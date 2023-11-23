@@ -6,20 +6,18 @@ import LoadingSpinner from "../LoadingSpinner";
 import { prefix } from "@fortawesome/free-solid-svg-icons";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
-
+import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
 
 const MainTemplate = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const logout = useLogout();
-    const axiosPrivate = useAxiosPrivate();
-    
-
-
-    //-------------------
     const dispatch = useDispatch()
+    const selectMenu = useSelector(selectedMenu)
+
+    const [activeDropdown, setActiveDropdown] = useState(selectMenu);
+    //-------------------
     const usersCount = useSelector(selectUsersCount)
-    //const patientsCount = useSelector(selectPatientsCount)
     //-------------------
 
     //-------------------
@@ -39,38 +37,31 @@ const MainTemplate = () => {
 	};
     //---------------------------------------------//
 	const [misActive1, msetIsActive1] = useState(false);
-	const mmenuClick1 = event => {
-		msetIsActive1(current => !current);
-	};
+	
 	
 	const [sisActive1, ssetIsActive1] = useState(false);
-	const smenuClick1 = event => {
-		ssetIsActive1(current => !current);
-	};
+	
     const handleSubmenuClick = (menu,subMenu) => {
         ssetIsActive1(subMenu)
         msetIsActive1(menu)
+        dispatch(checkSelectedMenu(subMenu))
+
     }
-        
-    const [dropDownMenu1, dropDownMenu1IsActive] = useState(true);
-	const dropDownMenu1Click = event => {
-		dropDownMenu1IsActive(current => !current);
-	};
-	
-	const [dropDownMenu2, dropDownMenu2IsActive] = useState(false);
-	const dropDownMenu2Click = event => {
-		dropDownMenu2IsActive(current => !current);
-	};
+        //console.log(selectMenu)
+  
    //--------------------------------------
-
-
-
-
     const signOut = async () => {
         await logout();
         navigate('/login');
     }
 
+    const  isActiceDD = (currentDD) => {        
+        if(activeDropdown === currentDD){
+            setActiveDropdown(current => '');        
+        }else{
+            setActiveDropdown(current => currentDD);
+        }        
+    }
     return (
         <section>
             {/* Wrapper */}
@@ -315,7 +306,7 @@ const MainTemplate = () => {
                               </div>
                               <ul className="navbar-nav flex-column">
                                 <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('settings')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -329,12 +320,12 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Օգտ. կառավարում</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='settings' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children '} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        onClick={()=>handleSubmenuClick("users","permissions")}>
                                                             <span className="nav-link-text">Արտոնություններ</span>
                                                         </Link>
                                                     </li>
@@ -353,11 +344,11 @@ const MainTemplate = () => {
                                                 </ul>	
                                             </li>	
                                         </ul>	
-                                    </li>
+                                </li>
 
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "settings" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "workers" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('workers')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -372,18 +363,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Աշխատակիցներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='workers' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children '} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./workers/position"
+                                                        onClick={()=>handleSubmenuClick("workers","position")}>
                                                             <span className="nav-link-text">Աշխատակցի պաշտոն</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./users/workers"
+                                                        onClick={()=>handleSubmenuClick("workers","workers")}>
                                                             <span className="nav-link-text">Աշխատակից</span>
                                                         </Link>
                                                     </li>
@@ -392,7 +383,7 @@ const MainTemplate = () => {
                                         </ul>	
                                     </li>
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "customers" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('customers')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -405,12 +396,12 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Հաճախորդներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='customers' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="customers" || location.pathname==="/customers/customers"?"nav-link active":"nav-link"} to="./customers/customers"
+                                                        onClick={()=>handleSubmenuClick("customers","customers")}>
                                                             <span className="nav-link-text">Հաճախորդ</span>
                                                         </Link>
                                                     </li>
@@ -420,7 +411,7 @@ const MainTemplate = () => {
                                     </li>
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "companies" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('companies')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -430,18 +421,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Ընկերություններ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='companies' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="companies" || location.pathname==="/companies/companies"?"nav-link active":"nav-link"} to="./companies/companies"
+                                                        onClick={()=>handleSubmenuClick("companies","companies")}>
                                                             <span className="nav-link-text">Ընկերություն</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="brands" || location.pathname==="/companies/brands"?"nav-link active":"nav-link"} to="./companies/brands"
+                                                        onClick={()=>handleSubmenuClick("companies","brands")}>
                                                             <span className="nav-link-text">Ապրանքանիշ</span>
                                                         </Link>
                                                     </li>
@@ -452,7 +443,7 @@ const MainTemplate = () => {
 
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "products" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('products')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -463,18 +454,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Ապրանքներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='products' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="productsClasses" || location.pathname==="/products/productsClasses"?"nav-link active":"nav-link"} to="./products/productsClasses"
+                                                        onClick={()=>handleSubmenuClick("products","productsClasses")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="products" || location.pathname==="/products/products"?"nav-link active":"nav-link"} to="./products/products"
+                                                        onClick={()=>handleSubmenuClick("products","products")}>
                                                             <span className="nav-link-text">Ապրանք</span>
                                                         </Link>
                                                     </li>
@@ -485,7 +476,7 @@ const MainTemplate = () => {
 
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "purchases" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('purchases')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -497,18 +488,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Գնում</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='purchases' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="purchase1" || location.pathname==="/purchases/purchase1"?"nav-link active":"nav-link"} to="./purchases/purchase1"
+                                                        onClick={()=>handleSubmenuClick("purchases","purchase1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="purchase2" || location.pathname==="/purchases/purchase2"?"nav-link active":"nav-link"} to="./purchases/purchase2"
+                                                        onClick={()=>handleSubmenuClick("purchases","purchase2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -520,7 +511,7 @@ const MainTemplate = () => {
 
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "warehouses" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('warehouses')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -531,18 +522,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Պահեստներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='warehouses' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="warehouse1" || location.pathname==="/warehouses/warehouse1"?"nav-link active":"nav-link"} to="./warehouses/warehouse1"
+                                                        onClick={()=>handleSubmenuClick("warehouses","warehouse1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="warehouse2" || location.pathname==="/warehouses/warehouse2"?"nav-link active":"nav-link"} to="./warehouses/warehouse2"
+                                                        onClick={()=>handleSubmenuClick("warehouses","warehouse2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -552,7 +543,7 @@ const MainTemplate = () => {
                                     </li>
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "orders" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('orders')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -565,18 +556,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Պատվերներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='orders' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="order1" || location.pathname==="/orders/order1"?"nav-link active":"nav-link"} to="./orders/order1"
+                                                        onClick={()=>handleSubmenuClick("orders","order1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="order2" || location.pathname==="/orders/order2"?"nav-link active":"nav-link"} to="./orders/order2"
+                                                        onClick={()=>handleSubmenuClick("orders","order2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -585,7 +576,7 @@ const MainTemplate = () => {
                                         </ul>	
                                     </li>
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "payments" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('payments')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-digit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -599,18 +590,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Վճարումներ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='payments' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="payment1" || location.pathname==="/payments/payment1"?"nav-link active":"nav-link"} to="./payments/payment1"
+                                                        onClick={()=>handleSubmenuClick("payments","payment1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="payment2" || location.pathname==="/payments/payment2"?"nav-link active":"nav-link"} to="./payments/payment2"
+                                                        onClick={()=>handleSubmenuClick("payments","payment2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -620,7 +611,7 @@ const MainTemplate = () => {
                                     </li>
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "statistics" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('statistics')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -633,18 +624,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Վիճակագրություն</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='statistics' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="statistic1" || location.pathname==="/statistics/statistic1"?"nav-link active":"nav-link"} to="./statistics/statistic1"
+                                                        onClick={()=>handleSubmenuClick("statistics","statistic1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="statistic2" || location.pathname==="/statistics/statistic2"?"nav-link active":"nav-link"} to="./statistics/statistic2"
+                                                        onClick={()=>handleSubmenuClick("statistics","statistic2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -654,7 +645,7 @@ const MainTemplate = () => {
                                     </li>
 
                                     <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={dropDownMenu2Click}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "commonInfo" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('commonInfo')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
                                                 <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -672,18 +663,18 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Ընդ. տեղեկատվություններ</span>
                                         </a>
-                                        <ul id="dash_integ" className={dropDownMenu2 ? 'nav flex-column collapse  nav-children' : 'nav flex-column collapse  nav-children show'} >
+                                        <ul id="dash_integ" className={activeDropdown==='commonInfo' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("settings","permissions")}>
+                                                        <Link className={sisActive1==="commonInfo1" || location.pathname==="/commonInfo/commonInfo1"?"nav-link active":"nav-link"} to="./commonInfo/commonInfo1"
+                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfo1")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="roles" || location.pathname==="/users/roles"?"nav-link active":"nav-link"} to="./users/roles"
-                                                        onClick={()=>handleSubmenuClick("users","roles")}>
+                                                        <Link className={sisActive1==="commonInfo2" || location.pathname==="/commonInfo/commonInfo2"?"nav-link active":"nav-link"} to="./commonInfo/commonInfo2"
+                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfo2")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
