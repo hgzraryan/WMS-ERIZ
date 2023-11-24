@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useHistory, useNavigate, Link, Outlet, useLocation, NavLink } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import React, { Suspense, useState, useEffect } from "react";
@@ -14,12 +15,10 @@ const MainTemplate = () => {
     const logout = useLogout();
     const dispatch = useDispatch()
     const selectMenu = useSelector(selectedMenu)
-
-    const [activeDropdown, setActiveDropdown] = useState(selectMenu);
+    const [activeDropdown, setActiveDropdown] = useState( localStorage.getItem("selectedMenu") || selectMenu);
     //-------------------
     const usersCount = useSelector(selectUsersCount)
     //-------------------
-
     //-------------------
     const [isActive, setIsActive] = useState(false);
 	const menuClick = event => {
@@ -36,15 +35,18 @@ const MainTemplate = () => {
 		ssetIsActive(current => !current);
 	};
     //---------------------------------------------//
-	const [misActive1, msetIsActive1] = useState(false);
+	const [misActive1, msetIsActive1] = useState(localStorage.getItem("activeMenu") || false);
 	
 	
-	const [sisActive1, ssetIsActive1] = useState(false);
+	const [sisActive1, ssetIsActive1] = useState(localStorage.getItem("activeSubMenu") || false);
 	
     const handleSubmenuClick = (menu,subMenu) => {
         ssetIsActive1(subMenu)
         msetIsActive1(menu)
         dispatch(checkSelectedMenu(subMenu))
+        localStorage.setItem("activeMenu", menu);
+        localStorage.setItem("activeSubMenu", subMenu);
+       
 
     }
         //console.log(selectMenu)
@@ -55,11 +57,14 @@ const MainTemplate = () => {
         navigate('/login');
     }
 
-    const  isActiceDD = (currentDD) => {        
+    const  isActiceDD = (currentDD) => {    
+        console.log('currentDD' ,currentDD)    
         if(activeDropdown === currentDD){
             setActiveDropdown(current => '');        
         }else{
             setActiveDropdown(current => currentDD);
+            localStorage.setItem("selectedMenu", currentDD);
+
         }        
     }
     return (
@@ -306,9 +311,10 @@ const MainTemplate = () => {
                               </div>
                               <ul className="navbar-nav flex-column">
                                 <li className="nav-item">
-                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('settings')}  data-bs-target="#dash_integ">
+                                        <a className={misActive1 === "users" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('users')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
+
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <circle cx="12" cy="7" r="4"></circle>
@@ -320,12 +326,12 @@ const MainTemplate = () => {
                                             </span>
                                             <span className="nav-link-text">Օգտ. կառավարում</span>
                                         </a>
-                                        <ul id="dash_integ" className={activeDropdown==='settings' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children '} >
+                                        <ul id="dash_integ" className={activeDropdown==='users' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children '} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="permissions" || location.pathname==="/users/permissions"?"nav-link active":"nav-link"} to="./users/permissions"
-                                                        onClick={()=>handleSubmenuClick("users","permissions")}>
+                                                        <Link className={sisActive1==="privileges" || location.pathname==="/users/privileges"?"nav-link active":"nav-link"} to="./users/privileges"
+                                                        onClick={()=>handleSubmenuClick("users","privileges")}>
                                                             <span className="nav-link-text">Արտոնություններ</span>
                                                         </Link>
                                                     </li>
@@ -337,8 +343,12 @@ const MainTemplate = () => {
                                                     </li>
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="users" || location.pathname==="/users/users"?"nav-link active":"nav-link"} to="./users/users"
-                                                        onClick={()=>handleSubmenuClick("users","users")}>                                                       
+                                                        onClick={()=>handleSubmenuClick("users","users")}>  
+                                                <span className="badge badge-sm badge-primary badge-sm badge-pill position-top-start">{usersCount}</span>
                                                             <span className="nav-link-text">Օգտատերեր</span>
+                                                         <span className="nav-icon-wrap position-relative">
+                                              
+                                            </span>                                                     
                                                         </Link>
                                                     </li>
                                                 </ul>	
@@ -367,13 +377,13 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./workers/position"
+                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/position"?"nav-link active":"nav-link"} to="./workers/position"
                                                         onClick={()=>handleSubmenuClick("workers","position")}>
                                                             <span className="nav-link-text">Աշխատակցի պաշտոն</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./users/workers"
+                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./workers/workers"
                                                         onClick={()=>handleSubmenuClick("workers","workers")}>
                                                             <span className="nav-link-text">Աշխատակից</span>
                                                         </Link>
@@ -492,14 +502,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="purchase1" || location.pathname==="/purchases/purchase1"?"nav-link active":"nav-link"} to="./purchases/purchase1"
-                                                        onClick={()=>handleSubmenuClick("purchases","purchase1")}>
+                                                        <Link className={sisActive1==="purchaseOne" || location.pathname==="/purchases/purchaseOne"?"nav-link active":"nav-link"} to="./purchases/purchaseOne"
+                                                        onClick={()=>handleSubmenuClick("purchases","purchaseOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="purchase2" || location.pathname==="/purchases/purchase2"?"nav-link active":"nav-link"} to="./purchases/purchase2"
-                                                        onClick={()=>handleSubmenuClick("purchases","purchase2")}>
+                                                        <Link className={sisActive1==="purchaseTwo" || location.pathname==="/purchases/purchaseTwo"?"nav-link active":"nav-link"} to="./purchases/purchaseTwo"
+                                                        onClick={()=>handleSubmenuClick("purchases","purchaseTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -526,14 +536,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="warehouse1" || location.pathname==="/warehouses/warehouse1"?"nav-link active":"nav-link"} to="./warehouses/warehouse1"
-                                                        onClick={()=>handleSubmenuClick("warehouses","warehouse1")}>
+                                                        <Link className={sisActive1==="warehouseOne" || location.pathname==="/warehouses/warehouseOne"?"nav-link active":"nav-link"} to="./warehouses/warehouseOne"
+                                                        onClick={()=>handleSubmenuClick("warehouses","warehouseOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="warehouse2" || location.pathname==="/warehouses/warehouse2"?"nav-link active":"nav-link"} to="./warehouses/warehouse2"
-                                                        onClick={()=>handleSubmenuClick("warehouses","warehouse2")}>
+                                                        <Link className={sisActive1==="warehouseTwo" || location.pathname==="/warehouses/warehouseTwo"?"nav-link active":"nav-link"} to="./warehouses/warehouseTwo"
+                                                        onClick={()=>handleSubmenuClick("warehouses","warehouseTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -560,14 +570,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="order1" || location.pathname==="/orders/order1"?"nav-link active":"nav-link"} to="./orders/order1"
-                                                        onClick={()=>handleSubmenuClick("orders","order1")}>
+                                                        <Link className={sisActive1==="orderOne" || location.pathname==="/orders/orderOne"?"nav-link active":"nav-link"} to="./orders/orderOne"
+                                                        onClick={()=>handleSubmenuClick("orders","orderOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="order2" || location.pathname==="/orders/order2"?"nav-link active":"nav-link"} to="./orders/order2"
-                                                        onClick={()=>handleSubmenuClick("orders","order2")}>
+                                                        <Link className={sisActive1==="orderTwo" || location.pathname==="/orders/orderTwo"?"nav-link active":"nav-link"} to="./orders/orderTwo"
+                                                        onClick={()=>handleSubmenuClick("orders","orderTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -594,14 +604,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="payment1" || location.pathname==="/payments/payment1"?"nav-link active":"nav-link"} to="./payments/payment1"
-                                                        onClick={()=>handleSubmenuClick("payments","payment1")}>
+                                                        <Link className={sisActive1==="paymentOne" || location.pathname==="/payments/paymentOne"?"nav-link active":"nav-link"} to="./payments/paymentOne"
+                                                        onClick={()=>handleSubmenuClick("payments","paymentOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="payment2" || location.pathname==="/payments/payment2"?"nav-link active":"nav-link"} to="./payments/payment2"
-                                                        onClick={()=>handleSubmenuClick("payments","payment2")}>
+                                                        <Link className={sisActive1==="paymentTwo" || location.pathname==="/payments/paymentTwo"?"nav-link active":"nav-link"} to="./payments/paymentTwo"
+                                                        onClick={()=>handleSubmenuClick("payments","paymentTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -628,14 +638,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="statistic1" || location.pathname==="/statistics/statistic1"?"nav-link active":"nav-link"} to="./statistics/statistic1"
-                                                        onClick={()=>handleSubmenuClick("statistics","statistic1")}>
+                                                        <Link className={sisActive1==="statisticOne" || location.pathname==="/statistics/statisticOne"?"nav-link active":"nav-link"} to="./statistics/statisticOne"
+                                                        onClick={()=>handleSubmenuClick("statistics","statisticOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="statistic2" || location.pathname==="/statistics/statistic2"?"nav-link active":"nav-link"} to="./statistics/statistic2"
-                                                        onClick={()=>handleSubmenuClick("statistics","statistic2")}>
+                                                        <Link className={sisActive1==="statisticTwo" || location.pathname==="/statistics/statisticTwo"?"nav-link active":"nav-link"} to="./statistics/statisticTwo"
+                                                        onClick={()=>handleSubmenuClick("statistics","statisticTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -667,14 +677,14 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="commonInfo1" || location.pathname==="/commonInfo/commonInfo1"?"nav-link active":"nav-link"} to="./commonInfo/commonInfo1"
-                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfo1")}>
+                                                        <Link className={sisActive1==="commonInfoOne" || location.pathname==="/commonInfo/commonInfoOne"?"nav-link active":"nav-link"} to="./commonInfo/commonInfoOne"
+                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfoOne")}>
                                                             <span className="nav-link-text">1</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="commonInfo2" || location.pathname==="/commonInfo/commonInfo2"?"nav-link active":"nav-link"} to="./commonInfo/commonInfo2"
-                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfo2")}>
+                                                        <Link className={sisActive1==="commonInfoTwo" || location.pathname==="/commonInfo/commonInfoTwo"?"nav-link active":"nav-link"} to="./commonInfo/commonInfoTwo"
+                                                        onClick={()=>handleSubmenuClick("commonInfo","commonInfoTwo")}>
                                                             <span className="nav-link-text">2</span>
                                                         </Link>
                                                     </li>
@@ -682,30 +692,6 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
-
-
-                                  <li className="nav-item">
-                                    <Link className={(misActive1 === "users" ||  location.pathname==="/users")?"nav-link active":"nav-link"} to="/users"
-                                    onClick={() => handleSubmenuClick("users","")}>
-                                            <span className="nav-icon-wrap position-relative">
-                                                <span className="svg-icon">
-                                                <span className="badge badge-sm badge-primary badge-sm badge-pill position-top-end-overflow">{usersCount}</span>
-                                                <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <title/>
-                                                        <g id="Complete">
-                                                        <g id="user">
-                                                        <g>
-                                                        <path d="M20,21V19a4,4,0,0,0-4-4H8a4,4,0,0,0-4,4v2" fill="none" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
-                                                        <circle cx="12" cy="7" fill="none" r="4" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
-                                                        </g>
-                                                        </g>
-                                                        </g>
-                                                        </svg>
-                                                </span>
-                                            </span>
-                                            <span className="nav-link-text">Աշխատակիցներ</span>
-                                        </Link>
-                                  </li>
                               </ul>
                           </div>
                       </div>
