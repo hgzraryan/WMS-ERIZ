@@ -13,6 +13,7 @@ import useDeleteData from "../../hooks/useDeleteData";
 import useUpdateCount from "../../hooks/useUpdateCount";
 import { checkUsersCount } from "../../redux/features/users/usersCountSlice";
 import CustomTable from "../CustomTable";
+import { Helmet } from "react-helmet";
 const USERS_URL = "/users";
 
 
@@ -208,6 +209,11 @@ const Users = () => {
 
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Explore User</title>
+        <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
+      </Helmet>
       <div className="contactapp-wrap">
         <div className="contactapp-content">
           <div className="contactapp-detail-wrap">

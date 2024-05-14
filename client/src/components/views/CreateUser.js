@@ -18,6 +18,7 @@ import {
 } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {  toast } from 'react-toastify';
+import { Helmet } from "react-helmet";
 
 const REGISTER_URL = "/register";
 function CreateUser({ setIsOpen,getUsers }) {
@@ -172,6 +173,12 @@ function CreateUser({ setIsOpen,getUsers }) {
   };
 
   return (
+    <>
+    <Helmet>
+        <meta charSet="utf-8" />
+        <title>Explore User</title>
+        <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
+      </Helmet>
     <Modal
       show={() => handleToggleCreateModal(true)}
       size="xl"
@@ -474,6 +481,7 @@ function CreateUser({ setIsOpen,getUsers }) {
         </FormProvider>
       </Modal.Body>
     </Modal>
+    </>
   );
 }
 
