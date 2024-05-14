@@ -25,6 +25,109 @@ export const firstName_validation = {
     },
   },
 }
+export const state_validation = {
+  name: "state",
+  label: "Մարզ",
+  multiline: true,
+  id: "state",
+  placeholder: "Մարզ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
+export const city_validation = {
+  name: "city",
+  label: "Քաղաք/Գյուղ",
+  multiline: true,
+  id: "city",
+  placeholder: "Քաղաք/Գյուղ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
+export const country_validation = {
+  name: "country",
+  label: "Երկիր",
+  multiline: true,
+  id: "country",
+  placeholder: "Երկիր",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
+export const street_validation = {
+  name: "street",
+  label: "Փողոց",
+  multiline: true,
+  id: "street",
+  placeholder: "Փողոց",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
+export const zipCode_validation = {
+  name: "zipCode",
+  label: "Փոստային համար",
+  type: "number",
+  multiline: true,
+  id: "zipCode",
+  placeholder: "Փոստային համար",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
+export const password_validation = {
+  name: "password",
+  label: "Ծածկագիր",
+  type: "password",
+  id: "password",
+  placeholder: "Ծածկագիր",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    minLength: {
+      value: 6,
+      message: "min 6 characters",
+    },
+  },
+};
 export const lastName_validation = {
   name: 'lastName',
   label: 'Ազգանուն',

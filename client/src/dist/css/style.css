@@ -78905,8 +78905,8 @@ div.hopscotch-bubble .hopscotch-bubble-container .hopscotch-actions .hopscotch-n
 }
 
 .pagination .page-item.active .page-link {
-  background: #018a54;
-  border-color: #018a54;
+  background: #0a2f4c ;
+  border-color: #0a2f4c ;
   color: #fff;
 }
 .pagination .page-item.disabled .page-link {
@@ -79157,18 +79157,18 @@ div.hopscotch-bubble .hopscotch-bubble-container .hopscotch-actions .hopscotch-n
   border-color: #298DFF;
 }
 .badge.badge-primary {
-  background: #018a54;
+  background: #4eafcb;
   color: #fff;
 }
 .badge.badge-primary.badge-indicator-processing:after {
-  border-color: #018a54;
+  border-color: #4eafcb;
 }
 .badge.badge-teal {
-  background: #018a54;
+  background: #4eafcb;
   color: #fff;
 }
 .badge.badge-teal.badge-indicator-processing:after {
-  border-color: #018a54;
+  border-color: #4eafcb;
 }
 .badge.badge-neon {
   background: #81E230;
@@ -83187,7 +83187,7 @@ Project:	Jampack
 }
 .hk-wrapper[data-layout="vertical"] .hk-menu .menu-content-wrap .menu-group .navbar-nav .nav-item .nav-link.active{
   background: rgba(0, 125, 136, 0.15);
-  color: #018a54 !important;
+  color: #0a2f4c !important;
   border-radius: 0.5rem;
   
 }  

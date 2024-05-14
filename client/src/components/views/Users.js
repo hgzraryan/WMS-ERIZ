@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react";
 import LoadingSpinner from "../LoadingSpinner";
 import ReactPaginate from "react-paginate";
 import Loading from "../Loading";
-import CreateUser from "../views/CreateUser";
+import CreateUser from "../addViews/CreateUser";
 import { Dropdown } from "react-bootstrap";
 import useGetData from "../../hooks/useGetData";
 import useDeleteData from "../../hooks/useDeleteData";

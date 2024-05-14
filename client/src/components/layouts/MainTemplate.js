@@ -344,7 +344,7 @@ const MainTemplate = () => {
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="users" || location.pathname==="/users/users"?"nav-link active":"nav-link"} to="./users/users"
                                                         onClick={()=>handleSubmenuClick("users","users")}>  
-                                                <span className="badge badge-sm badge-primary badge-sm badge-pill position-top-start">{usersCount}</span>
+                                                <span className="badge badge-sm badge-primary badge-sm badge-pill position-top-start ">{usersCount}</span>
                                                             <span className="nav-link-text">Օգտատերեր</span>
                                                          <span className="nav-icon-wrap position-relative">
                                               

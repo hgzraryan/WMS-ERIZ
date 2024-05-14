@@ -5,7 +5,8 @@ import useInput from '../hooks/useInput';
 import useToggle from '../hooks/useToggle';
 import jwt from 'jwt-decode'
 import Swal from "sweetalert2";
-import {Helmet} from "react-helmet";
+import { HelmetProvider,Helmet } from 'react-helmet-async'
+
 
 
 import axios from '../api/axios';
@@ -125,6 +126,7 @@ const Login = () => {
     }
 
     return (
+        <HelmetProvider>
 
         <section>
 
@@ -298,7 +300,7 @@ const Login = () => {
    
 
 
-
+        </HelmetProvider>
     )
 }
 

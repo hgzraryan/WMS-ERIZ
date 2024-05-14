@@ -32,6 +32,8 @@ export const STATISTICTWO_ROUTE = 'statistics/statisticTwo'
 export const COMMONINFOONE_ROUTE = 'commonInfo/commonInfoOne'
 export const COMMONINFOTWO_ROUTE = 'commonInfo/commonInfoTwo'
 
+export const REGISTER_USER = "/registerUser";
+
 //user Roles
 export const ROLES = {
     User: 2001,
