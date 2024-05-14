@@ -2,19 +2,12 @@ import { useEffect, useState } from "react";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const useGetData = (url) => {
+const useGetData = (url,currentPage,usersPerPage) => {
     const [data, setData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);  
-    const [usersPerPage, setUsersPerPage] = useState(12);
-    const [hasMore, setHasMore] = useState(true);  
+   // const [hasMore, setHasMore] = useState(true);  
     const axiosPrivate = useAxiosPrivate();  
     const navigate = useNavigate();  
     const location = useLocation();    
-
-    const pagesVisited = currentPage * usersPerPage;
-    const currentUsers = data.slice(pagesVisited, pagesVisited + usersPerPage);
-    const pageCount = Math.ceil(data.length / usersPerPage);
-    const onPageCount =  Math.round((window.innerHeight / 100) * 1.5);
 
     useEffect(() => {
         let isMounted = true;
@@ -22,21 +15,21 @@ const useGetData = (url) => {
     
         const getData = async () => {
           try {
-            const response = await axiosPrivate.post(url, {
+            const response = await axiosPrivate.post(url,{
               signal: controller.signal,
-              page: currentPage,
-              onPage: onPageCount,
+              page: currentPage+1,
+              onPage: usersPerPage,
             });
-            console.log(response);
-            if (
-              response.data.jsonString.length === 0 ||
-              response.data.jsonString.length < onPageCount
-            ) {
-              setHasMore(false);
-            }
+            //console.log(response);
+            // if (
+            //   response.data.jsonString.length === 0 ||
+            //   response.data.jsonString.length < onPageCount
+            // ) {
+            //   setHasMore(false);
+            // }
             isMounted &&
               setData((prevUsers) => response.data.jsonString);
-            setCurrentPage((prev) => prev + 1);
+            //setCurrentPage((prev) => prev + 1);
           } catch (err) {
             console.error(err);
             navigate("/login", { state: { from: location }, replace: true });
@@ -49,51 +42,75 @@ const useGetData = (url) => {
           isMounted = false;
           controller.abort();
         };
-      }, [url]);
+      }, [url,currentPage]);
+
       const getData = async () => {
           try {
             const response = await axiosPrivate.get(url);
             setTimeout(() => {             
               
                   setData((prevUsers) => response.data.jsonString);
-                  setCurrentPage((prev) => prev = 1);
+                 // setCurrentPage((prev) => prev = 1);
               
             }, 500);
           } catch (err) {
             console.error(err);
-            navigate("/login", { state: { from: location }, replace: true });
+            //navigate("/login", { state: { from: location }, replace: true });
           }
         };
-      const checkData = async () => {
+        const refreshData = async () => {
           try {
-            const response = await axiosPrivate.post(url, {
-              page: currentPage,
-              onPage:  onPageCount,
+            const response = await axiosPrivate.post(url,{
+             
+              page: 1,
+              onPage: usersPerPage,
             });
-            setTimeout(() => {
-              if (
-                response.data.jsonString.length === 0 ||
-                response.data.jsonString.length < onPageCount
-              ) {
-                setHasMore(false);
-              }             
-                  setData((prevUsers) => [
-                    ...prevUsers,
-                    ...response.data.jsonString,
-                  ]);
-                  setCurrentPage((prev) => prev + 1);
-                             }, 500);
+            // console.log(response);
+            // if (
+            //   response.data.jsonString.length === 0 ||
+            //   response.data.jsonString.length < onPageCount
+            // ) {
+            //   setHasMore(false);
+            // }
+            
+              setData((prevUsers) => response.data.jsonString);
+            //setCurrentPage((prev) => prev + 1);
           } catch (err) {
             console.error(err);
             navigate("/login", { state: { from: location }, replace: true });
           }
         };
+    
+
+      // const checkData = async () => {
+      //     try {
+      //       const response = await axiosPrivate.post(url, {
+      //         page: currentPage,
+      //         onPage:  usersPerPage,
+      //       });
+      //       setTimeout(() => {
+      //         // if (
+      //         //   response.data.jsonString.length === 0 ||
+      //         //   response.data.jsonString.length < onPageCount
+      //         // ) {
+      //         //   setHasMore(false);
+      //         // }             
+      //             setData((prevUsers) => [
+      //               ...prevUsers,
+      //               ...response.data.jsonString,
+      //             ]);
+      //             //setCurrentPage((prev) => prev + 1);
+      //                        }, 500);
+      //     } catch (err) {
+      //       console.error(err);
+      //       navigate("/login", { state: { from: location }, replace: true });
+      //     }
+      //   };
       return {
         data,
         setData,
-        hasMore,
         getData,
-        checkData
+        refreshData
     }
 }
 export default useGetData;

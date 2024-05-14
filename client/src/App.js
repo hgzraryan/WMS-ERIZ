@@ -6,7 +6,6 @@ import Users from "./components/views/Users";
 import Layout from "./components/layouts/Layout";
 import Editor from "./components/Editor";
 import Admin from "./components/Admin";
-import UserAdd from "./components/UserAdd";
 import Missing from "./components/Missing";
 import Unauthorized from "./components/Unauthorized";
 import Lounge from "./components/Lounge";
@@ -14,8 +13,8 @@ import LinkPage from "./components/LinkPage";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import MainTemplate from "./components/layouts/MainTemplate";
-
 import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 import {
   LOGIN_ROUTE,
@@ -49,38 +48,55 @@ import {
   STATISTICTWO_ROUTE,
   COMMONINFOONE_ROUTE,
   COMMONINFOTWO_ROUTE,
-} from "./utils/consts";
-import Privilege from "./components/views/Privilege";
-import Roles from "./components/views/Roles";
-import WorkersPosition from "./components/views/WorkersPosition";
-import Workers from "./components/views/Workers";
-import Customers from "./components/views/Customers";
-import Companies from "./components/views/Companies";
-import Brands from "./components/views/Brands";
-import ProductsClasses from "./components/views/ProductsClasses";
-import Products from "./components/views/Products";
-import PurchaseOne from "./components/views/PurchaseOne";
-import PurchaseTwo from "./components/views/PurchaseTwo";
-import WarehouseOne from "./components/views/WarehouseOne";
-import WarehouseTwo from "./components/views/WarehouseTwo";
-import OrderOne from "./components/views/OrderOne";
-import OrderTwo from "./components/views/OrderTwo";
-import PaymentOne from "./components/views/PaymentOne";
-import PaymentTwo from "./components/views/PaymentTwo";
-import StatisticOne from "./components/views/StatisticOne";
-import StatisticTwo from "./components/views/StatisticTwo";
-import CommonInfoOne from "./components/views/CommonInfoOne";
-import CommonInfoTwo from "./components/views/CommonInfoTwo";
-
-const ROLES = {
-  User: 2001,
-  Editor: 1984,
-  Approver: 6010,
-  Admin: 5150,
-};
+  ROLES,
+} from "./utils/constants";
+const Privilege = lazy(()=>  import("./components/views/Privilege"));
+const Roles = lazy(()=>  import("./components/views/Roles"));
+const WorkersPosition = lazy(()=>  import("./components/views/WorkersPosition"));
+const Workers = lazy(()=>  import("./components/views/Workers"));
+const Customers = lazy(()=>  import("./components/views/Customers"));
+const Companies = lazy(()=>  import("./components/views/Companies"));
+const Brands = lazy(()=>  import("./components/views/Brands"));
+const ProductsClasses = lazy(()=>  import("./components/views/ProductsClasses"));
+const Products = lazy(()=>  import("./components/views/Products"));
+const PurchaseOne = lazy(()=>  import("./components/views/PurchaseOne"));
+const PurchaseTwo = lazy(()=>  import("./components/views/PurchaseTwo"));
+const WarehouseOne = lazy(()=>  import("./components/views/WarehouseOne"));
+const WarehouseTwo = lazy(()=>  import("./components/views/WarehouseTwo"));
+const OrderOne = lazy(()=>  import("./components/views/OrderOne"));
+const OrderTwo = lazy(()=>  import("./components/views/OrderTwo"));
+const PaymentOne = lazy(()=>  import("./components/views/PaymentOne"));
+const PaymentTwo = lazy(()=>  import("./components/views/PaymentTwo"));
+const StatisticOne = lazy(()=>  import("./components/views/StatisticOne"));
+const StatisticTwo = lazy(()=>  import("./components/views/StatisticTwo"));
+const CommonInfoOne = lazy(()=>  import("./components/views/CommonInfoOne"));
+const CommonInfoTwo = lazy(()=>  import("./components/views/CommonInfoTwo"));
+// import Privilege from "./components/views/Privilege";
+// import Roles from "./components/views/Roles";
+// import WorkersPosition from "./components/views/WorkersPosition";
+//import Workers from "./components/views/Workers";
+//import Customers from "./components/views/Customers";
+//import Companies from "./components/views/Companies";
+//import Brands from "./components/views/Brands";
+//import ProductsClasses from "./components/views/ProductsClasses";
+//import Products from "./components/views/Products";
+//import PurchaseOne from "./components/views/PurchaseOne";
+//import PurchaseTwo from "./components/views/PurchaseTwo";
+//import WarehouseOne from "./components/views/WarehouseOne";
+//import WarehouseTwo from "./components/views/WarehouseTwo";
+//import OrderOne from "./components/views/OrderOne";
+//import OrderTwo from "./components/views/OrderTwo";
+//import PaymentOne from "./components/views/PaymentOne";
+//import PaymentTwo from "./components/views/PaymentTwo";
+// import StatisticOne from "./components/views/StatisticOne";
+// import StatisticTwo from "./components/views/StatisticTwo";
+// import CommonInfoOne from "./components/views/CommonInfoOne";
+// import CommonInfoTwo from "./components/views/CommonInfoTwo";
 
 function App() {
   return (
+    <Suspense fallback={<h1>Loading...</h1>}>
+
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -143,6 +159,8 @@ function App() {
         </Route>
       </Route>
     </Routes>
+    </Suspense>
+
   );
 }
 

@@ -18,7 +18,7 @@ import {
 } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {  toast } from 'react-toastify';
-import { Helmet } from "react-helmet";
+import { HelmetProvider,Helmet } from 'react-helmet-async'
 
 const REGISTER_URL = "/register";
 function CreateUser({ setIsOpen,getUsers }) {
@@ -173,7 +173,7 @@ function CreateUser({ setIsOpen,getUsers }) {
   };
 
   return (
-    <>
+    <HelmetProvider>
     <Helmet>
         <meta charSet="utf-8" />
         <title>Explore User</title>
@@ -481,7 +481,7 @@ function CreateUser({ setIsOpen,getUsers }) {
         </FormProvider>
       </Modal.Body>
     </Modal>
-    </>
+    </HelmetProvider>
   );
 }
 

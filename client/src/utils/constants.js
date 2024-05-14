@@ -9,6 +9,7 @@ export const ADMIN_ROUTE = 'admin'
 export const EDITOR_ROUTE = 'editor'
 export const LOUNGE_ROUTE = 'lounge'
 
+export const USERS_URL = "/users"
 export const PRIVILIGE_ROUTE = 'users/privileges'
 export const ROLES_ROUTE = 'users/roles'
 export const WORKERSPOSITION_ROUTE = 'workers/position'
@@ -30,3 +31,11 @@ export const STATISTICONE_ROUTE = 'statistics/statisticOne'
 export const STATISTICTWO_ROUTE = 'statistics/statisticTwo'
 export const COMMONINFOONE_ROUTE = 'commonInfo/commonInfoOne'
 export const COMMONINFOTWO_ROUTE = 'commonInfo/commonInfoTwo'
+
+//user Roles
+export const ROLES = {
+    User: 2001,
+    Editor: 1984,
+    Approver: 6010,
+    Admin: 5150,
+  };

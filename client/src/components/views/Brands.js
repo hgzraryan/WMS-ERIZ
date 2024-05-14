@@ -1,8 +1,10 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
+import { HelmetProvider,Helmet } from 'react-helmet-async'
 
 function Brands() {
   return (
+    <HelmetProvider>
+
     <div>
     <Helmet>
     <meta charSet="utf-8" />
@@ -11,6 +13,7 @@ function Brands() {
 </Helmet>
       Brands
     </div>
+    </HelmetProvider>
   )
 }
 

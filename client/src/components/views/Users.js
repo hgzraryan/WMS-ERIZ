@@ -12,211 +12,73 @@ import useGetData from "../../hooks/useGetData";
 import useDeleteData from "../../hooks/useDeleteData";
 import useUpdateCount from "../../hooks/useUpdateCount";
 import { checkUsersCount } from "../../redux/features/users/usersCountSlice";
-import CustomTable from "../CustomTable";
-import { Helmet } from "react-helmet";
-const USERS_URL = "/users";
-
-
+import { HelmetProvider,Helmet } from 'react-helmet-async'
+import { useSelector } from "react-redux";
+import { USERS_URL } from "../../utils/constants";
 
 const Users = () => {
+
   const confirmUserRef = useRef("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenRole, setIsOpenRole] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
-  /*-------------------Custom Hook--------------------*/
+  //const usersCount = useSelector(selectUsersCount)
+  const [currentPage, setCurrentPage] = useState(0);  
+  const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
+  //const pageCount = Math.ceil(usersCount/usersPerPage)
+
   const {
     data: users,
     setData: setUsers,
-    hasMore,
-    checkData,
+    // hasMore,
+    // checkData,
     getData: getUsers,
-  } = useGetData(USERS_URL);
-
-  //TODO need correct
-  const { updateDataCount } = useUpdateCount(
-    "/allCount",
-    checkUsersCount,
-    "usersCount"
-  );
-
-  const { handleDeleteItem } = useDeleteData(
-    "/users",
+    refreshData
+  } = useGetData(USERS_URL,currentPage,usersPerPage);
+  //-------------------
+  
+  const { handleDeleteItem,updateUsersCount } = useDeleteData(
+    USERS_URL,
     confirmUserRef,
     selectedItem,
     setSelectedItemId,
     users,
     setUsers,
-    "username"
+    "username",
+    
   );
-  /*------------------------------------------------*/
-  /*----------------ADD USER---------------------*/
-  const errRef = useRef("");
-
-  const [validName, setValidName] = useState(false);
-  const [validPwd, setValidPwd] = useState(false);
-  const [errMsg, setErrMsg] = useState("");
-  /*------------------------------------------------*/
+  
+  const handlePageClick = ({ selected: selectedPage }) => {
+    setCurrentPage(selectedPage);
+    //updateUsersCount();
+}
   const refreshPage = () => {
     let paglink = document.querySelectorAll(".page-item");
-    paglink[0].firstChild.click();
+    paglink[0]?.firstChild.click();
+    refreshData()
   };
-  //-------------------
   const handleOpenModal = (user) => {
     setSelectedItemId(true);
     setSelectedItem((prev) => user);
   };
   const handleCloseModal = () => {
     setSelectedItemId(null);
-  };
-  const [showCreateNew, setIsActive] = useState(false);
-  const CreateNew = (event) => {
-    setIsActive((current) => !current);
-  };
-
-  //-------------------
-
-  const setUserTypeStyle = (userType) => {
-    switch (userType) {
-      case "Admin":
-        return "badge badge-soft-success  my-1  me-2";
-      case "Editor":
-        return "badge badge-soft-violet my-1  me-2";
-      case "User":
-        return "badge badge-soft-danger my-1  me-2";
-      case "Approver":
-        return "badge badge-soft-light my-1  me-2";
-
-      default:
-        break;
-    }
-  };
-
-  const setUserActiveState = (activeState) => {
-    switch (activeState) {
-      case 0:
-        return ["badge badge-soft-danger  my-1  me-2", "Ոչ ակտիվ"];
-      case 1:
-        return ["badge badge-soft-success my-1  me-2  my-1  me-2", "Ակտիվ"];
-      default:
-        break;
-    }
-  };
-  const columns = useMemo(
-    () => [
-      {
-        Header: () => (
-          <input
-            type="checkbox"
-            className="form-check-input check-select-all"
-          />
-        ),
-        Cell: () => (
-          <input
-            type="checkbox"
-            className="form-check-input check-select-all"
-          />
-        ),
-        accessor: "select",
-        disableSortBy: true,
-      },
-      {
-        Header: "ID",
-        accessor: "_id",
-        sortable: true,
-        show: false,
-      },
-      {
-        Header: "Ծածկանուն",
-        accessor: "username",
-        sortable: true,
-      },
-      {
-        Header: "Անուն",
-        accessor: "firstname",
-      },
-      {
-        Header: "Ազգանուն",
-        accessor: "lastname",
-        sortable: true,
-      },
-      {
-        Header: "Էլ․ հասցե",
-        accessor: "email",
-      },
-      {
-        Header: "Դերեր",
-        accessor: "roles",
-        Cell: ({ value }) =>
-          Object.keys(value).map((role) => (
-            <span className={setUserTypeStyle(role)} key={role}>
-              {role}
-            </span>
-          )),
-      },
-      {
-        Header: "Կարգավիճակ",
-        accessor: "isActive",
-        Cell: ({ value }) => (
-          <span className={setUserActiveState(value)[0]}>
-            {setUserActiveState(value)[1]}
-          </span>
-        ),
-      },
-      {
-        Header: "Գործողություններ",
-        accessor: "actions",
-        Cell: ({ row }) => (
-          <div className="d-flex align-items-center">
-            <div className="d-flex">
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                data-bs-toggle="tooltip"
-                data-placement="top"
-                title="Edit"
-                href="edit-contact.html"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="edit" />
-                  </span>
-                </span>
-              </a>
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                data-bs-toggle="tooltip"
-                onClick={() => handleOpenModal(row.values)}
-                data-placement="top"
-                title=""
-                data-bs-original-title="Delete"
-                href="#"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="trash" />
-                  </span>
-                </span>
-              </a>
-            </div>
-          </div>
-        ),
-        disableSortBy: true,
-      },
-    ],
-    []
-  );
-
-
-
+  };	
+	//-------------------------
+   
   return (
+    <HelmetProvider>
+
     <div>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Explore User</title>
-        <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
-      </Helmet>
+	<Helmet>
+		<meta charSet="utf-8" />
+		<title>Vteam LIMS | Users</title>
+		<link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
+	</Helmet>
       <div className="contactapp-wrap">
         <div className="contactapp-content">
-          <div className="contactapp-detail-wrap">
+          <div className="contactapp-detail-wrap w-100">
             <header className="contact-header">
               <div className="d-flex align-items-center">
                 <div className="dropdown">
@@ -236,7 +98,7 @@ const Users = () => {
                     <Dropdown.Toggle
                       variant="success"
                       id="dropdown-basic"
-                      className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block d-none"
+                      className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block"
                     >
                       Գրանցել նոր
                     </Dropdown.Toggle>
@@ -245,15 +107,25 @@ const Users = () => {
                       <Dropdown.Item onClick={() => setIsOpen(true)}>
                         Աշխատակից
                       </Dropdown.Item>
+                      {/* <Dropdown.Item onClick={() => setIsOpenRole(true)}>
+                        Դեր
+                      </Dropdown.Item> */}
                     </Dropdown.Menu>
                   </Dropdown>
 
                   {isOpen && (
                     <CreateUser
                       setIsOpen={setIsOpen}
-                      getUsers={() => getUsers()}
+                      refreshData={() => refreshData()}
+                      updateUsersCount={updateUsersCount}
                     />
                   )}
+                   {/* {isOpenRole && (
+                    <AddUserRole
+                    setIsOpenRole={setIsOpenRole}
+                      getUsers={() => getUsers()}
+                      updateUsersCount={updateUsersCount}
+                    />)} */}
                   {/*
 										<a className="dropdown-item" href="#">Type2</a>
 										<a className="dropdown-item" href="#">Type3</a>
@@ -291,7 +163,6 @@ const Users = () => {
                     <span>Compact View</span>
                   </a>
                 </div>
-
                 <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
                   href="#"
@@ -351,7 +222,7 @@ const Users = () => {
                     id="scrollableDiv"
                     style={{ height: "80vh", overflow: "auto" }}
                   >
-                    <InfiniteScroll
+                    {/* <InfiniteScroll
                       dataLength={users.length}
                       next={() => checkData()}
                       hasMore={hasMore}
@@ -360,18 +231,34 @@ const Users = () => {
                       endMessage={
                         <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
                       }
-                    >
-                      <CustomTable
+                    > */}
+                      {/* <UsersTable
                         confirmRef={confirmUserRef}
                         selectedItem={selectedItem}
                         selectedItemId={selectedItemId}
-                        tableData={users}
                         handleDeleteItem={handleDeleteItem}
                         handleOpenModal={handleOpenModal}
                         handleCloseModal={handleCloseModal}
-                        columns={columns}
-                      />
-                    </InfiniteScroll>
+                        users={users}
+                        setUsers={setUsers}
+                        getUsers={getUsers}
+                        refreshData={refreshData}
+                      /> */}
+                     <ReactPaginate
+                      previousLabel = {"Հետ"}    
+                      nextLabel = {"Առաջ"}
+                      pageCount = {5}
+                      onPageChange = {handlePageClick}
+                      initialPage = {0}
+                      containerClassName={"pagination"}
+                      pageLinkClassName = {"page-link"}
+                      pageClassName = {"page-item"}
+                      previousLinkClassName={"page-link"}
+                      nextLinkClassName={"page-link"}
+                      disabledLinkClassName={"disabled"}
+                      //activeLinkClassName={"active"}
+                      activeClassName={"active"}
+											/>
                   </div>
                 </div>
               </div>
@@ -380,6 +267,7 @@ const Users = () => {
         </div>
       </div>
     </div>
+    </HelmetProvider>
   );
 };
 
