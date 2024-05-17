@@ -1,7 +1,7 @@
 import useAxiosPrivate from "./useAxiosPrivate";
 import Swal from "sweetalert2";
 
-const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems,name) => {
+const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,name,refreshData='') => {
   const axiosPrivate = useAxiosPrivate();
 
 
@@ -12,9 +12,10 @@ const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems
           data: { id: delid },
         });
         setSelectedItemId(null); // Close the modal after deletion
-        Swal.fire(`${response.data[name]} has been deleted`);
-        const updatedItems = items.filter((data) => data._id !== delid);
-        setItems(updatedItems);
+        Swal.fire(`${response.data[name]} հեռացված է`);
+        // const updatedItems = items.filter((data) => data._id !== delid);
+        // setItems(updatedItems);
+        refreshData()
       } catch (err) {
         Swal.fire({
           icon: "error",
@@ -25,7 +26,7 @@ const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems
         //navigate('/login', { state: { from: location }, replace: true });
       }
     } else {
-      Swal.fire("Write right name");
+      Swal.fire("Տեքստը սխալ է");
     }
   };
   return {handleDeleteItem};

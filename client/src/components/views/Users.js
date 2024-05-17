@@ -15,11 +15,13 @@ import { checkUsersCount } from "../../redux/features/users/usersCountSlice";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { useSelector } from "react-redux";
 import { USERS_URL } from "../../utils/constants";
+import UsersTable from "../viewTables/UsersTable";
 
 const Users = () => {
 
   const confirmUserRef = useRef("");
   const [isOpen, setIsOpen] = useState(false);
+  //const [users, setUsers] = useState(jsonString);
   const [isOpenRole, setIsOpenRole] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -27,13 +29,11 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(0);  
   const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
   //const pageCount = Math.ceil(usersCount/usersPerPage)
-
   const {
     data: users,
     setData: setUsers,
     // hasMore,
     // checkData,
-    getData: getUsers,
     refreshData
   } = useGetData(USERS_URL,currentPage,usersPerPage);
   //-------------------
@@ -43,9 +43,8 @@ const Users = () => {
     confirmUserRef,
     selectedItem,
     setSelectedItemId,
-    users,
-    setUsers,
     "username",
+    refreshData
     
   );
   
@@ -116,7 +115,7 @@ const Users = () => {
                   {isOpen && (
                     <CreateUser
                       setIsOpen={setIsOpen}
-                      refreshData={() => refreshData()}
+                      //refreshData={() => refreshData()}
                       updateUsersCount={updateUsersCount}
                     />
                   )}
@@ -220,7 +219,7 @@ const Users = () => {
                 <div className="contact-list-view">
                   <div
                     id="scrollableDiv"
-                    style={{ height: "80vh", overflow: "auto" }}
+                    style={{ height: "100%", overflow: "auto" }}
                   >
                     {/* <InfiniteScroll
                       dataLength={users.length}
@@ -232,7 +231,7 @@ const Users = () => {
                         <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
                       }
                     > */}
-                      {/* <UsersTable
+                      <UsersTable
                         confirmRef={confirmUserRef}
                         selectedItem={selectedItem}
                         selectedItemId={selectedItemId}
@@ -241,9 +240,9 @@ const Users = () => {
                         handleCloseModal={handleCloseModal}
                         users={users}
                         setUsers={setUsers}
-                        getUsers={getUsers}
+                        //getUsers={getUsers}
                         refreshData={refreshData}
-                      /> */}
+                      />
                      <ReactPaginate
                       previousLabel = {"Հետ"}    
                       nextLabel = {"Առաջ"}

@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdError } from "react-icons/md";
 
-export const Input = ({ label, type, id, placeholder, validation, name }) => {
+export const Input = ({ label, type, id, placeholder, validation, name,defaultValue='',min='' }) => {
   const {
     register,
     formState: { errors },
@@ -32,6 +32,9 @@ export const Input = ({ label, type, id, placeholder, validation, name }) => {
         type={type}
         className="form-control"
         placeholder={placeholder}
+        defaultValue={defaultValue}
+        autocomplete="off"
+        min={min}
         {...register(name, validation)}
       />
     </div>

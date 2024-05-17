@@ -2,12 +2,12 @@ import React, { useState, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ComponentToConfirm = ({
-  confirmUserRef,
   handleCloseModal,
   handleDeleteItem,
   selectedItemId,
-  userName,
-  userId
+  confirmUserRef,
+  keyName,
+  delId,
 }) => {
   return (
     <Modal show={selectedItemId !== null} size="xl" onHide={handleCloseModal}>
@@ -38,7 +38,7 @@ const ComponentToConfirm = ({
                                   className="form-label"
                                   htmlFor="confirmUser"
                                 >
-                                  Աշխատակցի հեռացման համար խնդրում ենք մուտքագրել "{userName}" տեքստը
+                                  Աշխատակցի հեռացման համար խնդրում ենք մուտքագրել "{keyName}" տեքստը
                                 </label>
                                 <input
                                   ref={confirmUserRef}
@@ -65,7 +65,7 @@ const ComponentToConfirm = ({
                   <div className="modal-footer align-items-center">
                     <button
                       type="button"
-                      onClick={() => handleDeleteItem(userId)}
+                      onClick={() => handleDeleteItem(delId)}
                       className="btn btn-primary"
                       data-bs-dismiss="modal"
                     >

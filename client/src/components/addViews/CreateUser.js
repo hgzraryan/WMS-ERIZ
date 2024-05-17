@@ -31,7 +31,6 @@ const roleState = [
     { label:'Հաստատող',name: "Approver", value: 3345 },
     { label:'Փոփոխող',name: "Editor", value: 1984 },
     { label:'Օգտատեր',name: "User", value: 2001 },
-    { label:'Նմուշառող',name: "Sampler", value: 1212 },
   ]
 function CreateUser({ setIsOpen,refreshData }) {
   const [errMsg, setErrMsg] = useState("");
@@ -148,8 +147,6 @@ function CreateUser({ setIsOpen,refreshData }) {
     gender,
     maritalStatus,
     roles,
-    emergencyContactNumber,
-    emergencyContactName,
     dateOfBirth,
     }) => {
    
@@ -167,8 +164,6 @@ function CreateUser({ setIsOpen,refreshData }) {
           country: country,
           zipCode: zipCode,
         },
-        emergencyContactName:emergencyContactName,
-        emergencyContactNumber:emergencyContactNumber,
       },
       gender: gender,
       maritalStatus:maritalStatus,
@@ -669,8 +664,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                       rules={{ required: true }}
                                       render={({ field }) => (
                                         <Select
-                                          {...field}
-                                          
+                                          {...field}                                          
                                           closeMenuOnSelect={true}
                                           components={animatedComponents}
                                           options={roleState}

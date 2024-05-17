@@ -8,6 +8,7 @@ import { prefix } from "@fortawesome/free-solid-svg-icons";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
+import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 
 const MainTemplate = () => {
     const navigate = useNavigate();
@@ -536,15 +537,117 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="warehouseOne" || location.pathname==="/warehouses/warehouseOne"?"nav-link active":"nav-link"} to="./warehouses/warehouseOne"
-                                                        onClick={()=>handleSubmenuClick("warehouses","warehouseOne")}>
-                                                            <span className="nav-link-text">1</span>
+                                                        <Link className={sisActive1==="warehousesList" || location.pathname=== WARREHOUSESLIST_ROUTE?"nav-link active":"nav-link"} to={WARREHOUSESLIST_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","warehousesList")}>
+                                                            <span className="nav-link-text">Պահեստների ցանկ</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="warehouseTwo" || location.pathname==="/warehouses/warehouseTwo"?"nav-link active":"nav-link"} to="./warehouses/warehouseTwo"
-                                                        onClick={()=>handleSubmenuClick("warehouses","warehouseTwo")}>
-                                                            <span className="nav-link-text">2</span>
+                                                        <Link className={sisActive1==="listOfProductValues" || location.pathname=== LISTOFPRODUCTVALUES_ROUTE?"nav-link active":"nav-link"} to={LISTOFPRODUCTVALUES_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","listOfProductValues")}>
+                                                            <span className="nav-link-text">Ապրանքանյութական արժեքների ցանկ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="priceList" || location.pathname=== PRICELIST_ROUTE?"nav-link active":"nav-link"} to={PRICELIST_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","priceList")}>
+                                                            <span className="nav-link-text">Գնացուցակ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productCover" || location.pathname=== PRODUCTCOVER_ROUTE?"nav-link active":"nav-link"} to={PRODUCTCOVER_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","productCover")}>
+                                                            <span className="nav-link-text">Ապրանքների վերադիր</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="accessWarrant" || location.pathname=== ACCESSWARRANT_ROUTE?"nav-link active":"nav-link"} to={ACCESSWARRANT_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","accessWarrant")}>
+                                                            <span className="nav-link-text">Մուտք Պահեստ/Մուտքի օրդեր</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="retailPurchase" || location.pathname=== RETAILPURCHASE_ROUTE?"nav-link active":"nav-link"} to={RETAILPURCHASE_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","retailPurchase")}>
+                                                            <span className="nav-link-text">Ապրանքների ձեռքբերում մանրածախ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="movementsOfProducts" || location.pathname=== MOVEMENTSOFPRODUCTS_ROUTE?"nav-link active":"nav-link"} to={MOVEMENTSOFPRODUCTS_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","movementsOfProducts")}>
+                                                            <span className="nav-link-text">Ապրանքների տեղաշարժ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productReassessment" || location.pathname=== PRODUCTREASSESSMENT_ROUTE?"nav-link active":"nav-link"} to={PRODUCTREASSESSMENT_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","productReassessment")}>
+                                                            <span className="nav-link-text">Ապրանքների վերագնահատում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productCheckout" || location.pathname=== PRODUCTCHECKOUT_ROUTE?"nav-link active":"nav-link"} to={PRODUCTCHECKOUT_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","productCheckout")}>
+                                                            <span className="nav-link-text">Ապրանքների դուրսգրում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="inventory" || location.pathname=== INVENTORY_ROUTE?"nav-link active":"nav-link"} to={INVENTORY_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","inventory")}>
+                                                            <span className="nav-link-text">Գույքագրում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="inventoryByScanner" || location.pathname=== INVENTORYBYSCANNER_ROUTE?"nav-link active":"nav-link"} to={INVENTORYBYSCANNER_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","inventoryByScanner")}>
+                                                            <span className="nav-link-text">Գույքագրում սկաների միջոցով</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="listOfSet" || location.pathname=== LISTOFSET_ROUTE?"nav-link active":"nav-link"} to={LISTOFSET_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","listOfSet")}>
+                                                            <span className="nav-link-text">Կոմպլեկտների անվանումների ցուցակ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="compilation" || location.pathname=== COMPILATION_ROUTE?"nav-link active":"nav-link"} to={COMPILATION_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","compilation")}>
+                                                            <span className="nav-link-text">Կոմպլեկտավորում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="disassembly" || location.pathname=== DISASSEMBLY_ROUTE?"nav-link active":"nav-link"} to={DISASSEMBLY_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","disassembly")}>
+                                                            <span className="nav-link-text">Ապակոմպլեկտավորում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="fragmentation" || location.pathname=== FRAGMENTATION_ROUTE?"nav-link active":"nav-link"} to={FRAGMENTATION_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","fragmentation")}>
+                                                            <span className="nav-link-text">Մասնատում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="expiredObsProducts" || location.pathname=== EXPIREDOBSPRODUCTS_ROUTE?"nav-link active":"nav-link"} to={EXPIREDOBSPRODUCTS_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","expiredObsProducts")}>
+                                                            <span className="nav-link-text">Ժամկետնանց ապրանքներ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="minLimitProducts" || location.pathname=== MINLIMITPRODUCTS_ROUTE?"nav-link active":"nav-link"} to={MINLIMITPRODUCTS_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","minLimitProducts")}>
+                                                            <span className="nav-link-text">Ապրանքների նվազագույն քանակը պահեստներում</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="requirements" || location.pathname=== REQUIREMENTS_ROUTE?"nav-link active":"nav-link"} to={REQUIREMENTS_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","requirements")}>
+                                                            <span className="nav-link-text">Պահանջագրեր</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="defactura" || location.pathname=== DEFACTURA_ROUTE?"nav-link active":"nav-link"} to={DEFACTURA_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("warehouses","defactura")}>
+                                                            <span className="nav-link-text">Դեֆեկտուրա</span>
                                                         </Link>
                                                     </li>
                                                 </ul>	

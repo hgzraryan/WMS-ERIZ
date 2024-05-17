@@ -10,8 +10,6 @@ import {
   city_validation,
   street_validation,
   zipCode_validation,
-  additional_validation,
-  emergencyContactName_validation,
 } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
@@ -38,7 +36,7 @@ const roleState = [
   { label:'Նմուշառող',name: "Sampler", value: 1212 },
   { label:'Բժիշկ',name: "Doctor", value: 9578 },  
 ]
-function UserEditModal({ user, setEditRow, refreshData }) {
+function UserEdit({ user, setEditRow, refreshData }) {
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const axiosPrivate = useAxiosPrivate();
@@ -46,7 +44,7 @@ function UserEditModal({ user, setEditRow, refreshData }) {
   const [region, setRegion] = useState("");
   const [gender, setGender] = useState("");
   const [merried, setMerried] = useState("");
-  //console.log(user)
+  console.log(user)
   const { trigger } = useForm();
   const methods = useForm({
     mode: "onChange",
@@ -168,16 +166,6 @@ function UserEditModal({ user, setEditRow, refreshData }) {
                 ? zipCode
                 : null,
           },
-          emergencyContactName:
-            emergencyContactName?.trim() !==
-            user?.contact?.emergencyContactName?.trim()
-              ? emergencyContactName
-              : null,
-          emergencyContactNumber:
-            emergencyContactNumber?.trim() !==
-            user?.contact?.emergencyContactNumber?.trim()
-              ? emergencyContactNumber
-              : null,
           phone: phone?.trim() !== user?.contact?.phone?.trim() ? phone : null,
         },
         gender: gender?.trim() !== user?.gender?.trim() ? gender : null,
@@ -654,54 +642,6 @@ function UserEditModal({ user, setEditRow, refreshData }) {
                                     </div>
                                   </div>
                                 </div>
-                                {/* <div className="row gx-3">
-                                <div className="col-sm-6">
-                                  <Input {...user_validation} defaultValue={user?.username}/>
-                                </div>
-                                <div className="col-sm-6">
-                                  <Input {...password_validation} defaultValue={user?.password}/>
-                                </div>
-                              </div> */}
-
-                                <div className="row gx-3">
-                                  <div className="col-sm-6">
-                                    <Input
-                                      {...emergencyContactName_validation}
-                                      defaultValue={
-                                        user?.contact?.emergencyContactName
-                                      }
-                                    />
-                                  </div>
-                                  <div className="col-sm-6">
-                                    <div className="d-flex justify-content-between me-2">
-                                      <label
-                                        className="form-label"
-                                        htmlFor="phoneNumber"
-                                      >
-                                        Լրացուցիչ կոնտակտի հեռախոս
-                                      </label>
-                                      {methods.formState.errors
-                                        .emergencyContactNumber && (
-                                        <span className="error text-red">
-                                          <span>
-                                            <img
-                                              src={ErrorSvg}
-                                              alt="errorSvg"
-                                            />
-                                          </span>{" "}
-                                          պարտադիր
-                                        </span>
-                                      )}
-                                    </div>
-                                    <CustomPhoneComponent
-                                      name="emergencyContactNumber"
-                                      control={methods.control}
-                                      defaultValue={
-                                        user?.contact?.emergencyContactNumber
-                                      }
-                                    />
-                                  </div>
-                                </div>
                               </div>
                             </div>
                           </div>
@@ -796,4 +736,4 @@ function UserEditModal({ user, setEditRow, refreshData }) {
   );
 }
 
-export default UserEditModal;
+export default UserEdit;

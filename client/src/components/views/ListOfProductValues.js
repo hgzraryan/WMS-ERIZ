@@ -1,17 +1,17 @@
-import React from 'react'
+import React from "react";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 
-function WarehouseOne() {
+function ListOfProductValues() {
   return (
     <HelmetProvider>
-    <Helmet>
+      <Helmet>
         <meta charSet="utf-8" />
         <title>Explore Warehouse</title>
         <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
       </Helmet>
-      WarehouseOne
+      WarehouseOTwo
     </HelmetProvider>
-  )
+  );
 }
 
-export default WarehouseOne
+export default ListOfProductValues;

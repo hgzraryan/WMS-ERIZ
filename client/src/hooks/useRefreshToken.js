@@ -3,14 +3,15 @@ import useAuth from './useAuth';
 
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
-
+    
+try {
     const refresh = async () => {
         const response = await axios.get('/refresh', {
             withCredentials: true
         });
         setAuth(prev => {
-            console.log(JSON.stringify(prev));
-            console.log(response.data.accessToken);
+            // console.log(JSON.stringify(prev));
+            // console.log(response.data.accessToken);
             return {
                 ...prev,
                 roles: response.data.roles,
@@ -20,6 +21,9 @@ const useRefreshToken = () => {
         return response.data.accessToken;
     }
     return refresh;
+} catch (error) {
+    console.log(error)
+}
 };
 
 export default useRefreshToken;

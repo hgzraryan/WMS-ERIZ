@@ -17,7 +17,7 @@ export const firstName_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -137,7 +137,7 @@ export const lastName_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -154,7 +154,7 @@ export const midName_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -171,7 +171,7 @@ export const user_validation = {
     validation: {
       required: {
         value: true,
-        message: 'required',
+        message: "պարտադիր",
       },
       maxLength: {
         value: 30,
@@ -188,7 +188,7 @@ export const user_validation = {
     validation: {
       required: {
         value: true,
-        message: 'required',
+        message: "պարտադիր",
       },
       minLength: {
         value: 6,
@@ -205,7 +205,7 @@ export const position_validation = {
     validation: {
       required: {
         value: true,
-        message: 'required',
+        message: "պարտադիր",
       },
       maxLength: {
         value: 30,
@@ -222,7 +222,7 @@ export const birthday_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 10,
@@ -239,7 +239,7 @@ export const age_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 3,
@@ -256,7 +256,7 @@ export const address_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     }
   },
 }
@@ -269,7 +269,7 @@ export const email_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     pattern: {
       value:
@@ -287,7 +287,7 @@ export const mobile_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 15,
@@ -304,7 +304,7 @@ export const name_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: 'պարտադիր',
     },
     maxLength: {
       value: 30,
@@ -321,7 +321,7 @@ export const price_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 10,
@@ -338,7 +338,7 @@ export const unit_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -356,7 +356,7 @@ export const currency_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -373,7 +373,7 @@ export const useage_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -390,7 +390,7 @@ export const producer_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 30,
@@ -408,7 +408,7 @@ export const desc_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 200,
@@ -425,7 +425,7 @@ export const class_validation = {
   validation: {
     required: {
       value: true,
-      message: 'required',
+      message: "պարտադիր",
     },
     maxLength: {
       value: 200,
@@ -433,7 +433,134 @@ export const class_validation = {
     },
   },
 }
-
-
-
+export const director_validation = {
+  name: "director",
+  label: "Տնօրեն",
+  type: "text",
+  id: "director",
+  placeholder: "Տնօրեն",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const tin_validation = {
+  name: "tin",
+  label: "ՀՎՀՀ",
+  type: "number",
+  id: "tin",
+  placeholder: "ՀՎՀՀ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const bankAccNumber_validation = {
+  name: "bankAccNumber",
+  label: "Հ/Հ",
+  type: "number",
+  id: "bankAccNumber",
+  placeholder: "Հ/Հ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const bankName_validation = {
+  name: "bankName",
+  label: "Բանկ",
+  type: "text",
+  id: "bankName",
+  placeholder: "Բանկ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const code_validation = {
+  name: "code",
+  label: "Կոդ",
+  type: "text",
+  id: "code",
+  placeholder: "Կոդ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const balance_validation = {
+  name: "balance",
+  label: "Մնացորդ",
+  type: "text",
+  id: "balance",
+  placeholder: "Մնացորդ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const storekeeper_validation = {
+  name: "storekeeper",
+  label: "Պահեստապետ",
+  type: "text",
+  id: "storekeeper",
+  placeholder: "Պահեստապետ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const subWarehouse_validation = {
+  name: "subWarehouse",
+  label: "Ենթապահեստ",
+  type: "text",
+  id: "subWarehouse",
+  placeholder: "Ենթապահեստ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const type_validation = {
+  name: "type",
+  label: "Տեսակ",
+  type: "text",
+  id: "type",
+  placeholder: "Տեսակ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const warehouseState_validation = {
+  name: "warehouseState",
+  label: "Կարգավիճակ",
+  type: "text",
+  id: "warehouseState",
+  placeholder: "Կարգավիճակ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
 
