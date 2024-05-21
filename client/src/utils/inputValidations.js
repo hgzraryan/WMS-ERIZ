@@ -488,7 +488,7 @@ export const bankName_validation = {
 export const code_validation = {
   name: "code",
   label: "Կոդ",
-  type: "text",
+  type: "number",
   id: "code",
   placeholder: "Կոդ",
   validation: {
@@ -501,7 +501,7 @@ export const code_validation = {
 export const balance_validation = {
   name: "balance",
   label: "Մնացորդ",
-  type: "text",
+  type: "number",
   id: "balance",
   placeholder: "Մնացորդ",
   validation: {
@@ -563,4 +563,16 @@ export const warehouseState_validation = {
     },
   },
 };
-
+export const respPersonFullName_validation = {
+  name: "respPersonFullName",
+  label: "Պատասխանատու անձի ԱԱՀ",
+  type: "text",
+  id: "parentFullName",
+  placeholder: "Պատասխանատու անձի ԱԱՀ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};

@@ -1,90 +1,94 @@
 import React, { useEffect, useRef, useState } from "react";
+import { deleteNullProperties } from "../../utils/helper";
+import { REGISTER_PARTNER } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import CustomPhoneComponent from "../CustomPhoneComponent";
 import ErrorSvg from "../../dist/svg/error.svg";
-import {
-  name_validation,
-  zipCode_validation,
-  street_validation,
-  city_validation,
-  code_validation,
-  type_validation,
-  balance_validation,
-  storekeeper_validation,
-  subWarehouse_validation,
-  warehouseState_validation,
-  email_validation,
-} from "../../utils/inputValidations";
-import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
-import { REGISTER_WAREHOUSE } from "../../utils/constants";
-import { toast } from "react-toastify";
+
 import {
   CountryDropdown,
   RegionDropdown,
   CountryRegionData,
 } from "react-country-region-selector";
-import { deleteNullProperties } from "../../utils/helper";
 import Select from "react-select";
-
-const storekeepers=[
+import { toast } from "react-toastify";
+import {
+  bankAccNumber_validation,
+  bankName_validation,
+  city_validation,
+  email_validation,
+  name_validation,
+  respPersonFullName_validation,
+  street_validation,
+  zipCode_validation,
+} from "../../utils/inputValidations";
+import { Input } from "../Input";
+import { Editor } from "@tinymce/tinymce-react";
+const companyTypes = [
   {
-  label: " Arman Karapetyan",
-  value:12001
-},
+    label: "Ֆիզիկական անձ",
+    value: "Physical",
+  },
   {
-    label: " Levon Stepanyan",
-    value:12002
-},
-]
-const subWarehouses=[
+    label: "Իրավաբանական անձ",
+    value: "Legal",
+  },
   {
-  label: "Abovyan",
-  value:15001
-},
-  {
-    label: "Armavir",
-    value:15002
-},
-]
-const warehouseType=[
-  {
-    value: "Main",
-    label:"Հիմնական"
-},
-  {
-    value: "Mobile",
-    label:"Շրջիկ"
-},
-  {
+    label: "Այլ",
     value: "Other",
-    label:"Այլ"
-},
-]
-const warehouseState=[
+  },
+];
+const currencies = [
   {
-  label: "Ակտիվ",
-  value:1
-},
+    label: "ՀՀ դրամ",
+    value: "AMD",
+  },
   {
-    label: "Ոչ ակտիվ",
-    value:0
-},
-]
-const salesAllowed=[
+    label: "Ռուսական ռուբլի",
+    value: "RUB",
+  },
   {
-  label: "Կարելի է",
-  value:1
-},
+    label: "ԱՄՆ դոլլար",
+    value: "RUB",
+  },
+];
+const partnerTypes = [
   {
-    label: "Չի կարելի",
-    value:0
-},
-]
-function AddWareHouse({ handleToggleCreateModal, refreshData }) {
+    label: "Վերավաճառող",
+    value: "Reseller",
+  },
+  {
+    label: "Արտադրող",
+    value: "Producer",
+  },
+  {
+    label: "Ներդրող",
+    value: "Investor",
+  },
+];
+const productCategories = [
+  {
+    label: "Մրգեր",
+    value: "fruits",
+  },
+  {
+    label: "Հյութեր",
+    value: "յuices",
+  },
+  {
+    label: "Մսամթերք",
+    value: "meat",
+  },
+  {
+    label: "Ծովամթերք",
+    value: "seafood",
+  },
+];
+
+function AddPartner({ setIsOpen, refreshData }) {
   const [additionalPhone, setAdditionalPhone] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const [country, setCountry] = useState("");
@@ -102,6 +106,9 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
     mode: "onChange",
   });
   const { trigger } = useForm();
+  const handleToggleCreateModal = (value) => {
+    setIsOpen((prev) => value);
+  };
   const toggleAdditionalPhone = (e, value) => {
     e.stopPropagation();
     e.preventDefault();
@@ -122,33 +129,33 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
     async (
       //data
       {
-      code,
-      email,
-      street,
-      city,
-      warehouseState,
-      country,
-      state,
-      zipCode,
-      warehouseType,
-      name,
-      balance,
-      storekeeper,
-      subWarehouse,
-      addPhone,
-      phone,
-      salesAllowed
-    }
-  ) => {
-      const newWarehouse = {
-        code:+code,
-        warehouseState:warehouseState?.value,
-        type:warehouseType?.value,
         name,
-        balance:+balance,
-        storekeeper:storekeeper?.value,
-        subWarehouse:subWarehouse?.value,
-        salesAllowed:salesAllowed?.value,
+        companyType,
+        respPersonFullName,
+        phone,
+        addPhone,
+        bankName,
+        bankAccNumber,
+        currency,
+        partnerType,
+        email,
+        country,
+        state,
+        city,
+        street,
+        zipCode,
+        productCategories,
+      }
+    ) => {
+      const newPartner = {
+        name,
+        companyType: companyType?.value,
+        respPersonFullName,
+        bankName,
+        bankAccNumber:+bankAccNumber,
+        currency: currency?.value,
+        partnerType: partnerType?.value,
+        productCategories: productCategories.map((el) => el.value),
         contact: {
           email: email,
           phone: phone,
@@ -163,18 +170,18 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
         },
         additional: editorRef.current.getContent({ format: "text" }),
       };
-      const updatedData = deleteNullProperties(newWarehouse)
+      const updatedData = deleteNullProperties(newPartner);
 
-      console.log(newWarehouse);
+      console.log(newPartner);
       try {
-        await axiosPrivate.post(REGISTER_WAREHOUSE, newWarehouse, {
+        await axiosPrivate.post(REGISTER_PARTNER, updatedData, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
 
         handleToggleCreateModal(false);
         refreshData();
-        notify(`${newWarehouse.name} գործընկերը ավելացված է`);
+        notify(`${newPartner.name} գործընկերը ավելացված է`);
       } catch (err) {
         if (!err?.response) {
           setErrMsg("No Server Response");
@@ -192,7 +199,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
     >
       <Modal.Header closeButton>
         <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ավելացնել նոր պահեստ
+          Ավելացնել նոր գործընկեր
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -209,7 +216,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                   >
                     <div className="card">
                       <div className="card-header">
-                        <a href="#">Պահեստի տվյալներ</a>
+                        <a href="#">Գործընկերոջ տվյալներ</a>
                         <button
                           className="btn btn-xs btn-icon btn-rounded btn-light"
                           data-bs-toggle="tooltip"
@@ -232,156 +239,46 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                         <div className="modal-body">
                           <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...code_validation} />
-                            </div>
-                            <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="warehouseState"
-                                    >
-                                      Կարգավիճակ
-                                    </label>
-                                    {methods.formState.errors
-                                      .warehouseState && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="warehouseState"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={warehouseState}
-                                          placeholder={"Ընտրել"}
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                          </div>
-                          <div className="row gx-3">
-                          <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="warehouseType"
-                                    >
-                                      Տեսակ
-                                    </label>
-                                    {methods.formState.errors
-                                      .warehouseType && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="warehouseType"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={warehouseType}
-                                          placeholder={"Ընտրել"}
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                            <div className="col-sm-6">
                               <Input {...name_validation} />
                             </div>
-                          </div>
-                          <div className="row gx-3">
-                          <div className="col-sm-6">
-                              <Input {...balance_validation} />
-                            </div>
                             <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="storekeeper"
-                                    >
-                                      Պահեստապետ
-                                    </label>
-                                    {methods.formState.errors
-                                      .storekeeper && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="storekeeper"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={storekeepers}
-                                          placeholder={"Ընտրել"}
-                                        />
-                                      )}
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="companyType"
+                                >
+                                  Կազմակերպության տեսակը
+                                </label>
+                                {methods.formState.errors.companyType && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="companyType"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      options={companyTypes}
+                                      placeholder={"Ընտրել"}
                                     />
-                                  </div>
-                                </div>
+                                  )}
+                                />
+                              </div>
+                            </div>
                           </div>
                           <div className="row gx-3">
-                          <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="subWarehouse"
-                                    >
-                                      Ենթապահեստ
-                                    </label>
-                                    {methods.formState.errors
-                                      .subWarehouse && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="subWarehouse"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={subWarehouses}
-                                          placeholder={"Ընտրել"}
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                </div>
+                            <div className="col-sm-6">
+                              <Input {...respPersonFullName_validation} />
+                            </div>
                             <div className="col-sm-6 d-flex">
                               <div className="col-sm-6">
                                 <div className="d-flex justify-content-between me-2">
@@ -467,6 +364,82 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                     style={{ cursor: "pointer" }}
                                   />
                                 )}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...bankName_validation} />
+                            </div>
+                            <div className="col-sm-6">
+                              <Input {...bankAccNumber_validation} />
+                            </div>
+                          </div>
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="currency"
+                                >
+                                  Արժույթ
+                                </label>
+                                {methods.formState.errors.currency && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="currency"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      options={currencies}
+                                      placeholder={"Ընտրել"}
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="partnerType"
+                                >
+                                  Գործընկերոջ տեսակը
+                                </label>
+                                {methods.formState.errors.partnerType && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="partnerType"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      options={partnerTypes}
+                                      placeholder={"Ընտրել"}
+                                    />
+                                  )}
+                                />
                               </div>
                             </div>
                           </div>
@@ -564,41 +537,49 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                               <Input {...email_validation} />
                             </div>
                           </div>
+
                           <div className="row gx-3">
-                          <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="salesAllowed"
-                                    >
-                                      Վաճառք պահեստից
-                                    </label>
-                                    {methods.formState.errors
-                                      .salesAllowed && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="salesAllowed"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={salesAllowed}
-                                          placeholder={"Ընտրել"}
-                                        />
+                            <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="productCategories"
+                                >
+                                  Ապրանքի կատեգորիա
+                                </label>
+                                {methods.formState.errors.productCategories && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="productCategories"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      isMulti
+                                      closeMenuOnSelect={false}
+                                      options={productCategories.map(
+                                        (elem) => ({
+                                          value: elem.value,
+                                          label: elem?.label,
+                                          //price: elem?.price
+                                        })
                                       )}
+                                      placeholder={"Ընտրել"}
                                     />
-                                  </div>
-                                </div>
+                                  )}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -638,7 +619,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                   init={{
                                     height: 300,
                                     plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
+                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
                                     toolbar:
                                       "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
                                     tinycomments_mode: "embedded",
@@ -694,4 +675,4 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
   );
 }
 
-export default AddWareHouse;
+export default AddPartner;

@@ -8,7 +8,7 @@ import { prefix } from "@fortawesome/free-solid-svg-icons";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
-import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
+import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 
 const MainTemplate = () => {
     const navigate = useNavigate();
@@ -439,6 +439,12 @@ const MainTemplate = () => {
                                                         <Link className={sisActive1==="companies" || location.pathname==="/companies/companies"?"nav-link active":"nav-link"} to="./companies/companies"
                                                         onClick={()=>handleSubmenuClick("companies","companies")}>
                                                             <span className="nav-link-text">Ընկերություն</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="partners" || location.pathname===PARTNERS_ROUTE?"nav-link active":"nav-link"} to={PARTNERS_ROUTE}
+                                                        onClick={()=>handleSubmenuClick("companies","partners")}>
+                                                            <span className="nav-link-text">Գործընկերներ</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">

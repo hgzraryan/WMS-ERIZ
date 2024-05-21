@@ -17,6 +17,7 @@ export const WORKERSPOSITION_ROUTE = 'workers/position'
 export const WORKERS_ROUTE = 'workers/workers'
 export const CUSTOMERS_ROUTE = 'customers/customers'
 export const COMPANIES_ROUTE = 'companies/companies'
+export const PARTNERS_ROUTE = 'companies/partners'
 export const BRANDS_ROUTE = 'companies/brands'
 export const PRODUCTCLASSES_ROUTE = 'products/productsClasses'
 export const PRODUCTS_ROUTE = 'products/products'
@@ -52,10 +53,12 @@ export const DEFACTURA_ROUTE = 'warehouses/defactura'
 
 
 export const WAREHOUSES_URL = '/warehouses'
+export const PARTNERS_URL = '/partners'
 
 
 export const REGISTER_USER = "/registerUser";
 export const REGISTER_WAREHOUSE = "/registerWarehouse";
+export const REGISTER_PARTNER = "/registerPartner";
 
 //user Roles
 export const ROLES = {

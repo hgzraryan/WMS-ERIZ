@@ -85,7 +85,8 @@ import {
   EXPIREDOBSPRODUCTS_ROUTE,
   MINLIMITPRODUCTS_ROUTE,
   REQUIREMENTS_ROUTE,
-  DEFACTURA_ROUTE
+  DEFACTURA_ROUTE,
+  PARTNERS_ROUTE
 } from "./utils/constants";
 const Register = lazy(()=>  import("./components/Register"));
 const Login = lazy(()=>  import("./components/Login"));
@@ -109,6 +110,7 @@ const WorkersPosition = lazy(()=>  import("./components/views/WorkersPosition"))
 const Workers = lazy(()=>  import("./components/views/Workers"));
 const Customers = lazy(()=>  import("./components/views/Customers"));
 const Companies = lazy(()=>  import("./components/views/Companies"));
+const Partners = lazy(()=>  import("./components/views/Partners"));
 const Brands = lazy(()=>  import("./components/views/Brands"));
 const ProductsClasses = lazy(()=>  import("./components/views/ProductsClasses"));
 const Products = lazy(()=>  import("./components/views/Products"));
@@ -173,6 +175,7 @@ function App() {
                 <Route path={WORKERS_ROUTE} element={<Workers />} />
                 <Route path={CUSTOMERS_ROUTE} element={<Customers />} />
                 <Route path={COMPANIES_ROUTE} element={<Companies />} />
+                <Route path={PARTNERS_ROUTE} element={<Partners />} />
                 <Route path={BRANDS_ROUTE} element={<Brands />} />
                 <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsClasses />} />
                 <Route path={PRODUCTS_ROUTE} element={<Products />} />

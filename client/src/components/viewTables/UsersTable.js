@@ -404,9 +404,6 @@ function UsersTable({
      
  }
   const getColumnSearchProps = (dataIndex) => {
-const asd=allUsers
-console.log('allUsers',allUsers)
-
     return {
       filterDropdown: ({
         setSelectedKeys,

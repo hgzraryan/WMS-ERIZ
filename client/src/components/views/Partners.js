@@ -1,71 +1,106 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-lone-blocks */
-import React, { useState, useRef, useMemo } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import FeatherIcon from "feather-icons-react";
-import LoadingSpinner from "../LoadingSpinner";
-import ReactPaginate from "react-paginate";
-import Loading from "../Loading";
-import CreateUser from "../addViews/CreateUser";
+import React, { useRef, useState } from 'react'
+import { PARTNERS_URL } from '../../utils/constants';
+import useDeleteData from '../../hooks/useDeleteData';
+import useGetData from '../../hooks/useGetData';
+import ReactPaginate from 'react-paginate';
+import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
+import AddPartner from '../addViews/AddPartner';
 import { Dropdown } from "react-bootstrap";
-import useGetData from "../../hooks/useGetData";
-import useDeleteData from "../../hooks/useDeleteData";
-import useUpdateCount from "../../hooks/useUpdateCount";
-import { checkUsersCount } from "../../redux/features/users/usersCountSlice";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
-import { useSelector } from "react-redux";
-import { USERS_URL } from "../../utils/constants";
-import UsersTable from "../viewTables/UsersTable";
+import PartnersTable from '../viewTables/PartnersTable';
 
-const Users = () => {
-
-  const confirmUserRef = useRef("");
-  const [isOpen, setIsOpen] = useState(false);
-  //const [users, setUsers] = useState(jsonString);
-  const [isOpenRole, setIsOpenRole] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
-  const [selectedItemId, setSelectedItemId] = useState(null);
-  //const usersCount = useSelector(selectUsersCount)
-  const [currentPage, setCurrentPage] = useState(0);  
-  const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
-  //const pageCount = Math.ceil(usersCount/usersPerPage)
+function Partners() {
+    const confirmUserRef = useRef("");
+    const [isOpen, setIsOpen] = useState(false);  
+    const [selectedItem, setSelectedItem] = useState("");  
+    const [selectedItemId, setSelectedItemId] = useState(null);  
+    const [currentPage, setCurrentPage] = useState(0);    
+    const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));  
+    // const [partners, setPartners] = useState([
+    //     {
+    //         partnerId:47001,
+    //         name:'Կարեն Հարությունյան',
+    //         companyType:'Ֆիզ անձ',
+    //         respPersonFullName:'Կարեն Հարությունյան',
+    //         contact:{
+    //             phone:'+37485965823',
+    //             addPhone:'+48979616669',
+    //             email:'asd@asdasd.er',
+    //             address:{
+    //                 country:"Armenia",
+    //                 state:"Yerevan",
+    //                 city:"Yerevan",
+    //                 street:"Abovyan 15-25",
+    //                 zipCode:'1235',
+    //             }
+    //         },
+    //         currency:'AMD',
+    //         bankAccNumber:123456798,
+    //         bankName:'InecoBank',
+    //         partnerType:'Producer',
+    //         productCategorie:'meat'
+    //     },
+    //     {
+    //         partnerId:47002,
+    //         name:'Աշոտ Հարությունյան',
+    //         companyType:'Իրավ․ անձ',
+    //         respPersonFullName:'Կարեն Հարությունյան',
+    //         contact:{
+    //             phone:'+37485965823',
+    //             addPhone:'+48979616669',
+    //             email:'asd@asdasd.er',
+    //             address:{
+    //                 country:"Armenia",
+    //                 state:"Yerevan",
+    //                 city:"Yerevan",
+    //                 street:"Abovyan 15-25",
+    //                 zipCode:'1235',
+    //             }
+    //         },
+    //         currency:'AMD',
+    //         bankAccNumber:123456798,
+    //         bankName:'InecoBank',
+    //         partnerType:'Producer',
+    //         productCategorie:'meat'
+    //     }
+    // ]);  
+    //const pageCount = Math.ceil(usersCount/usersPerPage)
+  
   const {
-    data: users,
-    setData: setUsers,
-    // hasMore,
-    // checkData,
-    refreshData
-  } = useGetData(USERS_URL,currentPage,usersPerPage);
-  //-------------------
-  
-  const { handleDeleteItem,updateUsersCount } = useDeleteData(
-    USERS_URL,
-    confirmUserRef,
-    selectedItem,
-    setSelectedItemId,
-    "username",
-    refreshData
+      data: partners,
+      setData: setPartners,
+      // hasMore,
+      // checkData,
+      refreshData
+    } = useGetData(PARTNERS_URL,currentPage,usersPerPage);
+   //-------------------
     
-  );
-  
-  const handlePageClick = ({ selected: selectedPage }) => {
-    setCurrentPage(selectedPage);
-    //updateUsersCount();
-}
-  const refreshPage = () => {
-    let paglink = document.querySelectorAll(".page-item");
-    paglink[0]?.firstChild.click();
-    refreshData()
-  };
-  const handleOpenModal = (user) => {
-    setSelectedItemId(true);
-    setSelectedItem((prev) => user);
-  };
-  const handleCloseModal = () => {
-    setSelectedItemId(null);
-  };	
-	//-------------------------
-   
+    // const { handleDeleteItem,updateUsersCount } = useDeleteData(
+    //   PARTNERS_URL,
+    //   confirmUserRef,
+    //   selectedItem,
+    //   setSelectedItemId,
+    //   "username",
+    //   refreshData
+      
+    // );
+   const handlePageClick = ({ selected: selectedPage }) => {
+      setCurrentPage(selectedPage);
+      //updateUsersCount();
+  }
+    const refreshPage = () => {
+      let paglink = document.querySelectorAll(".page-item");
+      paglink[0]?.firstChild.click();
+      refreshData()
+    };
+    const handleOpenModal = (user) => {
+      setSelectedItemId(true);
+      setSelectedItem((prev) => user);
+    };
+    const handleCloseModal = () => {
+      setSelectedItemId(null);
+    };	
+      //-------------------------
   return (
     <HelmetProvider>
 
@@ -89,7 +124,7 @@ const Users = () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <h1>Աշխատակիցներ</h1>
+                    <h1>Գործընկերներ</h1>
                   </a>
                 </div>
                 <div className="dropdown ms-3">
@@ -104,7 +139,7 @@ const Users = () => {
 
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => setIsOpen(true)}>
-                        Աշխատակից
+                      Գործընկեր
                       </Dropdown.Item>
                       {/* <Dropdown.Item onClick={() => setIsOpenRole(true)}>
                         Դեր
@@ -113,23 +148,13 @@ const Users = () => {
                   </Dropdown>
 
                   {isOpen && (
-                    <CreateUser
+                    <AddPartner
                       setIsOpen={setIsOpen}
                       //refreshData={() => refreshData()}
-                      updateUsersCount={updateUsersCount}
+                      //updateUsersCount={updateUsersCount}
                     />
                   )}
-                   {/* {isOpenRole && (
-                    <AddUserRole
-                    setIsOpenRole={setIsOpenRole}
-                      getUsers={() => getUsers()}
-                      updateUsersCount={updateUsersCount}
-                    />)} */}
-                  {/*
-										<a className="dropdown-item" href="#">Type2</a>
-										<a className="dropdown-item" href="#">Type3</a>
-										<a className="dropdown-item" href="#">Type4</a>
-										*/}
+                 
                 </div>
               </div>
               <div className="contact-options-wrap">
@@ -231,15 +256,15 @@ const Users = () => {
                         <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
                       }
                     > */}
-                      <UsersTable
+                      <PartnersTable
                         confirmRef={confirmUserRef}
-                        selectedItem={selectedItem}
-                        selectedItemId={selectedItemId}
-                        handleDeleteItem={handleDeleteItem}
+                       // selectedItem={selectedItem}
+                        //selectedItemId={selectedItemId}
+                        //handleDeleteItem={handleDeleteItem}
                         handleOpenModal={handleOpenModal}
                         handleCloseModal={handleCloseModal}
-                        users={users}
-                        setUsers={setUsers}
+                        partners={partners}
+                        setPartners={setPartners}
                         //getUsers={getUsers}
                         refreshData={refreshData}
                       />
@@ -267,7 +292,7 @@ const Users = () => {
       </div>
     </div>
     </HelmetProvider>
-  );
-};
+  )
+}
 
-export default Users;
+export default Partners

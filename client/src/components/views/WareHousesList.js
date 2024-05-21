@@ -12,40 +12,6 @@ import useGetData from "../../hooks/useGetData";
 import { USERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import WarehouseEdit from "../editModals/WarehouseEdit";
 
-const data = [
-  {
-    warehouseId: 21003,
-    name: "Մասիս",
-    contact: {
-      phone: "+37496002906",
-      email: "asd2@adqwe.qqw",
-      address: {
-        street: "street",
-        city: "city",
-        country: "country",
-        state: "state",
-        zipCode: 1234,
-      },
-    },
-    type: "type",
-    code: "123145697",
-    balance: "+37496002906",
-    state: "Ակտիվ",
-    subWirehouse: "+37496002906",
-    storekeeper: "Կարեն Հարւթյունյան",
-  },
-  {
-    warehouseId: 21004,
-    name: "Ստեփանակերտ",
-    address: "Հանրապետության 2/3",
-    type: "type",
-    code: "123145697",
-    balance: "+37496002906",
-    state: "Ակտիվ",
-    subWirehouse: "+37496002906",
-    storekeeper: "Կարեն Հարւթյունյան",
-  },
-];
 const data1 = [
   {
     productId: 21003,
@@ -156,7 +122,7 @@ function WareHousesList() {
     data: wareHouses,
     setData: setWarehouses,
     refreshData,
-  } = useGetData(USERS_URL, currentPage, usersPerPage);
+  } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage);
 
   const handleOpenEditModal = (value) => {
     setEditRow((prev) => value);
@@ -342,6 +308,16 @@ function WareHousesList() {
     {
       title: "Տեսակ",
       dataIndex: "type",
+      render: (_, record) => (
+        <Space>
+          {record?.type === "Main" 
+          ? 'Հիմնական' 
+          :record?.type === "Mobile"
+          ? 'Շրջիկ'
+          :record?.type === "Other"
+          ? 'Այլ':''}
+        </Space>
+      ),
       width: "10%",
     },
     {
@@ -357,6 +333,15 @@ function WareHousesList() {
     {
       title: "Կարգավիճակ",
       dataIndex: "state",
+      render: (_, record) => (
+        <Space>
+          {record?.warehouseState === 1 
+          ? 'Ակտիվ' 
+          :record?.type === 0
+          ? 'Ոչ ակտիվ'
+          :''}
+        </Space>
+      ),
       width: "10%",
     },
     {
@@ -493,7 +478,7 @@ function WareHousesList() {
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
           <Table
-            dataSource={data}
+            dataSource={wareHouses}
             columns={wareHousesColumns}
             onRow={(record, index) => ({
               onClick: () => handleShowWareHouse(record, index),

@@ -15,7 +15,63 @@ import { balance_validation, city_validation, code_validation, email_validation,
 import { Input } from "../Input";
 import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
+import { WAREHOUSES_URL } from "../../utils/constants";
+import Select from "react-select";
 
+const storekeepers=[
+  {
+  label: " Arman Karapetyan",
+  value:12001
+},
+  {
+    label: " Levon Stepanyan",
+    value:12002
+},
+]
+const subWarehouses=[
+  {
+  label: "Abovyan",
+  value:15001
+},
+  {
+    label: "Armavir",
+    value:15002
+},
+]
+const warehouseType=[
+  {
+    value: "Main",
+    label:"Հիմնական"
+},
+  {
+    value: "Mobile",
+    label:"Շրջիկ"
+},
+  {
+    value: "Other",
+    label:"Այլ"
+},
+]
+const warehouseState=[
+  {
+  label: "Ակտիվ",
+  value:1
+},
+  {
+    label: "Ոչ ակտիվ",
+    value:0
+},
+]
+const salesAllowed=[
+  {
+  label: "Կարելի է",
+  value:1
+},
+  {
+    label: "Չի կարելի",
+    value:0
+},
+]
 function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
     const [additionalPhone, setAdditionalPhone] = useState(false);
   const axiosPrivate = useAxiosPrivate();
@@ -29,11 +85,16 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
       CountryRegionData[11][2] =
         "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
     }
+    setCountry(warehouse?.contact?.address?.country);
+
   }, []);
   const methods = useForm({
     mode: "onChange",
   });
   const { trigger } = useForm();
+  const handleToggleCreateModal = (value) => {
+    setEditRow((prev) => value);
+};
   const toggleAdditionalPhone = (e, value) => {
     e.stopPropagation();
     e.preventDefault();
@@ -73,8 +134,8 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
         code:code?.trim() !== warehouse?.code.trim() ? code : null,
         warehouseState:warehouseState?.trim() !== warehouse?.warehouseState.trim() ? warehouseState : null,
         type:type?.trim() !== warehouse?.type.trim() ? type : null,
-        name:name?.trim() !== name?.type.trim() ? name : null,
-        balance:balance?.trim() !== balance?.type.trim() ? balance : null,
+        name:name?.trim() !== warehouse?.name?.trim() ? name : null,
+        balance:balance !== warehouse?.balance ? balance : null,
         storekeeper:storekeeper?.trim() !== storekeeper?.type.trim() ? storekeeper : null,
         subWirehouse:subWirehouse?.trim() !== subWirehouse?.type.trim() ? subWirehouse : null,
         contact: {
@@ -106,11 +167,11 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
           },
           additional: editorRef.current.getContent({ format: "text" }).trim()!==warehouse?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
         };
-      const updatedData = deleteNullProperties(newWarehouse)
+      const updatedFields = deleteNullProperties(newWarehouse)
 
-      console.log(updatedData);
+      console.log(updatedFields);
       // try {
-      //   await axiosPrivate.post(WAREHOUSES_URL, updatedData, {
+      //   await axiosPrivate.put(WAREHOUSES_URL, { updatedFields, id: warehouse.warehouseId }, {
       //     headers: { "Content-Type": "application/json" },
       //     withCredentials: true,
       //   });
@@ -178,13 +239,75 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                               <Input {...code_validation} defaultValue={warehouse?.code} />
                             </div>
                             <div className="col-sm-6">
-                              <Input {...warehouseState_validation} defaultValue={warehouse?.state}/>
-                            </div>
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="warehouseState"
+                                    >
+                                      Կարգավիճակ
+                                    </label>
+                                    {methods.formState.errors
+                                      .warehouseState && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="warehouseState"
+                                      control={methods.control}
+                                      defaultValue={warehouseState.find((el)=>el.value===warehouse?.warehouseState)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={warehouseState}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                           </div>
                           <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...type_validation} defaultValue={warehouse?.type}/>
-                            </div>
+                          <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="warehouseType"
+                                    >
+                                      Տեսակ
+                                    </label>
+                                    {methods.formState.errors
+                                      .warehouseType && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="warehouseType"
+                                      control={methods.control}
+                                      defaultValue={warehouseType.find((el)=>el.value===warehouse?.type)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={warehouseType}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                             <div className="col-sm-6">
                               <Input {...name_validation} defaultValue={warehouse?.name}/>
                             </div>
@@ -194,13 +317,75 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                               <Input {...balance_validation} defaultValue={warehouse?.balance}/>
                             </div>
                             <div className="col-sm-6">
-                              <Input {...storekeeper_validation} defaultValue={warehouse?.storekeeper}/>
-                            </div>
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="storekeeper"
+                                    >
+                                      Պահեստապետ
+                                    </label>
+                                    {methods.formState.errors
+                                      .storekeeper && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="storekeeper"
+                                      control={methods.control}
+                                      defaultValue={storekeepers.find((el)=>el.value===warehouse?.storekeeper)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={storekeepers}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                           </div>
                           <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...subWarehouse_validation} defaultValue={warehouse?.subWarehouse}/>
-                            </div>
+                          <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="subWarehouse"
+                                    >
+                                      Ենթապահեստ
+                                    </label>
+                                    {methods.formState.errors
+                                      .subWarehouse && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="subWarehouse"
+                                      control={methods.control}
+                                      defaultValue={subWarehouses.find((el)=>el.value===warehouse?.subWarehouse)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={subWarehouses}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                             <div className="col-sm-6 d-flex">
                               <div className="col-sm-6">
                                 <div className="d-flex justify-content-between me-2">
@@ -293,88 +478,97 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                               </div>
                             </div>
                           </div>
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <div className="d-flex justify-content-between me-2">
-                                <label className="form-label" htmlFor="country">
-                                  Երկիր
-                                </label>
-                                {methods?.formState.errors.country && (
-                                  <span className="error text-red">
-                                    <img src={ErrorSvg} alt="errorSvg" />
-                                    Պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <Controller
-                                name="country"
-                                control={methods.control}
-                                defaultValue={
-                                    warehouse?.contact?.address?.country
-                                  }
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                  <CountryDropdown
-                                    {...field}
-                                    classes="form-control"
-                                    defaultOptionLabel="Երկիր"
-                                    value={country}
-                                    priorityOptions={["Armenia"]}
-                                    onChange={(val) => {
-                                      field.onChange(val);
-                                      setCountry(val);
-                                      methods.trigger("country");
-                                      methods.setValue("state", "");
-                                      methods.trigger("state");
-                                    }}
-                                    style={{
-                                      appearance: "auto",
-                                    }}
-                                  />
-                                )}
-                              />
-                            </div>
-                            <div className="col-sm-6">
-                              <div className="d-flex justify-content-between me-2">
-                                <label className="form-label" htmlFor="state">
-                                  Մարզ
-                                </label>
-                                {methods?.formState.errors.state && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <Controller
-                                name="state"
-                                control={methods.control}
-                                defaultValue={
-                                    warehouse?.contact?.address?.state
-                                  }
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                  <RegionDropdown
-                                    blankOptionLabel="Մարզ"
-                                    defaultOptionLabel="Մարզ"
-                                    classes="form-control"
-                                    country={country}
-                                    value={region}
-                                    onChange={(val) => {
-                                      field.onChange(val);
-                                      setRegion(val);
-                                      trigger("state");
-                                    }}
-                                    style={{
-                                      appearance: "auto",
-                                    }}
-                                  />
-                                )}
-                              />
-                            </div>
-                          </div>
+                          <div className="row gx-3 ">
+                        <div className="col-sm-6">
+                                    <div className="d-flex justify-content-between me-2">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="country"
+                                      >
+                                        Երկիր
+                                      </label>
+                                      {methods?.formState.errors.country && (
+                                        <span className="error text-red">
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                          Պարտադիր
+                                        </span>
+                                      )}
+                                    </div>
+                                    <Controller
+                                      name="country"
+                                      control={methods.control}
+                                      defaultValue={
+                                        warehouse?.contact?.address?.country
+                                      }
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <CountryDropdown
+                                          {...field}
+                                          classes="form-control"
+                                          defaultOptionLabel="Երկիր"
+                                          value={field.value}
+                                          priorityOptions={["Armenia"]}
+                                          onChange={(val) => {
+                                            field.onChange(val);
+                                            setCountry(val);
+                                            methods.trigger("country");
+                                            methods.setValue("state",'')
+                                            methods.trigger("state")
+                                          }}
+                                          style={{
+                                            appearance: "auto",
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="col-sm-6">
+                                    <div className="d-flex justify-content-between me-2">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="state"
+                                      >
+                                        Մարզ
+                                      </label>
+                                      {methods?.formState.errors.state && (
+                                        <span className="error text-red">
+                                          <span>
+                                            <img
+                                              src={ErrorSvg}
+                                              alt="errorSvg"
+                                            />
+                                          </span>
+                                          պարտադիր
+                                        </span>
+                                      )}
+                                    </div>
+                                    <Controller
+                                      name="state"
+                                      control={methods.control}
+                                      defaultValue={
+                                        warehouse?.contact?.address?.state
+                                      }
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <RegionDropdown
+                                          {...field}
+                                          classes="form-control"
+                                          country={country}
+                                          defaultOptionLabel="Մարզ"
+                                          value={field.value}
+                                          onChange={(val) => {
+                                            field.onChange(val);
+                                            setRegion(val);
+                                            trigger("state");
+                                          }}
+                                          style={{
+                                            appearance: "auto",
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                           <div className="row gx-3 mt-2">
                             <div className="col-sm-6">
                               <Input {...city_validation} defaultValue={warehouse?.contact?.address?.city}/>
@@ -385,11 +579,47 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...zipCode_validation} defaultValue={warehouse?.contact?.address?.zipcode}/>
+                              <Input {...zipCode_validation} defaultValue={warehouse?.contact?.address?.zipCode}/>
                             </div>
                             <div className="col-sm-6">
                               <Input {...email_validation} defaultValue={warehouse?.contact?.email}/>
                             </div>
+                          </div>
+                          <div className="row gx-3">
+                          <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="salesAllowed"
+                                    >
+                                      Վաճառք պահեստից
+                                    </label>
+                                    {methods.formState.errors
+                                      .salesAllowed && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="salesAllowed"
+                                      control={methods.control}
+                                      defaultValue={salesAllowed.find((el)=>el.value===warehouse?.salesAllowed)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={salesAllowed}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                           </div>
                         </div>
                       </div>
@@ -429,8 +659,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                   initialValue={warehouse?.additional}
                                   init={{
                                     height: 300,
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export pageembed linkchecker a11ychecker tinymcespellchecker permanentpen  advtable advcode editimage advtemplate ai mentions tinycomments  mergetags autocorrect typography inlinecss markdown markdown",
+                                    plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
                                     toolbar:
                                       "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
                                     tinycomments_mode: "embedded",
