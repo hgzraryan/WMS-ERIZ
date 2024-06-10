@@ -8,9 +8,16 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import PartnerEdit from '../editModals/PartnerEdit';
+import ComponentToConfirm from '../ComponentToConfirm';
 
 function PartnersTable(
     {
+      confirmPartnerRef,
+  selectedItem,
+  selectedItemId,
+  handleDeleteItem,
+  handleOpenModal,
+  handleCloseModal,
         partners,
         setPartners,
         refreshData
@@ -134,14 +141,11 @@ function PartnersTable(
        
         {
           title: "ID",
-          dataIndex: "partnerId",
-          onFilter: (value, record) =>
-            record["partnerId"]
-              .toString()
-              .toLowerCase()
-              .includes((value).toLowerCase()),
-          ...getColumnSearchProps("partnerId"),
-          width: 80,
+    dataIndex: "partnerId",
+    onFilter: (value, record) =>
+      record.partnerId.toString().toLowerCase().includes(value.toLowerCase()),
+    ...getColumnSearchProps("partnerId"),
+    width: 80,
         },
         {
           title: "Անվանում",
@@ -166,10 +170,21 @@ function PartnersTable(
           title:'Կազմ․ տեսակը',
           dataIndex: "companyType",
           filters: [
-            { text: 'Ֆիզ անձ', value: 'Ֆիզ անձ' },
-            { text: 'Իրավ․ անձ', value: 'Իրավ․ անձ' },
+            { text: 'Ֆիզ անձ', value: 'Physical' },
+            { text: 'Իրավ․ անձ', value: 'Legal' },
+            { text: 'Այլ', value: 'Other' },
           ],
-          onFilter: (value, record) => record.companyType.indexOf(value) === 0,
+          onFilter: (value, record) => record?.companyType?.indexOf(value) === 0,
+          render: ( _,record) => (
+            <Space>
+              {record?.companyType==="Legal"
+              ?'Իրավ․ անձ'
+              :record?.companyType==="Physical"
+              ?'Ֆիզ անձ'
+              :record?.companyType==="Other"
+              ?'Այլ':''}
+            </Space>
+          ),
           width: 120,
         },
         {
@@ -208,11 +223,16 @@ function PartnersTable(
         {
           title: "Գործընկերոջ տեսակը",
           dataIndex: "partnerType",
-        //   filters: [
-        //     { text: 'Ֆիզ անձ', value: 'Ֆիզ անձ' },
-        //     { text: 'Իրավ․ անձ', value: 'Իրավ․ անձ' },
-        //   ],
-        //   onFilter: (value, record) => record.companyType.indexOf(value) === 0,
+          render: ( _,record) => (
+            <Space>
+              {record?.partnerType==="Producer"
+              ?'Արտադրող'
+              :record?.partnerType==="Reseller"
+              ?'Վերավաճառող'
+              :record?.partnerType==="Investor"
+              ?'Ներդրող':''}
+            </Space>
+          ),
           width: 150,
         },
         {
@@ -236,7 +256,7 @@ function PartnersTable(
                     </span>
                   </span>
                 </a>
-                {/* <a
+                <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                   data-bs-toggle="tooltip"
                   onClick={() => handleOpenModal(row)}
@@ -250,7 +270,7 @@ function PartnersTable(
                       <FeatherIcon icon="trash" />
                     </span>
                   </span>
-                </a> */}
+                </a>
                 {/* <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                   data-bs-toggle="tooltip"
@@ -322,6 +342,15 @@ function PartnersTable(
         <PartnerEdit partner={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
       )
     }
+     <ComponentToConfirm
+              handleCloseModal={handleCloseModal}
+              handleOpenModal={handleOpenModal}
+              handleDeleteItem={handleDeleteItem}
+              selectedItemId={selectedItemId}
+              confirmRef={confirmPartnerRef}
+              keyName={selectedItem.name}
+              delId={selectedItem.partnerId}
+            />
         <Table
               dataSource={partners}
               columns={resizableColumns}

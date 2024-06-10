@@ -537,6 +537,11 @@ function UsersTable({
       title: "Ծածկանուն",
       dataIndex: "username",
       width:60,
+      onFilter: (value, record) =>
+        record["username"]
+          .toString()
+          .toLowerCase()
+          .includes((value).toLowerCase()),
       ...getColumnSearchProps("username"),
 
     },
@@ -734,7 +739,7 @@ const setUserTypeStyle = (userType) => {
               handleOpenModal={handleOpenModal}
               handleDeleteItem={handleDeleteItem}
               selectedItemId={selectedItemId}
-              confirmUserRef={confirmRef}
+              confirmRef={confirmRef}
               keyName={selectedItem.username}
               delId={selectedItem.userId}
             />

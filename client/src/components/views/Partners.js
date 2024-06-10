@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { PARTNERS_URL } from '../../utils/constants';
+import { PARTNERS_URL, USERS_URL } from '../../utils/constants';
 import useDeleteData from '../../hooks/useDeleteData';
 import useGetData from '../../hooks/useGetData';
 import ReactPaginate from 'react-paginate';
@@ -10,80 +10,31 @@ import { HelmetProvider,Helmet } from 'react-helmet-async'
 import PartnersTable from '../viewTables/PartnersTable';
 
 function Partners() {
-    const confirmUserRef = useRef("");
+    const confirmPartnerRef = useRef("");
     const [isOpen, setIsOpen] = useState(false);  
     const [selectedItem, setSelectedItem] = useState("");  
     const [selectedItemId, setSelectedItemId] = useState(null);  
     const [currentPage, setCurrentPage] = useState(0);    
-    const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));  
-    // const [partners, setPartners] = useState([
-    //     {
-    //         partnerId:47001,
-    //         name:'Կարեն Հարությունյան',
-    //         companyType:'Ֆիզ անձ',
-    //         respPersonFullName:'Կարեն Հարությունյան',
-    //         contact:{
-    //             phone:'+37485965823',
-    //             addPhone:'+48979616669',
-    //             email:'asd@asdasd.er',
-    //             address:{
-    //                 country:"Armenia",
-    //                 state:"Yerevan",
-    //                 city:"Yerevan",
-    //                 street:"Abovyan 15-25",
-    //                 zipCode:'1235',
-    //             }
-    //         },
-    //         currency:'AMD',
-    //         bankAccNumber:123456798,
-    //         bankName:'InecoBank',
-    //         partnerType:'Producer',
-    //         productCategorie:'meat'
-    //     },
-    //     {
-    //         partnerId:47002,
-    //         name:'Աշոտ Հարությունյան',
-    //         companyType:'Իրավ․ անձ',
-    //         respPersonFullName:'Կարեն Հարությունյան',
-    //         contact:{
-    //             phone:'+37485965823',
-    //             addPhone:'+48979616669',
-    //             email:'asd@asdasd.er',
-    //             address:{
-    //                 country:"Armenia",
-    //                 state:"Yerevan",
-    //                 city:"Yerevan",
-    //                 street:"Abovyan 15-25",
-    //                 zipCode:'1235',
-    //             }
-    //         },
-    //         currency:'AMD',
-    //         bankAccNumber:123456798,
-    //         bankName:'InecoBank',
-    //         partnerType:'Producer',
-    //         productCategorie:'meat'
-    //     }
-    // ]);  
-    //const pageCount = Math.ceil(usersCount/usersPerPage)
+    const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));   
   
-  const {
-      data: partners,
-      setData: setPartners,
-      // hasMore,
-      // checkData,
-      refreshData
-    } = useGetData(PARTNERS_URL,currentPage,usersPerPage);
-   //-------------------
-    
-    // const { handleDeleteItem,updateUsersCount } = useDeleteData(
-    //   PARTNERS_URL,
-    //   confirmUserRef,
-    //   selectedItem,
-    //   setSelectedItemId,
-    //   "username",
-    //   refreshData
+      const {
+        data: partners,
+        setData: setPartners,
+        // hasMore,
+        // checkData,
+        refreshData
+      } = useGetData(PARTNERS_URL,currentPage,usersPerPage);
+     //-------------------
       
-    // );
+      const { handleDeleteItem,updateUsersCount } = useDeleteData(
+        PARTNERS_URL,
+        confirmPartnerRef,
+        selectedItem,
+        setSelectedItemId,
+        "name",
+        refreshData
+        
+      );
    const handlePageClick = ({ selected: selectedPage }) => {
       setCurrentPage(selectedPage);
       //updateUsersCount();
@@ -150,7 +101,7 @@ function Partners() {
                   {isOpen && (
                     <AddPartner
                       setIsOpen={setIsOpen}
-                      //refreshData={() => refreshData()}
+                      refreshData={() => refreshData()}
                       //updateUsersCount={updateUsersCount}
                     />
                   )}
@@ -257,10 +208,10 @@ function Partners() {
                       }
                     > */}
                       <PartnersTable
-                        confirmRef={confirmUserRef}
-                       // selectedItem={selectedItem}
-                        //selectedItemId={selectedItemId}
-                        //handleDeleteItem={handleDeleteItem}
+                         confirmPartnerRef={confirmPartnerRef}
+                         selectedItem={selectedItem}
+                          selectedItemId={selectedItemId}
+                        handleDeleteItem={handleDeleteItem}
                         handleOpenModal={handleOpenModal}
                         handleCloseModal={handleCloseModal}
                         partners={partners}
@@ -271,7 +222,7 @@ function Partners() {
                      <ReactPaginate
                       previousLabel = {"Հետ"}    
                       nextLabel = {"Առաջ"}
-                      pageCount = {5}
+                      //pageCount = {pageCount}
                       onPageChange = {handlePageClick}
                       initialPage = {0}
                       containerClassName={"pagination"}

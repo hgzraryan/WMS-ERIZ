@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const useGetData = (url, currentPage, usersPerPage) => {
   const [data, setData] = useState([]);
+  const [dataCount, setDataCount] = useState(null);
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +21,8 @@ const useGetData = (url, currentPage, usersPerPage) => {
         });
         if (isMounted) {
           setData(response.data.jsonString);
+          setDataCount(response.data.count)
+
         }
       } catch (err) {
         console.error(err);
@@ -59,6 +62,7 @@ const useGetData = (url, currentPage, usersPerPage) => {
     data,
     setData,
     refreshData,
+    dataCount
   };
 };
 export default useGetData;

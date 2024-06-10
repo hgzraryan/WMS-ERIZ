@@ -29,6 +29,7 @@ import {
 } from "react-country-region-selector";
 import { deleteNullProperties } from "../../utils/helper";
 import Select from "react-select";
+import { customStyles } from "../customStyles";
 
 const storekeepers=[
   {
@@ -263,6 +264,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={warehouseState}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -299,6 +301,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={warehouseType}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -341,6 +344,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={storekeepers}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -377,6 +381,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={subWarehouses}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -594,6 +599,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={salesAllowed}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -637,8 +643,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                   }
                                   init={{
                                     height: 300,
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
+                                    plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
                                     toolbar:
                                       "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
                                     tinycomments_mode: "embedded",

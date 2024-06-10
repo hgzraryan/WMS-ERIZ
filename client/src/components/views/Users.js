@@ -28,14 +28,15 @@ const Users = () => {
   //const usersCount = useSelector(selectUsersCount)
   const [currentPage, setCurrentPage] = useState(0);  
   const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
-  //const pageCount = Math.ceil(usersCount/usersPerPage)
   const {
     data: users,
     setData: setUsers,
     // hasMore,
     // checkData,
-    refreshData
+    refreshData,
+    dataCount
   } = useGetData(USERS_URL,currentPage,usersPerPage);
+  const pageCount = Math.ceil(dataCount/usersPerPage)
   //-------------------
   
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
@@ -246,7 +247,7 @@ const Users = () => {
                      <ReactPaginate
                       previousLabel = {"Հետ"}    
                       nextLabel = {"Առաջ"}
-                      pageCount = {5}
+                      pageCount = {pageCount}
                       onPageChange = {handlePageClick}
                       initialPage = {0}
                       containerClassName={"pagination"}

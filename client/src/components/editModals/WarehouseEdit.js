@@ -17,6 +17,7 @@ import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
 import { WAREHOUSES_URL } from "../../utils/constants";
 import Select from "react-select";
+import { customStyles } from "../customStyles";
 
 const storekeepers=[
   {
@@ -267,6 +268,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                           {...field}
                                           options={warehouseState}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -303,6 +305,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                           {...field}
                                           options={warehouseType}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -345,6 +348,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                           {...field}
                                           options={storekeepers}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -381,6 +385,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                           {...field}
                                           options={subWarehouses}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -615,6 +620,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                           {...field}
                                           options={salesAllowed}
                                           placeholder={"Ընտրել"}
+                                          styles={customStyles}
                                         />
                                       )}
                                     />

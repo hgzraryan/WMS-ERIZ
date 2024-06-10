@@ -25,6 +25,7 @@ import makeAnimated from "react-select/animated";
 import 'react-phone-number-input/style.css'
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 import { Editor } from "@tinymce/tinymce-react";
+import { customStyles } from "../customStyles";
 
 const roleState = [
     { label:'Ադմին',name: "Admin", value: 5150 },
@@ -57,36 +58,6 @@ function CreateUser({ setIsOpen,refreshData }) {
     }
   }, []);
   const animatedComponents = makeAnimated();
-  const colourStyles = {
-    control: (styles, { isFocused, isSelected }) => ({
-      ...styles,
-      backgroundColor: "#fff",
-      borderColor: isFocused ? "#fff" : "#e8e3e3",
-      boxShadow: "#e8e3e3",
-
-      ":hover": {
-        borderColor: "#fff",
-      },
-    }),
-    option: (styles, { data }) => ({
-      ...styles,
-      zIndex:100,
-    }),
-    multiValueLabel: (styles, { data }) => ({
-      ...styles,
-      backgroundColor: "#0096fb",
-      color: "#fff",
-    }),
-    multiValueRemove: (styles, { data }) => ({
-      ...styles,
-      backgroundColor: "#0096fb",
-      color: "#e8e3e3",
-      ":hover": {
-        backgroundColor: "#0096fb",
-        color: "#eb3434",
-      },
-    }),
-  };
   
   // useEffect(() => {
   //   setTimeout(() => {
@@ -668,7 +639,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                           closeMenuOnSelect={true}
                                           components={animatedComponents}
                                           options={roleState}
-                                          styles={colourStyles}
+                                          styles={customStyles}
                                           placeholder={"Ընտրել"}
                                           menuPlacement="top"
                                         />
@@ -715,7 +686,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                 }                                
                                 init={{
                                   height:300,
-                                  plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+                                  plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
                                   toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
                                   tinycomments_mode: 'embedded',
                                   tinycomments_author: 'Author name',

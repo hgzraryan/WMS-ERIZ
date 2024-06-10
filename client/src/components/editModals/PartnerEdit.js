@@ -27,6 +27,7 @@ import {
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
+import { customStyles } from "../customStyles";
 const companyTypes = [
   {
     label: "Ֆիզիկական անձ",
@@ -285,6 +286,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                                     {...field}
                                     options={companyTypes}
                                     placeholder={"Ընտրել"}
+                                    styles={customStyles}
                                   />
                                 )}
                               />
@@ -423,6 +425,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                                     {...field}
                                     options={currencies}
                                     placeholder={"Ընտրել"}
+                                    styles={customStyles}
                                   />
                                 )}
                               />
@@ -456,6 +459,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                                     {...field}
                                     options={partnerTypes}
                                     placeholder={"Ընտրել"}
+                                    styles={customStyles}
                                   />
                                 )}
                               />
@@ -607,6 +611,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                                       })
                                     )}
                                     placeholder={"Ընտրել"}
+                                    styles={customStyles}
                                   />
                                 )}
                               />

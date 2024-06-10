@@ -11,6 +11,8 @@ import AddWareHouse from "../addViews/AddWareHouse";
 import useGetData from "../../hooks/useGetData";
 import { USERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import WarehouseEdit from "../editModals/WarehouseEdit";
+import useDeleteData from "../../hooks/useDeleteData";
+import ComponentToConfirm from "../ComponentToConfirm";
 
 const data1 = [
   {
@@ -106,10 +108,12 @@ const data1 = [
 ];
 
 function WareHousesList() {
+  const confirmWarehouseRef = useRef(""); 
+  const [selectedItem, setSelectedItem] = useState("");  
+  const [selectedItemId, setSelectedItemId] = useState(null);  
   const [currentPage, setCurrentPage] = useState(0);
   const [editRow, setEditRow] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  //const pageCount = Math.ceil(agentsCount/usersPerPage)
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -117,13 +121,30 @@ function WareHousesList() {
     Math.round(window.innerHeight / 100)
   );
   const [wareHouseDetails, setWareHouseDetails] = useState(false);
-
+  
   const {
     data: wareHouses,
     setData: setWarehouses,
     refreshData,
+    dataCount
   } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage);
-
+  const pageCount = Math.ceil(dataCount/usersPerPage)
+  const { handleDeleteItem,updateUsersCount } = useDeleteData(
+    WAREHOUSES_URL,
+    confirmWarehouseRef,
+    selectedItem,
+    setSelectedItemId,
+    "name",
+    refreshData
+    
+  );
+  const handleOpenModal = (user) => {
+    setSelectedItemId(true);
+    setSelectedItem((prev) => user);
+  };
+  const handleCloseModal = () => {
+    setSelectedItemId(null);
+  };	
   const handleOpenEditModal = (value) => {
     setEditRow((prev) => value);
     console.log(value);
@@ -272,7 +293,6 @@ function WareHousesList() {
       dataIndex: "phone",
       render: (_, record) => (
         <Space>
-          {console.log(record)}
           {record?.contact?.phone}
         </Space>
       ),
@@ -283,7 +303,6 @@ function WareHousesList() {
       dataIndex: "address",
       render: (_, record) => (
         <Space>
-          {console.log(record)}
           {record?.contact?.address?.city},{record?.contact?.address?.street}
         </Space>
       ),
@@ -294,7 +313,6 @@ function WareHousesList() {
       dataIndex: "email",
       render: (_, record) => (
         <Space>
-          {console.log(record)}
           {record?.contact?.email}
         </Space>
       ),
@@ -349,9 +367,90 @@ function WareHousesList() {
       dataIndex: "actions",
       width: "10%",
       render: (_, record) => (
+        <>
         <Space size="middle" onClick={() => handleOpenEditModal(record)}>
           <FeatherIcon icon="edit" width={20} />
+          {/* <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                  data-bs-toggle="tooltip"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    handleOpenModal(record)
+                  }}
+                  data-placement="top"
+                  title=""
+                  data-bs-original-title="Delete"
+                  href="#"
+                  >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="trash" />
+                    </span>
+                  </span>
+                </a> */}
+          {/* <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                  data-bs-toggle="tooltip"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    handleOpenModal(record)
+                  }}
+                  data-placement="top"
+                  title=""
+                  data-bs-original-title="Delete"
+                  href="#"
+                  >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="trash" />
+                    </span>
+                  </span>
+                </a> */}
+          {/* <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                  data-bs-toggle="tooltip"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    handleOpenModal(record)
+                  }}
+                  data-placement="top"
+                  title=""
+                  data-bs-original-title="Delete"
+                  href="#"
+                  >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="trash" />
+                    </span>
+                  </span>
+                </a> */}
         </Space>
+        <Space size="middle" onClick={() => handleOpenEditModal(record)}>
+          {/* <FeatherIcon icon="edit" width={20} /> */}
+          <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                  data-bs-toggle="tooltip"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    handleOpenModal(record)
+                  }}
+                  data-placement="top"
+                  title=""
+                  data-bs-original-title="Delete"
+                  href="#"
+                  >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="trash" />
+                    </span>
+                  </span>
+                </a>
+        </Space>
+                  </>
       ),
     },
   ];
@@ -437,6 +536,15 @@ function WareHousesList() {
         <title>Explore Warehouse</title>
         <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
       </Helmet>
+      <ComponentToConfirm
+              handleCloseModal={handleCloseModal}
+              handleOpenModal={handleOpenModal}
+              handleDeleteItem={handleDeleteItem}
+              selectedItemId={selectedItemId}
+              confirmRef={confirmWarehouseRef}
+              keyName={selectedItem.name}
+              delId={selectedItem.warehouseId}
+            />
       {editRow && (
         <WarehouseEdit
           warehouse={editRow}

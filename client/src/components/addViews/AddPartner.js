@@ -27,6 +27,7 @@ import {
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
+import { customStyles } from "../customStyles";
 const companyTypes = [
   {
     label: "Ֆիզիկական անձ",
@@ -263,12 +264,15 @@ function AddPartner({ setIsOpen, refreshData }) {
                                   name="companyType"
                                   control={methods.control}
                                   defaultValue={null}
+                                  closeMenuOnSelect={false}
+                                  isMulti
                                   rules={{ required: true }}
                                   render={({ field }) => (
                                     <Select
                                       {...field}
                                       options={companyTypes}
                                       placeholder={"Ընտրել"}
+                                      styles={customStyles}
                                     />
                                   )}
                                 />
@@ -404,6 +408,8 @@ function AddPartner({ setIsOpen, refreshData }) {
                                       {...field}
                                       options={currencies}
                                       placeholder={"Ընտրել"}
+                                      styles={customStyles}
+
                                     />
                                   )}
                                 />
@@ -437,6 +443,7 @@ function AddPartner({ setIsOpen, refreshData }) {
                                       {...field}
                                       options={partnerTypes}
                                       placeholder={"Ընտրել"}
+                                      styles={customStyles}
                                     />
                                   )}
                                 />
@@ -575,6 +582,7 @@ function AddPartner({ setIsOpen, refreshData }) {
                                         })
                                       )}
                                       placeholder={"Ընտրել"}
+                                      styles={customStyles}
                                     />
                                   )}
                                 />
@@ -618,8 +626,7 @@ function AddPartner({ setIsOpen, refreshData }) {
                                   }
                                   init={{
                                     height: 300,
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
+                                    plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
                                     toolbar:
                                       "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
                                     tinycomments_mode: "embedded",

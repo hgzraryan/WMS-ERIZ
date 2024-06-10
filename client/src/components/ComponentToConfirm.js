@@ -5,7 +5,7 @@ const ComponentToConfirm = ({
   handleCloseModal,
   handleDeleteItem,
   selectedItemId,
-  confirmUserRef,
+  confirmRef,
   keyName,
   delId,
 }) => {
@@ -41,16 +41,16 @@ const ComponentToConfirm = ({
                                   Աշխատակցի հեռացման համար խնդրում ենք մուտքագրել "{keyName}" տեքստը
                                 </label>
                                 <input
-                                  ref={confirmUserRef}
+                                  ref={confirmRef}
                                   type="text"
                                   name="name"
                                   placeholder="Մուտքագրել պահանջվող տեքստը"
                                   id="confirmUser"
                                   className="form-control w-50"
                                   autoComplete="off"
-                                  value={confirmUserRef.value}
+                                  value={confirmRef.value}
                                   onChange={(e) =>
-                                    (confirmUserRef.current = e.target.value)
+                                    (confirmRef.current = e.target.value)
                                   }
                                   required
                                 />
