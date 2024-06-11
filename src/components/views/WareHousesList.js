@@ -497,7 +497,9 @@ function WareHousesList() {
       dataIndex: "actions",
       width: 100,
       render: (_, record) => (
-        <Space size="middle" onClick={console.log(record)}>
+        <Space size="middle" 
+        //onClick={console.log(record)}
+        >
           <FeatherIcon icon="edit" width={20} />
         </Space>
       ),

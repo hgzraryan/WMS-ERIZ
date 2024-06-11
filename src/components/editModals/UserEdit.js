@@ -16,7 +16,6 @@ import { toast } from "react-toastify";
 import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
 import CustomDateComponent from "../CustomDateComponent";
-import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import "react-phone-number-input/style.css";
 import {
@@ -28,14 +27,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { deepEqual, deleteNullProperties, objToArrWithObjects } from "../../utils/helper";
 import { USERS_URL } from "../../utils/constants";
 import { Editor } from "@tinymce/tinymce-react";
-const roleState = [
-  { label:'Ադմին',name: "Admin", value: 5150 },
-  { label:'Հաստատող',name: "Approver", value: 3345 },
-  { label:'Փոփոխող',name: "Editor", value: 1984 },
-  { label:'Օգտատեր',name: "User", value: 2001 },
-  { label:'Նմուշառող',name: "Sampler", value: 1212 },
-  { label:'Բժիշկ',name: "Doctor", value: 9578 },  
-]
+
 function UserEdit({ user, setEditRow, refreshData }) {
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);

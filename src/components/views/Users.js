@@ -16,9 +16,11 @@ import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { useSelector } from "react-redux";
 import { USERS_URL } from "../../utils/constants";
 import UsersTable from "../viewTables/UsersTable";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Users = () => {
-
+  const { pageNumber } = useParams();
+  const navigate = useNavigate();
   const confirmUserRef = useRef("");
   const [isOpen, setIsOpen] = useState(false);
   //const [users, setUsers] = useState(jsonString);
@@ -28,17 +30,20 @@ const Users = () => {
   //const usersCount = useSelector(selectUsersCount)
   const [currentPage, setCurrentPage] = useState(0);  
   const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
+  const [searchCount,setSearchCount] = useState(null)
+  const [searchParams,setSearchParams] = useState(null)
   const {
     data: users,
     setData: setUsers,
-    // hasMore,
-    // checkData,
     refreshData,
     dataCount
-  } = useGetData(USERS_URL,currentPage,usersPerPage);
-  const pageCount = Math.ceil(dataCount/usersPerPage)
+  } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
   //-------------------
-  
+  const handleSearchPageCount = (data) =>{
+    setSearchCount(data.count)
+    setSearchParams(data.params)
+  }
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     USERS_URL,
     confirmUserRef,

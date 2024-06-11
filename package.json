@@ -81,5 +81,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://wms.eriz.am:8443"
+  "proxy": "https://wms.eriz.am:5443"
 }

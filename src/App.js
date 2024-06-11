@@ -1,39 +1,5 @@
-// import Register from "./components/Register";
-// import Login from "./components/Login";
-// import PrivacyPolicy from "./components/PrivacyPolicy";
-// import Home from "./components/Home";
-// import Users from "./components/views/Users";
-// import Layout from "./components/layouts/Layout";
-// import Editor from "./components/Editor";
-// import Admin from "./components/Admin";
-// import Missing from "./components/Missing";
-// import Unauthorized from "./components/Unauthorized";
-// import Lounge from "./components/Lounge";
-// import LinkPage from "./components/LinkPage";
-// import RequireAuth from "./components/RequireAuth";
-// import PersistLogin from "./components/PersistLogin";
-// import MainTemplate from "./components/layouts/MainTemplate";
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-//wareHouseList
-//commodityValuesList
-//priceList
-//???
-//wareHouseImport/importWarrent
-//commodityPurchaseRetail
-//commodityMovement
-//commodityRevaluation
-//commodityDischarge kam Export
-//inventory
-//inventoryByScanner
-//GroupNameList
-//grouping
-//ungrouping
-//partition
-//expiredCommodity
-//minimalCount
-//requirements
-//defectura
 import {
   LOGIN_ROUTE,
   PRIVACY_POLICY_ROUTE,
@@ -86,7 +52,9 @@ import {
   MINLIMITPRODUCTS_ROUTE,
   REQUIREMENTS_ROUTE,
   DEFACTURA_ROUTE,
-  PARTNERS_ROUTE
+  PARTNERS_ROUTE,
+  SETUP_ROUTE,
+  LEGALFORMS_ROUTE
 } from "./utils/constants";
 const Register = lazy(()=>  import("./components/Register"));
 const Login = lazy(()=>  import("./components/Login"));
@@ -143,6 +111,8 @@ const AccessWarrant = lazy(()=>  import("./components/views/AccessWarrant"));
 const ProductCover = lazy(()=>  import("./components/views/ProductCover"));
 const PriceList = lazy(()=>  import("./components/views/PriceList"));
 const ListOfProductValues = lazy(()=>  import("./components/views/ListOfProductValues"));
+const Setup = lazy(()=>  import("./components/views/Setup"));
+const LegalForms = lazy(()=>  import("./components/views/LegalForms"));
 
 function App() {
   return (
@@ -164,6 +134,8 @@ function App() {
               <Route index path={DASHBOARD_ROUTE} element={<Home />} />
 
               <Route index path="/" element={<Home />} />
+              <Route index path={SETUP_ROUTE} element={<Setup />} />
+              <Route  path={LEGALFORMS_ROUTE} element={<LegalForms />} />
 
               <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                 <Route path={ADMIN_ROUTE} element={<Admin />} />

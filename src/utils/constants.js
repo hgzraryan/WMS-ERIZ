@@ -4,20 +4,19 @@ export const REGISTER_ROUTE = 'register'
 export const LINKPAGE_ROUTE = 'linkpage'
 export const UNAUTHORIZED_ROUTE = 'unauthorized'
 export const DASHBOARD_ROUTE = 'dashboard'
-export const USERS_ROUTE = 'users/users'
+export const USERS_ROUTE = 'users/users/page/:pageNumber'
 export const ADMIN_ROUTE = 'admin'
 export const EDITOR_ROUTE = 'editor'
 export const LOUNGE_ROUTE = 'lounge'
 
-export const USERS_URL = "/users"
 export const PRIVILIGE_ROUTE = 'users/privileges'
 export const USERS_ID_ROUTE = 'users/users/:id'
 export const ROLES_ROUTE = 'users/roles'
 export const WORKERSPOSITION_ROUTE = 'workers/position'
 export const WORKERS_ROUTE = 'workers/workers'
-export const CUSTOMERS_ROUTE = 'customers/customers'
+export const CUSTOMERS_ROUTE = 'customers/customers/page/:pageNumber'
 export const COMPANIES_ROUTE = 'companies/companies'
-export const PARTNERS_ROUTE = 'companies/partners'
+export const PARTNERS_ROUTE = 'companies/partners/page/:pageNumber'
 export const BRANDS_ROUTE = 'companies/brands'
 export const PRODUCTCLASSES_ROUTE = 'products/productsClasses'
 export const PRODUCTS_ROUTE = 'products/products'
@@ -50,15 +49,22 @@ export const PRODUCTCOVER_ROUTE = 'warehouses/productCover'
 export const LISTOFPRODUCTVALUES_ROUTE = 'warehouses/listOfProductValues'
 export const PRICELIST_ROUTE = 'warehouses/priceList'
 export const DEFACTURA_ROUTE = 'warehouses/defactura'
+export const SETUP_ROUTE = 'setup'
+export const LEGALFORMS_ROUTE = 'setup/legalForms/page/:pageNumber'
 
 
+export const USERS_URL = "/users"
 export const WAREHOUSES_URL = '/warehouses'
 export const PARTNERS_URL = '/partners'
+export const CUSTOMERS_URL = '/customers'
+export const LEGALFORMS_URL = '/legalForms'
 
 
 export const REGISTER_USER = "/registerUser";
 export const REGISTER_WAREHOUSE = "/registerWarehouse";
 export const REGISTER_PARTNER = "/registerPartner";
+export const REGISTER_CUSTOMER = "/registerCustomer";
+export const REGISTER_LEGALFORM = "/registerLegalForm";
 
 //user Roles
 export const ROLES = {

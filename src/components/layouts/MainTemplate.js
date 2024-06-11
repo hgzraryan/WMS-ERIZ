@@ -9,6 +9,7 @@ import { checkUsersCount, selectUsersCount } from "../../redux/features/users/us
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
 import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
+import sideSetupSvg from '../../dist/svg/sideSetup.svg'
 
 const MainTemplate = () => {
     const navigate = useNavigate();
@@ -45,21 +46,31 @@ const MainTemplate = () => {
         ssetIsActive1(subMenu)
         msetIsActive1(menu)
         dispatch(checkSelectedMenu(subMenu))
-        localStorage.setItem("activeMenu", menu);
-        localStorage.setItem("activeSubMenu", subMenu);
+        //localStorage.setItem("activeMenu", menu);
+        localStorage.setItem("activeSubMenu", JSON.stringify(subMenu));
        
 
     }
         //console.log(selectMenu)
   
    //--------------------------------------
+   useEffect(() => {
+    localStorage.setItem("activeMenu", JSON.stringify(location.pathname.split('/')[1]));
+    const subMenuIsActiveData = JSON.parse(localStorage.getItem('activeSubMenu'));
+    const menuIsActiveData = JSON.parse(localStorage.getItem('activeMenu'));
+    //const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+    //storedUserData?setUserData(storedUserData):setUserData('')
+    menuIsActiveData?msetIsActive1(menuIsActiveData):msetIsActive1('')
+    subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
+  }, [location?.pathname]);
+   //--------------------------------------
     const signOut = async () => {
         await logout();
         navigate('/login');
     }
 
-    const  isActiceDD = (currentDD) => {    
-        console.log('currentDD' ,currentDD)    
+    const  isActiceDD = (currentDD) => {     
         if(activeDropdown === currentDD){
             setActiveDropdown(current => '');        
         }else{
@@ -343,7 +354,7 @@ const MainTemplate = () => {
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="users" || location.pathname==="/users/users"?"nav-link active":"nav-link"} to="./users/users"
+                                                        <Link className={sisActive1==="users" || location.pathname==="/users/users"?"nav-link active":"nav-link"} to="./users/users/page/1"
                                                         onClick={()=>handleSubmenuClick("users","users")}>  
                                                 <span className="badge badge-sm badge-primary badge-sm badge-pill position-top-start ">{usersCount}</span>
                                                             <span className="nav-link-text">Օգտատերեր</span>
@@ -411,7 +422,7 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="customers" || location.pathname==="/customers/customers"?"nav-link active":"nav-link"} to="./customers/customers"
+                                                        <Link className={sisActive1==="customers" || location.pathname==="/customers/customers"?"nav-link active":"nav-link"} to="./customers/customers/page/1"
                                                         onClick={()=>handleSubmenuClick("customers","customers")}>
                                                             <span className="nav-link-text">Հաճախորդ</span>
                                                         </Link>
@@ -442,7 +453,7 @@ const MainTemplate = () => {
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="partners" || location.pathname===PARTNERS_ROUTE?"nav-link active":"nav-link"} to={PARTNERS_ROUTE}
+                                                        <Link className={sisActive1==="partners" || location.pathname===PARTNERS_ROUTE?"nav-link active":"nav-link"} to='./companies/partners/page/1'
                                                         onClick={()=>handleSubmenuClick("companies","partners")}>
                                                             <span className="nav-link-text">Գործընկերներ</span>
                                                         </Link>
@@ -801,6 +812,24 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
+                                    <li className="nav-item">
+                      <Link
+                        className={
+                            misActive1 === "setup"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                        to="/setup"
+                        onClick={() => handleSubmenuClick("setup", "")}
+                      >
+                        <span className="nav-icon-wrap">
+                          <span className="svg-icon">
+                          <img width={'20px'} height={'20px'} src={sideSetupSvg} alt="sideSetupSvg"/>
+                          </span>
+                        </span>
+                        <span className="nav-link-text">Կարգաբերումներ</span>
+                      </Link>
+                    </li>
                               </ul>
                           </div>
                       </div>

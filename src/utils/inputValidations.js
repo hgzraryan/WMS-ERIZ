@@ -42,6 +42,23 @@ export const state_validation = {
     },
   },
 };
+export const status_validation = {
+  name: "status",
+  label: "Կարգավիճակ",
+  multiline: true,
+  id: "status",
+  placeholder: "Կարգավիճակ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};
 export const city_validation = {
   name: "city",
   label: "Քաղաք/Գյուղ",

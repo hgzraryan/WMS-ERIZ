@@ -1,277 +1,248 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from "react";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
-import ResizableTitle from "../views/ResizableTitle";
-import { Button, Input, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import PartnerEdit from '../editModals/PartnerEdit';
-import ComponentToConfirm from '../ComponentToConfirm';
+import PartnerEdit from "../editModals/PartnerEdit";
+import ComponentToConfirm from "../ComponentToConfirm";
+import Table from "../Table";
 
-function PartnersTable(
-    {
-      confirmPartnerRef,
+function PartnersTable({
+  confirmPartnerRef,
   selectedItem,
   selectedItemId,
   handleDeleteItem,
   handleOpenModal,
   handleCloseModal,
-        partners,
-        setPartners,
-        refreshData
-    }
-) {
-    const navigate = useNavigate()
-    const axiosPrivate = useAxiosPrivate();
-    const location = useLocation();
-    const [editRow, setEditRow] = useState(false);
-    const [searchText, setSearchText] = useState("");
-    const [searchedColumn, setSearchedColumn] = useState("");
-    const searchInput = useRef(null);
-    const getColumnSearchProps = (dataIndex) => {
-        return {
-          filterDropdown: ({
-            setSelectedKeys,
-            selectedKeys,
-            confirm,
-            clearFilters,
-            close,
-          }) => (
-            <div
-              style={{
-                padding: 8,
-              }}
-              onKeyDown={(e) => e.stopPropagation()}
-            >
-              <Input
-                ref={searchInput}
-                placeholder={`Փնտրել`}
-                value={selectedKeys[0]}
-                onChange={(e) =>
-                  setSelectedKeys(e.target.value ? [e.target.value] : [])
-                }
-                onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                style={{
-                  marginBottom: 8,
-                  display: "block",
-                }}
-              />
-              <Space>
-                <Button
-                  type="primary"
-                  onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                  icon={<SearchOutlined />}
-                  size="small"
-                  debugger
-                  style={{
-                    width: 90,
-                  }}
-                >
-                  Search
-                </Button>
-                <Button
-                  onClick={() => clearFilters && handleReset(clearFilters,confirm)}
-                  size="small"
-                  style={{
-                    width: 90,
-                  }}
-                >
-                  Reset
-                </Button>
-                {/* <Button
-                  type="link"
-                  size="small"
-                  onClick={() => {
-                    confirm({
-                      closeDropdown: false,
-                    });
-                    console.log("dataIndex", dataIndex);
-                    setSearchText(selectedKeys[0]);
-                    setSearchedColumn(dataIndex);
-                  }}
-                >
-                  Filter
-                </Button> */}
-                <Button
-                  type="link"
-                  size="small"
-                  onClick={() => {
-                    close();
-                  }}
-                >
-                  close
-                </Button>
-              </Space>
-            </div>
-          ),
-          filterIcon: (filtered) => (
-            <SearchOutlined
-              style={{
-                color: filtered ? "#1677ff" : undefined,
-              }}
-            />
-          ),
-          onFilter: (value, record) =>
-            record[dataIndex]
-              .toString()
-              .toLowerCase()
-              .includes((value).toLowerCase()),
-          onFilterDropdownOpenChange: (visible) => {
-            if (visible) {
-              setTimeout(() => searchInput.current?.select(), 100);
-            }
-          },
-          onCell: (text, record) => {
-            //const highlightText = record[dataIndex].toString();
-            return (
-                {text}
-            //   <Highlighter
-            //     highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-            //     searchWords={[searchText]}
-            //     autoEscape
-            //     textToHighlight={highlightText}
-            //   />
-            );
-          },
-        };
-      };
-      const [partnersColumns, setPartnersColumns] = useState([
-       
-        {
-          title: "ID",
-    dataIndex: "partnerId",
-    onFilter: (value, record) =>
-      record.partnerId.toString().toLowerCase().includes(value.toLowerCase()),
-    ...getColumnSearchProps("partnerId"),
-    width: 80,
-        },
-        {
-          title: "Անվանում",
-          dataIndex: "name",
-          onFilter: (value, record) =>
-            record["partnerId"]
-          .toString()
-          .toLowerCase()
-          .includes((value).toLowerCase()),
-          ...getColumnSearchProps("name"),
-          width:150,
-    
-        },
-        {
-          title: 'Պատսխանատու անձ',
-          dataIndex: "respPersonFullName",
-          ...getColumnSearchProps("respPersonFullName"),
-          width: 150,
-    
-        },
-        {
-          title:'Կազմ․ տեսակը',
-          dataIndex: "companyType",
-          filters: [
-            { text: 'Ֆիզ անձ', value: 'Physical' },
-            { text: 'Իրավ․ անձ', value: 'Legal' },
-            { text: 'Այլ', value: 'Other' },
-          ],
-          onFilter: (value, record) => record?.companyType?.indexOf(value) === 0,
-          render: ( _,record) => (
-            <Space>
-              {record?.companyType==="Legal"
-              ?'Իրավ․ անձ'
-              :record?.companyType==="Physical"
-              ?'Ֆիզ անձ'
-              :record?.companyType==="Other"
-              ?'Այլ':''}
-            </Space>
-          ),
-          width: 120,
-        },
-        {
-            title: "Հեռախոս",
-            dataIndex: "phone",
-            render: ( _,record) => (
-              <Space>
-                {record?.contact?.phone}
-              </Space>
-            ),
-            ...getColumnSearchProps("phone"),
-            width: 100,
-          },
-        {
-          title:'Էլ․ հասցե',
-          dataIndex: "email",
-          render: ( _,record) => (
-            <Space>
-              {record?.contact?.email}
-            </Space>
-          ),
-          ...getColumnSearchProps("email"),
-          width: 120,
-    
-        },
-        {
-            title: "Հասցե",
-            dataIndex: "address",
-            render: (_,record) => (
-              <Space>
-                {record?.contact?.address?.city},{record?.contact?.address?.street}
-              </Space>
-            ),
-            width: 150,
-          },
-        {
-          title: "Գործընկերոջ տեսակը",
-          dataIndex: "partnerType",
-          render: ( _,record) => (
-            <Space>
-              {record?.partnerType==="Producer"
-              ?'Արտադրող'
-              :record?.partnerType==="Reseller"
-              ?'Վերավաճառող'
-              :record?.partnerType==="Investor"
-              ?'Ներդրող':''}
-            </Space>
-          ),
-          width: 150,
-        },
-        {
-          title: "Գործողություններ",
-          dataIndex: "actions",
-          render: (_, row ) => (
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
+  partners,
+  setPartners,
+  refreshData,
+}) {
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
+  const [editRow, setEditRow] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  // const getColumnSearchProps = (dataIndex) => {
+  //     return {
+  //       filterDropdown: ({
+  //         setSelectedKeys,
+  //         selectedKeys,
+  //         confirm,
+  //         clearFilters,
+  //         close,
+  //       }) => (
+  //         <div
+  //           style={{
+  //             padding: 8,
+  //           }}
+  //           onKeyDown={(e) => e.stopPropagation()}
+  //         >
+  //           <Input
+  //             ref={searchInput}
+  //             placeholder={`Փնտրել`}
+  //             value={selectedKeys[0]}
+  //             onChange={(e) =>
+  //               setSelectedKeys(e.target.value ? [e.target.value] : [])
+  //             }
+  //             onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+  //             style={{
+  //               marginBottom: 8,
+  //               display: "block",
+  //             }}
+  //           />
+  //           <div>
+  //             <Button
+  //               type="primary"
+  //               onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+  //               icon={<SearchOutlined />}
+  //               size="small"
+  //               debugger
+  //               style={{
+  //                 width: 90,
+  //               }}
+  //             >
+  //               Search
+  //             </Button>
+  //             <Button
+  //               onClick={() => clearFilters && handleReset(clearFilters,confirm)}
+  //               size="small"
+  //               style={{
+  //                 width: 90,
+  //               }}
+  //             >
+  //               Reset
+  //             </Button>
+  //             {/* <Button
+  //               type="link"
+  //               size="small"
+  //               onClick={() => {
+  //                 confirm({
+  //                   closeDropdown: false,
+  //                 });
+  //                 console.log("dataIndex", dataIndex);
+  //                 setSearchText(selectedKeys[0]);
+  //                 setSearchedColumn(dataIndex);
+  //               }}
+  //             >
+  //               Filter
+  //             </Button> */}
+  //             <Button
+  //               type="link"
+  //               size="small"
+  //               onClick={() => {
+  //                 close();
+  //               }}
+  //             >
+  //               close
+  //             </Button>
+  //           </div>
+  //         </div>
+  //       ),
+  //       filterIcon: (filtered) => (
+  //         <SearchOutlined
+  //           style={{
+  //             color: filtered ? "#1677ff" : undefined,
+  //           }}
+  //         />
+  //       ),
+  //       onFilter: (value, record) =>
+  //         record[dataIndex]
+  //           .toString()
+  //           .toLowerCase()
+  //           .includes((value).toLowerCase()),
+  //       onFilterDropdownOpenChange: (visible) => {
+  //         if (visible) {
+  //           setTimeout(() => searchInput.current?.select(), 100);
+  //         }
+  //       },
+  //       onCell: (text, record) => {
+  //         //const highlightText = record[dataIndex].toString();
+  //         return (
+  //             {text}
+  //         //   <Highlighter
+  //         //     highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+  //         //     searchWords={[searchText]}
+  //         //     autoEscape
+  //         //     textToHighlight={highlightText}
+  //         //   />
+  //         );
+  //       },
+  //     };
+  //   };
+  const columns = useMemo(
+    () => [
+      {
+        Header: "ID",
+        accessor: "partnerId",
+        width: 80,
+      },
+      {
+        Header: "Անվանում",
+        accessor: "name",
+        width: 250,
+      },
+      {
+        Header: "Պատսխանատու անձ",
+        accessor: "respPersonFullName",
+        width: 250,
+      },
+      {
+        Header: "Կազմ․ տեսակը",
+        accessor: "companyType",
+
+        Cell: ({ row }) => (
+          <div>
+            {row?.original?.companyType === "Legal"
+              ? "Իրավ․ անձ"
+              : row?.original?.companyType === "Physical"
+              ? "Ֆիզ անձ"
+              : row?.original?.companyType === "Other"
+              ? "Այլ"
+              : ""}
+          </div>
+        ),
+        width: 120,
+      },
+      {
+        Header: "Հեռախոս",
+        accessor: "phone",
+        Cell: ({ row }) => <div>{row?.original?.contact?.phone}</div>,
+        width: 150,
+      },
+      {
+        Header: "Էլ․ հասցե",
+        accessor: "email",
+        Cell: ({ row }) => <div>{row?.original?.contact?.email}</div>,
+        width: 200,
+      },
+      {
+        Header: "Հասցե",
+        accessor: "address",
+        Cell: ({ row }) => (
+          <div>
+            {row?.original?.contact?.address?.city},
+            {row?.original?.contact?.address?.street}
+          </div>
+        ),
+        width: 250,
+      },
+      {
+        Header: "Գործընկերոջ տեսակը",
+        accessor: "partnerType",
+        Cell: ({ row }) => (
+          <div>
+            {row?.original?.partnerType === "Producer"
+              ? "Արտադրող"
+              : row?.original?.partnerType === "Reseller"
+              ? "Վերավաճառող"
+              : row?.original?.partnerType === "Investor"
+              ? "Ներդրող"
+              : ""}
+          </div>
+        ),
+        width: 200,
+      },
+      {
+        Header: "Գործողություններ",
+        accessor: "actions",
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
               <a
-                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                  data-bs-toggle="tooltip"
-                  data-placement="top"
-                  title="Edit"
-                  href="#"
-                  onClick={() => handleOpenEditModal(row)}
-    
-                >
-                  <span className="icon">
-                    <span className="feather-icon">
-                      <FeatherIcon icon="edit" />
-                    </span>
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                data-bs-toggle="tooltip"
+                data-placement="top"
+                title="Edit"
+                href="#"
+                onClick={() => handleOpenEditModal(row.original)}
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="edit" />
                   </span>
-                </a>
-                <a
-                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                  data-bs-toggle="tooltip"
-                  onClick={() => handleOpenModal(row)}
-                  data-placement="top"
-                  title=""
-                  data-bs-original-title="Delete"
-                  href="#"
-                >
-                  <span className="icon">
-                    <span className="feather-icon">
-                      <FeatherIcon icon="trash" />
-                    </span>
+                </span>
+              </a>
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                data-bs-toggle="tooltip"
+                onClick={() => handleOpenModal(row.original)}
+                data-placement="top"
+                title=""
+                data-bs-original-title="Delete"
+                href="#"
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="trash" />
                   </span>
-                </a>
-                {/* <a
+                </span>
+              </a>
+              {/* <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                   data-bs-toggle="tooltip"
                   onClick={() => handleOpenDisableModal(row)}
@@ -286,88 +257,41 @@ function PartnersTable(
                     </span>
                   </span>
                 </a> */}
-              </div>
             </div>
-          ),
-          disableSortBy: true,
-          width: 150,
-          Filter: ({ column: { id } }) => <></>,
-        },
-      ]);
-      const handleOpenEditModal = (value) => {
-        setEditRow((prev) => value);
-      };
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        setSearchText(selectedKeys[0]);
-        if (dataIndex) {
-          setSearchedColumn(dataIndex);
-        }
-        confirm();
-      };
-      const handleReset = (clearFilters,confirm) => {
-        clearFilters();
-        confirm()
-        setSearchText("");
-      };
-      const onChange = (pagination, filters, sorter, extra) => {
-        //console.log("params", pagination, filters, sorter, extra);
-      };
-      //resize column
-      const handleResize =
-        (index) =>
-        (e, { size }) => {
-          const nextColumns = [...partnersColumns];
-          nextColumns[index] = {
-            ...nextColumns[index],
-            width: size.width,
-          };
-          setPartnersColumns(nextColumns);
-        };
-      const components = {
-        header: {
-          cell: ResizableTitle,
-        },
-      };
-      const resizableColumns = partnersColumns.map((col, index) => ({
-        ...col,
-        onHeaderCell: (column) => ({
-          width: column.width,
-          onResize: handleResize(index),
-        }),
-      }));
+          </div>
+        ),
+        disableSortBy: true,
+        width: 150,
+        Filter: ({ column: { id } }) => <></>,
+      },
+    ],
+    []
+  );
+  const handleOpenEditModal = (value) => {
+    setEditRow((prev) => value);
+  };
+
   return (
     <>
-     {
-      editRow &&(
-        <PartnerEdit partner={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
-      )
-    }
-     <ComponentToConfirm
-              handleCloseModal={handleCloseModal}
-              handleOpenModal={handleOpenModal}
-              handleDeleteItem={handleDeleteItem}
-              selectedItemId={selectedItemId}
-              confirmRef={confirmPartnerRef}
-              keyName={selectedItem.name}
-              delId={selectedItem.partnerId}
-            />
-        <Table
-              dataSource={partners}
-              columns={resizableColumns}
-              components={components}
-              // onRow={(record, index) => ({
-              //   onClick: () => console.log(record),
-              // })}
-              style={{ cursor: "pointer" }}
-              size={"middle"}
-              pagination={false}
-              onChange={onChange}
-              showSorterTooltip={{
-                target: "sorter-icon",
-              }}
-            />
+      {editRow && (
+        <PartnerEdit
+          partner={editRow}
+          setEditRow={setEditRow}
+          refreshData={refreshData}
+        />
+      )}
+      <ComponentToConfirm
+        handleCloseModal={handleCloseModal}
+        handleOpenModal={handleOpenModal}
+        handleDeleteItem={handleDeleteItem}
+        selectedItemId={selectedItemId}
+        confirmRef={confirmPartnerRef}
+        keyName={selectedItem.name}
+        delId={selectedItem.partnerId}
+      />
+      <Table data={partners} column={columns} />
     </>
-  )
+  );
 }
 
-export default PartnersTable
+export default PartnersTable;

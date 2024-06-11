@@ -8,22 +8,33 @@ import AddPartner from '../addViews/AddPartner';
 import { Dropdown } from "react-bootstrap";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import PartnersTable from '../viewTables/PartnersTable';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Partners() {
+    const navigate = useNavigate();
+    const { pageNumber } = useParams();
     const confirmPartnerRef = useRef("");
     const [isOpen, setIsOpen] = useState(false);  
     const [selectedItem, setSelectedItem] = useState("");  
     const [selectedItemId, setSelectedItemId] = useState(null);  
     const [currentPage, setCurrentPage] = useState(0);    
     const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));   
+    const [searchCount,setSearchCount] = useState(null)
+    const [searchParams,setSearchParams] = useState(null)
   
       const {
         data: partners,
         setData: setPartners,
         // hasMore,
         // checkData,
-        refreshData
-      } = useGetData(PARTNERS_URL,currentPage,usersPerPage);
+        refreshData,
+        dataCount
+      } = useGetData(PARTNERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+      const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
+      const handleSearchPageCount = (data) =>{
+        setSearchCount(data.count)
+        setSearchParams(data.params)
+      }
      //-------------------
       
       const { handleDeleteItem,updateUsersCount } = useDeleteData(
@@ -47,6 +58,7 @@ function Partners() {
     const handleOpenModal = (user) => {
       setSelectedItemId(true);
       setSelectedItem((prev) => user);
+      console.log(user)
     };
     const handleCloseModal = () => {
       setSelectedItemId(null);
@@ -222,7 +234,7 @@ function Partners() {
                      <ReactPaginate
                       previousLabel = {"Հետ"}    
                       nextLabel = {"Առաջ"}
-                      //pageCount = {pageCount}
+                      pageCount = {pageCount}
                       onPageChange = {handlePageClick}
                       initialPage = {0}
                       containerClassName={"pagination"}
