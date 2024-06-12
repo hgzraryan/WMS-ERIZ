@@ -46,7 +46,7 @@ const MainTemplate = () => {
         ssetIsActive1(subMenu)
         msetIsActive1(menu)
         dispatch(checkSelectedMenu(subMenu))
-        //localStorage.setItem("activeMenu", menu);
+        localStorage.setItem("activeMenu", menu);
         localStorage.setItem("activeSubMenu", JSON.stringify(subMenu));
        
 
@@ -55,14 +55,14 @@ const MainTemplate = () => {
   
    //--------------------------------------
    useEffect(() => {
-    localStorage.setItem("activeMenu", JSON.stringify(location.pathname.split('/')[1]));
-    const subMenuIsActiveData = JSON.parse(localStorage.getItem('activeSubMenu'));
-    const menuIsActiveData = JSON.parse(localStorage.getItem('activeMenu'));
-    //const storedUserData = JSON.parse(localStorage.getItem('userData'));
+    // localStorage.setItem("activeMenu", JSON.stringify(location.pathname.split('/')[1]));
+    // const subMenuIsActiveData = JSON.parse(localStorage.getItem('activeSubMenu'));
+    // const menuIsActiveData = JSON.parse(localStorage.getItem('activeMenu'));
+    // //const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
-    //storedUserData?setUserData(storedUserData):setUserData('')
-    menuIsActiveData?msetIsActive1(menuIsActiveData):msetIsActive1('')
-    subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
+    // //storedUserData?setUserData(storedUserData):setUserData('')
+    // menuIsActiveData?msetIsActive1(menuIsActiveData):msetIsActive1('')
+    // subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
   }, [location?.pathname]);
    //--------------------------------------
     const signOut = async () => {

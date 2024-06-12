@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 
-function AddLegalForm({handleToggleCreateModal,}) {
+function AddLegalForm({handleToggleCreateModal,refreshData}) {
     const navigate = useNavigate()
     const [errMsg, setErrMsg] = useState("");
     const editorRef = useRef(null);
@@ -58,7 +58,7 @@ function AddLegalForm({handleToggleCreateModal,}) {
             });
     
             handleToggleCreateModal(false);
-            //refreshData();
+            refreshData();
             notify(`${newCustomer.name} հաճախորդը ավելացված է`);
           } catch (err) {
             if (!err?.response) {

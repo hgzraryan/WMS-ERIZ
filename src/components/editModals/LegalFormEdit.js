@@ -52,7 +52,7 @@ function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
     
           console.log(newLegalForm);
           try {
-            await axiosPrivate.put(LEGALFORMS_URL, { updatedFields, id: legalForm.customerId }, {
+            await axiosPrivate.put('/legalforms', { updatedFields, id: legalForm.legalformId }, {
               headers: { "Content-Type": "application/json" },
               withCredentials: true,
             });
