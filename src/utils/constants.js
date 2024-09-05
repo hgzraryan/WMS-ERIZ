@@ -17,9 +17,10 @@ export const WORKERS_ROUTE = 'workers/workers'
 export const CUSTOMERS_ROUTE = 'customers/customers/page/:pageNumber'
 export const COMPANIES_ROUTE = 'companies/companies'
 export const PARTNERS_ROUTE = 'companies/partners/page/:pageNumber'
+export const SUPPLIERS_ROUTE = 'companies/suppliers/page/:pageNumber'
 export const BRANDS_ROUTE = 'companies/brands'
-export const PRODUCTCLASSES_ROUTE = 'products/productsClasses'
-export const PRODUCTS_ROUTE = 'products/products'
+export const PRODUCTCLASSES_ROUTE = 'products/productsClasses/:pageNumber'
+export const PRODUCTS_ROUTE = 'products/products/:pageNumber'
 export const PURCHASEONE_ROUTE = 'purchases/purchaseOne'
 export const PURCHASETWO_ROUTE = 'purchases/purchaseTwo'
 export const ORDERONE_ROUTE = 'orders/orderOne'
@@ -58,6 +59,9 @@ export const WAREHOUSES_URL = '/warehouses'
 export const PARTNERS_URL = '/partners'
 export const CUSTOMERS_URL = '/customers'
 export const LEGALFORMS_URL = '/legalForms'
+export const PRODUCTS_URL = '/products'
+export const PRODUCTCATEGORIES_URL = '/productCategories'
+export const SUPPLIERS_URL = '/suppliers'
 
 
 export const REGISTER_USER = "/registerUser";
@@ -65,6 +69,9 @@ export const REGISTER_WAREHOUSE = "/registerWarehouse";
 export const REGISTER_PARTNER = "/registerPartner";
 export const REGISTER_CUSTOMER = "/registerCustomer";
 export const REGISTER_LEGALFORM = "/registerLegalForm";
+export const REGISTER_PRODUCTCATEGORY = "/registerProductCategory";
+export const REGISTER_SUPPLIER = "/registerSupplier";
+export const REGISTER_PRODUCT = "/registerProduct";
 
 //user Roles
 export const ROLES = {

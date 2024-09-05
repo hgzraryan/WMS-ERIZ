@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-lone-blocks */
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import FeatherIcon from "feather-icons-react";
 import LoadingSpinner from "../LoadingSpinner";
@@ -16,14 +16,16 @@ import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { useSelector } from "react-redux";
 import { USERS_URL } from "../../utils/constants";
 import UsersTable from "../viewTables/UsersTable";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useRefreshData from "../../hooks/useRefreshData";
 
 const Users = () => {
   const { pageNumber } = useParams();
   const navigate = useNavigate();
   const confirmUserRef = useRef("");
   const [isOpen, setIsOpen] = useState(false);
-  //const [users, setUsers] = useState(jsonString);
+  const [users, setUsers] = useState([]);
   const [isOpenRole, setIsOpenRole] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -32,18 +34,79 @@ const Users = () => {
   const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
   const [searchCount,setSearchCount] = useState(null)
   const [searchParams,setSearchParams] = useState(null)
-  const {
-    data: users,
-    setData: setUsers,
-    refreshData,
-    dataCount
-  } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
-  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
+  const axiosPrivate = useAxiosPrivate();   
+  const location = useLocation();   
+  const [dataCount, setDataCount] = useState(null);
+
+  // const {
+  //   data: users,
+  //   setData: setUsers,
+  //   refreshData,
+  //   dataCount
+  // } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(50/usersPerPage)
+  const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage);
+
   //-------------------
   const handleSearchPageCount = (data) =>{
     setSearchCount(data.count)
     setSearchParams(data.params)
   }
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+if(!searchCount){
+
+  const getData = async () => {
+    try {
+      const response = await axiosPrivate.post(USERS_URL,{
+        signal: controller.signal,
+        page: currentPage===0?1:currentPage,
+        onPage: usersPerPage,
+      });
+      //console.log(response);
+      // if (
+        //   response.data.jsonString.length === 0 ||
+        //   response.data.jsonString.length < onPageCount
+        // ) {
+          //   setHasMore(false);
+        // }
+        isMounted &&
+          setUsers((prevUsers) => response.data.jsonString);
+          setDataCount(response.data.count)
+          //setCurrentPage((prev) => prev + 1);
+        } catch (err) {
+          console.error(err);
+          navigate("/login", { state: { from: location }, replace: true });
+        }
+      };
+      
+      getData();
+      
+    }else{
+      const getData = async () => {
+      // try {
+      //   const response = await axiosPrivate.post(searchUrl, {
+      //     params: searchParams,
+      //     page: currentPage===0?1:currentPage,
+      //     onPage: usersPerPage,
+      //     signal: controller.signal
+      //   });
+      //   //console.log('get search data')
+      //   setData(response.data.jsonString);
+      //   //setToggleSearchModal(false)  
+      //   //handleSearchPageCount(response.data.count)    
+      // }catch (err) {
+      //   console.error(err);
+      // }  
+    }; 
+    getData()
+    }
+      return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [currentPage,searchCount,searchParams,setUsers]);
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     USERS_URL,
     confirmUserRef,

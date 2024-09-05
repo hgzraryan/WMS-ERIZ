@@ -13,6 +13,8 @@ import { USERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import WarehouseEdit from "../editModals/WarehouseEdit";
 import useDeleteData from "../../hooks/useDeleteData";
 import ComponentToConfirm from "../ComponentToConfirm";
+import useRefreshData from "../../hooks/useRefreshData";
+import { useEffect } from "react";
 
 const data1 = [
   {
@@ -117,23 +119,29 @@ function WareHousesList() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const [usersPerPage, setUsersPerPage] = useState(
-    Math.round(window.innerHeight / 100)
-  );
+  const [usersPerPage, setUsersPerPage] = useState(Math.round(window.innerHeight / 100));
+  const [searchCount,setSearchCount] = useState(null)
+  const [searchId,setSearchId] = useState(null)
+  const [searchTerms,setSearchTerms] = useState(null)
   const [wareHouseDetails, setWareHouseDetails] = useState(false);
   
   const {
     data: wareHouses,
     setData: setWarehouses,
-    refreshData,
     dataCount
-  } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage);
-  const pageCount = Math.ceil(dataCount/usersPerPage)
+  } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage,searchCount,null,searchId,searchTerms);
+  const { refreshData,data } = useRefreshData(WAREHOUSES_URL, usersPerPage);
+  useEffect(()=>{
+    setWarehouses(data)
+    },[data])
+  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     WAREHOUSES_URL,
     confirmWarehouseRef,
     selectedItem,
     setSelectedItemId,
+    wareHouses,
+    setWarehouses,
     "name",
     refreshData
     
@@ -531,6 +539,11 @@ function WareHousesList() {
       onResize: handleResize(index),
     }),
   }));
+  const refreshPage = () => {
+    let paglink = document.querySelectorAll(".page-item");
+    paglink[0]?.firstChild.click();
+    refreshData()
+  };
   return (
     <HelmetProvider>
       <Helmet>
@@ -555,9 +568,11 @@ function WareHousesList() {
         />
       )}
       <section
-        className="dropdown p-3"
+        className="dropdown p-3 d-flex justify-content-between"
         style={{ borderBottom: "3px solid #f6f6f6", display: "flex" }}
       >
+        <div className="d-flex">
+
         <div className="me-2">
           <h3>Պահեստներ</h3>
         </div>
@@ -567,7 +582,7 @@ function WareHousesList() {
               variant="success"
               id="dropdown-basic"
               className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block"
-            >
+              >
               Ավելացնել նոր
             </Dropdown.Toggle>
 
@@ -580,10 +595,29 @@ function WareHousesList() {
         </div>
         {isOpen && (
           <AddWareHouse
-            handleToggleCreateModal={handleToggleCreateModal}
-            refreshData={() => refreshData()}
+          handleToggleCreateModal={handleToggleCreateModal}
+          refreshData={() => refreshData()}
           />
         )}
+                  </div>
+                  <div>
+
+         <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
+                  href="#"
+                  data-bs-toggle="tooltip"
+                  data-placement="top"
+                  onClick={refreshPage}
+                  title=""
+                  data-bs-original-title="Refresh"
+                  >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="refresh-cw" />
+                    </span>
+                  </span>
+                </a>
+                    </div>
       </section>
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
@@ -609,6 +643,7 @@ function WareHousesList() {
           <div className="d-flex justify-content-center align-items-center">
             <h3>{wareHouseDetails.name}</h3>
           </div>
+
           {wareHouseDetails ? (
             <Table
               dataSource={data1}
@@ -629,7 +664,9 @@ function WareHousesList() {
             ""
           )}
         </div>
+       
       </div>
+     
     </HelmetProvider>
   );
 }

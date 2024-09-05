@@ -53,7 +53,7 @@ const warehouseType=[
     label:"Այլ"
 },
 ]
-const warehouseState=[
+const customWarehouseState=[
   {
   label: "Ակտիվ",
   value:1
@@ -112,64 +112,66 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
       progress: undefined,
       theme: "light",
     });
-  const onSubmit = methods.handleSubmit(
-    async ({
-      warehouseId,
-      code,
-      email,
-      street,
-      city,
-      warehouseState,
-      country,
-      state,
-      zipCode,
-      type,
-      name,
-      balance,
-      storekeeper,
-      subWirehouse,
-      addPhone,
-      phone,
-    }) => {
-      const newWarehouse = {
-        code:code?.trim() !== warehouse?.code.trim() ? code : null,
-        warehouseState:warehouseState?.trim() !== warehouse?.warehouseState.trim() ? warehouseState : null,
-        type:type?.trim() !== warehouse?.type.trim() ? type : null,
-        name:name?.trim() !== warehouse?.name?.trim() ? name : null,
-        balance:balance !== warehouse?.balance ? balance : null,
-        storekeeper:storekeeper?.trim() !== storekeeper?.type.trim() ? storekeeper : null,
-        subWirehouse:subWirehouse?.trim() !== subWirehouse?.type.trim() ? subWirehouse : null,
-        contact: {
+    const onSubmit = methods.handleSubmit(
+      async ({
+        warehouseId,
+        code,
+        email,
+        street,
+        city,
+        warehouseState,
+        country,
+        state,
+        zipCode,
+        type,
+        name,
+        balance,
+        storekeeper,
+        subWirehouse,
+        addPhone,
+        phone,
+      }) => {
+        debugger
+        const newWarehouse = {
+          code:code?.trim() !== warehouse?.code ? code : null,
+          warehouseState:warehouseState?.value !== warehouse?.warehouseState ? warehouseState : null,
+          type:type?.trim() !== warehouse?.type.trim() ? type : null,
+          name:name?.trim() !== warehouse?.name?.trim() ? name : null,
+          balance:balance !== warehouse?.balance ? balance : null,
+          storekeeper:storekeeper?.value !== warehouse?.storekeeper ? storekeeper : null,
+          subWirehouse:subWirehouse?.trim() !== warehouse?.subWirehouse?.type.trim() ? subWirehouse : null,
+          contact: {
             email:email?.trim() !== warehouse?.contact?.email?.trim() ? email : null,
             phone:phone?.trim() !== warehouse?.contact?.phone?.trim() ? phone : null,
             addPhone:addPhone === warehouse?.contact?.addPhone?.trim() ? null : addPhone,
             address: {
               street:
-                street?.trim() !== warehouse?.contact?.address?.street?.trim()
-                  ? street
-                  : null,
-              city:
-                city?.trim() !== warehouse?.contact?.address?.city?.trim()
-                  ? city
-                  : null,
-              state:
-                state?.trim() !== warehouse?.contact?.address?.state?.trim()
-                  ? state
-                  : null,
-              country:
-                country?.trim() !== warehouse?.contact?.address?.country?.trim()
-                  ? country
-                  : null,
-              zipCode:
-                zipCode?.trim() !== warehouse?.contact?.address?.zipCode?.trim()
-                  ? zipCode
-                  : null,
-            },
+            street?.trim() !== warehouse?.contact?.address?.street?.trim()
+            ? street
+            : null,
+            city:
+            city?.trim() !== warehouse?.contact?.address?.city?.trim()
+            ? city
+            : null,
+            state:
+            state?.trim() !== warehouse?.contact?.address?.state?.trim()
+            ? state
+            : null,
+            country:
+            country?.trim() !== warehouse?.contact?.address?.country?.trim()
+            ? country
+            : null,
+            zipCode:
+            zipCode?.trim() !== warehouse?.contact?.address?.zipCode?.trim()
+            ? zipCode
+            : null,
+          },
           },
           additional: editorRef.current.getContent({ format: "text" }).trim()!==warehouse?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
         };
-      const updatedFields = deleteNullProperties(newWarehouse)
-
+        const updatedFields = deleteNullProperties(newWarehouse)
+        
+        console.log(type)
       console.log(updatedFields);
       // try {
       //   await axiosPrivate.put(WAREHOUSES_URL, { updatedFields, id: warehouse.warehouseId }, {
@@ -261,12 +263,12 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                     <Controller
                                       name="warehouseState"
                                       control={methods.control}
-                                      defaultValue={warehouseState.find((el)=>el.value===warehouse?.warehouseState)}
+                                      defaultValue={customWarehouseState.find((el)=>el.value===warehouse?.warehouseState)}
                                       rules={{ required: true }}
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={warehouseState}
+                                          options={customWarehouseState}
                                           placeholder={"Ընտրել"}
                                           styles={customStyles}
                                         />

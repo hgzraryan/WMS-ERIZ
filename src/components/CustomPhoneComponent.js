@@ -1,8 +1,6 @@
 import React from 'react'
 import { useController } from 'react-hook-form'
 import PhoneInput from 'react-phone-number-input'
-import "react-phone-number-input/style.css";
-
 
 function CustomPhoneComponent({ control, name,required=true,defaultValue='' })  {
     const {
@@ -25,7 +23,8 @@ function CustomPhoneComponent({ control, name,required=true,defaultValue='' })  
       initialValueFormat="national"
       autoComplete="off"
       defaultCountry="AM"
-      className='form-control d-flex'      
+      className='form-control d-flex'
+      
     />
     )
 }

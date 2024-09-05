@@ -148,7 +148,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
         name,
         balance:+balance,
         storekeeper:storekeeper?.value,
-        subWarehouse:subWarehouse?.value,
+        subWarehouse:subWarehouse?.value||1512,
         salesAllowed:salesAllowed?.value,
         contact: {
           email: email,
@@ -175,7 +175,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
 
         handleToggleCreateModal(false);
         refreshData();
-        notify(`${newWarehouse.name} գործընկերը ավելացված է`);
+        notify(`${newWarehouse.name}  ավելացված է`);
       } catch (err) {
         if (!err?.response) {
           setErrMsg("No Server Response");
@@ -379,7 +379,12 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={subWarehouses}
+                                          options={[
+                                            {
+                                            value: 0,
+                                            label: "Առանց ենթապահեստ",
+                                          },
+                                          ...subWarehouses]}
                                           placeholder={"Ընտրել"}
                                           styles={customStyles}
                                         />

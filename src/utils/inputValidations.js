@@ -515,11 +515,37 @@ export const code_validation = {
     },
   },
 };
+export const barcode_validation = {
+  name: "barcode",
+  label: "Բարկոդ",
+  type: "number",
+  id: "barcode",
+  placeholder: "Բարկոդ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
 export const balance_validation = {
   name: "balance",
   label: "Մնացորդ",
   type: "number",
   id: "balance",
+  placeholder: "Մնացորդ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const stock_validation = {
+  name: "stock",
+  label: "Մնացորդ",
+  type: "number",
+  id: "stock",
   placeholder: "Մնացորդ",
   validation: {
     required: {
@@ -589,6 +615,281 @@ export const respPersonFullName_validation = {
   validation: {
     required: {
       value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+// Electronics validations
+export const WarrantyPeriod_validation = {
+  name: "warrantyPeriod",
+  label: "Երաշխիքային ժամկետ",
+  type: "text",
+  id: "warrantyPeriod",
+  placeholder: "Երաշխիքային ժամկետ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Power_validation = {
+  name: "power",
+  label: "Հզորություն",
+  type: "text",
+  id: "power",
+  placeholder: "Հզորություն",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Brand_validation = {
+  name: "brand",
+  label: "Ապրանքանիշ",
+  type: "text",
+  id: "brand",
+  placeholder: "Ապրանքանիշ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Model_validation = {
+  name: "model",
+  label: "Մոդել",
+  type: "text",
+  id: "model",
+  placeholder: "Մոդել",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const StorageCapacity_validation = {
+  name: "storageCapacity",
+  label: "Հիշողության ծավալ",
+  type: "text",
+  id: "storageCapacity",
+  placeholder: "Հիշողության ծավալ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Dimension_validation = {
+  name: "dimension",
+  label: "Չափսերը",
+  type: "text",
+  id: "dimension",
+  placeholder: "Չափսերը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Weight_validation = {
+  name: "weight",
+  label: "Քաշը(կգ)",
+  type: "text",
+  id: "weight",
+  placeholder: "Քաշը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Color_validation = {
+  name: "color",
+  label: "Գույն",
+  type: "text",
+  id: "color",
+  placeholder: "Գույն",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Connectivity_validation = {
+  name: "connectivity",
+  label: "Միացման տեսակը",
+  type: "text",
+  id: "connectivity",
+  placeholder: "Միացման տեսակը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Battery_validation = {
+  name: "battery",
+  label: "Մարտկոցը",
+  type: "text",
+  id: "battery",
+  placeholder: "Մարտկոցը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const OperationSystem_validation = {
+  name: "operationSystem",
+  label: "Օպերացիոն համակարգը",
+  type: "text",
+  id: "operationSystem",
+  placeholder: "Օպերացիոն համակարգը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+//food validations
+export const ExpiryDate_validation = {
+  name: "expiryDate",
+  label: "Պիտանելիության ժամկետ",
+  type: "text",
+  id: "expiryDate",
+  placeholder: "Պիտանելիության ժամկետ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const StorageTemperature_validation = {
+  name: "storageTemperature",
+  label: "Պահպանման ջերմաստիճան",
+  type: "text",
+  id: "storageTemperature",
+  placeholder: "Պահպանման ջերմաստիճա",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const PackagingType_validation = {
+  name: "packagingType",
+  label: "Փաթեթավորումը",
+  type: "text",
+  id: "packagingType",
+  placeholder: "Փաթեթավորումը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Supplier_validation = {
+  name: "supplier",
+  label: "Մատակարար",
+  type: "text",
+  id: "supplier",
+  placeholder: "Մատակարար",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const Quantity_validation = {
+  name: "quantity",
+  label: "Քանակ",
+  type: "text",
+  id: "quantity",
+  placeholder: "Քանակ",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const CountryOfOrigin_validation = {
+  name: "countryOfOrigin",
+  label: "Արտադրող երկիր",
+  type: "text",
+  id: "countryOfOrigin",
+  placeholder: "Արտադրող երկիր",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const reorderLevel_validation = {
+  name: "reorderLevel",
+  label: "Հիշեցման նվազագույն քանակ",
+  type: "number",
+  id: "reorderLevel",
+  placeholder: "Հիշեցման նվազագույն քանակ",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const height_validation = {
+  name: "height",
+  label: "Բարձրություն(սմ)",
+  type: "number",
+  id: "height",
+  placeholder: "Բարձրություն",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const width_validation = {
+  name: "width",
+  label: "Լայնություն(սմ)",
+  type: "number",
+  id: "width",
+  placeholder: "Լայնություն",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const length_validation = {
+  name: "length",
+  label: "Երկարություն(սմ)",
+  type: "number",
+  id: "length",
+  placeholder: "Երկարություն",
+  validation: {
+    required: {
+      value: false,
       message: "պարտադիր",
     },
   },

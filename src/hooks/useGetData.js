@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useLocation, useNavigate } from "react-router-dom";
+import { PATIENTS__SEARCH_URL } from "../utils/constants";
 
 const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null,searchParams=null) => {
     const [data, setData] = useState([]);
@@ -18,12 +19,20 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
         try {
           const response = await axiosPrivate.post(url,{
             signal: controller.signal,
-            page: currentPage===0?1:currentPage,
+            page:(!currentPage || currentPage===0)?1:currentPage,
             onPage: usersPerPage,
           });
+          //console.log(response);
+          // if (
+            //   response.data.jsonString.length === 0 ||
+            //   response.data.jsonString.length < onPageCount
+            // ) {
+              //   setHasMore(false);
+            // }
             isMounted &&
               setData((prevUsers) => response.data.jsonString);
               setDataCount(response.data.count)
+              //setCurrentPage((prev) => prev + 1);
             } catch (err) {
               console.error(err);
               navigate("/login", { state: { from: location }, replace: true });
@@ -55,44 +64,70 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
           isMounted = false;
           controller.abort();
         };
-      }, [url,currentPage]);
+      }, [url,setData,currentPage,searchCount,searchParams,usersPerPage, axiosPrivate]);
 
-      const getData = async () => {
-          try {
-            const response = await axiosPrivate.get(url);
-            setTimeout(() => {             
+      // const getData = async () => {
+      //     try {
+      //       const response = await axiosPrivate.get(url);
+      //       setTimeout(() => {             
               
-                  setData((prevUsers) => response.data.jsonString);
-                 // setCurrentPage((prev) => prev = 1);
+      //             setData((prevUsers) => response.data.jsonString);
+      //            // setCurrentPage((prev) => prev = 1);
               
-            }, 500);
-          } catch (err) {
-            console.error(err);
-            //navigate("/login", { state: { from: location }, replace: true });
-          }
-        };
-        const refreshData = async () => {
-          try {
-            const controller = new AbortController();
-            const response = await axiosPrivate.post(url, {
-              signal: controller.signal,
-              page: 1,
-              onPage: usersPerPage,
-            });
-            setData(response.data.jsonString);
-          } catch (err) {
-            console.error(err);
-            if (err.name !== "AbortError") {
-              navigate("/login", { state: { from: location }, replace: true });
-            }
-          }
-        };
+      //       }, 500);
+      //     } catch (err) {
+      //       console.error(err);
+      //       //navigate("/login", { state: { from: location }, replace: true });
+      //     }
+      //   };
+        // const refreshData = async () => {
+        //   try {
+        //     const controller = new AbortController();
+        //     const response = await axiosPrivate.post(url, {
+        //       signal: controller.signal,
+        //       params: {
+        //         page: 1,
+        //         onPage: usersPerPage,
+        //       },
+        //     });
+        //     setData(response.data.jsonArray);
+        //   } catch (err) {
+        //     console.error(err);
+        //     if (err.name !== "AbortError") {
+        //       navigate("/login", { state: { from: location }, replace: true });
+        //     }
+        //   }
+        // };
+    
+
+      // const checkData = async () => {
+      //     try {
+      //       const response = await axiosPrivate.post(url, {
+      //         page: currentPage,
+      //         onPage:  usersPerPage,
+      //       });
+      //       setTimeout(() => {
+      //         // if (
+      //         //   response.data.jsonString.length === 0 ||
+      //         //   response.data.jsonString.length < onPageCount
+      //         // ) {
+      //         //   setHasMore(false);
+      //         // }             
+      //             setData((prevUsers) => [
+      //               ...prevUsers,
+      //               ...response.data.jsonString,
+      //             ]);
+      //             //setCurrentPage((prev) => prev + 1);
+      //                        }, 500);
+      //     } catch (err) {
+      //       console.error(err);
+      //       navigate("/login", { state: { from: location }, replace: true });
+      //     }
+      //   };
       return {
         data,
         setData,
-        getData,
         dataCount,
-        refreshData
     }
 }
 export default useGetData;

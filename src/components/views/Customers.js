@@ -35,9 +35,9 @@ function Customers() {
     setSearchCount(data.count)
     setSearchParams(data.params)
   }
-  useEffect(() => {
-    setCurrentPage(Number(pageNumber));
-  }, [pageNumber]);
+  // useEffect(() => {
+  //   setCurrentPage(Number(pageNumber));
+  // }, [pageNumber]);
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     CUSTOMERS_URL,
     confirmCustomerRef,

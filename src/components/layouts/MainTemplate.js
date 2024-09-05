@@ -8,7 +8,7 @@ import { prefix } from "@fortawesome/free-solid-svg-icons";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
-import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
+import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, SUPPLIERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 import sideSetupSvg from '../../dist/svg/sideSetup.svg'
 
 const MainTemplate = () => {
@@ -459,6 +459,12 @@ const MainTemplate = () => {
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
+                                                        <Link className={sisActive1==="suppliers" || location.pathname===SUPPLIERS_ROUTE?"nav-link active":"nav-link"} to='./companies/suppliers/page/1'
+                                                        onClick={()=>handleSubmenuClick("companies","suppliers")}>
+                                                            <span className="nav-link-text">Մատակարարներ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
                                                         <Link className={sisActive1==="brands" || location.pathname==="/companies/brands"?"nav-link active":"nav-link"} to="./companies/brands"
                                                         onClick={()=>handleSubmenuClick("companies","brands")}>
                                                             <span className="nav-link-text">Ապրանքանիշ</span>
@@ -486,13 +492,13 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="productsClasses" || location.pathname==="/products/productsClasses"?"nav-link active":"nav-link"} to="./products/productsClasses"
+                                                        <Link className={sisActive1==="productsClasses" || location.pathname==="/products/productsClasses"?"nav-link active":"nav-link"} to="./products/productsClasses/1"
                                                         onClick={()=>handleSubmenuClick("products","productsClasses")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="products" || location.pathname==="/products/products"?"nav-link active":"nav-link"} to="./products/products"
+                                                        <Link className={sisActive1==="products" || location.pathname==="/products/products"?"nav-link active":"nav-link"} to="./products/products/1"
                                                         onClick={()=>handleSubmenuClick("products","products")}>
                                                             <span className="nav-link-text">Ապրանք</span>
                                                         </Link>

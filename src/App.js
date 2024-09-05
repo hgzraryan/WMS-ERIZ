@@ -54,8 +54,10 @@ import {
   DEFACTURA_ROUTE,
   PARTNERS_ROUTE,
   SETUP_ROUTE,
-  LEGALFORMS_ROUTE
+  LEGALFORMS_ROUTE,
+  SUPPLIERS_ROUTE
 } from "./utils/constants";
+import Suppliers from "./components/views/Suppliers";
 const Register = lazy(()=>  import("./components/Register"));
 const Login = lazy(()=>  import("./components/Login"));
 const PrivacyPolicy = lazy(()=>  import("./components/PrivacyPolicy"));
@@ -80,7 +82,7 @@ const Customers = lazy(()=>  import("./components/views/Customers"));
 const Companies = lazy(()=>  import("./components/views/Companies"));
 const Partners = lazy(()=>  import("./components/views/Partners"));
 const Brands = lazy(()=>  import("./components/views/Brands"));
-const ProductsClasses = lazy(()=>  import("./components/views/ProductsClasses"));
+const ProductsCategories = lazy(()=>  import("./components/views/ProductsCategories"));
 const Products = lazy(()=>  import("./components/views/Products"));
 const PurchaseOne = lazy(()=>  import("./components/views/PurchaseOne"));
 const PurchaseTwo = lazy(()=>  import("./components/views/PurchaseTwo"));
@@ -148,8 +150,9 @@ function App() {
                 <Route path={CUSTOMERS_ROUTE} element={<Customers />} />
                 <Route path={COMPANIES_ROUTE} element={<Companies />} />
                 <Route path={PARTNERS_ROUTE} element={<Partners />} />
+                <Route path={SUPPLIERS_ROUTE} element={<Suppliers />} />
                 <Route path={BRANDS_ROUTE} element={<Brands />} />
-                <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsClasses />} />
+                <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsCategories />} />
                 <Route path={PRODUCTS_ROUTE} element={<Products />} />
                 <Route path={PURCHASEONE_ROUTE} element={<PurchaseOne />} />
                 <Route path={PURCHASETWO_ROUTE} element={<PurchaseTwo />} />

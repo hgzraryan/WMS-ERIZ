@@ -48,7 +48,7 @@ const ComponentToConfirm = ({
                                   id="confirmUser"
                                   className="form-control w-50"
                                   autoComplete="off"
-                                  value={confirmRef.value}
+                                  value={confirmRef?.value}
                                   onChange={(e) =>
                                     (confirmRef.current = e.target.value)
                                   }

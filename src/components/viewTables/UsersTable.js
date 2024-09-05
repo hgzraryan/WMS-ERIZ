@@ -36,18 +36,18 @@ function UsersTable({
   const [searchedColumn, setSearchedColumn] = useState("");
   const [allUsers, setAllUsers] = useState([]); 
   const searchInput = useRef(null);
-  useEffect(() => {
-      axiosPrivate
-        .get(USERS_URL)
-        .then((resp) => {
-          setAllUsers(resp?.data?.jsonString);
-        })        
-        .catch((err) => {
-          console.log(err);
-          navigate("/login", { state: { from: location }, replace: true });
+  // useEffect(() => {
+  //     axiosPrivate
+  //       .get(USERS_URL)
+  //       .then((resp) => {
+  //         setAllUsers(resp?.data?.jsonString);
+  //       })        
+  //       .catch((err) => {
+  //         console.log(err);
+  //         navigate("/login", { state: { from: location }, replace: true });
 
-        });
-  }, []);
+  //       });
+  // }, []);
 
   // const getColumnSearchProps = (dataIndex) => {
   //   return {
