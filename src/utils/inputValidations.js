@@ -894,3 +894,29 @@ export const length_validation = {
     },
   },
 };
+export const padon_validation = {
+  name: "padon",
+  label: "Ծղոտե ներքնակ",
+  type: "number",
+  id: "padon",
+  placeholder: "Քանակ",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
+export const liter_validation = {
+  name: "liter",
+  label: "Լիտր",
+  type: "number",
+  id: "liter",
+  placeholder: "Լիտր",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};

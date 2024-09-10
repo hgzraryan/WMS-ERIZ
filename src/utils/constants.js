@@ -76,7 +76,7 @@ export const REGISTER_PRODUCT = "/registerProduct";
 //user Roles
 export const ROLES = {
     User: 2001,
-    Editor: 1984,
-    Approver: 6010,
+    // Editor: 1984,
+    // Approver: 6010,
     Admin: 5150,
   };

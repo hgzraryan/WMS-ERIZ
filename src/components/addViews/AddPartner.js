@@ -574,13 +574,16 @@ function AddPartner({ setIsOpen, refreshData }) {
                                       {...field}
                                       isMulti
                                       closeMenuOnSelect={false}
-                                      options={productCategories.map(
-                                        (elem) => ({
-                                          value: elem.value,
-                                          label: elem?.label,
-                                          //price: elem?.price
-                                        })
-                                      )}
+                                      options={[
+                                        {
+                                          value: 0,
+                                          label: "Այլ",
+                                        },
+                                        ...productCategories.map((patient) => ({
+                                          value: patient.value,
+                                          label: patient?.label
+                                        })),
+                                      ]}
                                       placeholder={"Ընտրել"}
                                       styles={customStyles}
                                     />

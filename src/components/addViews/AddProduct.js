@@ -10,8 +10,10 @@ import {
   CountryOfOrigin_validation,
   height_validation,
   length_validation,
+  liter_validation,
   minCountWarning_validation,
   name_validation,
+  padon_validation,
   Quantity_validation,
   reorderLevel_validation,
   Weight_validation,
@@ -20,9 +22,11 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
+import CustomDateComponent from "../CustomDateComponent";
+import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 
 const customproductsClasses = [
   {
@@ -62,19 +66,24 @@ const customproductsClasses = [
     label: "Խնամք",
   },
 ];
-const customSuppliers = [
+const productTypes = [
   {
-    supplierId: 13654,
-    supplierName: "Karen Harutyunyan",
-    supplierPhone: "088 55 55 55",
-    supplierEmail: "adsf@sfas.rt",
+    productTypeId: 13654,
+    productTypeName: "Հավի բուդ ոսկորով",
   },
   {
-    supplierId: 13674,
-    supplierName: "Stephan Harutyunyan",
-    supplierPhone: "088 66 66 66",
-    supplierEmail: "qqqqq@sfas.dsfdfd",
+    productTypeId: 13655,
+    productTypeName: "Հավի բուդ առանց ոսկոր",
   },
+  {
+    productTypeId: 13656,
+    productTypeName: "Հավի թև ոսկորով",
+  },
+  {
+    productTypeId: 13657,
+    productTypeName: "Հավի թև առանց ոսկոր",
+  },
+  
 ];
 const currencies = [
   { value: "051", label: "AMD" },
@@ -96,10 +105,34 @@ function AddProduct({
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState('051');
   const [errMsg, setErrMsg] = useState("");
-
+  const [partners, setPartners] = useState([]);
+  const [country, setCountry] = useState('')
+  const [region, setRegion] = useState('')
+ useEffect(() => {
+    if (CountryRegionData[11][0] === "Armenia") {
+      CountryRegionData[11][0] = "Հայաստան"
+      CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
+    }
+  }, []);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const partnersResp = await axiosPrivate.get(PARTNERS_URL);
+        setPartners(partnersResp?.data?.jsonString);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
+    setTimeout(() => {
+      fetchData();
+    }, 500);
+  }, [navigate]);
   const handleAmountChange = (e) => {
     setAmount((prev) => e.target.value);
   };
@@ -221,7 +254,7 @@ function AddProduct({
     >
       <Modal.Header closeButton>
         <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ավելացնել ապրանք
+          Ապրանքի ձեռքբերում
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -236,7 +269,7 @@ function AddProduct({
                     autoComplete="off"
                     className="container"
                   >
-                    <div className="card">
+                    {/* <div className="card">
                       <div className="card-header">
                         <a href="#">Ապրանքի դասակարգը</a>
                       </div>
@@ -245,12 +278,12 @@ function AddProduct({
                           <div className="row gx-3 mb-2">
                             <div className="col-sm-12">
                               <div className="d-flex justify-content-between me-2">
-                                {/* <label
+                                <label
                                      className="form-label"
                                      htmlFor="productCategory"
                                    >
                                      Ապրանքի դասակարգը
-                                   </label> */}
+                                   </label>
                                 {methods.formState.errors.productCategory && (
                                   <span className="error text-red">
                                     <span>
@@ -296,7 +329,7 @@ function AddProduct({
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="card">
                       <div className="card-header">
                         <a href="#">Ապրանքի տվյալներ</a>
@@ -321,11 +354,84 @@ function AddProduct({
                       <div className="card-body">
                         <div className="modal-body">
                           <div className="row gx-3 mb-2">
-                            <div className="col-sm-6">
-                              <Input {...name_validation} />
+                          <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="suppliers"
+                                >
+                                  Անվանում
+                                </label>
+                                {methods.formState.errors.productName && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="productName"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      value={field.value}
+                                      options={productTypes?.map((item) => ({
+                                        value: item.productTypeId,
+                                        label: item.productTypeName,
+                                      }))}
+                                      placeholder={"Ընտրել"}
+                                      // onChange={(val) => {
+                                      //   field.onChange(val);
+                                      //   onUnitSelect(val);
+                                      // }}
+                                    />
+                                  )}
+                                />
+                              </div>
                             </div>
                             <div className="col-sm-6">
-                              <Input {...CountryOfOrigin_validation} />
+                            <div className="d-flex justify-content-between me-2">
+                              <label className="form-label" htmlFor="country">
+                                Արտադրող Երկիր
+                              </label>
+                              {methods?.formState.errors.country && (
+                                <span className="error text-red">
+                                  <img src={ErrorSvg} alt="errorSvg" />
+                                  Պարտադիր
+                                </span>
+                              )}
+                              </div>
+                              <Controller
+                                name="country"
+                                control={methods.control}
+                                defaultValue=""
+                                rules={{ required: true }}
+                                render={({ field }) => (
+                                  <CountryDropdown
+                                    {...field}
+                                    classes="form-control"
+                                    defaultOptionLabel="Երկիր"
+                                    value={country}
+                                    priorityOptions={['Armenia']}
+                                    onChange={(val) => {
+                                      field.onChange(val);
+                                      setCountry(val);
+                                      methods.trigger("country");
+                                      methods.setValue("state",'')
+                                      methods.trigger("state")
+                                    }}
+                                    style={{
+                                      appearance:'auto'
+                                    }}
+                                  />
+                                )}
+                              />
                             </div>
                           </div>
                           <div className="row gx-3">
@@ -359,9 +465,9 @@ function AddProduct({
                                     <Select
                                       {...field}
                                       value={field.value}
-                                      options={customSuppliers?.map((item) => ({
-                                        value: item.supplierId,
-                                        label: item.supplierName,
+                                      options={partners?.map((item) => ({
+                                        value: item.partnerId,
+                                        label: item.name,
                                       }))}
                                       placeholder={"Ընտրել"}
                                       // onChange={(val) => {
@@ -383,6 +489,16 @@ function AddProduct({
                               <Input {...Weight_validation} />
                             </div>
                           </div>
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...liter_validation} />
+                            </div>
+                            
+                          <div className="col-sm-6">
+                              <Input {...padon_validation} />
+                            </div>
+                          </div>
+
                           <div className="row gx-3">
                             <div className="col-sm-6">
                               <div className="d-flex justify-content-between me-2">
@@ -464,13 +580,69 @@ function AddProduct({
                               <Input {...reorderLevel_validation} />
                             </div>
                           </div>
-                          {attributs?.map((el) => {
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="birthday"
+                                  >
+                                    Արտադրման ամսաթիվ
+                                  </label>
+                                  {methods.formState.errors.dateOfBirth && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>{" "}
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <CustomDateComponent
+                                    name="dateOfBirth"
+                                    control={methods.control}
+                                  />
+                                </div>
+                              </div>
+                            </div> 
+                          <div className="col-sm-6">
+                          <div className="col-sm-6">
+                              <div className="form-group">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="expiredAlertDay"
+                                  >
+                                    Զգուշացման ամսաթիվ
+                                  </label>
+                                  {methods.formState.errors.expiredAlertDay && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>{" "}
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <CustomDateComponent
+                                    name="expiredAlertDay"
+                                    control={methods.control}
+                                  />
+                                </div>
+                              </div>
+                            </div> 
+                          </div>
+                          </div>
+                          {/* {attributs?.map((el) => {
                             console.log("attributs", attributs);
                             return (
                               <div className="d-flex justify-content-center mt-3">
-                                <div className="col-sm-12">
-                                  <Input
-                                    validation={{
+                              <div className="col-sm-12">
+                              <Input
+                              validation={{
                                       required: {
                                         value: false,
                                         message: "պարտադիր",
@@ -483,11 +655,11 @@ function AddProduct({
                                 </div>
                               </div>
                             );
-                          })}
+                          })} */}
                         </div>
                       </div>
                     </div>
-                    <div className="card">
+                    {/* <div className="card">
                       <div className="card-header">
                         <a href="#">Ապրանքի չափսերը</a>
                       </div>
@@ -508,7 +680,7 @@ function AddProduct({
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="separator-full"></div>
                     <div className="card">
                       <div className="card-header">

@@ -22,6 +22,7 @@ function CustomPhoneComponent({ control, name,required=true,defaultValue='' })  
       displayInitialValueAsLocalNumber
       initialValueFormat="national"
       autoComplete="off"
+      limitMaxLength
       defaultCountry="AM"
       className='form-control d-flex'
       

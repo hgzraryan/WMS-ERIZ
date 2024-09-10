@@ -261,7 +261,7 @@ function UsersTable({
               >
                 <span className="icon">
                   <span className="feather-icon">
-                    <FeatherIcon icon="power" style={{color: row?.isActive ? 'green' : 'red' }} />
+                    <FeatherIcon icon="power" style={{color: row?.original.isActive ? 'green' : 'red' }} />
                   </span>
                 </span>
               </a>
@@ -340,7 +340,7 @@ const setUserTypeStyle = (userType) => {
      {disableRow && (
               <UserDeactivateModal
                 handleCloseEditModal={handleCloseEditModal}
-                rowData={disableRow}
+                rowData={disableRow.original}
                 refreshData={refreshData}
               />
             )}

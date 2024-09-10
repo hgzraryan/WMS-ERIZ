@@ -8,6 +8,7 @@ function UserDeactivateModal({handleCloseEditModal,rowData,refreshData}) {
     const axiosPrivate = useAxiosPrivate()
     const navigate = useNavigate();
     const {userId,firstname,lastname,username,email,isActive} = rowData
+    console.log(rowData)
     const handleDisableUser = (data) => {
    
       handleCloseEditModal(false);
