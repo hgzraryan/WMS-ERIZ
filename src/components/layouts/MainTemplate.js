@@ -503,6 +503,12 @@ const MainTemplate = () => {
                                                             <span className="nav-link-text">Ապրանք</span>
                                                         </Link>
                                                     </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productsList" || location.pathname==="/products/productsList"?"nav-link active":"nav-link"} to="./products/productsList/1"
+                                                        onClick={()=>handleSubmenuClick("products","productsList")}>
+                                                            <span className="nav-link-text">Ապրանքների ցանկ</span>
+                                                        </Link>
+                                                    </li>
                                                 </ul>	
                                             </li>	
                                         </ul>	

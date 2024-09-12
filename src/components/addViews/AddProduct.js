@@ -22,11 +22,13 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
+import AddProductsList from "./AddProductsList";
+import { color } from "framer-motion";
 
 const customproductsClasses = [
   {
@@ -108,6 +110,8 @@ function AddProduct({
   const [partners, setPartners] = useState([]);
   const [country, setCountry] = useState('')
   const [region, setRegion] = useState('')
+  const [newProduct, setNewProduct] = useState(false)
+  const [productsList, setProductsList] = useState([])
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան"
@@ -117,12 +121,20 @@ function AddProduct({
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
+  const handleToggleCreateProductModal = (value) => {
+    setNewProduct((prev) => value);
 
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const partnersResp = await axiosPrivate.get(PARTNERS_URL);
         setPartners(partnersResp?.data?.jsonString);
+
+        const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
+        setProductsList(productsList?.data?.jsonString);
+
         setIsLoading(false);
       } catch (err) {
         console.log(err);
@@ -132,9 +144,13 @@ function AddProduct({
     setTimeout(() => {
       fetchData();
     }, 500);
-  }, [navigate]);
+  }, [navigate,newProduct]);
   const handleAmountChange = (e) => {
     setAmount((prev) => e.target.value);
+  };
+  const handleAddNewProduct = (e) => {
+    e.stopPropagation()
+    setNewProduct((prev) => true);
   };
   const handleCurrencyChange = (e) => {
     const asd = currencies.filter((el)=>
@@ -194,7 +210,7 @@ function AddProduct({
       theme: "light",
     });
   const onSubmit = methods.handleSubmit(async (data) => {
-    const newProduct = {
+    const newProd = {
       barcode: data?.barcode,
       reorderLevel: +data?.reorderLevel,
       name: data?.name || null,
@@ -220,10 +236,7 @@ function AddProduct({
        }})
     };
 
-    console.log(attributs);
-    console.log(newProduct);
-    console.log(data);
-    const updatedData = deleteNullProperties(newProduct)
+    const updatedData = deleteNullProperties(newProd)
 
     try {
       await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
@@ -234,7 +247,7 @@ function AddProduct({
       handleToggleCreateModal(false);
       refreshData();
       notify(
-        `${newProduct.diagnosticsName} Ախտորոշումը ավելացված է`
+        `${newProd.name}  ավելացված է`
       );
     } catch (err) {
       if (!err?.response) {
@@ -247,6 +260,13 @@ function AddProduct({
     }
   });
   return (
+    <>
+    {newProduct && (
+        <AddProductsList
+          handleToggleCreateModal={handleToggleCreateProductModal}
+          refreshData={() => refreshData()}
+        />
+      )}
     <Modal
       show={() => true}
       size="xl"
@@ -354,7 +374,7 @@ function AddProduct({
                       <div className="card-body">
                         <div className="modal-body">
                           <div className="row gx-3 mb-2">
-                          <div className="col-sm-6">
+                          <div className="col-sm-6 ">
                               <div className="d-flex justify-content-between me-2">
                                 <label
                                   className="form-label"
@@ -371,7 +391,9 @@ function AddProduct({
                                   </span>
                                 )}
                               </div>
-                              <div className="form-control">
+                              <div className="form-control d-flex justify-content-between">
+                                <div className="flex-grow-1 me-1">
+
                                 <Controller
                                   name="productName"
                                   control={methods.control}
@@ -379,22 +401,25 @@ function AddProduct({
                                   rules={{ required: true }}
                                   render={({ field }) => (
                                     <Select
-                                      {...field}
-                                      value={field.value}
-                                      options={productTypes?.map((item) => ({
-                                        value: item.productTypeId,
-                                        label: item.productTypeName,
-                                      }))}
-                                      placeholder={"Ընտրել"}
-                                      // onChange={(val) => {
+                                    {...field}
+                                    value={field.value}
+                                    options={productsList?.map((item) => ({
+                                      value: item.productListId,
+                                      label: item.name,
+                                    }))}
+                                    placeholder={"Ընտրել"}
+                                    // onChange={(val) => {
                                       //   field.onChange(val);
                                       //   onUnitSelect(val);
                                       // }}
+                                      />
+                                    )}
                                     />
-                                  )}
-                                />
+                                    </div>
+                              <FeatherIcon icon="plus-circle" width='24'  style={{ cursor: 'pointer',marginTop:'7px',marginLeft:'8px', color:'#01945c' }}   onClick={(e)=>handleAddNewProduct(e)}/>
                               </div>
                             </div>
+                            
                             <div className="col-sm-6">
                             <div className="d-flex justify-content-between me-2">
                               <label className="form-label" htmlFor="country">
@@ -435,8 +460,52 @@ function AddProduct({
                             </div>
                           </div>
                           <div className="row gx-3">
-                            <div className="col-sm-6">
+                            {/* <div className="col-sm-6">
                               <Input {...barcode_validation} />
+                            </div> */}
+                             <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="warehouse"
+                                >
+                                  Պահեստ
+                                </label>
+                                {methods.formState.errors.warehouse && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="warehouse"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      //  onChange={(val) => {
+                                      //    field.onChange(val.value);
+                                      //    onProductsClassSelect(val);
+                                      //  }}
+                                      //  value={wareHouses.find(
+                                      //    (option) =>
+                                      //      option.value === productClassType
+                                      //  )}
+                                      options={wareHouses?.map((item) => ({
+                                        value: item.warehouseId,
+                                        label: item.name,
+                                      }))}
+                                      placeholder={"Ընտրել"}
+                                    />
+                                  )}
+                                />
+                              </div>
                             </div>
                             <div className="col-sm-6">
                               <div className="d-flex justify-content-between me-2">
@@ -499,51 +568,7 @@ function AddProduct({
                             </div>
                           </div>
 
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <div className="d-flex justify-content-between me-2">
-                                <label
-                                  className="form-label"
-                                  htmlFor="warehouse"
-                                >
-                                  Պահեստ
-                                </label>
-                                {methods.formState.errors.warehouse && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>{" "}
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <div className="form-control">
-                                <Controller
-                                  name="warehouse"
-                                  control={methods.control}
-                                  defaultValue={null}
-                                  rules={{ required: true }}
-                                  render={({ field }) => (
-                                    <Select
-                                      {...field}
-                                      //  onChange={(val) => {
-                                      //    field.onChange(val.value);
-                                      //    onProductsClassSelect(val);
-                                      //  }}
-                                      //  value={wareHouses.find(
-                                      //    (option) =>
-                                      //      option.value === productClassType
-                                      //  )}
-                                      options={wareHouses?.map((item) => ({
-                                        value: item.warehouseId,
-                                        label: item.name,
-                                      }))}
-                                      placeholder={"Ընտրել"}
-                                    />
-                                  )}
-                                />
-                              </div>
-                            </div>
+                          <div className="row gx-3">                           
                             <div className="col-sm-6">
                               <label htmlFor="price" className="mb-2">
                                 Արժեք
@@ -573,10 +598,7 @@ function AddProduct({
                                 />
                               </div>
                             </div>
-                          </div>
-                          <div className="row gx-3">
-
-                          <div className="col-sm-6">
+                            <div className="col-sm-6">
                               <Input {...reorderLevel_validation} />
                             </div>
                           </div>
@@ -769,6 +791,7 @@ function AddProduct({
         </FormProvider>
       </Modal.Body>
     </Modal>
+    </>
   );
 }
 

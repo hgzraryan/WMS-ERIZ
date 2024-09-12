@@ -254,25 +254,25 @@ ul.hk-list.hk-list-sm li {
 
 a {
   text-decoration: none;
-  color: #007D88;
+  color: #01945c;
   -webkit-transition: color 0.2s ease;
   -moz-transition: color 0.2s ease;
   transition: color 0.2s ease;
 }
 a:hover {
   text-decoration: none;
-  color: #3d9ca5;
+  color: #01945c;
 }
 a:focus {
   text-decoration: none;
   outline: none;
-  color: #3d9ca5;
+  color: #01945c;
 }
 a.link-info {
-  color: #18DDEF !important;
+  color: #01945c !important;
 }
 a.link-info:hover, a.link-info:focus {
-  color: #4fe5f3 !important;
+  color: #01945c !important;
 }
 a.link-success {
   color: #00D67F !important;

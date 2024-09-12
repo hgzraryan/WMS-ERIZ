@@ -15,6 +15,7 @@ import useDeleteData from "../../hooks/useDeleteData";
 import ComponentToConfirm from "../ComponentToConfirm";
 import useRefreshData from "../../hooks/useRefreshData";
 import { useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const data1 = [
   {
@@ -124,6 +125,7 @@ function WareHousesList() {
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
   const [wareHouseDetails, setWareHouseDetails] = useState(false);
+  const axiosPrivate = useAxiosPrivate();  
   
   const {
     data: wareHouses,
@@ -280,10 +282,26 @@ function WareHousesList() {
     };
   };
 //Warehouse info
-  const handleShowWareHouse = (dat, dd) => {
-    // console.log(dat)
-    // console.log(dd)
-    setWareHouseDetails(dat);
+  const handleShowWareHouse = async (dat, dd) => {
+    const getData = async () => {
+      try {
+        const response = await axiosPrivate.post('searchUrl', {
+          page: currentPage===0?1:currentPage,
+          onPage: usersPerPage,
+          //signal: controller.signal
+        });
+        //console.log('get search data')
+        setWareHouseDetails(response.data.jsonString);
+        //setToggleSearchModal(false)  
+        //handleSearchPageCount(response.data.count)    
+      }catch (err) {
+        console.error(err);
+      }  
+    }; 
+    getData()
+    console.log(dat)
+    console.log(dd)
+    // setWareHouseDetails(dat);
   };
   const wareHousesColumns = [
     {

@@ -1,42 +1,35 @@
 import useAxiosPrivate from "./useAxiosPrivate";
 import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { checkUsersCount } from "../redux/features/users/usersCountSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems,name,getData) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  // const updateUsersCount = async () => {
-  //   try {
-  //     const response = await axiosPrivate.get("/allCount");
-  //     //console.log(response)
-  //     dispatch(checkUsersCount(response.data.usersCount));
-  //   } catch (err) {
-  //     console.error(err);
-  //     navigate("/login", { state: { from: location }, replace: true });
-  //   }
-  // };
+  
+  const notify = (text) =>
+    toast.error(text, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
   const handleDeleteItem = async (delid) => {
-    console.log(name)
-    console.log(selectedItem[name])
-    console.log(itemRef?.current)
-    if (selectedItem && selectedItem.name?.length && !!itemRef?.current?.length && selectedItem[name]?.trim() === itemRef?.current?.trim()) {
-      console.log(selectedItem[name])
-      console.log(itemRef?.current)
+    if (!!selectedItem[name].length && !!itemRef?.current.length && selectedItem[name]?.trim() === itemRef?.current?.trim()) {
       try {
         const response = await axiosPrivate.delete(url, {
           data: { id: delid },
         });
         setSelectedItemId(null); // Close the modal after deletion
-        Swal.fire(`Տվյալները ջնջված են`);
-        //Swal.fire(`${response.data[name]} has been deleted`);
-        // const updatedItems = items.filter((data) => data._id !== delid);
-        // setItems(updatedItems);
+        notify(
+          `Տվյալները ջնջված են`
+        );
         getData()
-       // updateUsersCount()
       } catch (err) {
         Swal.fire({
           icon: "error",
@@ -61,7 +54,6 @@ const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems
     }
   };
   return {handleDeleteItem,
-  //  updateUsersCount
-  };
+    };
 };
 export default useDeleteData;

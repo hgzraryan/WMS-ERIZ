@@ -8,6 +8,7 @@ import { PRODUCTCATEGORIES_URL } from '../../utils/constants';
 import { useParams } from 'react-router-dom';
 import useRefreshData from '../../hooks/useRefreshData';
 import useDeleteData from '../../hooks/useDeleteData';
+import AddProductsList from '../addViews/AddProductsList';
 
 const customproductsClasses=[
   {
@@ -99,7 +100,7 @@ function ProductsCategories() {
             </Dropdown>
           </div>
           {isOpen && (
-            <AddProductClass
+            <AddProductsList
               handleToggleCreateModal={handleToggleCreateModal}
               refreshData={() => refreshData()}
             />

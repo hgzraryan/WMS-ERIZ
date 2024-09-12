@@ -21,6 +21,7 @@ export const SUPPLIERS_ROUTE = 'companies/suppliers/page/:pageNumber'
 export const BRANDS_ROUTE = 'companies/brands'
 export const PRODUCTCLASSES_ROUTE = 'products/productsClasses/:pageNumber'
 export const PRODUCTS_ROUTE = 'products/products/:pageNumber'
+export const PRODUCTSLIST_ROUTE = 'products/productsList/:pageNumber'
 export const PURCHASEONE_ROUTE = 'purchases/purchaseOne'
 export const PURCHASETWO_ROUTE = 'purchases/purchaseTwo'
 export const ORDERONE_ROUTE = 'orders/orderOne'
@@ -60,6 +61,7 @@ export const PARTNERS_URL = '/partners'
 export const CUSTOMERS_URL = '/customers'
 export const LEGALFORMS_URL = '/legalForms'
 export const PRODUCTS_URL = '/products'
+export const PRODUCTSLIST_URL = '/productsList'
 export const PRODUCTCATEGORIES_URL = '/productCategories'
 export const SUPPLIERS_URL = '/suppliers'
 
@@ -72,6 +74,7 @@ export const REGISTER_LEGALFORM = "/registerLegalForm";
 export const REGISTER_PRODUCTCATEGORY = "/registerProductCategory";
 export const REGISTER_SUPPLIER = "/registerSupplier";
 export const REGISTER_PRODUCT = "/registerProduct";
+export const REGISTER_PRODUCTSLIST = "/registerProductsList";
 
 //user Roles
 export const ROLES = {
