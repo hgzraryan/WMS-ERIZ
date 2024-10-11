@@ -12,8 +12,8 @@ export const LOUNGE_ROUTE = 'lounge'
 export const PRIVILIGE_ROUTE = 'users/privileges'
 export const USERS_ID_ROUTE = 'users/users/:id'
 export const ROLES_ROUTE = 'users/roles'
-export const WORKERSPOSITION_ROUTE = 'workers/position'
-export const WORKERS_ROUTE = 'workers/workers'
+export const WORKERSPOSITION_ROUTE = 'workers/position/page/:pageNumber'
+export const WORKERS_ROUTE = 'workers/workers/page/:pageNumber'
 export const CUSTOMERS_ROUTE = 'customers/customers/page/:pageNumber'
 export const COMPANIES_ROUTE = 'companies/companies'
 export const PARTNERS_ROUTE = 'companies/partners/page/:pageNumber'
@@ -64,6 +64,8 @@ export const PRODUCTS_URL = '/products'
 export const PRODUCTSLIST_URL = '/productsList'
 export const PRODUCTCATEGORIES_URL = '/productCategories'
 export const SUPPLIERS_URL = '/suppliers'
+export const WORKERS_URL = '/workers'
+export const WORKERSPOSITIONS_URL = '/users'
 
 
 export const REGISTER_USER = "/registerUser";
@@ -75,6 +77,7 @@ export const REGISTER_PRODUCTCATEGORY = "/registerProductCategory";
 export const REGISTER_SUPPLIER = "/registerSupplier";
 export const REGISTER_PRODUCT = "/registerProduct";
 export const REGISTER_PRODUCTSLIST = "/registerProductsList";
+export const REGISTER_WORKERROLE = "/registerWorkerRole";
 
 //user Roles
 export const ROLES = {

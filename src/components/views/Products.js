@@ -121,7 +121,7 @@ const handleToggleExportModal = (value) => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <h1>Ապրանքներ</h1>
+                    <h1>Պահեստի ապրանքներ</h1>
                   </a>
                 </div>
                 <div className="dropdown ms-3">

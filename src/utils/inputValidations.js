@@ -920,3 +920,20 @@ export const liter_validation = {
     },
   },
 };
+export const emergencyContactName_validation = {
+  name: "emergencyContactName",
+  label: "Լրացուցիչ կոնտակտ",
+  multiline: true,
+  id: "emergencyContactName",
+  placeholder: "Լրացուցիչ կոնտակտ",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 200,
+      message: "200 characters max",
+    },
+  },
+};

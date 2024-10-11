@@ -389,13 +389,13 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/position"?"nav-link active":"nav-link"} to="./workers/position"
+                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/position/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/position/page/1"
                                                         onClick={()=>handleSubmenuClick("workers","position")}>
                                                             <span className="nav-link-text">Աշխատակցի պաշտոն</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers"?"nav-link active":"nav-link"} to="./workers/workers"
+                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/workers/page/:pageNumber"
                                                         onClick={()=>handleSubmenuClick("workers","workers")}>
                                                             <span className="nav-link-text">Աշխատակից</span>
                                                         </Link>

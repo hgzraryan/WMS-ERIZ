@@ -30,7 +30,7 @@ const Users = () => {
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
   //const usersCount = useSelector(selectUsersCount)
-  const [currentPage, setCurrentPage] = useState(0);  
+  const [currentPage, setCurrentPage] = useState(1);  
   const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
   const [searchCount,setSearchCount] = useState(null)
   const [searchParams,setSearchParams] = useState(null)
@@ -44,7 +44,7 @@ const Users = () => {
   //   refreshData,
   //   dataCount
   // } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
-  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(50/usersPerPage)
+  const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
   const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage);
 
   //-------------------
@@ -117,9 +117,11 @@ if(!searchCount){
     
   );
   
+  useEffect(() => {
+    setCurrentPage(Number(pageNumber));
+  }, [pageNumber]);
   const handlePageClick = ({ selected: selectedPage }) => {
-    setCurrentPage(selectedPage);
-    //updateUsersCount();
+    navigate(`/users/users/page/${selectedPage+1}`);
 }
   const refreshPage = () => {
     let paglink = document.querySelectorAll(".page-item");
@@ -317,7 +319,7 @@ if(!searchCount){
                       nextLabel = {"Առաջ"}
                       pageCount = {pageCount}
                       onPageChange = {handlePageClick}
-                      initialPage = {0}
+                      //initialPage = {0}
                       containerClassName={"pagination"}
                       pageLinkClassName = {"page-link"}
                       pageClassName = {"page-item"}
@@ -326,6 +328,8 @@ if(!searchCount){
                       disabledLinkClassName={"disabled"}
                       //activeLinkClassName={"active"}
                       activeClassName={"active"}
+                      forcePage={currentPage - 1}
+
 											/>
                   </div>
                 </div>
