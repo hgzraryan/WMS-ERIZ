@@ -78545,6 +78545,7 @@ div.hopscotch-bubble .hopscotch-bubble-container .hopscotch-actions .hopscotch-n
 .avatar.avatar-rounded .avatar-img,
 .avatar.avatar-rounded .initial-wrap {
   border-radius: 50%;
+  background-color: #fff;
 }
 .avatar.avatar-square .avatar-img,
 .avatar.avatar-square .initial-wrap {

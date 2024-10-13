@@ -341,7 +341,7 @@ const MainTemplate = () => {
                                         <ul id="dash_integ" className={activeDropdown==='users' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children '} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="privileges" || location.pathname==="/users/privileges"?"nav-link active":"nav-link"} to="./users/privileges"
                                                         onClick={()=>handleSubmenuClick("users","privileges")}>
                                                             <span className="nav-link-text">Արտոնություններ</span>
@@ -352,7 +352,7 @@ const MainTemplate = () => {
                                                         onClick={()=>handleSubmenuClick("users","roles")}>
                                                             <span className="nav-link-text">Դերեր</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="users" || location.pathname==="/users/users"?"nav-link active":"nav-link"} to="./users/users/page/1"
                                                         onClick={()=>handleSubmenuClick("users","users")}>  
@@ -404,7 +404,7 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <a className={misActive1 === "customers" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('customers')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
@@ -430,7 +430,7 @@ const MainTemplate = () => {
                                                 </ul>	
                                             </li>	
                                         </ul>	
-                                    </li>
+                                    </li> */}
 
                                     <li className="nav-item">
                                         <a className={misActive1 === "companies" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('companies')}  data-bs-target="#dash_integ">
@@ -464,12 +464,12 @@ const MainTemplate = () => {
                                                             <span className="nav-link-text">Մատակարարներ</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="brands" || location.pathname==="/companies/brands"?"nav-link active":"nav-link"} to="./companies/brands"
                                                         onClick={()=>handleSubmenuClick("companies","brands")}>
                                                             <span className="nav-link-text">Ապրանքանիշ</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                 </ul>	
                                             </li>	
                                         </ul>	
@@ -513,9 +513,7 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
-
-
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <a className={misActive1 === "purchases" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('purchases')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
@@ -546,10 +544,7 @@ const MainTemplate = () => {
                                                 </ul>	
                                             </li>	
                                         </ul>	
-                                    </li>
-
-
-
+                                    </li> */}
                                     <li className="nav-item">
                                         <a className={misActive1 === "warehouses" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('warehouses')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
@@ -571,7 +566,7 @@ const MainTemplate = () => {
                                                             <span className="nav-link-text">Պահեստների ցանկ</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="listOfProductValues" || location.pathname=== LISTOFPRODUCTVALUES_ROUTE?"nav-link active":"nav-link"} to={LISTOFPRODUCTVALUES_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","listOfProductValues")}>
                                                             <span className="nav-link-text">Ապրանքանյութական արժեքների ցանկ</span>
@@ -588,14 +583,14 @@ const MainTemplate = () => {
                                                         onClick={()=>handleSubmenuClick("warehouses","productCover")}>
                                                             <span className="nav-link-text">Ապրանքների վերադիր</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="accessWarrant" || location.pathname=== ACCESSWARRANT_ROUTE?"nav-link active":"nav-link"} to={ACCESSWARRANT_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","accessWarrant")}>
                                                             <span className="nav-link-text">Մուտք Պահեստ/Մուտքի օրդեր</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="retailPurchase" || location.pathname=== RETAILPURCHASE_ROUTE?"nav-link active":"nav-link"} to={RETAILPURCHASE_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","retailPurchase")}>
                                                             <span className="nav-link-text">Ապրանքների ձեռքբերում մանրածախ</span>
@@ -678,13 +673,12 @@ const MainTemplate = () => {
                                                         onClick={()=>handleSubmenuClick("warehouses","defactura")}>
                                                             <span className="nav-link-text">Դեֆեկտուրա</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                 </ul>	
                                             </li>	
                                         </ul>	
                                     </li>
-
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <a className={misActive1 === "orders" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('orders')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
                                                 <span className="svg-icon">
@@ -751,7 +745,6 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
-
                                     <li className="nav-item">
                                         <a className={misActive1 === "statistics" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('statistics')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
@@ -785,7 +778,6 @@ const MainTemplate = () => {
                                             </li>	
                                         </ul>	
                                     </li>
-
                                     <li className="nav-item">
                                         <a className={misActive1 === "commonInfo" ?"nav-link active":"nav-link"} href="#" data-bs-toggle="collapse" onClick={()=>isActiceDD('commonInfo')}  data-bs-target="#dash_integ">
                                             <span className="nav-icon-wrap">
@@ -841,7 +833,7 @@ const MainTemplate = () => {
                         </span>
                         <span className="nav-link-text">Կարգաբերումներ</span>
                       </Link>
-                    </li>
+                    </li> */}
                               </ul>
                           </div>
                       </div>

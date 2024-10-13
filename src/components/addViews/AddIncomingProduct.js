@@ -93,7 +93,7 @@ const currencies = [
   { value: "978", label: "EUR" },
   { value: "643", label: "RUB" },
 ];
-function AddProduct({
+function AddIncomingProduct({
   handleToggleCreateModal,
   productCategories,
   refreshData,
@@ -795,4 +795,4 @@ function AddProduct({
   );
 }
 
-export default AddProduct;
+export default AddIncomingProduct;

@@ -41,7 +41,7 @@ function UserDetails() {
 
   return (
     <>
-    <Suspense fallback={<LoadingSpinner />}>
+     <Suspense fallback={<LoadingSpinner />}>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
@@ -69,13 +69,52 @@ function UserDetails() {
                       {userDetails?.lastname +
                         " " +
                         userDetails?.firstname}
-                      <i
+                         {/* <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                data-bs-toggle="tooltip"
+                data-placement="top"
+                title="Edit"
+                href="#"
+                onClick={() => handleOpenEditModal(userDetails)}
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="edit" />
+                  </span>
+             
+                </span>
+              </a> */}
+              {/* password can be changed only by current useror superAdmin */}
+              {/* {(superAdmin || storedUser?.userId === userDetails.userId) &&
+                         <a
+                         className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                         data-bs-toggle="tooltip"
+                         data-placement="top"
+                         title="Edit"
+                         href="#"
+                         onClick={() => handleOpenResetPassModal(userDetails)}
+                         >
+                <span className="icon">
+                  <span className="feather-icon">
+                  <img
+                src={resetPassSVG}
+                width="20px"
+                height="20px"
+                alt="resetPassSVG"
+                className="me-2"
+                />
+                  </span>
+             
+                </span>
+              </a>
+              } */}
+                      {/* <i
                         className="bi-check-circle-fill fs-6 text-blue"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         title=""
                         data-bs-original-title="Top endorsed"
-                      ></i>
+                      ></i> */}
                     </h4>
 
                     <ul className="list-inline fs-7 mt-2 mb-0">
@@ -169,7 +208,7 @@ function UserDetails() {
                                 <i className="bi bi-calendar-event text-disabled me-2"></i>
                                 <span className="text-muted">Գրանցման ամսաթիվ:</span>
                               </span>
-                              <span className="ms-2">{moment.utc(userDetails?.createdAt).format('DD-MM-YYYY HH:mm')}</span>
+                              <span className="ms-2">{userDetails?.createdAt && moment.utc(userDetails?.createdAt).format('DD-MM-YYYY HH:mm')}</span>
                             </li>
                             <li className="list-group-item border-0">
                             <span>
@@ -179,7 +218,7 @@ function UserDetails() {
                               </span>
                             </span>
                             <span className="ms-2">
-                            {moment.utc(userDetails?.updatedAt).format('DD-MM-YYYY HH:mm')}
+                            {userDetails?.updatedAt && moment.utc(userDetails?.updatedAt).format('DD-MM-YYYY HH:mm')}
                             </span>
                           </li>
                             <li className="list-group-item border-0">
@@ -187,7 +226,7 @@ function UserDetails() {
                                 <i className="bi bi-calendar-event text-disabled me-2"></i>
                                 <span className="text-muted">Ծննդյան ամսաթիվ:</span>
                               </span>
-                              <span className="ms-2">{moment.utc(userDetails?.birthday).format('DD-MM-YYYY')}</span>
+                              <span className="ms-2">{userDetails?.birthday && moment.utc(userDetails?.birthday).format('DD-MM-YYYY')}</span>
                             </li>
                             <li className="list-group-item border-0">
                               <span>

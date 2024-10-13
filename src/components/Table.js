@@ -102,7 +102,7 @@ function Table({data,column}) {
             prepareRow(row)
             return (
               <tr {...row.getRowProps({
-                style: { width: '100%',cursor:'pointer' },
+                style: { width: '100%' },
                // onClick: () => handleRowClick(row) // Attach onClick event handler
               })}>
                 {row.cells.map(cell => {

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { Dropdown } from "react-bootstrap";
-import AddProduct from '../addViews/AddProduct';
+import AddProduct from '../addViews/AddIncomingProduct';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PRODUCTCATEGORIES_URL, PRODUCTS_URL } from '../../utils/constants';

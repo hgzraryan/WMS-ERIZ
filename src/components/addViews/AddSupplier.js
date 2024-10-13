@@ -84,7 +84,7 @@ function AddSupplier({ handleToggleCreateModal, refreshData }) {
         handleToggleCreateModal(false);
         refreshData();
         notify(
-          `${newSupplier.name} գործընկերը ավելացված է`
+          `${newSupplier.name} մատակարարը ավելացված է`
         );
       } catch (err) {
         if (!err?.response) {

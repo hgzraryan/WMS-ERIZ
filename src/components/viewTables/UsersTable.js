@@ -177,7 +177,11 @@ function UsersTable({
       {
         Header: "Ծածկանուն",
         accessor: "username",
+        Cell: ({ row }) => <div
+        onClick={() => handleUserPage(row.original?.userId)}
+        style={{cursor:'pointer'}}>{row.original?.username}</div>,
         width:200,
+
   
       },
       {
@@ -312,7 +316,7 @@ const setUserTypeStyle = (userType) => {
   };
 
   const handleUserPage = async(userId) =>{
-      navigate(`/users/${userId}`)
+      navigate(`/users/users/${userId}`)
   }
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     setSearchText(selectedKeys[0]);
