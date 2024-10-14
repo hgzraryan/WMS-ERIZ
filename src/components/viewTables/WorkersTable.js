@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Table from '../Table';
+import WorkersEdit from '../editModals/WorkersEdit';
 
 function WorkersTable({
     confirmRef,
@@ -36,10 +37,10 @@ function WorkersTable({
           {
             Header: (event) => (
               <>                
-                <div  className="columnHeader">Անուն Ազգանուն</div>
+                <div  className="fullName">Անուն Ազգանուն</div>
               </>
             ),
-            accessor: "name",
+            accessor: "fullName",
             sortable: true,
             width: 300,
             
@@ -47,7 +48,13 @@ function WorkersTable({
           {
             Header: (event) => (
               <>                
-                <div  className="columnHeader">Հասցե</div>
+                <div  className="columnAddress">Հասցե</div>
+              </>
+            ),
+            Cell: ({row}) => (
+              <>        
+              {console.log(row)}        
+                <div  className="columnHeader">{row?.original?.contact?.address?.city + "," +row?.original?.contact?.address?.street}</div>
               </>
             ),
             accessor: "address",
@@ -61,9 +68,15 @@ function WorkersTable({
                 <div  className="columnHeader">Հեռախոս</div>
               </>
             ),
+            Cell: ({row}) => (
+              <>        
+              {console.log(row)}        
+                <div  className="phone">{row?.original?.contact?.phone}</div>
+              </>
+            ),
             accessor: "phone",
             sortable: true,
-            width: 300,
+            width: 200,
             
           },
           {
@@ -75,7 +88,12 @@ function WorkersTable({
             accessor: "email",
             sortable: true,
             width: 300,
-            
+            Cell: ({row}) => (
+              <>        
+              {console.log(row)}     
+                <div  className="phone">{row?.original?.contact?.email}</div>
+              </>
+            ),
           },
           {
             Header: (event) => (
@@ -84,8 +102,14 @@ function WorkersTable({
                 <div  className="columnHeader">Կարգավիճակ</div>
               </>
             ),
+            Cell: ({row}) => (
+              <>        
+              {console.log(row)}     
+                <div  className="phone">{row?.original?.isActive}</div>
+              </>
+            ),
             accessor: "status",
-            width: 300,
+            width: 180,
           },
           {
             Header: (event) => (
@@ -94,7 +118,7 @@ function WorkersTable({
               </>
             ),
             accessor: "actions",
-            width: 300,
+            width: 200,
             Cell: ({ row }) => (
               <div className="d-flex align-items-center">
                 <div className="d-flex">
@@ -147,6 +171,10 @@ function WorkersTable({
       
   return (
     <>
+    {!!editRow &&(
+    <WorkersEdit worker={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
+  )
+}
           {/* <ComponentToConfirm
               handleCloseModal={handleCloseModal}
               handleOpenModal={handleOpenModal}

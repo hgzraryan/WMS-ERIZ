@@ -7,12 +7,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useRefreshData from "../../hooks/useRefreshData";
 import useDeleteData from "../../hooks/useDeleteData";
-import { WORKERSPOSITIONS_URL } from "../../utils/constants";
+import { WORKERSROLES_URL } from "../../utils/constants";
 import useGetData from "../../hooks/useGetData";
 import WorkersPositionsTable from "../viewTables/WorkersPositionsTable";
 import AddWorkerRole from "../addViews/AddWorkerRole";
 
-function WorkersPosition() {
+function WorkersRoles() {
   const { pageNumber } = useParams();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(Number(pageNumber));
@@ -38,16 +38,16 @@ function WorkersPosition() {
     setData: setWorkersPositions,
     dataCount,
     dataReceived
-  } = useGetData(WORKERSPOSITIONS_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
+  } = useGetData(WORKERSROLES_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-  const { refreshData,data } = useRefreshData(WORKERSPOSITIONS_URL, usersPerPage,pageNumber);
+  const { refreshData,data } = useRefreshData(WORKERSROLES_URL, usersPerPage,pageNumber);
   useEffect(()=>{
     setWorkersPositions(data)
     },[data])
   //-------------------
   
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
-    WORKERSPOSITIONS_URL,
+    WORKERSROLES_URL,
     confirmWPRef,
     selectedItem,
     setSelectedItemId,
@@ -283,4 +283,4 @@ function WorkersPosition() {
   )
 }
 
-export default WorkersPosition
+export default WorkersRoles

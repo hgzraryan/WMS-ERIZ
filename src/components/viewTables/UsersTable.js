@@ -208,11 +208,10 @@ function UsersTable({
           Object.keys(value).map((role) => (
             <span className={setUserTypeStyle(role)} key={role}>
               {role === "User" ? "Օգտատեր" :
-                  role === "Doctor" ? "Բժիշկ" :
-                  role === "Editor" ? "Փոփոխող" :
-                  role === "Sampler" ? "Նմուշառող" :
+                  role === "Storekeeper" ? "Պահեստապետ" :
                   role === "Approver" ? "Հաստատող" :
                   role === "Admin" ? "Ադմին" :
+                  role === "SuperAdmin" ? "Համակարգի կառավարող" :
                   "Unknown Role"}
                   </span>
                 )),
@@ -299,17 +298,14 @@ const setUserTypeStyle = (userType) => {
     switch (userType) {
       case "Admin":
         return "badge badge-soft-success  my-1  me-2";
-      case "Editor":
+      case "Storekeeper":
         return "badge badge-soft-violet my-1  me-2";
       case "User":
         return "badge badge-soft-danger my-1  me-2";
       case "Approver":
         return "badge badge-soft-light my-1  me-2";
-      case "Sampler":
-        return "badge badge-soft-yellow my-1  me-2";
-      case "Doctor":
+      case "SuperAdmin":
         return "badge badge-soft-blue my-1  me-2";
-
       default:
         break;
     }

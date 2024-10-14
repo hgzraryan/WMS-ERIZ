@@ -13,7 +13,7 @@ import {
   LOUNGE_ROUTE,
   PRIVILIGE_ROUTE,
   ROLES_ROUTE,
-  WORKERSPOSITION_ROUTE,
+  WORKERSROLES_URL,
   WORKERS_ROUTE,
   CUSTOMERS_ROUTE,
   COMPANIES_ROUTE,
@@ -57,7 +57,9 @@ import {
   LEGALFORMS_ROUTE,
   SUPPLIERS_ROUTE,
   PRODUCTSLIST_ROUTE,
-  INCOMINGPRODUCTS_ROUTE
+  INCOMINGPRODUCTS_ROUTE,
+  OUTGOINGPRODUCTS_ROUTE,
+  WORKERSROLES_ROUTE
 } from "./utils/constants";
 import Suppliers from "./components/views/Suppliers";
 import ProductsList from "./components/views/ProductsList";
@@ -79,7 +81,7 @@ const PersistLogin = lazy(()=>  import("./components/PersistLogin"));
 const MainTemplate = lazy(()=>  import("./components/layouts/MainTemplate"));
 const Privilege = lazy(()=>  import("./components/views/Privilege"));
 const Roles = lazy(()=>  import("./components/views/Roles"));
-const WorkersPosition = lazy(()=>  import("./components/views/WorkersPosition"));
+const WorkersRoles = lazy(()=>  import("./components/views/WorkersRoles"));
 const Workers = lazy(()=>  import("./components/views/Workers"));
 const Customers = lazy(()=>  import("./components/views/Customers"));
 const Companies = lazy(()=>  import("./components/views/Companies"));
@@ -88,6 +90,7 @@ const Brands = lazy(()=>  import("./components/views/Brands"));
 const ProductsCategories = lazy(()=>  import("./components/views/ProductsCategories"));
 const Products = lazy(()=>  import("./components/views/Products"));
 const IncomingProducts = lazy(()=>  import("./components/views/IncomingProducts"));
+const OutgoingProducts = lazy(()=>  import("./components/views/OutgoingProducts"));
 const PurchaseOne = lazy(()=>  import("./components/views/PurchaseOne"));
 const PurchaseTwo = lazy(()=>  import("./components/views/PurchaseTwo"));
 const OrderOne = lazy(()=>  import("./components/views/OrderOne"));
@@ -149,7 +152,7 @@ function App() {
                 <Route path={ROLES_ROUTE} element={<Roles />} />
                 <Route path={USERS_ROUTE} element={<Users />} />
                 <Route path={USERS_ID_ROUTE} element={<UserDetails />} />
-                <Route path={WORKERSPOSITION_ROUTE} element={<WorkersPosition />}/>
+                <Route path={WORKERSROLES_ROUTE} element={<WorkersRoles />}/>
                 <Route path={WORKERS_ROUTE} element={<Workers />} />
                 <Route path={CUSTOMERS_ROUTE} element={<Customers />} />
                 <Route path={COMPANIES_ROUTE} element={<Companies />} />
@@ -158,7 +161,8 @@ function App() {
                 <Route path={BRANDS_ROUTE} element={<Brands />} />
                 <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsCategories />} />
                 <Route path={PRODUCTS_ROUTE} element={<Products />} />
-                <Route path={INCOMINGPRODUCTS_ROUTE } element={<IncomingProducts />} />
+                <Route path={INCOMINGPRODUCTS_ROUTE} element={<IncomingProducts />} />
+                <Route path={OUTGOINGPRODUCTS_ROUTE } element={<OutgoingProducts />} />
                 <Route path={PRODUCTSLIST_ROUTE} element={<ProductsList />} />
                 <Route path={PURCHASEONE_ROUTE} element={<PurchaseOne />} />
                 <Route path={PURCHASETWO_ROUTE} element={<PurchaseTwo />} />

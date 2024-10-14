@@ -3,17 +3,12 @@ import  '../dist/css/IncomingOrderForm.scss';
 
 function IncomingOrderForm() {
     return (
-        <article className="a4-page">
-            <header style={{marginBottom:'30px'}}>
+        <article className="a4-page p-0" style={{margin:'20px'}}>
+            {/* <header style={{marginBottom:'30px'}}>
                 <div className="header-left">
                     <p>Էրիզ ՍՊԸ</p>
                 </div>
-            </header>
-            <section className='form-section' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column', lineheight:0}}>           
-                <p>Matakarar</p> 
-            <div className='line' style={{fontWeight:'bold'}}/>
-            <p>(Մատակարարի անվանում)</p>
-            </section>
+            </header> */}
             <section className="form-section" style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <div>
                     <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>12456</u></span></p>
@@ -23,6 +18,11 @@ function IncomingOrderForm() {
                     <div className='line'></div>
                     <p>(կազմման ամսաթիվ)</p>
                 </div>
+            </section>
+            <section className='form-section' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column', lineheight:0}}>           
+                <p>Matakarar</p> 
+            <div className='line' style={{fontWeight:'bold'}}/>
+            <p>(Մատակարարի անվանում)</p>
             </section>
             <section className="form-section" style={{marginBottom:'30px'}}>
                 <table className="main-table" style= {{width:'100%', marginTop:'20px'}}>

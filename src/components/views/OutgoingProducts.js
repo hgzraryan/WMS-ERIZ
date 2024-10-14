@@ -12,7 +12,9 @@ import ReactPaginate from 'react-paginate';
 import useDeleteData from '../../hooks/useDeleteData';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import AddIncomingProduct from '../addViews/AddIncomingProduct';
-function IncomingProducts() {
+import OutgoingProductsTable from '../viewTables/OutgoingProductsTable';
+import AddOutgoingProduct from '../addViews/AddOutgoingProduct';
+function OutgoingProducts() {
     const { pageNumber } = useParams();
     const navigate = useNavigate()
     const location = useLocation();
@@ -65,15 +67,15 @@ function IncomingProducts() {
       setSearchParams(data.params)
     }
     const {
-      data: incomingProducts,
-      setData: setIncomingProducts,
+      data: outgoingProducts,
+      setData: setOutgoingProducts,
       //refreshData,
       dataCount
     } = useGetData(PRODUCTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
     const { refreshData,data } = useRefreshData(PRODUCTS_URL, usersPerPage);
     useEffect(()=>{
-        setIncomingProducts(data)
+        setOutgoingProducts(data)
       },[data])
       
     const { handleDeleteItem } = useDeleteData(
@@ -81,8 +83,8 @@ function IncomingProducts() {
       confirmAgentsRef,
       selectedItem,
       setSelectedItemId,
-      incomingProducts,
-      setIncomingProducts,
+      outgoingProducts,
+      setOutgoingProducts,
       "name",
       refreshData 
     );
@@ -102,7 +104,7 @@ function IncomingProducts() {
       <HelmetProvider>
        <Helmet>
           <meta charSet="utf-8" />
-          <title>Explore Incoming Products</title>
+          <title>Explore Outgoing Products</title>
           <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
         </Helmet>
         <div className="contactapp-wrap" style={{height:'100%'}}>
@@ -119,7 +121,7 @@ function IncomingProducts() {
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      <h1>Պահեստի մուտքեր</h1>
+                      <h1>Պահեստի ելքեր</h1>
                     </a>
                   </div>
                   <div className="dropdown ms-3">
@@ -129,7 +131,7 @@ function IncomingProducts() {
                   id="dropdown-basic"
                   className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block"
                   >
-                  Մուտքագրել նոր
+                  Ելքագրել
                 </Dropdown.Toggle>
     
                 <Dropdown.Menu>
@@ -139,7 +141,7 @@ function IncomingProducts() {
                 </Dropdown.Menu>
               </Dropdown>
               {isOpen && (
-              <AddIncomingProduct
+              <AddOutgoingProduct
               handleToggleCreateModal={handleToggleCreateModal}
               productCategories={productCategories}
               refreshData={() => refreshData()}
@@ -193,15 +195,15 @@ function IncomingProducts() {
                       id="scrollableDiv"
                       style={{overflow: "auto" }}
                     >
-                        <IncomingProductsTable
+                        <OutgoingProductsTable
                           confirmRef={confirmAgentsRef}
                           selectedItem={selectedItem}
                           selectedItemId={selectedItemId}
                           //handleDeleteItem={handleDeleteItem}
                           handleOpenModal={handleOpenModal}
                           handleCloseModal={handleCloseModal}
-                          products={incomingProducts}
-                          setProducts={setIncomingProducts}
+                          products={outgoingProducts}
+                          setProducts={setOutgoingProducts}
                           refreshData={refreshData}
                           handleSearchPageCount={(data)=>handleSearchPageCount(data)}
   
@@ -234,5 +236,5 @@ function IncomingProducts() {
       </HelmetProvider>
     )
   }
-  
-export default IncomingProducts
+
+export default OutgoingProducts

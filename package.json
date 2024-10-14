@@ -1,7 +1,7 @@
 {
   "name": "ERP_VTEAM_CLIENT",
   "version": "0.1.0",
-  "revision": "111024",
+  "revision": "141024",
   "private": true,
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.17.4",
@@ -49,6 +49,7 @@
     "react-scripts": "5.0.0",
     "react-select": "^5.8.0",
     "react-table": "^7.8.0",
+    "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.3",
     "react-transition-group": "^4.4.5",
     "react-validation": "^3.0.7",

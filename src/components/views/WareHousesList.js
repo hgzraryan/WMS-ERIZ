@@ -16,6 +16,7 @@ import ComponentToConfirm from "../ComponentToConfirm";
 import useRefreshData from "../../hooks/useRefreshData";
 import { useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import CustomTable from "../CustomTable";
 
 const data1 = [
   {
@@ -141,13 +142,13 @@ function WareHousesList() {
         },
         {
           key: 12,
-          name: 'John Brown jr.',
+          name: 'John dfsgsdfgsdfg jr.',
           age: 30,
           address: 'New York No. 3 Lake Park',
           children: [
             {
               key: 121,
-              name: 'Jimmy Brown',
+              name: 'Jimmy Brsfsown',
               age: 16,
               address: 'New York No. 3 Lake Park',
             },
@@ -170,12 +171,6 @@ function WareHousesList() {
                   name: 'Jim Green jr.',
                   age: 25,
                   address: 'London No. 3 Lake Park',
-                },
-                {
-                  key: 1312,
-                  name: 'Jimmy Green sr.',
-                  age: 18,
-                  address: 'London No. 4 Lake Park',
                 },
               ],
             },
@@ -548,46 +543,46 @@ function WareHousesList() {
   ];
   const [productsColumns, setProductsColumns] = useState([
     {
-      title: "ID",
-      dataIndex: "productId",
-      width: 100,
+      Header: "ID",
+      accessor: "productId",
+      width: 80,
     },
     {
-      title: "Անվանում",
-      dataIndex: "name",
-      width: 100,
+      Header: "Անվանում",
+      accessor: "name",
+      width: 200,
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Քանակ",
-      dataIndex: "count",
+      Header: "Քանակ",
+      accessor: "count",
       width: 100,
       sorter: (a, b) => a.count - b.count,
     },
     {
-      title: "Չափման միավոր",
-      dataIndex: "unit",
-      width: 100,
+      Header: "Չափման միավոր",
+      accessor: "unit",
+      width: 150,
     },
     {
-      title: "Գնման ամսաթիվ",
-      dataIndex: "purchaseDate",
-      width: 100,
+      Header: "Գնման ամսաթիվ",
+      accessor: "purchaseDate",
+      width: 180,
     },
     {
-      title: "Արտ․ժամկետ",
-      dataIndex: "productionDate",
-      width: 100,
+      Header: "Արտ․ժամկետ",
+      accessor: "productionDate",
+      width: 180,
     },
     {
-      title: "Պիտ․ ժամկետ",
-      dataIndex: "expiredDate",
-      width: 100,
+      Header: "Պիտ․ ժամկետ",
+      accessor: "expiredDate",
+      width: 180,
     },
     {
-      title: "Գործողություններ",
-      dataIndex: "actions",
-      width: 100,
+      Header: "Գործողություններ",
+      accessor: "actions",
+      width: 200,
       render: (_, record) => (
         <Space size="middle" 
         //onClick={console.log(record)}
@@ -706,7 +701,7 @@ function WareHousesList() {
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
           <Table
-            dataSource={wareHouses}
+            dataSource={asd}
             columns={wareHousesColumns}
             onRow={(record, index) => ({
               onClick: () => handleShowWareHouse(record, index),
@@ -729,20 +724,24 @@ function WareHousesList() {
           </div>
 
           {wareHouseDetails ? (
-            <Table
-              dataSource={data1}
-              columns={resizableColumns}
-              components={components}
-              onRow={(record, index) => ({
-                onClick: () => console.log(record),
-              })}
-              style={{ cursor: "pointer" }}
-              size={"middle"}
-              pagination={false}
-              onChange={onChange}
-              showSorterTooltip={{
-                target: "sorter-icon",
-              }}
+            // <Table
+            //   dataSource={data1}
+            //   columns={resizableColumns}
+            //   components={components}
+            //   onRow={(record, index) => ({
+            //     onClick: () => console.log(record),
+            //   })}
+            //   style={{ cursor: "pointer" }}
+            //   size={"middle"}
+            //   pagination={false}
+            //   onChange={onChange}
+            //   showSorterTooltip={{
+            //     target: "sorter-icon",
+            //   }}
+            // />
+            <CustomTable
+            data={data1}
+            column={productsColumns}
             />
           ) : (
             ""

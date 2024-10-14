@@ -8,7 +8,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PRODUCTCATEGORIES_URL, PRODUCTS_URL } from '../../utils/constants';
 import useRefreshData from '../../hooks/useRefreshData';
 import useGetData from '../../hooks/useGetData';
-import ProductsTable from '../viewTables/ProductsTable';
+import IncomingProductsTable from '../viewTables/IncomingProductsTable';
 import ReactPaginate from 'react-paginate';
 import useDeleteData from '../../hooks/useDeleteData';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
@@ -195,7 +195,7 @@ const handleToggleExportModal = (value) => {
                     id="scrollableDiv"
                     style={{overflow: "auto" }}
                   >
-                      <ProductsTable
+                      <IncomingProductsTable
                         confirmRef={confirmAgentsRef}
                         selectedItem={selectedItem}
                         selectedItemId={selectedItemId}

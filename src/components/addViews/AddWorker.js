@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { Modal } from "react-bootstrap";
-import { REGISTER_WORKERROLE } from '../../utils/constants';
+import { REGISTER_WORKER, REGISTER_WORKERROLE, } from '../../utils/constants';
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import { city_validation, email_validation, emergencyContactName_validation, name_validation, password_validation, respPersonFullName_validation, status_validation, street_validation, user_validation, zipCode_validation } from '../../utils/inputValidations';
+import { city_validation, email_validation, emergencyContactName_validation, fullName_validation, name_validation, password_validation, respPersonFullName_validation, status_validation, street_validation, user_validation, zipCode_validation } from '../../utils/inputValidations';
 import { Input } from '../Input';
 import { Editor } from '@tinymce/tinymce-react';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
@@ -13,7 +13,11 @@ import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from '../CustomPhoneComponent';
 import CustomDateComponent from '../CustomDateComponent';
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
-
+import moment from 'moment';
+const workersRoles = [
+  { value: "StoreKeepr", label: "Պահեստապետ" },
+  { value: "HardWorker", label: "Բանվոր" },
+];
 function AddWorker({ handleToggleCreateModal, refreshData }) {
     const [errMsg, setErrMsg] = useState("");
     const axiosPrivate = useAxiosPrivate();
@@ -28,12 +32,36 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
   };
     const { trigger } = useForm();
   
-//    useEffect(() => {
-//       if (CountryRegionData[11][0] === "Armenia") {
-//         CountryRegionData[11][0] = "Հայաստան"
-//         CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
-//       }
-//     }, []);
+   useEffect(() => {
+      if (CountryRegionData[11][0] === "Armenia") {
+        CountryRegionData[11][0] = "Հայաստան"
+        CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
+      }
+    }, []);
+    // useEffect(() => {
+    //   setTimeout(() => {
+    //     axiosPrivate
+    //       .get(WORKERROLE_URL)
+    //       .then((resp) => {
+    //         setDoctors(resp?.data?.jsonString);
+    //         setIsLoading(false);
+    //       }).then((resp) => {
+    //         axiosPrivate.get(PATIENTS_URL).then((resp) => {
+    //           setPatients(resp?.data?.jsonString);
+    //           setIsLoading(false);
+    //         });
+    //       })
+    //       .then((resp) => {
+    //         axiosPrivate.get(MEDICALSERVICES_URL).then((resp) => {
+    //           setMedicalServices(resp?.data?.jsonString);
+    //           setIsLoading(false);
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //   }, 500);
+    // }, []);
     const onWorkerStateSelect = (event) => {
         setIsActive(prev=>event.target.value)
       };
@@ -58,32 +86,71 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
       progress: undefined,
       theme: "light",
     });
-    const onSubmit = methods.handleSubmit(async ({name,StatusTypes}) => {
-      const newWorkerRole = {
-        status:StatusTypes.value,
-        name:name,
+    const onSubmit = methods.handleSubmit(async ({
+      fullName,
+      email,
+      street,
+      city,
+      state,
+      country,
+      zipCode,
+      workerRole,
+      emergencyContactName,
+      emergencyContactNumber,
+      gender,
+      phone,
+      dateOfBirth,
+      user,
+      password,
+      maritalStatus,
+    }) => {
+      debugger
+      const newWorker = {
+        fullName: fullName,        
+        username:user,
+        password:password,
+        contact: {
+          email: email,
+          phone: phone,
+          address: {
+            street: street,
+            city: city,
+            state: state,
+            country: country,
+            zipCode: zipCode,
+          },
+        },
+        workerRole: workerRole?.value,
+        gender: gender,
+        maritalStatus:maritalStatus,
+        dateOfBirth: dateOfBirth ? moment(dateOfBirth).format('YYYY-MM-DD') : null,
+        emergencyContactName: emergencyContactName,
+        emergencyContactNumber: emergencyContactNumber,
+        profilePictureUrl: "profilePictureUrl",
+        isActive: 1,
         additional: editorRef.current.getContent({ format: "text" }),
+
       };
   
-      console.log(newWorkerRole);
-    //   try {
-    //     await axiosPrivate.post(REGISTER_WORKERROLE, newWorkerRole, {
-    //       headers: { "Content-Type": "application/json" },
-    //       withCredentials: true,
-    //     });
+      //console.log('newWorker',newWorker);
+      try {
+        await axiosPrivate.post(REGISTER_WORKER, newWorker, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
   
-    //     handleToggleCreateModal(false);
-    //     refreshData();
-    //     notify(
-    //       `${newWorkerRole.name} գործընկերը ավելացված է`
-    //     );
-    //   } catch (err) {
-    //     if (!err?.response) {
-    //       setErrMsg("No Server Response");
-    //     }  else {
-    //       setErrMsg(" Failed");
-    //     }
-    //   }
+        handleToggleCreateModal(false);
+        refreshData();
+        notify(
+          `${newWorker.fullName} աշխատակիցը ավելացված է`
+        );
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        }  else {
+          setErrMsg(" Failed");
+        }
+      }
     }); 
 
       
@@ -133,11 +200,75 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                         </div>
                         <div className="card-body">
                         <div className="modal-body">
-                          <div className="row gx-3">
+                        <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...respPersonFullName_validation} />
+                              <Input {...fullName_validation} />
                             </div>
+                            <div className="col-sm-6">
+                              <Input {...email_validation} />
+                            </div>
+                          </div>
+                          <div className="row gx-3">
                             
+                            <div className="col-sm-6">
+                            <div className="d-flex justify-content-between me-2">
+                              <label className="form-label" htmlFor="phoneNumber">
+                                Հեռախոս
+                              </label>
+                              {methods.formState.errors.phone && (
+                                    <span className="error text-red"><span><img src={ErrorSvg} alt="errorSvg"/></span> պարտադիր</span>
+                                    )}
+                                    </div>
+                                    <CustomPhoneComponent name="phone"  control={methods.control} />  
+                            </div>
+                            <div className="col-sm-6">
+                                      <div className="d-flex justify-content-between me-2">
+                                        <label
+                                          className="form-label"
+                                          htmlFor="workerRole"
+                                        >
+                                          Պաշտոն
+                                        </label>
+                                        {methods.formState.errors.workerRole && (
+                                          <span className="error text-red">
+                                            <span>
+                                              <img
+                                                src={ErrorSvg}
+                                                alt="errorSvg"
+                                              />
+                                            </span>{" "}
+                                            պարտադիր
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="form-control">
+                                        <Controller
+                                          name="workerRole"
+                                          control={methods.control}
+                                          defaultValue={null}
+                                          rules={{ required: true }}
+                                          render={({ field }) => (
+                                            <Select
+                                              {...field}
+                                              // onChange={(val) => {
+                                              //   field.onChange(val.value);
+                                              //   onPartnerSelect(val);
+                                              // }}
+                                              // value={agents.find(
+                                              //   (option) =>
+                                              //     option.value === partnerName
+                                              // )}
+                                              options={workersRoles}
+                                              // options={workersRoles.map((agent) => ({
+                                              //   value: agent.agentId,
+                                              //   label: `${agent?.agentId}․  ${agent?.name}`,
+                                              // }))}
+                                              placeholder={"Ընտրել"}
+                                            />
+                                          )}
+                                        />
+                                      </div>
+                                    </div>
                           </div>
                           <div className="row gx-3 mb-3">
                           <div className="col-sm-6">
@@ -233,22 +364,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                               <Input {...additional_validation} />
                             </div> */}
                           </div>
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...email_validation} />
-                            </div>
-                            <div className="col-sm-6">
-                            <div className="d-flex justify-content-between me-2">
-                              <label className="form-label" htmlFor="phoneNumber">
-                                Հեռախոս
-                              </label>
-                              {methods.formState.errors.phone && (
-                                    <span className="error text-red"><span><img src={ErrorSvg} alt="errorSvg"/></span> պարտադիր</span>
-                                    )}
-                                    </div>
-                                    <CustomPhoneComponent name="phone"  control={methods.control} />  
-                            </div>
-                          </div>
+                         
                           <div className="row gx-3">
                           <div className="col-sm-6">
                               <div className="d-flex justify-content-between me-2">

@@ -389,13 +389,13 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="position" || location.pathname==="/workers/position/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/position/page/1"
-                                                        onClick={()=>handleSubmenuClick("workers","position")}>
+                                                        <Link className={sisActive1==="roles" || location.pathname==="/workers/roles/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/roles/page/1"
+                                                        onClick={()=>handleSubmenuClick("workers","roles")}>
                                                             <span className="nav-link-text">Աշխատակցի պաշտոն</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/workers/page/:pageNumber"
+                                                        <Link className={sisActive1==="workers" || location.pathname==="/workers/workers/page/:pageNumber"?"nav-link active":"nav-link"} to="./workers/workers/page/1"
                                                         onClick={()=>handleSubmenuClick("workers","workers")}>
                                                             <span className="nav-link-text">Աշխատակից</span>
                                                         </Link>
@@ -446,12 +446,12 @@ const MainTemplate = () => {
                                         <ul id="dash_integ" className={activeDropdown==='companies' ? 'nav flex-column collapse  nav-children show' : 'nav flex-column collapse  nav-children'} >
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="companies" || location.pathname==="/companies/companies"?"nav-link active":"nav-link"} to="./companies/companies"
                                                         onClick={()=>handleSubmenuClick("companies","companies")}>
                                                             <span className="nav-link-text">Ընկերություն</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="partners" || location.pathname===PARTNERS_ROUTE?"nav-link active":"nav-link"} to='./companies/partners/page/1'
                                                         onClick={()=>handleSubmenuClick("companies","partners")}>
@@ -492,21 +492,27 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
+                                                    <li className="nav-item">
                                                         <Link className={sisActive1==="productsClasses" || location.pathname==="/products/productsClasses"?"nav-link active":"nav-link"} to="./products/productsClasses/1"
                                                         onClick={()=>handleSubmenuClick("products","productsClasses")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="nav-item">
-                                                        <Link className={sisActive1==="products" || location.pathname==="/products/products"?"nav-link active":"nav-link"} to="./products/products/1"
-                                                        onClick={()=>handleSubmenuClick("products","products")}>
-                                                            <span className="nav-link-text">Ապրանք</span>
-                                                        </Link>
-                                                    </li>
-                                                    <li className="nav-item">
                                                         <Link className={sisActive1==="productsList" || location.pathname==="/products/productsList"?"nav-link active":"nav-link"} to="./products/productsList/1"
                                                         onClick={()=>handleSubmenuClick("products","productsList")}>
                                                             <span className="nav-link-text">Ապրանքների ցանկ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="incomingProducts" || location.pathname==="/products/incomingProducts"?"nav-link active":"nav-link"} to="./products/incomingProducts/1"
+                                                        onClick={()=>handleSubmenuClick("products","incomingProducts")}>
+                                                            <span className="nav-link-text">Ապրանքների մուտք</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="outgoingProducts" || location.pathname==="/products/outgoingProducts"?"nav-link active":"nav-link"} to="./products/outgoingProducts/1"
+                                                        onClick={()=>handleSubmenuClick("products","outgoingProducts")}>
+                                                            <span className="nav-link-text">Ապրանքների ելք</span>
                                                         </Link>
                                                     </li>
                                                 </ul>	

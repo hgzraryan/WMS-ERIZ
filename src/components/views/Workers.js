@@ -23,7 +23,7 @@ function Workers() {
   const [searchCount,setSearchCount] = useState(null)
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
-
+  
   const handleSearchPageCount = ({count,searchTerms,id}) =>{
     setSearchCount(count)
     setSearchTerms(searchTerms)
@@ -34,12 +34,12 @@ function Workers() {
     setData: setWorkers,
     dataReceived,
     dataCount
-  } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
+  } = useGetData(WORKERS_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
    const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-  // const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage,pageNumber);
-  // useEffect(()=>{
-  //   setWorkers(data)
-  //   },[data])
+  const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage,pageNumber);
+  useEffect(()=>{
+    setWorkers(data)
+    },[data])
   const handleOpenModal = (doctor) => {
     setSelectedItemId(true);
     setSelectedItem((prev) => doctor);
@@ -181,9 +181,9 @@ function Workers() {
                       //handleDeleteItem={handleDeleteItem}
                       handleOpenModal={handleOpenModal}
                       handleCloseModal={handleCloseModal}
-                      workers={[]}
-                      // setWorkers={setWorkers}
-                      // refreshData={refreshData}
+                      workers={workers}
+                      setWorkers={setWorkers}
+                      refreshData={refreshData}
                       // dataReceived={dataReceived}
                     />
                        <ReactPaginate

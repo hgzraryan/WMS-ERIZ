@@ -937,3 +937,20 @@ export const emergencyContactName_validation = {
     },
   },
 };
+export const fullName_validation = {
+  name: "fullName",
+  label: "Անուն հայրանուն ազգանուն",
+  type: "text",
+  id: "fullName",
+  placeholder: "Անուն հայրանուն ազգանուն",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 50,
+      message: "Առավելագույնը 50 տառ",
+    },
+  },
+};
