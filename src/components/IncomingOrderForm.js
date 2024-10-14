@@ -1,7 +1,8 @@
 import React from 'react'
 import  '../dist/css/IncomingOrderForm.scss';
+import moment from 'moment';
 
-function IncomingOrderForm() {
+function IncomingOrderForm({data}) {
     return (
         <article className="a4-page p-0" style={{margin:'20px'}}>
             {/* <header style={{marginBottom:'30px'}}>
@@ -11,16 +12,16 @@ function IncomingOrderForm() {
             </header> */}
             <section className="form-section" style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <div>
-                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>12456</u></span></p>
+                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>{" "+data?._id}</u></span></p>
                 </div>
                 <div style={{lineheight:'0'}}>
-                    <p>19/10/2024</p>
+                    <p>{moment(data?.createdAt).format('DD-MM-YYYY HH:mm')}</p>
                     <div className='line'></div>
                     <p>(կազմման ամսաթիվ)</p>
                 </div>
             </section>
             <section className='form-section' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column', lineheight:0}}>           
-                <p>Matakarar</p> 
+                <p>{data?.supplier}</p> 
             <div className='line' style={{fontWeight:'bold'}}/>
             <p>(Մատակարարի անվանում)</p>
             </section>
@@ -36,10 +37,10 @@ function IncomingOrderForm() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>213</td>
-                            <td>4646546asdas</td>
-                            <td>150000</td>
-                            <td>asd123asd</td>
+                            <td>-----</td>
+                            <td>-----</td>
+                            <td>{data?.price}</td>
+                            <td>------</td>
                         </tr>
                     </tbody>
                 </table>
@@ -56,7 +57,7 @@ function IncomingOrderForm() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>asd</td>
+                            <td>{data?.name}</td>
                             <td>10</td>
                             <td>kg</td>
                         </tr>
@@ -67,28 +68,28 @@ function IncomingOrderForm() {
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացված է</h6><div className='line' style={{width:'80%'}}>adfasd</div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացված է</h6><div className='line' style={{width:'80%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(անունը,ստորագրությունը)</p>
                 </div>
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացման հիմքը և նպատակը</h6><div className='line' style={{width:'59%'}}>adfasd</div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացման հիմքը և նպատակը</h6><div className='line' style={{width:'59%'}}></div>
                 </div>
                    
                 </div>
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գումարը</h6><div className='line' style={{width:'84%'}}>adfasd</div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գումարը</h6><div className='line' style={{width:'84%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(տառերով)</p>
                 </div>
                  <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Կցվում են</h6><div className='line' style={{width:'84%'}}>adfasd</div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Կցվում են</h6><div className='line' style={{width:'84%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(Կցվող փաստաթղթերի Էջերի թիվը)</p>
                 </div>

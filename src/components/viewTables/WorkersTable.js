@@ -4,6 +4,7 @@ import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Table from '../Table';
 import WorkersEdit from '../editModals/WorkersEdit';
+import WorkersInfoModal from '../infoModals/WorkersInfoModal';
 
 function WorkersTable({
     confirmRef,
@@ -17,6 +18,12 @@ function WorkersTable({
     refreshData
   }) {
     const [editRow, setEditRow] = useState(false);
+    const [modalInfo, setModalInfo] = useState(false);
+
+    const handleOpenInfoModal = (data) => {
+       
+       setModalInfo((prev) => data);
+     };
     const handleOpenEditModal = (value) => {
       setEditRow((prev) => value);
       console.log(value)
@@ -125,7 +132,7 @@ function WorkersTable({
                   <BiSolidInfoCircle
                   cursor={"pointer"}
                   size={"1.5rem"}
-                  //onClick={() => handleOpenInfoModal(row.original)}
+                  onClick={() => handleOpenInfoModal(row.original)}
                 />
                 </div>
                 <div className="d-flex">
@@ -144,7 +151,7 @@ function WorkersTable({
                       </span>
                     </span>
                   </a>
-                  <a
+                  {/* <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                     data-bs-toggle="tooltip"
                     onClick={() => handleOpenModal(row.original)}
@@ -158,7 +165,7 @@ function WorkersTable({
                         <FeatherIcon icon="trash" />
                       </span>
                     </span>
-                  </a>
+                  </a> */}
                 </div>
               </div>
             ),
@@ -171,6 +178,9 @@ function WorkersTable({
       
   return (
     <>
+     {!!modalInfo && (
+        <WorkersInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+      )}
     {!!editRow &&(
     <WorkersEdit worker={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
   )

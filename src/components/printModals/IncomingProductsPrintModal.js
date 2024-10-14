@@ -18,7 +18,7 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
     const { statusBoard } = modalPrint;
     const componentRef = useRef();
     const [checked, setChecked] = useState(false);
-  
+  console.log(modalPrint)
     // useEffect(() => {
     //   if (clientType && clientType === "patient") {
     //     setTimeout(() => {
@@ -270,7 +270,7 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
                   <LoadingSpinner />
                 ) : (
                   <>
-               <IncomingOrderForm/>
+               <IncomingOrderForm data={modalPrint}/>
                   </>
                 )}
               </Suspense>

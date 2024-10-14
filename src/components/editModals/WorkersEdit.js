@@ -65,9 +65,6 @@ const onGenderSelect = (event) => {
   //       });
   //   }, 500);
   // }, []);
-  const onWorkerStateSelect = (event) => {
-      setIsActive(prev=>event.target.value)
-    };
   const onWorkerMerriedSelect = (event) => {
       setMerried(prev=>event.target.value)
     };
@@ -107,7 +104,6 @@ const onGenderSelect = (event) => {
     password,
     maritalStatus,
   }) => {
-    debugger
     const newWorker = {
       fullName: fullName,        
       username:user,
