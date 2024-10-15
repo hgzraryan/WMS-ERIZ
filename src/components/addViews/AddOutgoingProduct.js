@@ -1,91 +1,19 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import ErrorSvg from "../../dist/svg/error.svg";
-import { Input } from "../Input";
-import {
-  liter_validation,
-  padon_validation,
-  Quantity_validation,
-  reorderLevel_validation,
-  Weight_validation,
-} from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTS_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
-import { toast } from "react-toastify";
-import CustomDateComponent from "../CustomDateComponent";
-import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 import AddProductsList from "./AddProductsList";
-import { color } from "framer-motion";
+import CustomTable from "../CustomTable";
+import { BiSolidInfoCircle } from "react-icons/bi";
+import moment from "moment";
 
-const customproductsClasses = [
-  {
-    id: 1,
-    name: "Electronics",
-    value: "Electronics",
-    label: "Էլեկտրոնիկա",
-  },
-  {
-    id: 2,
-    name: "Clothing",
-    value: "Clothing",
-    label: "Հագուստ",
-  },
-  {
-    id: 3,
-    name: "Food",
-    value: "Food",
-    label: "Սնունդ",
-  },
-  {
-    id: 1,
-    name: "Furniture",
-    value: "Furniture",
-    label: "Կահույք",
-  },
-  {
-    id: 2,
-    name: "Books",
-    value: "Books",
-    label: "Գրքեր",
-  },
-  {
-    id: 3,
-    name: "Beauty",
-    value: "Beauty",
-    label: "Խնամք",
-  },
-];
-const productTypes = [
-  {
-    productTypeId: 13654,
-    productTypeName: "Հավի բուդ ոսկորով",
-  },
-  {
-    productTypeId: 13655,
-    productTypeName: "Հավի բուդ առանց ոսկոր",
-  },
-  {
-    productTypeId: 13656,
-    productTypeName: "Հավի թև ոսկորով",
-  },
-  {
-    productTypeId: 13657,
-    productTypeName: "Հավի թև առանց ոսկոր",
-  },
-  
-];
-const currencies = [
-  { value: "051", label: "AMD" },
-  { value: "840", label: "USD" },
-  { value: "978", label: "EUR" },
-  { value: "643", label: "RUB" },
-];
 function AddOutgoingProduct({
   handleToggleCreateModal,
   productCategories,
@@ -101,32 +29,91 @@ function AddOutgoingProduct({
   const [currency, setCurrency] = useState('051');
   const [errMsg, setErrMsg] = useState("");
   const [partners, setPartners] = useState([]);
-  const [country, setCountry] = useState('')
-  const [region, setRegion] = useState('')
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
- useEffect(() => {
-    if (CountryRegionData[11][0] === "Armenia") {
-      CountryRegionData[11][0] = "Հայաստան"
-      CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
-    }
-  }, []);
+  const [fetchedProductsList, setFetchedProductsList] = useState([])
+  const [outgoingProductsList, setOutgoingProductsList] = useState([])
+  const [rowInputValues, setRowInputValues] = useState({});
+  const [asdasd, setasdasd] = useState();
+
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
+  // useEffect(() => {
+  //   if (fetchedProductsList) {
+  //     const initialValues = fetchedProductsList.reduce((acc, row) => {
+  //       acc[row.productId] = ''; // Initialize each input value with an empty string or default value
+  //       return acc;
+  //     }, {});
+  
+  //     setRowInputValues(initialValues);
+  //   }
+  // }, [fetchedProductsList]);
+
+  const handleInputChange = useCallback((e, rowId) => {
+    debugger
+    const { value } = e.target;
+    setRowInputValues((prevValues) => ({
+      ...prevValues,
+      [rowId]: value,
+    }));
+  }, []);
+
   const handleToggleCreateProductModal = (value) => {
     setNewProduct((prev) => value);
 
   };
+  const fetchDataByProduct = async () => {
+    try {
+      const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
+      setFetchedProductsList(respProductsList?.data?.jsonString);
+
+      setIsLoading(false);
+      return respProductsList?.data?.jsonString
+    } catch (err) {
+      console.log(err);
+      navigate("/login", { state: { from: location }, replace: true });
+    }
+    
+  };
+  const handleOutgoingProductsList = async (e,row) => {
+e.preventDefault()
+    debugger
+    //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
+    const asd = {}
+    asd.id=row.original.productId
+    asd.name=row.original.name
+    asd.input=rowInputValues[row.original.productId]
+console.log(asd)
+    const tmpData = []
+     tmpData.push(asd)
+    
+    // try {
+    //   const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
+    //   setFetchedProductsList(respProductsList?.data?.jsonString);
+
+    //   setIsLoading(false);
+    //   return respProductsList?.data?.jsonString
+    // } catch (err) {
+    //   console.log(err);
+    //   navigate("/login", { state: { from: location }, replace: true });
+    // }
+    
+  };
   
+  const onProductSelect = async() =>{
+   const asd = await fetchDataByProduct()
+//debugger
+    setFetchedProductsList(asd)
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
         const partnersResp = await axiosPrivate.get(PARTNERS_URL);
         setPartners(partnersResp?.data?.jsonString);
 
-        const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
-        setProductsList(productsList?.data?.jsonString);
+        const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
+        setProductsList(respProductsList?.data?.jsonString);
 
         setIsLoading(false);
       } catch (err) {
@@ -138,21 +125,7 @@ function AddOutgoingProduct({
       fetchData();
     }, 500);
   }, [navigate,newProduct]);
-  const handleAmountChange = (e) => {
-    setAmount((prev) => e.target.value);
-  };
-  const handleAddNewProduct = (e) => {
-    e.stopPropagation()
-    setNewProduct((prev) => true);
-  };
-  const handleCurrencyChange = (e) => {
-    const asd = currencies.filter((el)=>
-      el.label===e.target?.value
-    )
-    console.log(asd)
-    console.log(e.target?.value)
-    setCurrency(e.target?.value)
-  };
+
   // sproductCategories)
   const editorRef = useRef(null);
 
@@ -173,35 +146,10 @@ function AddOutgoingProduct({
     }, 500);
   }, [navigate]);
 
-  const onProductsClassSelect = (data) => {
-    console.log("data", data);
-
-    const aaa = productCategories?.filter((el) => {
-      return el.categoryId === data.value;
-    });
-    if (aaa.length > 0) {
-      setAttributs(aaa[0].attributs);
-    } else {
-      setAttributs([]);
-    }
-
-    setProductClassId(data?.value);
-  };
   const methods = useForm({
     mode: "onChange",
   });
-  
-  const notify = (text) =>
-    toast.success(text, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+ 
   const onSubmit = methods.handleSubmit(async (data) => {
     const newProd = {
       barcode: data?.barcode,
@@ -239,9 +187,7 @@ function AddOutgoingProduct({
 
       handleToggleCreateModal(false);
       refreshData();
-      notify(
-        `${newProd.name}  ավելացված է`
-      );
+     
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -252,6 +198,162 @@ function AddOutgoingProduct({
       }
     }
   });
+
+  const fetchedDataColumn = useMemo(
+    () => [
+      {
+        Header: (event) => (
+          <>                
+            <div  className="columnHeader">ID</div>
+          </>
+        ),
+        accessor: "productId",
+        sortable: true,
+        width: 60,
+        
+      },
+      {
+        Header: (event) => (
+          <>                
+            <div  className="columnHeader">Անվանում</div>
+          </>
+        ),
+        accessor: "name",
+        sortable: true,
+        width: 100,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+            <div>Պահեստ</div>
+          </>
+        ),
+        accessor: "warehouse",
+        width: 120,
+        sortable: true,
+        // Cell: ({ row }) => (
+        //   <div className="d-flex align-items-center">
+            
+        //   </div>
+        // ),
+      },
+      {
+        Header: (event) => (
+          <>
+            <div>Արտադրման ժամկետ</div>
+          </>
+        ),
+        accessor: "phone",
+        width: 180,
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            {moment(row.original?.createdAt).format('DD-MM-YYYY')}
+          </div>
+        ),
+        
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Մուտքի ամսաթիվ</div>
+          </>
+        ),
+        accessor: "mainCurrency",
+        style: {
+           // Custom style for the 'description' column
+        },
+        width: 180,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Մնացորդ</div>
+          </>
+        ),
+        accessor: "balance",
+        width: 100,
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Գին</div>
+          </>
+        ),
+        accessor: "priceList",
+        width: 100,
+      },
+     
+      {
+        Header: (event) => (
+          <>
+            <div className="columnHeader">Գործողություններ</div>
+          </>
+        ),
+        accessor: "actions",
+        width: 150,
+        
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            
+            <div className="d-flex">
+              <BiSolidInfoCircle
+              cursor={"pointer"}
+              size={"1.5rem"}
+              //onClick={() => handleOpenInfoModal(row.original)}
+            />
+            {console.log(rowInputValues)}
+            <input className="form-control" style={{width:'70px', height:'30px',padding:'1px'}} 
+              value={rowInputValues[row?.original?.productId] || ''} 
+              onChange={(e) => handleInputChange(e, row.original.productId)} 
+              autoFocus={true}
+              />
+            <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button>
+            </div>
+            {/* <div className="d-flex">
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                data-bs-toggle="tooltip"
+                data-placement="top"
+                title="Edit"
+                href="#"
+                onClick={() => handleOpenEditModal(row.original)}
+
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="edit" />
+                  </span>
+                </span>
+              </a>
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                data-bs-toggle="tooltip"
+                onClick={() => handleOpenModal(row.original)}
+                data-placement="top"
+                title=""
+                data-bs-original-title="Delete"
+                href="#"
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="trash" />
+                  </span>
+                </span>
+              </a>
+            </div> */}
+          </div>
+        ),
+        disableSortBy: true,
+        
+      },
+    ],
+    [rowInputValues]
+  );
   return (
     <>
     {newProduct && (
@@ -267,7 +369,7 @@ function AddOutgoingProduct({
     >
       <Modal.Header closeButton>
         <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ապրանքի ձեռքբերում
+          Ապրանքի դուրս բերում
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -367,7 +469,7 @@ function AddOutgoingProduct({
                       <div className="card-body">
                         <div className="modal-body">
                           <div className="row gx-3 mb-2">
-                          <div className="col-sm-6 ">
+                          <div className="col-sm-12 ">
                               <div className="d-flex justify-content-between me-2">
                                 <label
                                   className="form-label"
@@ -397,305 +499,44 @@ function AddOutgoingProduct({
                                     {...field}
                                     value={field.value}
                                     options={productsList?.map((item) => ({
-                                      value: item.productListId,
+                                      value: item.productId,
                                       label: item.name,
                                     }))}
                                     placeholder={"Ընտրել"}
-                                    // onChange={(val) => {
-                                      //   field.onChange(val);
-                                      //   onUnitSelect(val);
-                                      // }}
+                                    onChange={(val) => {
+                                        field.onChange(val);
+                                        onProductSelect(val);
+                                      }}
                                       />
                                     )}
                                     />
                                     </div>
-                              <FeatherIcon icon="plus-circle" width='24'  style={{ cursor: 'pointer',marginTop:'7px',marginLeft:'8px', color:'#01945c' }}   onClick={(e)=>handleAddNewProduct(e)}/>
                               </div>
                             </div>
                             
-                            <div className="col-sm-6">
-                            <div className="d-flex justify-content-between me-2">
-                              <label className="form-label" htmlFor="country">
-                                Արտադրող Երկիր
-                              </label>
-                              {methods?.formState.errors.country && (
-                                <span className="error text-red">
-                                  <img src={ErrorSvg} alt="errorSvg" />
-                                  Պարտադիր
-                                </span>
-                              )}
-                              </div>
-                              <Controller
-                                name="country"
-                                control={methods.control}
-                                defaultValue=""
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                  <CountryDropdown
-                                    {...field}
-                                    classes="form-control"
-                                    defaultOptionLabel="Երկիր"
-                                    value={country}
-                                    priorityOptions={['Armenia']}
-                                    onChange={(val) => {
-                                      field.onChange(val);
-                                      setCountry(val);
-                                      methods.trigger("country");
-                                      methods.setValue("state",'')
-                                      methods.trigger("state")
-                                    }}
-                                    style={{
-                                      appearance:'auto'
-                                    }}
-                                  />
-                                )}
-                              />
-                            </div>
                           </div>
-                          <div className="row gx-3">
-                            {/* <div className="col-sm-6">
-                              <Input {...barcode_validation} />
-                            </div> */}
-                             <div className="col-sm-6">
-                              <div className="d-flex justify-content-between me-2">
-                                <label
-                                  className="form-label"
-                                  htmlFor="warehouse"
-                                >
-                                  Պահեստ
-                                </label>
-                                {methods.formState.errors.warehouse && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>{" "}
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <div className="form-control">
-                                <Controller
-                                  name="warehouse"
-                                  control={methods.control}
-                                  defaultValue={null}
-                                  rules={{ required: true }}
-                                  render={({ field }) => (
-                                    <Select
-                                      {...field}
-                                      //  onChange={(val) => {
-                                      //    field.onChange(val.value);
-                                      //    onProductsClassSelect(val);
-                                      //  }}
-                                      //  value={wareHouses.find(
-                                      //    (option) =>
-                                      //      option.value === productClassType
-                                      //  )}
-                                      options={wareHouses?.map((item) => ({
-                                        value: item.warehouseId,
-                                        label: item.name,
-                                      }))}
-                                      placeholder={"Ընտրել"}
-                                    />
-                                  )}
-                                />
-                              </div>
-                            </div>
-                            <div className="col-sm-6">
-                              <div className="d-flex justify-content-between me-2">
-                                <label
-                                  className="form-label"
-                                  htmlFor="suppliers"
-                                >
-                                  Մատակարարներ
-                                </label>
-                                {methods.formState.errors.suppliers && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>{" "}
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <div className="form-control">
-                                <Controller
-                                  name="suppliers"
-                                  control={methods.control}
-                                  defaultValue={null}
-                                  rules={{ required: true }}
-                                  render={({ field }) => (
-                                    <Select
-                                      {...field}
-                                      value={field.value}
-                                      options={partners?.map((item) => ({
-                                        value: item.partnerId,
-                                        label: item.name,
-                                      }))}
-                                      placeholder={"Ընտրել"}
-                                      // onChange={(val) => {
-                                      //   field.onChange(val);
-                                      //   onUnitSelect(val);
-                                      // }}
-                                    />
-                                  )}
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...Quantity_validation} />
-                            </div>
-                            <div className="col-sm-6">
-                              <Input {...Weight_validation} />
-                            </div>
-                          </div>
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...liter_validation} />
-                            </div>
-                            
-                          <div className="col-sm-6">
-                              <Input {...padon_validation} />
-                            </div>
-                          </div>
-
-                          <div className="row gx-3">                           
-                            <div className="col-sm-6">
-                              <label htmlFor="price" className="mb-2">
-                                Արժեք
-                              </label>
-                              <div className="form-control d-flex ">
-                                <select
-                                  id="currency"
-                                  value={currency}
-                                  onChange={handleCurrencyChange}
-                                  style={{ border: "none", outline: "none" }}
-                                >
-                                  {currencies.map((el) => (
-                                    <option value={el.value}>{el.label}</option>
-                                  ))}
-                                </select>
-                                <input
-                                  type="number"
-                                  id="amount"
-                                  value={amount}
-                                  onChange={handleAmountChange}
-                                  placeholder="Արժեք"
-                                  style={{
-                                    border: "none",
-                                    outline: "none",
-                                    flex: 1,
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div className="col-sm-6">
-                              <Input {...reorderLevel_validation} />
-                            </div>
-                          </div>
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <div className="form-group">
-                                <div className="d-flex justify-content-between me-2">
-                                  <label
-                                    className="form-label"
-                                    htmlFor="birthday"
-                                  >
-                                    Արտադրման ամսաթիվ
-                                  </label>
-                                  {methods.formState.errors.dateOfBirth && (
-                                    <span className="error text-red">
-                                      <span>
-                                        <img src={ErrorSvg} alt="errorSvg" />
-                                      </span>{" "}
-                                      պարտադիր
-                                    </span>
-                                  )}
-                                </div>
-                                <div>
-                                  <CustomDateComponent
-                                    name="dateOfBirth"
-                                    control={methods.control}
-                                  />
-                                </div>
-                              </div>
-                            </div> 
-                          <div className="col-sm-6">
-                          <div className="col-sm-6">
-                              <div className="form-group">
-                                <div className="d-flex justify-content-between me-2">
-                                  <label
-                                    className="form-label"
-                                    htmlFor="expiredAlertDay"
-                                  >
-                                    Զգուշացման ամսաթիվ
-                                  </label>
-                                  {methods.formState.errors.expiredAlertDay && (
-                                    <span className="error text-red">
-                                      <span>
-                                        <img src={ErrorSvg} alt="errorSvg" />
-                                      </span>{" "}
-                                      պարտադիր
-                                    </span>
-                                  )}
-                                </div>
-                                <div>
-                                  <CustomDateComponent
-                                    name="expiredAlertDay"
-                                    control={methods.control}
-                                  />
-                                </div>
-                              </div>
-                            </div> 
-                          </div>
-                          </div>
-                          {/* {attributs?.map((el) => {
-                            console.log("attributs", attributs);
-                            return (
-                              <div className="d-flex justify-content-center mt-3">
-                              <div className="col-sm-12">
-                              <Input
-                              validation={{
-                                      required: {
-                                        value: false,
-                                        message: "պարտադիր",
-                                      },
-                                    }}
-                                    name={el.attributeName}
-                                    placeholder={el.attributeUnitLabel}
-                                    label={el.attributeName}
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })} */}
                         </div>
                       </div>
                     </div>
-                    {/* <div className="card">
-                      <div className="card-header">
-                        <a href="#">Ապրանքի չափսերը</a>
-                      </div>
-                      <div className="card-body">
-                        <div className="modal-body">
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...width_validation} />
-                            </div>
-                            <div className="col-sm-6">
-                              <Input {...length_validation} />
-                            </div>
-                          </div>
-                          <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...height_validation} />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> */}
+                  {(!!fetchedProductsList && fetchedProductsList.length) ?
+                  <>
+                    <div className="separator-full"></div>
+                    <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
+
+                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} />
+                    </div>
+                  </>:<></>
+                  }
+                    {(!!fetchedProductsList && fetchedProductsList.length) ?
+                  <>
+                    <div className="separator-full"></div>
+                    <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
+
+                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} />
+                    </div>
+                  </>:<></>
+                  }
+
                     <div className="separator-full"></div>
                     <div className="card">
                       <div className="card-header">
