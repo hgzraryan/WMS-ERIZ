@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { ComponentToPrint } from './ComponentToPrint';
 import ReactToPrint from 'react-to-print';
-function OrdersPrintWrapper() {
+function OrdersPrintWrapper({value,action}) {
   let componentRef = useRef(null);
   return (
     <div style={{ display: "flex" }}>
@@ -18,7 +18,7 @@ function OrdersPrintWrapper() {
         content={() => componentRef.current}
       />
       <div style={{ display: "none" }}>
-          <ComponentToPrint ref={componentRef} value={{}} currentClient={{}} externalChecked={{}}/>
+          <ComponentToPrint ref={componentRef} value={value} action={action} currentClient={{}} />
        
       </div>
     </div>

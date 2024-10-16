@@ -282,7 +282,6 @@ function WareHousesList() {
               onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
               icon={<SearchOutlined />}
               size="small"
-              debugger
               style={{
                 width: 90,
               }}
@@ -356,7 +355,7 @@ function WareHousesList() {
   };
 //Warehouse info
   const handleShowWareHouse = async (record, index) => {
-    debugger
+    
     if(!record?.children){
       setWareHouseData(data1);
       

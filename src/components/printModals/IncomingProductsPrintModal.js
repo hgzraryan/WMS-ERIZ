@@ -287,9 +287,8 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
             }}
           >
                        <OrdersPrintWrapper
-            //   value={{}}
-            //   currentClient={{}}
-              //externalChecked={checked}
+               value={modalPrint}
+            action='incoming'
             />
             <button
               type="button"

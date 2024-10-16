@@ -5,9 +5,10 @@ import { useTable } from "react-table";
 //import BarcodeComp from "./BarcodeComp";
 import moment from "moment";
 import IncomingOrderForm from "../../IncomingOrderForm";
+import OutgoingOrdersForm from "../../OutgoingOrdersForm";
 
-export const ComponentToPrint = forwardRef(({ value,currentClient }, ref) => {
-
+export const ComponentToPrint = forwardRef(({ value,currentClient,action }, ref) => {
+console.log(value)
 
   //-----------------------barcode ------------------
   /*
@@ -152,7 +153,9 @@ const { inputRef } = Barcode({
               Մուտքի օրդեր
             </p>
           </div> */}
-          <IncomingOrderForm/>
+          {action==='outgoing'?<OutgoingOrdersForm/>:action==='incoming'?<IncomingOrderForm/>:<></>}
+          
+          
 
     </div>
   );

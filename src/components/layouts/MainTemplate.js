@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
 import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, SUPPLIERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 import sideSetupSvg from '../../dist/svg/sideSetup.svg'
+import packageJson from '../../../package.json';
 
 const MainTemplate = () => {
     const navigate = useNavigate();
@@ -107,7 +108,7 @@ const MainTemplate = () => {
                                             </span>
                                         </span>
                                     </a>
-                                    <div className="input-group d-xl-flex d-none">
+                                    {/* <div className="input-group d-xl-flex d-none">
                                         <span className="input-affix-wrapper input-search affix-border">
                                             <input type="text" className="form-control  bg-transparent"  data-navbar-search-close="false" placeholder="Փնտրել..." aria-label="Փնտրել" />
                                             <span className="input-suffix">
@@ -120,7 +121,7 @@ const MainTemplate = () => {
                                                 </span>
                                             </span>
                                         </span>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div  className={sisActive ? 'dropdown-menu p-0 show' : 'dropdown-menu p-0'}>
                                     {/* Mobile Search */}
@@ -845,6 +846,7 @@ const MainTemplate = () => {
                       </div>
                   </div>
                   {/* /Main Menu */}
+                  <div className="menu-footer"><p style={{fontSize:'12px',marginLeft:'5px'}}>V{packageJson?packageJson?.version:''} Rev{packageJson?packageJson?.revision:''}</p></div>
               </div>
               <div id="hk_menu_backdrop" className="hk-menu-backdrop"></div>
               {/* /Vertical Nav */}

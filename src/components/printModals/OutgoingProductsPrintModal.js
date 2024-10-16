@@ -287,9 +287,8 @@ console.log(modalPrint)
           }}
         >
                      <OrdersPrintWrapper
-          //   value={{}}
-          //   currentClient={{}}
-            //externalChecked={checked}
+             value={modalPrint}
+             action='outgoing'
           />
           <button
             type="button"
