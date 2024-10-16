@@ -6,7 +6,7 @@ import { useTable } from "react-table";
 import moment from "moment";
 import IncomingOrderForm from "../../IncomingOrderForm";
 
-export const ComponentToPrint = forwardRef(({ value,currentClient,externalChecked }, ref) => {
+export const ComponentToPrint = forwardRef(({ value,currentClient }, ref) => {
 
 
   //-----------------------barcode ------------------

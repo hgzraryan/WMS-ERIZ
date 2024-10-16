@@ -1,6 +1,9 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import "../../dist/css/data-table.css";
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
+import { BiSolidInfoCircle } from 'react-icons/bi';
 
 function OutgoingProductsTable({
     confirmRef,
@@ -13,6 +16,11 @@ function OutgoingProductsTable({
     setProducts,
     refreshData
   }) {
+    const [modalPrint, setModalPrint] = useState("");
+    const handleOpenPrintModal = (data) => {
+      setModalPrint((prev) => data);
+      
+    }; 
       const columns = useMemo(
           () => [
             {
@@ -36,7 +44,7 @@ function OutgoingProductsTable({
               ),
               accessor: "name",
               sortable: true,
-              width: 300,
+              width: 350,
               
             },
             {
@@ -72,7 +80,7 @@ function OutgoingProductsTable({
               ),
               accessor: "currency",
               sortable: true,
-              width: 150,
+              width: 100,
               
             },
             {
@@ -84,7 +92,7 @@ function OutgoingProductsTable({
               ),
               accessor: "supplier",
               sortable: true,
-              width: 300,
+              width: 200,
               
             },
             {
@@ -96,15 +104,54 @@ function OutgoingProductsTable({
               ),
               accessor: "stock",
               sortable: true,
-              width: 300,
+              width: 200,
               
             },
-            
+            {
+              Header: (event) => (
+                <>
+                  <div className="columnHeader">Գործողություններ</div>
+                </>
+              ),
+              accessor: "actions",
+              width: 150,
+              Cell: ({ row }) => (
+                <div className="d-flex align-items-center">
+                  <BiSolidInfoCircle
+                cursor={"pointer"}
+                size={"1.5rem"}
+                //onClick={() => handleOpenInfoModal(row.original)}
+              />
+                  <div className="d-flex">
+                  
+                  <a
+                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                      data-bs-toggle="tooltip"
+                      data-placement="top"
+                      title="Print"
+                      href="#"
+                      onClick={() => handleOpenPrintModal(row.original)}
+                    >
+                      <span className="icon">
+                        <span className="feather-icon">
+                          <FeatherIcon icon="printer" />
+                        </span>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              ),
+              disableSortBy: true,
+              
+            },
           ],
           []
         );
     return (
       <>
+       {!!modalPrint && (
+        <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
+      )}
             <CustomTable data={products} column={columns} />
   
       </>

@@ -235,6 +235,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                           </span>
                         </button>
                       </div>
+                      {console.log(warehouse)}
                       <div className="card-body">
                         <div className="modal-body">
                           <div className="row gx-3">

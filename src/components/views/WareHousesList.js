@@ -17,6 +17,9 @@ import useRefreshData from "../../hooks/useRefreshData";
 import { useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CustomTable from "../CustomTable";
+import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
+import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
 const data1 = [
   {
@@ -109,9 +112,47 @@ const data1 = [
     productionDate: "-",
     expiredDate: "-",
   },
+  {
+    productId: 21003,
+    name: "Խնձոր",
+    purchaseDate: "12-05-2024",
+    count: 2600,
+    unit: "կիլոգրամ",
+    productionDate: "-",
+    expiredDate: "-",
+  },
+  {
+    productId: 21003,
+    name: "Խնձոր",
+    purchaseDate: "12-05-2024",
+    count: 2600,
+    unit: "կիլոգրամ",
+    productionDate: "-",
+    expiredDate: "-",
+  },
+  {
+    productId: 21003,
+    name: "Խնձոր",
+    purchaseDate: "12-05-2024",
+    count: 2600,
+    unit: "կիլոգրամ",
+    productionDate: "-",
+    expiredDate: "-",
+  },
+  {
+    productId: 21003,
+    name: "Խնձոր",
+    purchaseDate: "12-05-2024",
+    count: 2600,
+    unit: "կիլոգրամ",
+    productionDate: "-",
+    expiredDate: "-",
+  },
 ];
 
 function WareHousesList() {
+  const axiosPrivate = useAxiosPrivate();  
+  const navigate = useNavigate();
   const confirmWarehouseRef = useRef(""); 
   const [selectedItem, setSelectedItem] = useState("");  
   const [selectedItemId, setSelectedItemId] = useState(null);  
@@ -125,65 +166,37 @@ function WareHousesList() {
   const [searchCount,setSearchCount] = useState(null)
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
-  const [wareHouseDetails, setWareHouseDetails] = useState(false);
-  const axiosPrivate = useAxiosPrivate();  
+  const [wareHouseData, setWareHouseData] = useState(false);
+  const [subPageageCount, setSubPageageCount] = useState(0);
+  const [subCurrentPage, setSubCurrentPage] = useState(0);
+
+  const [itemsPerPage, setItemsPerPage] = useState(Math.round(window.innerHeight / 100));
+  const [itemOffset, setItemOffset] = useState(0);
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = data1.slice(itemOffset, endOffset);
+
   const asd = [
     {
       key: 1,
-      name: 'John Brown sr.',
+      name: 'Մասիս',
       age: 60,
       address: 'New York No. 1 Lake Park',
       children: [
         {
           key: 11,
-          name: 'John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park',
+          name: 'Սառնարան',
+          phone: 1215,
+          address: 'Մասիս 1',
         },
         {
           key: 12,
-          name: 'John dfsgsdfgsdfg jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park',
-          children: [
-            {
-              key: 121,
-              name: 'Jimmy Brsfsown',
-              age: 16,
-              address: 'New York No. 3 Lake Park',
-            },
-          ],
-        },
-        {
-          key: 13,
-          name: 'Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
-          children: [
-            {
-              key: 131,
-              name: 'Jim Green',
-              age: 42,
-              address: 'London No. 2 Lake Park',
-              children: [
-                {
-                  key: 1311,
-                  name: 'Jim Green jr.',
-                  age: 25,
-                  address: 'London No. 3 Lake Park',
-                },
-              ],
-            },
-          ],
+          name: 'Չոր պահեստ',
+          phone: 1216,
+          address: 'Մասիս 2',
         },
       ],
     },
-    {
-      key: 2,
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-    },
+   
   ]
   const {
     data: wareHouses,
@@ -196,6 +209,7 @@ function WareHousesList() {
     
     },[data])
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
+  const subPageageCount1 = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(data1.length/itemsPerPage)
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     WAREHOUSES_URL,
     confirmWarehouseRef,
@@ -341,18 +355,16 @@ function WareHousesList() {
     };
   };
 //Warehouse info
-  const handleShowWareHouse = async (dat, dd) => {
-    setWareHouseDetails(data1);
-
-    const getData = async () => {
-      try {
-        const response = await axiosPrivate.post('searchUrl', {
-          page: currentPage===0?1:currentPage,
-          onPage: usersPerPage,
-          //signal: controller.signal
-        });
+  const handleShowWareHouse = async (record, index) => {
+    debugger
+    if(!record?.children){
+      setWareHouseData(data1);
+      
+      const getData = async () => {
+        try {
+          const response = await axiosPrivate.get(`warehouse/${record.key}`, );
         //console.log('get search data')
-        setWareHouseDetails(data1);
+        setWareHouseData(data1);
         //setToggleSearchModal(false)  
         //handleSearchPageCount(response.data.count)    
       }catch (err) {
@@ -360,9 +372,12 @@ function WareHousesList() {
       }  
     }; 
     getData()
-    console.log(dat)
-    console.log(dd)
+    console.log(record)
+    console.log(index)
     // setWareHouseDetails(dat);
+  }else{
+    return
+  }
   };
   const wareHousesColumns = [
     {
@@ -380,7 +395,7 @@ function WareHousesList() {
       dataIndex: "phone",
       render: (_, record) => (
         <Space>
-          {record?.contact?.phone}
+          {record?.phone}
         </Space>
       ),
       width: "10%",
@@ -592,9 +607,6 @@ function WareHousesList() {
       ),
     },
   ]);
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
   //resize column
   const handleResize =
     (index) =>
@@ -622,6 +634,14 @@ function WareHousesList() {
     let paglink = document.querySelectorAll(".page-item");
     paglink[0]?.firstChild.click();
     refreshData()
+  };
+  const handlePageClick = (event) => {
+    console.log(event)
+    const newOffset = (event.selected * itemsPerPage) % data1.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
   };
   return (
     <HelmetProvider>
@@ -700,16 +720,26 @@ function WareHousesList() {
       </section>
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
-          <Table
-            dataSource={asd}
-            columns={wareHousesColumns}
-            onRow={(record, index) => ({
-              onClick: () => handleShowWareHouse(record, index),
-            })}
-            style={{ cursor: "pointer" }}
-            size={"middle"}
-            pagination={false}
-          />
+        <Table
+  dataSource={asd}
+  columns={wareHousesColumns}
+  onRow={(record, index) => (
+    {
+    onClick: () => handleShowWareHouse(record, index),
+  })}
+  style={{ cursor: "pointer" }}
+  size={"middle"}
+  pagination={false}
+  expandable={{
+    expandedRowRender: (record) => (
+      <div className="custom-child-row">
+        <p>{record.name}</p>
+      </div>
+    ),
+    rowExpandable: (record) => !!record.children,
+  }}
+/>
+
         </div>
         <div
           className="wareHouses__container"
@@ -720,10 +750,10 @@ function WareHousesList() {
           }}
         >
           <div className="d-flex justify-content-center align-items-center">
-            <h3>{wareHouseDetails.name}</h3>
+            <h3>{wareHouseData.name}</h3>
           </div>
 
-          {wareHouseDetails ? (
+          {wareHouseData ? (
             // <Table
             //   dataSource={data1}
             //   columns={resizableColumns}
@@ -739,10 +769,30 @@ function WareHousesList() {
             //     target: "sorter-icon",
             //   }}
             // />
+            <>
             <CustomTable
-            data={data1}
+            data={currentItems}
             column={productsColumns}
             />
+            <ReactPaginate
+            previousLabel = {"Հետ"}    
+            nextLabel = {"Առաջ"}
+            pageCount = {subPageageCount1}
+            onPageChange = {handlePageClick}
+            //initialPage = {Number(pageNumber)}
+            containerClassName={"pagination"}
+            pageLinkClassName = {"page-link"}
+            pageClassName = {"page-item"}
+            previousLinkClassName={"page-link"}
+            nextLinkClassName={"page-link"}
+            disabledLinkClassName={"disabled"}
+            //activeLinkClassName={"active"}
+            activeClassName={"active"}
+            forcePage={subCurrentPage}
+            renderOnZeroPageCount={null}
+
+            />
+            </>
           ) : (
             ""
           )}

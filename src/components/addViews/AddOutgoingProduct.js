@@ -32,26 +32,16 @@ function AddOutgoingProduct({
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
   const [fetchedProductsList, setFetchedProductsList] = useState([])
-  const [outgoingProductsList, setOutgoingProductsList] = useState([])
   const [rowInputValues, setRowInputValues] = useState({});
-  const [asdasd, setasdasd] = useState();
+  const [outgoingList, setOutgoingList] = useState([]);
+  const [focusedInputId, setFocusedInputId] = useState(null); // Tracks which input is focused
 
+  const editorRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosPrivate = useAxiosPrivate();
-  // useEffect(() => {
-  //   if (fetchedProductsList) {
-  //     const initialValues = fetchedProductsList.reduce((acc, row) => {
-  //       acc[row.productId] = ''; // Initialize each input value with an empty string or default value
-  //       return acc;
-  //     }, {});
-  
-  //     setRowInputValues(initialValues);
-  //   }
-  // }, [fetchedProductsList]);
-
-  const handleInputChange = useCallback((e, rowId) => {
-    debugger
+  const axiosPrivate = useAxiosPrivate();  
+  console.log('outgoingList',outgoingList)
+  const handleInputChange = useCallback((e, rowId) => {    
     const { value } = e.target;
     setRowInputValues((prevValues) => ({
       ...prevValues,
@@ -77,34 +67,28 @@ function AddOutgoingProduct({
     
   };
   const handleOutgoingProductsList = async (e,row) => {
-e.preventDefault()
-    debugger
+  e.preventDefault()
+    
     //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
-    const asd = {}
-    asd.id=row.original.productId
-    asd.name=row.original.name
-    asd.input=rowInputValues[row.original.productId]
-console.log(asd)
-    const tmpData = []
-     tmpData.push(asd)
-    
-    // try {
-    //   const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
-    //   setFetchedProductsList(respProductsList?.data?.jsonString);
+    const tmp = {}
+    tmp.id=row.original.productId
+    tmp.name=row.original.name
+    tmp.input=rowInputValues[row.original.productId]
+    tmp.warehouse=row.original.warehouse
+    tmp.subWarehouse=row.original.name
 
-    //   setIsLoading(false);
-    //   return respProductsList?.data?.jsonString
-    // } catch (err) {
-    //   console.log(err);
-    //   navigate("/login", { state: { from: location }, replace: true });
-    // }
-    
+    const tmpData = []
+     tmpData.push(tmp)
+     setOutgoingList((prev)=>[tmp,...prev])    
   };
   
   const onProductSelect = async() =>{
    const asd = await fetchDataByProduct()
-//debugger
     setFetchedProductsList(asd)
+  }
+  const handleDeleteselected = (deleteId) =>{
+   const tmp = outgoingList.filter((el)=>el.id!==deleteId)
+   setOutgoingList(tmp)
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -126,8 +110,6 @@ console.log(asd)
     }, 500);
   }, [navigate,newProduct]);
 
-  // sproductCategories)
-  const editorRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,36 +133,10 @@ console.log(asd)
   });
  
   const onSubmit = methods.handleSubmit(async (data) => {
-    const newProd = {
-      barcode: data?.barcode,
-      reorderLevel: +data?.reorderLevel,
-      name: data?.name || null,
-      productCategory: data?.productCategory || 0,
-      stock: +data?.warehouse?.value || null,
-      quantity: +data.quantity || null,
-      supplier: +data.suppliers?.value || null,
-      countryOfOrigin:data.countryOfOrigin,
-      SKU:'1',
-      dimensions:{
-        //height: +data.height || null,
-        //length: +data.length || null,
-        // width: +data.width || null,
-        weight: +data.weight || null,
-      },
-      price:+amount,
-      currency:currency,
-      description: editorRef.current.getContent({ format: "text" }),
-       attributs:attributs.map((el,index)=>{return{
-        'attributeName':el.attributeName,
-        'attributeUnit':el.attributeUnit,
-        'attributeUnitLabel':el.attributeUnitLabel
-       }})
-    };
-
-    const updatedData = deleteNullProperties(newProd)
+  
 
     try {
-      await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
+      await axiosPrivate.post(REGISTER_PRODUCT, outgoingList, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -301,16 +257,12 @@ console.log(asd)
           <div className="d-flex align-items-center">
             
             <div className="d-flex">
-              <BiSolidInfoCircle
-              cursor={"pointer"}
-              size={"1.5rem"}
-              //onClick={() => handleOpenInfoModal(row.original)}
-            />
-            {console.log(rowInputValues)}
-            <input className="form-control" style={{width:'70px', height:'30px',padding:'1px'}} 
-              value={rowInputValues[row?.original?.productId] || ''} 
-              onChange={(e) => handleInputChange(e, row.original.productId)} 
-              autoFocus={true}
+            <EditableInput
+                rowId={row.original.productId}
+                value={rowInputValues[row?.original?.productId] || ""}
+                handleInputChange={handleInputChange}
+                isFocused={focusedInputId === row.original.productId}
+                onFocus={handleFocus}
               />
             <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button>
             </div>
@@ -354,6 +306,9 @@ console.log(asd)
     ],
     [rowInputValues]
   );
+  const handleFocus = (rowId) => {
+    setFocusedInputId(rowId);
+  };
   return (
     <>
     {newProduct && (
@@ -384,67 +339,6 @@ console.log(asd)
                     autoComplete="off"
                     className="container"
                   >
-                    {/* <div className="card">
-                      <div className="card-header">
-                        <a href="#">Ապրանքի դասակարգը</a>
-                      </div>
-                      <div className="card-body">
-                        <div className="modal-body">
-                          <div className="row gx-3 mb-2">
-                            <div className="col-sm-12">
-                              <div className="d-flex justify-content-between me-2">
-                                <label
-                                     className="form-label"
-                                     htmlFor="productCategory"
-                                   >
-                                     Ապրանքի դասակարգը
-                                   </label>
-                                {methods.formState.errors.productCategory && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>{" "}
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <div className="form-control">
-                                <Controller
-                                  name="productCategory"
-                                  control={methods.control}
-                                  defaultValue={null}
-                                  rules={{ required: true }}
-                                  render={({ field }) => (
-                                    <Select
-                                      {...field}
-                                      onChange={(val) => {
-                                        field.onChange(val.value);
-                                        onProductsClassSelect(val);
-                                      }}
-                                      value={customproductsClasses.find(
-                                        (option) =>
-                                          option.value === productClassType
-                                      )}
-                                      options={[
-                                        {
-                                          value: 0,
-                                          label: "Առանց դասակարգ",
-                                        },
-                                        ...productCategories?.map((item) => ({
-                                          value: item.categoryId,
-                                          label: item.name,
-                                        })),
-                                      ]}
-                                      placeholder={"Ընտրել"}
-                                    />
-                                  )}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> */}
                     <div className="card">
                       <div className="card-header">
                         <a href="#">Ապրանքի տվյալներ</a>
@@ -527,12 +421,28 @@ console.log(asd)
                     </div>
                   </>:<></>
                   }
-                    {(!!fetchedProductsList && fetchedProductsList.length) ?
+                    {(!!outgoingList && outgoingList.length) ?
                   <>
                     <div className="separator-full"></div>
                     <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
+                      <header>
+                        <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                        <h4>Դուրս գրվող ապրանքներ</h4>
+                        </div>
+                      </header>
+                  {outgoingList.map((el,index)=>{
+                    return<ul>
+                      <li key = {el.id} ><FeatherIcon  icon={'minus'} style={{cursor:'pointer', border:'1px solid #edebeb', borderRadius:'10px',marginRight:'10px'}} onClick={()=>handleDeleteselected(el.id)}/>{(index+1) + "." + el.name+"("+el.id+") - "+el.input} </li>
+                      
+                      <div className="separator"></div>
 
-                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} />
+                    </ul>
+                  })}
+                  <footer>
+                    <div>
+
+                    </div>
+                  </footer>
                     </div>
                   </>:<></>
                   }
@@ -630,3 +540,23 @@ console.log(asd)
 }
 
 export default AddOutgoingProduct;
+const EditableInput = ({ rowId, value, handleInputChange, isFocused, onFocus }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
+
+  return (
+    <input
+      ref={inputRef}
+      className="form-control"
+      style={{ width: "70px", height: "30px", padding: "1px" }}
+      value={value}
+      onChange={(e) => handleInputChange(e, rowId)}
+      onFocus={() => onFocus(rowId)}
+    />
+  );
+};

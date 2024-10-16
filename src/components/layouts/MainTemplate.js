@@ -590,12 +590,12 @@ const MainTemplate = () => {
                                                             <span className="nav-link-text">Ապրանքների վերադիր</span>
                                                         </Link>
                                                     </li> */}
-                                                    <li className="nav-item">
+                                                    {/* <li className="nav-item">
                                                         <Link className={sisActive1==="accessWarrant" || location.pathname=== ACCESSWARRANT_ROUTE?"nav-link active":"nav-link"} to={ACCESSWARRANT_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","accessWarrant")}>
                                                             <span className="nav-link-text">Մուտք Պահեստ/Մուտքի օրդեր</span>
                                                         </Link>
-                                                    </li>
+                                                    </li> */}
                                                     {/* <li className="nav-item">
                                                         <Link className={sisActive1==="retailPurchase" || location.pathname=== RETAILPURCHASE_ROUTE?"nav-link active":"nav-link"} to={RETAILPURCHASE_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","retailPurchase")}>
