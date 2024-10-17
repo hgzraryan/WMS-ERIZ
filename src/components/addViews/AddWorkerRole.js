@@ -11,8 +11,8 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Select from "react-select";
 import ErrorSvg from "../../dist/svg/error.svg";
 const StatusTypes = [
-    { value: "Active", label: "Ակտիվ" },
-    { value: "NotActive", label: "Ոչ ակտիվ" },
+    { value: 1, label: "Ակտիվ" },
+    { value: 0, label: "Ոչ ակտիվ" },
   ];
 function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
     const [errMsg, setErrMsg] = useState("");
@@ -39,7 +39,7 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
     });
     const onSubmit = methods.handleSubmit(async ({name,StatusTypes}) => {
       const newWorkerRole = {
-        status:StatusTypes.value,
+        isActive:StatusTypes.value,
         name:name,
         additional: editorRef.current.getContent({ format: "text" }),
       };

@@ -19,8 +19,8 @@ function WorkersPositionsTable({
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    workersPositions,
-    setWorkersPositions,
+    workersRoles,
+    setWorkersRoles,
     refreshData
   }) {
     const [editRow, setEditRow] = useState(false);
@@ -136,7 +136,7 @@ function WorkersPositionsTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             />
-                <Table data={asd} column={columns}/>
+                <Table data={workersRoles} column={columns}/>
 
     </>
   )

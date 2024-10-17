@@ -70,7 +70,7 @@ function AddSupplier({ handleToggleCreateModal, refreshData }) {
             zipCode: zipCode,
           },
          },
-         role:description,
+         description:description,
         additional: editorRef.current.getContent({ format: "text" }),
       };
   

@@ -40,7 +40,7 @@ function Suppliers() {
         setData: setSuppliers,
         //refreshData,
         dataCount 
-      } = useGetData(PRODUCTCATEGORIES_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+      } = useGetData(SUPPLIERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
     const { refreshData,data } = useRefreshData(SUPPLIERS_URL, usersPerPage);
     useEffect(()=>{
