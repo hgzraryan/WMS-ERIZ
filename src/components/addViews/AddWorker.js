@@ -15,10 +15,7 @@ import CustomDateComponent from '../CustomDateComponent';
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
-const workersRoles = [
-  { value: "StoreKeepr", label: "Պահեստապետ" },
-  { value: "HardWorker", label: "Բանվոր" },
-];
+
 function AddWorker({ handleToggleCreateModal, refreshData }) {
   const navigate = useNavigate()
   const location = useLocation();
@@ -255,7 +252,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                                               //     option.value === partnerName
                                               // )}
                                               //options={workersRoles}
-                                              options={workersRoles.map((elem) => ({
+                                              options={workerRoles.map((elem) => ({
                                                 value: elem.workerRoleId,
                                                 label: `${elem?.workerRoleId}․  ${elem?.name}`,
                                               }))}

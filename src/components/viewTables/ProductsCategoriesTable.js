@@ -35,16 +35,16 @@ function ProductsClassesTable({
   };
     const columns1 = useMemo(
         () => [
-          {
-            Header: () => null, 
-            id: 'expander',
-            Cell: ({ row }) =>
-              row.canExpand ? ( // Only show expand button if the row has subRows
-                <span {...row.getToggleRowExpandedProps()} style={{ cursor: 'pointer' }}>
-                  {row.isExpanded ? <img alt='plus' src={minusCircle} style={{paddingLeft:'5px'}}/>: <img alt='plus' src={plusCircle} style={{paddingLeft:'5px'}}/>} {/* Show ▼ if expanded, ▶ if collapsed */}
-                </span>
-              ) : null, // Render nothing if no subRows
-          },
+          // {
+          //   Header: () => null, 
+          //   id: 'expander',
+          //   Cell: ({ row }) =>
+          //     row.canExpand ? ( // Only show expand button if the row has subRows
+          //       <span {...row.getToggleRowExpandedProps()} style={{ cursor: 'pointer' }}>
+          //         {row.isExpanded ? <img alt='plus' src={minusCircle} style={{paddingLeft:'5px'}}/>: <img alt='plus' src={plusCircle} style={{paddingLeft:'5px'}}/>} {/* Show ▼ if expanded, ▶ if collapsed */}
+          //       </span>
+          //     ) : null, // Render nothing if no subRows
+          // },
           {
             Header: (event) => (
               <>
@@ -175,8 +175,8 @@ function ProductsClassesTable({
         keyName={selectedItem.name}
         delId={selectedItem.categoryId}
       />
-          {/* <CustomTable data={productCategories} column={columns} /> */}
-          <table {...getTableProps()} style={{ width: '60%', borderCollapse: 'collapse' }}>
+          <CustomTable data={productCategories} column={columns1} />
+          {/* <table {...getTableProps()} style={{ width: '60%', borderCollapse: 'collapse' }}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()} style={{ borderBottom: '1px solid #ddd' }}>
@@ -210,7 +210,7 @@ function ProductsClassesTable({
           );
         })}
       </tbody>
-    </table>
+    </table> */}
 
     </>
   )
