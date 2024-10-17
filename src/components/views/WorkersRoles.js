@@ -242,6 +242,7 @@ function WorkersRoles() {
                         <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
                       }
                     > */}
+                    {console.log(workerRoles)}
                       <WorkersPositionsTable
                         confirmRef={confirmWPRef}
                         selectedItem={selectedItem}
@@ -249,8 +250,8 @@ function WorkersRoles() {
                          handleDeleteItem={handleDeleteItem}
                         handleOpenModal={handleOpenModal}
                         handleCloseModal={handleCloseModal}
-                        workersPositions={workerRoles}
-                        setWorkersPositions={setWorkerRoles}
+                        workerRoles={workerRoles}
+                        setWorkerRoles={setWorkerRoles}
                         // refreshData={refreshData}
                       />
                      <ReactPaginate

@@ -112,6 +112,7 @@ function AddIncomingProduct({
   const [region, setRegion] = useState('')
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
+  const [suppliersList, setSuppliersList] = useState([])
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան"
@@ -134,6 +135,9 @@ function AddIncomingProduct({
 
         const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(productsList?.data?.jsonString);
+
+        const suppliersList = await axiosPrivate.get(PRODUCTSLIST_URL);
+        setSuppliersList(suppliersList?.data?.jsonString);
 
         setIsLoading(false);
       } catch (err) {
@@ -534,8 +538,8 @@ function AddIncomingProduct({
                                     <Select
                                       {...field}
                                       value={field.value}
-                                      options={partners?.map((item) => ({
-                                        value: item.partnerId,
+                                      options={suppliersList?.map((item) => ({
+                                        value: item.supplierId,
                                         label: item.name,
                                       }))}
                                       placeholder={"Ընտրել"}

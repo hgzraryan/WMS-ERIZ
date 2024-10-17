@@ -9,6 +9,7 @@ function SuppliersTable({suppliers,
     handleOpenModal,
     handleCloseModal,
     productCategories}) {
+      console.log(suppliers)
     const columns = useMemo(
         () => [
           {
@@ -30,7 +31,7 @@ function SuppliersTable({suppliers,
                 <div  className="supplierName">Անվանում</div>
               </>
             ),
-            accessor: "supplierName",
+            accessor: "name",
             sortable: true,
             width: 300,
             
@@ -42,7 +43,7 @@ function SuppliersTable({suppliers,
                 <div  className="supplierEmail">Էլ․ հասցե</div>
               </>
             ),
-            accessor: "supplierEmail",
+            accessor: "email",
             sortable: true,
             width: 300,
             

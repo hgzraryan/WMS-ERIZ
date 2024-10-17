@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Dropdown } from "react-bootstrap";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import SuppliersTable from '../viewTables/SuppliersTable';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useDeleteData from '../../hooks/useDeleteData';
 import AddSupplier from '../addViews/AddSupplier';
 import useGetData from '../../hooks/useGetData';
 import useRefreshData from '../../hooks/useRefreshData';
 import { PRODUCTCATEGORIES_URL, SUPPLIERS_ROUTE, SUPPLIERS_URL } from '../../utils/constants';
+import ReactPaginate from 'react-paginate';
 const customSuppliers = [
     {
         supplierId:13654,
@@ -24,6 +25,7 @@ const customSuppliers = [
 ]
 function Suppliers() {
     const { pageNumber } = useParams();
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     //const [suppliers, setSuppliers] = useState(customSuppliers);
     const [currentPage, setCurrentPage] = useState(Number(pageNumber));
@@ -66,6 +68,9 @@ function Suppliers() {
 //       "name",
 //       refreshData 
 //     );
+const handlePageClick = ({ selected: selectedPage }) => {
+  navigate(`/workersPositions/page/${selectedPage+1}`);
+}
   return (
     <HelmetProvider>
     <Helmet>
@@ -108,6 +113,7 @@ function Suppliers() {
     <div className="productsClasses__Wrapper">
       <div className="productsClasses__table">
       {suppliers ? (
+        <>
                 <SuppliersTable 
                   confirmRef={confirmSuppliersRef}
                   selectedItem={selectedItem}
@@ -117,8 +123,25 @@ function Suppliers() {
                   handleCloseModal={handleCloseModal}
                   suppliers={suppliers} 
                   setSuppliers={setSuppliers}
-                />
-
+                  />
+<ReactPaginate
+                      previousLabel = {"Հետ"}    
+                      nextLabel = {"Առաջ"}
+                      pageCount = {1}
+                      onPageChange = {handlePageClick}
+                      //initialPage = {0}
+                      containerClassName={"pagination"}
+                      pageLinkClassName = {"page-link"}
+                      pageClassName = {"page-item"}
+                      previousLinkClassName={"page-link"}
+                      nextLinkClassName={"page-link"}
+                      disabledLinkClassName={"disabled"}
+                      //activeLinkClassName={"active"}
+                      activeClassName={"active"}
+                      forcePage={currentPage - 1}
+                      
+											/>
+                      </>
         ) : (
           ""
         )}

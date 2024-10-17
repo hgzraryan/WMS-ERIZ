@@ -19,8 +19,8 @@ function WorkersPositionsTable({
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    workersRoles,
-    setWorkersRoles,
+    workerRoles,
+    setWorkerRoles,
     refreshData
   }) {
     const [editRow, setEditRow] = useState(false);
@@ -59,7 +59,13 @@ function WorkersPositionsTable({
                 <div  className="columnHeader">Կարգավիճակ</div>
               </>
             ),
-            accessor: "status",
+            accessor: "isActive",
+            Cell: ({ row }) => (
+              <div className="d-flex align-items-center justify-content-center">
+                {console.log(row)}
+              {row.original?.isActive===1?'Ակտիվ':row.original?.isActive===0?'Պասիվ':'scsd'}
+              </div>
+            ),
             width: 300,
           },
           {
@@ -136,7 +142,7 @@ function WorkersPositionsTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             />
-                <Table data={workersRoles} column={columns}/>
+                <Table data={workerRoles} column={columns}/>
 
     </>
   )
