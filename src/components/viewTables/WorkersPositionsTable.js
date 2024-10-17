@@ -78,14 +78,7 @@ function WorkersPositionsTable({
             width: 300,
             Cell: ({ row }) => (
               <div className="d-flex align-items-center">
-                <div className="d-flex">
-                  <BiSolidInfoCircle
-                  cursor={"pointer"}
-                  size={"1.5rem"}
-                  //onClick={() => handleOpenInfoModal(row.original)}
-                />
-                </div>
-                <div className="d-flex">
+                 <div className="d-flex">
                   <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                     data-bs-toggle="tooltip"

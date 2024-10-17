@@ -7,6 +7,8 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import PartnerEdit from "../editModals/PartnerEdit";
 import ComponentToConfirm from "../ComponentToConfirm";
 import Table from "../Table";
+import { BiSolidInfoCircle } from "react-icons/bi";
+import PartnersInfoModal from "../infoModals/PartnersInfoModal";
 
 function PartnersTable({
   confirmPartnerRef,
@@ -26,7 +28,12 @@ function PartnersTable({
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const [modalInfo, setModalInfo] = useState(false);
 
+  const handleOpenInfoModal = (data) => {
+     
+     setModalInfo((prev) => data);
+   };
   // const getColumnSearchProps = (dataIndex) => {
   //     return {
   //       filterDropdown: ({
@@ -212,6 +219,13 @@ function PartnersTable({
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="d-flex align-items-center">
+                 <div className="d-flex">
+              <BiSolidInfoCircle
+              cursor={"pointer"}
+              size={"1.5rem"}
+              onClick={() => handleOpenInfoModal(row.original)}
+            />
+            </div>
             <div className="d-flex">
               <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
@@ -273,6 +287,9 @@ function PartnersTable({
 
   return (
     <>
+      {!!modalInfo && (
+        <PartnersInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+      )}
       {editRow && (
         <PartnerEdit
           partner={editRow}
