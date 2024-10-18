@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal } from "react-bootstrap";
 import moment from 'moment';
-function WorkersInfoModal({setModalInfo,modalInfo}) {
+function PartnersInfoModal({setModalInfo,modalInfo}) {
     return (
         <Modal
           show={() => true}
@@ -32,29 +32,31 @@ function WorkersInfoModal({setModalInfo,modalInfo}) {
                             /> */}
                       </div>
                       <div className="w-100">
-                           <div className="d-flex justify-content-between">  <span>ID </span> <span>{modalInfo.workerId}</span></div>
+                           <div className="d-flex justify-content-between">  <span>ID </span> <span>{modalInfo.partnerId}</span></div>
                            <div className="separator-full m-0"></div>
-                           <div className="d-flex justify-content-between">  <span>ԱԱՀ </span> <span>{modalInfo.fullName}</span></div>
+                           <div className="d-flex justify-content-between">  <span>Անվանում </span> <span>{modalInfo.name}</span></div>
                            <div className="separator-full m-0"></div>
-                           <div className="d-flex justify-content-between">  <span>Պաշտոն </span> <span>{modalInfo.workerRole}</span></div>
+                           <div className="d-flex justify-content-between">  <span>Տեսակը </span> <span>{modalInfo.companyType==='Physical'?'Ֆիզիկական անձ':modalInfo.companyType==='Legal'?'Իրավաբանական անձ':'Այլ'}</span></div>
                            <div className="separator-full m-0"></div>
-                           <div className="d-flex justify-content-between">  <span>Ծննդյան ամսաթիվ </span> <span>{modalInfo?.dateOfBirth}</span></div>
+                           <div className="d-flex justify-content-between">  <span>Պատախանատու անձ </span> <span>{modalInfo.respPersonFullName}</span></div>
+                           <div className="separator-full m-0"></div>
+                           <div className="d-flex justify-content-between">  <span>ՀՎՀՀ </span> <span>{modalInfo?.tin}</span></div>
+                           <div className="separator-full m-0"></div>
+                           <div className="d-flex justify-content-between">  <span>Բանկ </span> <span>{modalInfo?.bankName}</span></div>
+                           <div className="separator-full m-0"></div>
+                           <div className="d-flex justify-content-between">  <span>Հաշվեհամար </span> <span>{modalInfo?.bankAccNumber}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Գրանցվել է </span> <span>{modalInfo.createdAt && moment.utc(modalInfo.createdAt).format('DD-MM-YYYY HH:mm')}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Վերջին թարմացում</span> <span>{modalInfo?.updatedAt && moment.utc(modalInfo?.updatedAt).format('DD-MM-YYYY HH:mm')}</span></div>
                            <div className="separator-full m-0"></div>
-                           <div className="d-flex justify-content-between">  <span>Հասցե </span> <span>{modalInfo?.contact?.address?.country}, {modalInfo?.contact?.address?.state},{modalInfo?.contact?.address?.city},{modalInfo?.contact?.address?.street}</span></div>
+                           <div className="d-flex justify-content-between">  <span>Հասցե </span> <span>{modalInfo?.contact?.address?.state},{modalInfo?.contact?.address?.city},{modalInfo?.contact?.address?.street}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Փոստային համար </span> <span>{modalInfo?.contact?.address?.zipCode}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Էլ․ Հասցե </span> <span>{modalInfo?.contact?.email}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Հեռախոս </span> <span>{modalInfo?.contact?.phone}</span></div>
-                           <div className="separator-full m-0"></div> 
-                           <div className="d-flex justify-content-between">  <span>Կոնտակտային անձ </span> <span>{modalInfo?.emergencyContactName}</span></div>
-                           <div className="separator-full m-0"></div> 
-                           <div className="d-flex justify-content-between">  <span>Կոնտակտային անձի հեռախոս </span> <span>{modalInfo?.emergencyContactNumber}</span></div>
                            <div className="separator-full m-0"></div> 
                            <div className="d-flex justify-content-between">  <span>Հավելյալ տեղեկություն </span> <span>{modalInfo?.additional}</span></div>
                            <div className="separator-full m-0"></div>
@@ -77,4 +79,4 @@ function WorkersInfoModal({setModalInfo,modalInfo}) {
         </Modal>
       )
     }
-export default WorkersInfoModal
+export default PartnersInfoModal

@@ -100,7 +100,7 @@ function ProductsCategories() {
             </Dropdown>
           </div>
           {isOpen && (
-            <AddProductsList
+            <AddProductClass
               handleToggleCreateModal={handleToggleCreateModal}
               refreshData={() => refreshData()}
             />

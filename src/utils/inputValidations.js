@@ -954,3 +954,14 @@ export const fullName_validation = {
     },
   },
 };
+export const newPassword_validation = {
+  required: 'New password is required',
+  minLength: {
+    value: 6,
+    message: "նվազագույնը 6 սիմվոլ",
+  },
+};
+
+export const confirmPassword_validation = {
+  required: 'Կրկնեք գաղտնաբառը',
+};

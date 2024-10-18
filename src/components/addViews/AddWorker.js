@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { Modal } from "react-bootstrap";
-import { REGISTER_WORKER, REGISTER_WORKERROLE, } from '../../utils/constants';
+import { REGISTER_WORKER, REGISTER_WORKERROLE, WORKERSROLES_URL, } from '../../utils/constants';
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import { city_validation, email_validation, emergencyContactName_validation, fullName_validation, name_validation, password_validation, respPersonFullName_validation, status_validation, street_validation, user_validation, zipCode_validation } from '../../utils/inputValidations';
 import { Input } from '../Input';
@@ -14,11 +14,11 @@ import CustomPhoneComponent from '../CustomPhoneComponent';
 import CustomDateComponent from '../CustomDateComponent';
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 import moment from 'moment';
-const workersRoles = [
-  { value: "StoreKeepr", label: "Պահեստապետ" },
-  { value: "HardWorker", label: "Բանվոր" },
-];
+import { useLocation, useNavigate } from 'react-router-dom';
+
 function AddWorker({ handleToggleCreateModal, refreshData }) {
+  const navigate = useNavigate()
+  const location = useLocation();
     const [errMsg, setErrMsg] = useState("");
     const axiosPrivate = useAxiosPrivate();
     const [merried, setMerried] = useState(""); 
@@ -26,6 +26,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
     const [country, setCountry] = useState('')
     const [region, setRegion] = useState('')
     const [gender, setGender] = useState(""); 
+    const [workerRoles, setWorkerRoles] = useState([]); 
 
   const onGenderSelect = (event) => {
     setGender(prev=>event.target.value)
@@ -38,30 +39,22 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
         CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
       }
     }, []);
-    // useEffect(() => {
-    //   setTimeout(() => {
-    //     axiosPrivate
-    //       .get(WORKERROLE_URL)
-    //       .then((resp) => {
-    //         setDoctors(resp?.data?.jsonString);
-    //         setIsLoading(false);
-    //       }).then((resp) => {
-    //         axiosPrivate.get(PATIENTS_URL).then((resp) => {
-    //           setPatients(resp?.data?.jsonString);
-    //           setIsLoading(false);
-    //         });
-    //       })
-    //       .then((resp) => {
-    //         axiosPrivate.get(MEDICALSERVICES_URL).then((resp) => {
-    //           setMedicalServices(resp?.data?.jsonString);
-    //           setIsLoading(false);
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       });
-    //   }, 500);
-    // }, []);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const fetchedWorkerRoles = await axiosPrivate.get(WORKERSROLES_URL);
+          setWorkerRoles(fetchedWorkerRoles?.data?.jsonString);
+  
+          //setIsLoading(false);
+        } catch (err) {
+          console.log(err);
+          navigate("/login", { state: { from: location }, replace: true });
+        }
+      };
+      setTimeout(() => {
+        fetchData();
+      }, 500);
+    }, [navigate]);
     const onWorkerStateSelect = (event) => {
         setIsActive(prev=>event.target.value)
       };
@@ -258,11 +251,11 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                                               //   (option) =>
                                               //     option.value === partnerName
                                               // )}
-                                              options={workersRoles}
-                                              // options={workersRoles.map((agent) => ({
-                                              //   value: agent.agentId,
-                                              //   label: `${agent?.agentId}․  ${agent?.name}`,
-                                              // }))}
+                                              //options={workersRoles}
+                                              options={workerRoles.map((elem) => ({
+                                                value: elem.workerRoleId,
+                                                label: `${elem?.workerRoleId}․  ${elem?.name}`,
+                                              }))}
                                               placeholder={"Ընտրել"}
                                             />
                                           )}

@@ -65,9 +65,9 @@ export const LEGALFORMS_URL = '/legalForms'
 export const PRODUCTS_URL = '/products'
 export const PRODUCTSLIST_URL = '/productsList'
 export const PRODUCTCATEGORIES_URL = '/productCategories'
-export const SUPPLIERS_URL = '/suppliers'
+export const SUPPLIERS_URL = '/supplierList'
 export const WORKERS_URL = '/workerList'
-export const WORKERSROLES_URL = '/workersRoles'
+export const WORKERSROLES_URL = '/workerRoleList'
 
 
 export const REGISTER_USER = "/registerUser";
@@ -81,6 +81,9 @@ export const REGISTER_PRODUCT = "/registerProduct";
 export const REGISTER_PRODUCTSLIST = "/registerProductsList";
 export const REGISTER_WORKERROLE = "/registerWorkerRole";
 export const REGISTER_WORKER = "/registerWorker";
+
+export const CHANGE_USERPASSWORD = "/changeUserPassword";
+
 
 //user Roles
 export const ROLES = {

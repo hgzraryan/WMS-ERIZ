@@ -109,11 +109,11 @@ function WorkersTable({
                 <div  className="columnHeader">Կարգավիճակ</div>
               </>
             ),
-            Cell: ({row}) => (
-              <>        
-              {console.log(row)}     
-                <div  className="phone">{row?.original?.isActive}</div>
-              </>
+            Cell: ({ row }) => (
+              <div className="d-flex align-items-center justify-content-center">
+                {console.log(row)}
+              {row.original?.isActive===1?'Ակտիվ':row.original?.isActive===0?'Պասիվ':'scsd'}
+              </div>
             ),
             accessor: "status",
             width: 180,

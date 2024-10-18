@@ -34,15 +34,15 @@ function WorkersRoles() {
     setSearchId(id)
   }
   const {
-    data: workersPositions,
-    setData: setWorkersPositions,
+    data: workerRoles,
+    setData: setWorkerRoles,
     dataCount,
     dataReceived
   } = useGetData(WORKERSROLES_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
   const { refreshData,data } = useRefreshData(WORKERSROLES_URL, usersPerPage,pageNumber);
   useEffect(()=>{
-    setWorkersPositions(data)
+    setWorkerRoles(data)
     },[data])
   //-------------------
   
@@ -51,8 +51,8 @@ function WorkersRoles() {
     confirmWPRef,
     selectedItem,
     setSelectedItemId,
-    workersPositions,
-    setWorkersPositions,
+    workerRoles,
+    setWorkerRoles,
     "name",
     refreshData
     
@@ -242,6 +242,7 @@ function WorkersRoles() {
                         <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
                       }
                     > */}
+                    {console.log(workerRoles)}
                       <WorkersPositionsTable
                         confirmRef={confirmWPRef}
                         selectedItem={selectedItem}
@@ -249,8 +250,8 @@ function WorkersRoles() {
                          handleDeleteItem={handleDeleteItem}
                         handleOpenModal={handleOpenModal}
                         handleCloseModal={handleCloseModal}
-                        workersPositions={workersPositions}
-                        setWorkersPositions={setWorkersPositions}
+                        workerRoles={workerRoles}
+                        setWorkerRoles={setWorkerRoles}
                         // refreshData={refreshData}
                       />
                      <ReactPaginate
