@@ -34,7 +34,9 @@ function WorkersInfoModal({setModalInfo,modalInfo}) {
                       <div className="w-100">
                            <div className="d-flex justify-content-between">  <span>ID </span> <span>{modalInfo.workerId}</span></div>
                            <div className="separator-full m-0"></div>
-                           <div className="d-flex justify-content-between">  <span>Անվանում </span> <span>{modalInfo.fullName}</span></div>
+                           <div className="d-flex justify-content-between">  <span>ԱԱՀ </span> <span>{modalInfo.fullName}</span></div>
+                           <div className="separator-full m-0"></div>
+                           <div className="d-flex justify-content-between">  <span>Պաշտոն </span> <span>{modalInfo.workerRole}</span></div>
                            <div className="separator-full m-0"></div>
                            <div className="d-flex justify-content-between">  <span>Ծննդյան ամսաթիվ </span> <span>{modalInfo?.dateOfBirth}</span></div>
                            <div className="separator-full m-0"></div>

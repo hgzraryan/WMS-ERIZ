@@ -82,6 +82,9 @@ export const REGISTER_PRODUCTSLIST = "/registerProductsList";
 export const REGISTER_WORKERROLE = "/registerWorkerRole";
 export const REGISTER_WORKER = "/registerWorker";
 
+export const CHANGE_USERPASSWORD = "/changeUserPassword";
+
+
 //user Roles
 export const ROLES = {
     User: 2001,

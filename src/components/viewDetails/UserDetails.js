@@ -10,6 +10,8 @@ import LoadingSpinner from "../LoadingSpinner";
 import userSamplePhoto from "../../dist/img/Missing.svg";
 import profileBgImg from "../../dist/img/profile-bg.jpg";
 import moment from "moment";
+import ResetPasswordModal from "../ResetPasswordModal";
+import resetPassSVG from "../../dist/svg/resetPass.svg";
 
 function UserDetails() {
   const axiosPrivate = useAxiosPrivate()
@@ -17,9 +19,13 @@ function UserDetails() {
   const { id } = useParams();
   const [userDetails, setUserDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [resetPassword, setResetPassword] = useState(false);
 
   const [activeLink, setActiveLink] = useState('tab_summery'); 
   const [pageTab, setPageTab] = useState('tab_summery')
+  const handleOpenResetPassModal = (value) => {
+    setResetPassword((prev) => value);
+   };
   const handleLinkClick = (linkId) => {
     setActiveLink(linkId);
     setPageTab(linkId)
@@ -41,6 +47,13 @@ function UserDetails() {
 
   return (
     <>
+     {!!resetPassword && (
+        <ResetPasswordModal
+        id={userDetails?.userId}
+        resetPassword={resetPassword}
+        setResetPassword={setResetPassword}
+        />
+      )}
      <Suspense fallback={<LoadingSpinner />}>
         {isLoading ? (
           <LoadingSpinner />
@@ -90,7 +103,7 @@ function UserDetails() {
                          className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                          data-bs-toggle="tooltip"
                          data-placement="top"
-                         title="Edit"
+                         title="Change password"
                          href="#"
                          onClick={() => handleOpenResetPassModal(userDetails)}
                          >
@@ -107,7 +120,7 @@ function UserDetails() {
              
                 </span>
               </a>
-              } */}
+               }  */}
                       {/* <i
                         className="bi-check-circle-fill fs-6 text-blue"
                         data-bs-toggle="tooltip"
