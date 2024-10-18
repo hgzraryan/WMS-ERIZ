@@ -14,7 +14,7 @@ import ResizableTitle from "../views/ResizableTitle";
 import Highlighter from "react-highlight-words";
 
 import { SearchOutlined } from "@ant-design/icons";
-import { USERS_URL } from "../../utils/constants";
+import { ROLES, USERS_URL } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Table from "../Table";
 
@@ -36,6 +36,8 @@ function UsersTable({
   const [searchedColumn, setSearchedColumn] = useState("");
   const [allUsers, setAllUsers] = useState([]); 
   const searchInput = useRef(null);
+  const storedUserRoles = JSON.parse(localStorage.getItem('userRoles'));
+  const [superAdmin,setSuperAdmin]=useState(storedUserRoles.includes(ROLES?.SuperAdmin))
   // useEffect(() => {
   //     axiosPrivate
   //       .get(USERS_URL)

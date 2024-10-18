@@ -88,4 +88,5 @@ export const ROLES = {
     // Editor: 1984,
     // Approver: 6010,
     Admin: 5150,
+    SuperAdmin:5050
   };

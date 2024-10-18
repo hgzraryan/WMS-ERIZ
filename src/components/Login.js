@@ -50,8 +50,18 @@ const Login = () => {
             );
             const accessToken = response?.data?.accessToken;
             const decodedJWT = jwt(accessToken);
-            const roles = decodedJWT.UserInfo.roles;
-			//const isActive = decodedJWT.UserInfo.isActive;
+            console.log(decodedJWT)
+             const roles = decodedJWT.UserInfo.roles;
+			 const isActive = decodedJWT.UserInfo.isActive;
+            // const userId = decodedJWT.UserInfo.userId;
+
+            // Clear localStorage before storing new data
+            localStorage.removeItem("userData");
+            localStorage.removeItem("userRoles");
+
+            localStorage.setItem("userData", JSON.stringify(response?.data?.authUserData));
+            localStorage.setItem("userRoles", JSON.stringify(roles));
+
 			
 
 			
