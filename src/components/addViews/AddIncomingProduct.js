@@ -10,10 +10,10 @@ import {
   CountryOfOrigin_validation,
   height_validation,
   length_validation,
-  liter_validation,
+  volume_validation,
   minCountWarning_validation,
   name_validation,
-  padon_validation,
+  pallet_validation,
   Quantity_validation,
   reorderLevel_validation,
   Weight_validation,
@@ -22,13 +22,14 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
 import AddProductsList from "./AddProductsList";
 import { color } from "framer-motion";
+import moment from "moment";
 
 const customproductsClasses = [
   {
@@ -107,12 +108,11 @@ function AddIncomingProduct({
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState('051');
   const [errMsg, setErrMsg] = useState("");
-  const [partners, setPartners] = useState([]);
   const [country, setCountry] = useState('')
-  const [region, setRegion] = useState('')
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
   const [suppliersList, setSuppliersList] = useState([])
+  const editorRef = useRef(null);
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան"
@@ -130,15 +130,14 @@ function AddIncomingProduct({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const partnersResp = await axiosPrivate.get(PARTNERS_URL);
-        setPartners(partnersResp?.data?.jsonString);
-
         const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(productsList?.data?.jsonString);
 
-        const suppliersList = await axiosPrivate.get(PRODUCTSLIST_URL);
+        const suppliersList = await axiosPrivate.get(SUPPLIERS_URL);
         setSuppliersList(suppliersList?.data?.jsonString);
 
+        const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
+        setWareHouses(wareHousesReps?.data?.jsonString);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
@@ -165,24 +164,6 @@ function AddIncomingProduct({
     setCurrency(e.target?.value)
   };
   // sproductCategories)
-  const editorRef = useRef(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
-        setWareHouses(wareHousesReps?.data?.jsonString);
-
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-        navigate("/login", { state: { from: location }, replace: true });
-      }
-    };
-    setTimeout(() => {
-      fetchData();
-    }, 500);
-  }, [navigate]);
 
   const onProductsClassSelect = (data) => {
     console.log("data", data);
@@ -215,31 +196,36 @@ function AddIncomingProduct({
     });
   const onSubmit = methods.handleSubmit(async (data) => {
     const newProd = {
-      barcode: data?.barcode,
-      reorderLevel: +data?.reorderLevel,
-      name: data?.name || null,
-      productCategory: data?.productCategory || 0,
-      stock: +data?.warehouse?.value || null,
-      quantity: +data.quantity || null,
-      supplier: +data.suppliers?.value || null,
+      name: data?.productName?.value || null,
       countryOfOrigin:data.countryOfOrigin,
-      SKU:'1',
+      stock: +data?.warehouse?.value || null,
+      supplier: +data.suppliers?.value || null,
+      quantity: +data.quantity || null,
+      volume: +data.volume || null,
       dimensions:{
         //height: +data.height || null,
         //length: +data.length || null,
         // width: +data.width || null,
         weight: +data.weight || null,
       },
-      price:+amount,
+      palletCount:+data?.pallet,
       currency:currency,
+      price:+amount,
+      reorderLevel: +data?.reorderLevel,
+      producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
+      expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       description: editorRef.current.getContent({ format: "text" }),
-       attributs:attributs.map((el,index)=>{return{
-        'attributeName':el.attributeName,
-        'attributeUnit':el.attributeUnit,
-        'attributeUnitLabel':el.attributeUnitLabel
-       }})
+      //barcode: data?.barcode,
+      // productCategory: data?.productCategory || 0,
+      // SKU:'1',
+      //  attributs:attributs.map((el,index)=>{return{
+      //   'attributeName':el.attributeName,
+      //   'attributeUnit':el.attributeUnit,
+      //   'attributeUnitLabel':el.attributeUnitLabel
+      //  }})
     };
-
+console.log(newProd)
+console.log(data)
     const updatedData = deleteNullProperties(newProd)
 
     try {
@@ -426,10 +412,10 @@ function AddIncomingProduct({
                             
                             <div className="col-sm-6">
                             <div className="d-flex justify-content-between me-2">
-                              <label className="form-label" htmlFor="country">
+                              <label className="form-label" htmlFor="countryOfOrigin">
                                 Արտադրող Երկիր
                               </label>
-                              {methods?.formState.errors.country && (
+                              {methods?.formState.errors.countryOfOrigin && (
                                 <span className="error text-red">
                                   <img src={ErrorSvg} alt="errorSvg" />
                                   Պարտադիր
@@ -437,7 +423,7 @@ function AddIncomingProduct({
                               )}
                               </div>
                               <Controller
-                                name="country"
+                                name="countryOfOrigin"
                                 control={methods.control}
                                 defaultValue=""
                                 rules={{ required: true }}
@@ -564,11 +550,11 @@ function AddIncomingProduct({
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...liter_validation} />
+                              <Input {...volume_validation} />
                             </div>
                             
                           <div className="col-sm-6">
-                              <Input {...padon_validation} />
+                              <Input {...pallet_validation} />
                             </div>
                           </div>
 

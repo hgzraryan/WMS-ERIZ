@@ -175,7 +175,7 @@ function WareHousesList() {
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data1.slice(itemOffset, endOffset);
 
-  const asd = [
+  const customWarehouse = [
     {
       key: 1,
       name: 'Մասիս',
@@ -205,7 +205,7 @@ function WareHousesList() {
   } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage,searchCount,null,searchId,searchTerms);
   const { refreshData,data } = useRefreshData(WAREHOUSES_URL, usersPerPage);
   useEffect(()=>{
-    setWarehouses(asd)
+    setWarehouses(customWarehouse)
     
     },[data])
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
@@ -720,7 +720,7 @@ function WareHousesList() {
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
         <Table
-  dataSource={asd}
+  dataSource={customWarehouse}
   columns={wareHousesColumns}
   onRow={(record, index) => (
     {

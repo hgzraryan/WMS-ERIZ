@@ -20,7 +20,7 @@ import {
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
-import { REGISTER_WAREHOUSE } from "../../utils/constants";
+import { REGISTER_WAREHOUSE, WAREHOUSES_URL } from "../../utils/constants";
 import { toast } from "react-toastify";
 import {
   CountryDropdown,
@@ -30,6 +30,7 @@ import {
 import { deleteNullProperties } from "../../utils/helper";
 import Select from "react-select";
 import { customStyles } from "../customStyles";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const storekeepers=[
   {
@@ -86,12 +87,18 @@ const salesAllowed=[
 },
 ]
 function AddWareHouse({ handleToggleCreateModal, refreshData }) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [additionalPhone, setAdditionalPhone] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const editorRef = useRef(null);
   const [region, setRegion] = useState("");
+  const [parentWarehouses, setParentWarehouses] = useState("");
+
+
   useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան";
@@ -99,6 +106,21 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
         "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
     }
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
+        setParentWarehouses(wareHousesReps?.data?.jsonString);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
+    setTimeout(() => {
+      fetchData();
+    }, 500);
+  }, [navigate]);
   const methods = useForm({
     mode: "onChange",
   });
@@ -148,7 +170,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
         name,
         balance:+balance,
         storekeeper:storekeeper?.value,
-        subWarehouse:subWarehouse?.value||1512,
+        parentWarehouse:parentWarehouses?.value,
         salesAllowed:salesAllowed?.value,
         contact: {
           email: email,
@@ -313,8 +335,52 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                           </div>
                           <div className="row gx-3">
                           <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="parentWarehouse"
+                                    >
+                                      Հիմնական պահեստ
+                                    </label>
+                                    {methods.formState.errors
+                                      .parentWarehouse && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="parentWarehouse"
+                                      control={methods.control}
+                                      defaultValue={null}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={[
+                                            {
+                                            value: 0,
+                                            label: "Հիմնական պահեստ",
+                                          },
+                                          ...parentWarehouses.map((parent) => ({
+                                            value: parent.warehouseId,
+                                            label: `${parent?.warehouseId}․  ${parent?.name}`,
+                                          }))
+                                          ]}
+                                          placeholder={"Ընտրել"}
+                                          styles={customStyles}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
+                          {/* <div className="col-sm-6">
                               <Input {...balance_validation} />
-                            </div>
+                            </div> */}
                             <div className="col-sm-6">
                                   <div className="d-flex justify-content-between me-2">
                                     <label
@@ -350,135 +416,6 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                     />
                                   </div>
                                 </div>
-                          </div>
-                          <div className="row gx-3">
-                          <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="subWarehouse"
-                                    >
-                                      Ենթապահեստ
-                                    </label>
-                                    {methods.formState.errors
-                                      .subWarehouse && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="subWarehouse"
-                                      control={methods.control}
-                                      defaultValue={null}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={[
-                                            {
-                                            value: 0,
-                                            label: "Առանց ենթապահեստ",
-                                          },
-                                          ...subWarehouses]}
-                                          placeholder={"Ընտրել"}
-                                          styles={customStyles}
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                            <div className="col-sm-6 d-flex">
-                              <div className="col-sm-6">
-                                <div className="d-flex justify-content-between me-2">
-                                  <label
-                                    className="form-label"
-                                    htmlFor="doctor"
-                                  >
-                                    Հեռախոս
-                                  </label>
-                                  {methods?.formState.errors.phone && (
-                                    <span className="error text-red">
-                                      <span>
-                                        <img src={ErrorSvg} alt="errorSvg" />
-                                      </span>
-                                      պարտադիր
-                                    </span>
-                                  )}
-                                </div>
-                                <CustomPhoneComponent
-                                  name="phone"
-                                  control={methods.control}
-                                />
-                              </div>
-                              {additionalPhone && (
-                                <>
-                                  <div className="col-sm-6">
-                                    <div className="d-flex justify-content-between ">
-                                      <label
-                                        className="form-label"
-                                        htmlFor="addPhone"
-                                      >
-                                        Հեռախոս
-                                      </label>
-                                      {methods?.formState.errors.addPhone && (
-                                        <span className="error text-red">
-                                          <span>
-                                            <img
-                                              src={ErrorSvg}
-                                              alt="errorSvg"
-                                            />
-                                          </span>
-                                          պարտադիր
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="d-flex">
-                                      <CustomPhoneComponent
-                                        name="addPhone"
-                                        control={methods.control}
-                                        required={false}
-                                      />
-                                      <div>
-                                        <FeatherIcon
-                                          icon="minus-circle"
-                                          width="24"
-                                          onClick={(e) =>
-                                            toggleAdditionalPhone(e, false)
-                                          }
-                                          style={{
-                                            cursor: "pointer",
-                                            marginTop: "8px",
-                                          }}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </>
-                              )}
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  paddingTop: "41px",
-                                }}
-                              >
-                                {!additionalPhone && (
-                                  <FeatherIcon
-                                    icon="plus-circle"
-                                    width="35"
-                                    onClick={(e) =>
-                                      toggleAdditionalPhone(e, true)
-                                    }
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                )}
-                              </div>
-                            </div>
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
@@ -610,6 +547,93 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                     />
                                   </div>
                                 </div>
+                                <div className="col-sm-6 d-flex">
+                              <div className="col-sm-6">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="doctor"
+                                  >
+                                    Հեռախոս
+                                  </label>
+                                  {methods?.formState.errors.phone && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <CustomPhoneComponent
+                                  name="phone"
+                                  control={methods.control}
+                                />
+                              </div>
+                              {additionalPhone && (
+                                <>
+                                  <div className="col-sm-6">
+                                    <div className="d-flex justify-content-between ">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="addPhone"
+                                      >
+                                        Հեռախոս
+                                      </label>
+                                      {methods?.formState.errors.addPhone && (
+                                        <span className="error text-red">
+                                          <span>
+                                            <img
+                                              src={ErrorSvg}
+                                              alt="errorSvg"
+                                            />
+                                          </span>
+                                          պարտադիր
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="d-flex">
+                                      <CustomPhoneComponent
+                                        name="addPhone"
+                                        control={methods.control}
+                                        required={false}
+                                      />
+                                      <div>
+                                        <FeatherIcon
+                                          icon="minus-circle"
+                                          width="24"
+                                          onClick={(e) =>
+                                            toggleAdditionalPhone(e, false)
+                                          }
+                                          style={{
+                                            cursor: "pointer",
+                                            marginTop: "8px",
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  paddingTop: "41px",
+                                }}
+                              >
+                                {!additionalPhone && (
+                                  <FeatherIcon
+                                    icon="plus-circle"
+                                    width="35"
+                                    onClick={(e) =>
+                                      toggleAdditionalPhone(e, true)
+                                    }
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                )}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

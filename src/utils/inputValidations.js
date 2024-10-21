@@ -894,11 +894,11 @@ export const length_validation = {
     },
   },
 };
-export const padon_validation = {
-  name: "padon",
+export const pallet_validation = {
+  name: "pallet",
   label: "Ծղոտե ներքնակ",
   type: "number",
-  id: "padon",
+  id: "pallet",
   placeholder: "Քանակ",
   validation: {
     required: {
@@ -907,11 +907,11 @@ export const padon_validation = {
     },
   },
 };
-export const liter_validation = {
-  name: "liter",
+export const volume_validation = {
+  name: "volume",
   label: "Լիտր",
   type: "number",
-  id: "liter",
+  id: "volume",
   placeholder: "Լիտր",
   validation: {
     required: {

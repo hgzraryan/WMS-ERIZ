@@ -37,7 +37,7 @@ function UsersTable({
   const [allUsers, setAllUsers] = useState([]); 
   const searchInput = useRef(null);
   const storedUserRoles = JSON.parse(localStorage.getItem('userRoles'));
-  const [superAdmin,setSuperAdmin]=useState(storedUserRoles.includes(ROLES?.SuperAdmin))
+  const [superAdmin,setSuperAdmin]=useState(storedUserRoles?.includes(ROLES?.SuperAdmin))
   // useEffect(() => {
   //     axiosPrivate
   //       .get(USERS_URL)
@@ -240,7 +240,7 @@ function UsersTable({
                   </span>
                 </span>
               </a>
-              <a
+              {/* <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                 data-bs-toggle="tooltip"
                 onClick={() => handleOpenModal(row.original)}
@@ -254,7 +254,9 @@ function UsersTable({
                     <FeatherIcon icon="trash" />
                   </span>
                 </span>
-              </a>
+              </a> */}
+              {/* {!!superAdmin && */}
+
               <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                 data-bs-toggle="tooltip"
@@ -270,9 +272,12 @@ function UsersTable({
                   </span>
                 </span>
               </a>
+              {/* } */}
+
             </div>
           </div>
         ),
+        
         disableSortBy: true,
         width: 150,
         Filter: ({ column: { id } }) => <></>,
