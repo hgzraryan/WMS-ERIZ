@@ -5,10 +5,11 @@ import { Dropdown } from "react-bootstrap";
 import AddProductClass from '../addViews/AddProductClass';
 import useGetData from '../../hooks/useGetData';
 import { PRODUCTCATEGORIES_URL } from '../../utils/constants';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useRefreshData from '../../hooks/useRefreshData';
 import useDeleteData from '../../hooks/useDeleteData';
 import AddProductsList from '../addViews/AddProductsList';
+import ReactPaginate from 'react-paginate';
 
 const customproductsClasses=[
   {
@@ -25,6 +26,7 @@ const customproductsClasses=[
   },
 ]
 function ProductsCategories() {
+  const navigate =useNavigate()
   const { pageNumber } = useParams();
   //const [productsClasses,setProductsClasses] = useState(customproductsClasses)
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +42,8 @@ function ProductsCategories() {
   const {
     data: productCategories,
     setData: setProductCategories,
-    dataCount
+    dataCount,
+    dataReceived
    } = useGetData(PRODUCTCATEGORIES_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
    const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
    const { refreshData,data } = useRefreshData(PRODUCTCATEGORIES_URL, usersPerPage);
@@ -67,6 +70,10 @@ function ProductsCategories() {
     "name",
     refreshData 
   );
+  const handlePageClick = ({ selected: selectedPage }) => {
+    //setCurrentPage(selectedPage);
+    navigate(`/partners/page/${selectedPage+1}`);
+  }
     return (
       <HelmetProvider>
         <Helmet>
@@ -109,6 +116,7 @@ function ProductsCategories() {
         <div className="productsClasses__Wrapper">
           <div className="productsClasses__table">
           {productCategories ? (
+            <>
                     <ProductsCategoriesTable 
                       confirmRef={confirmProductCategoriesRef}
                       selectedItem={selectedItem}
@@ -118,7 +126,24 @@ function ProductsCategories() {
                       handleCloseModal={handleCloseModal}
                       productCategories={productCategories} 
                       setProductCategories={setProductCategories}
-                    />
+                      dataReceived={dataReceived}
+                      />
+                       <ReactPaginate
+                      previousLabel = {"Հետ"}    
+                      nextLabel = {"Առաջ"}
+                      pageCount = {pageCount}
+                      onPageChange = {handlePageClick}
+                      initialPage = {0}
+                      containerClassName={"pagination"}
+                      pageLinkClassName = {"page-link"}
+                      pageClassName = {"page-item"}
+                      previousLinkClassName={"page-link"}
+                      nextLinkClassName={"page-link"}
+                      disabledLinkClassName={"disabled"}
+                      //activeLinkClassName={"active"}
+                      activeClassName={"active"}
+											/>
+                      </>
 
             ) : (
               ""

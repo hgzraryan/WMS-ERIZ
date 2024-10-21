@@ -11,16 +11,11 @@ import {
   street_validation,
   city_validation,
   code_validation,
-  type_validation,
-  balance_validation,
-  storekeeper_validation,
-  subWarehouse_validation,
-  warehouseState_validation,
   email_validation,
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
-import { REGISTER_WAREHOUSE, WAREHOUSES_URL } from "../../utils/constants";
+import { REGISTER_WAREHOUSE, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { toast } from "react-toastify";
 import {
   CountryDropdown,
@@ -32,26 +27,6 @@ import Select from "react-select";
 import { customStyles } from "../customStyles";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const storekeepers=[
-  {
-  label: " Arman Karapetyan",
-  value:12001
-},
-  {
-    label: " Levon Stepanyan",
-    value:12002
-},
-]
-const subWarehouses=[
-  {
-  label: "Abovyan",
-  value:15001
-},
-  {
-    label: "Armavir",
-    value:15002
-},
-]
 const warehouseType=[
   {
     value: "Main",
@@ -96,7 +71,8 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
   const [isLoading, setIsLoading] = useState(false);
   const editorRef = useRef(null);
   const [region, setRegion] = useState("");
-  const [parentWarehouses, setParentWarehouses] = useState("");
+  const [parentWarehouses, setParentWarehouses] = useState([]);
+  const [workers, setWorkers] = useState([]);
 
 
   useEffect(() => {
@@ -111,6 +87,10 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
       try {
         const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
         setParentWarehouses(wareHousesReps?.data?.jsonString);
+
+        const workersReps = await axiosPrivate.get(WORKERS_URL);
+        setWorkers(workersReps?.data?.jsonString);
+
         setIsLoading(false);
       } catch (err) {
         console.log(err);
@@ -157,7 +137,6 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
       name,
       balance,
       storekeeper,
-      subWarehouse,
       addPhone,
       phone,
       salesAllowed
@@ -190,7 +169,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
 
       console.log(newWarehouse);
       try {
-        await axiosPrivate.post(REGISTER_WAREHOUSE, newWarehouse, {
+        await axiosPrivate.post(REGISTER_WAREHOUSE, updatedData, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
@@ -366,13 +345,12 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                             value: 0,
                                             label: "Հիմնական պահեստ",
                                           },
-                                          ...parentWarehouses.map((parent) => ({
+                                          ...parentWarehouses?.map((parent) => ({
                                             value: parent.warehouseId,
                                             label: `${parent?.warehouseId}․  ${parent?.name}`,
                                           }))
                                           ]}
                                           placeholder={"Ընտրել"}
-                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -408,9 +386,15 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={storekeepers}
+                                          options={workers?.map((el)=>(
+
+                                            {                                              
+                                              value:el.workerId,
+                                              label: `${el?.workerId}․  ${el?.fullName}`
+                                            }
+                                          )
+                                      )}
                                           placeholder={"Ընտրել"}
-                                          styles={customStyles}
                                         />
                                       )}
                                     />
@@ -541,7 +525,6 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                                           {...field}
                                           options={salesAllowed}
                                           placeholder={"Ընտրել"}
-                                          styles={customStyles}
                                         />
                                       )}
                                     />

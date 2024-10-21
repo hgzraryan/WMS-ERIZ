@@ -6,6 +6,7 @@ import { PATIENTS__SEARCH_URL } from "../utils/constants";
 const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null,searchParams=null) => {
     const [data, setData] = useState([]);
     const [dataCount, setDataCount] = useState(null);
+    const [dataReceived, setDataReceived] = useState(false);
     const axiosPrivate = useAxiosPrivate();  
     const navigate = useNavigate();  
     const location = useLocation();    
@@ -19,7 +20,7 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
         try {
           const response = await axiosPrivate.post(url,{
             signal: controller.signal,
-            page:(!currentPage || currentPage===0)?1:currentPage,
+            page: currentPage===0?1:currentPage,
             onPage: usersPerPage,
           });
           //console.log(response);
@@ -32,6 +33,7 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
             isMounted &&
               setData((prevUsers) => response.data.jsonString);
               setDataCount(response.data.count)
+              setDataReceived(true)
               //setCurrentPage((prev) => prev + 1);
             } catch (err) {
               console.error(err);
@@ -52,6 +54,7 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
             });
             //console.log('get search data')
             setData(response.data.jsonString);
+            setDataReceived(true)
             //setToggleSearchModal(false)  
             //handleSearchPageCount(response.data.count)    
           }catch (err) {
@@ -64,7 +67,7 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
           isMounted = false;
           controller.abort();
         };
-      }, [url,setData,currentPage,searchCount,searchParams,usersPerPage, axiosPrivate]);
+      }, [url,currentPage,searchCount,searchParams]);
 
       // const getData = async () => {
       //     try {
@@ -128,6 +131,8 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
         data,
         setData,
         dataCount,
+        dataReceived
+
     }
 }
 export default useGetData;

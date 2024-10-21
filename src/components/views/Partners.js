@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { PARTNERS_URL, USERS_URL } from '../../utils/constants';
 import useDeleteData from '../../hooks/useDeleteData';
 import useGetData from '../../hooks/useGetData';
@@ -9,6 +9,7 @@ import { Dropdown } from "react-bootstrap";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import PartnersTable from '../viewTables/PartnersTable';
 import { useNavigate, useParams } from 'react-router-dom';
+import useRefreshData from '../../hooks/useRefreshData';
 
 function Partners() {
     const navigate = useNavigate();
@@ -25,12 +26,14 @@ function Partners() {
       const {
         data: partners,
         setData: setPartners,
-        // hasMore,
-        // checkData,
-        refreshData,
-        dataCount
+        dataCount,
+        dataReceived
       } = useGetData(PARTNERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
       const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
+      const { refreshData,data } = useRefreshData(PARTNERS_URL, usersPerPage,pageNumber);
+      useEffect(()=>{
+        setPartners(data)
+       },[data])
       const handleSearchPageCount = (data) =>{
         setSearchCount(data.count)
         setSearchParams(data.params)
@@ -47,8 +50,8 @@ function Partners() {
         
       );
    const handlePageClick = ({ selected: selectedPage }) => {
-      setCurrentPage(selectedPage);
-      //updateUsersCount();
+    navigate(`/partners/page/${selectedPage+1}`);
+    //updateUsersCount();
   }
     const refreshPage = () => {
       let paglink = document.querySelectorAll(".page-item");
@@ -230,6 +233,7 @@ function Partners() {
                         setPartners={setPartners}
                         //getUsers={getUsers}
                         refreshData={refreshData}
+                        dataReceived={dataReceived}
                       />
                      <ReactPaginate
                       previousLabel = {"Հետ"}    

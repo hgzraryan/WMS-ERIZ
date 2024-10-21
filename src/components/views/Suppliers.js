@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-undef */
 import React, { useEffect, useRef, useState } from 'react'
 import { Dropdown } from "react-bootstrap";
 import { HelmetProvider,Helmet } from 'react-helmet-async'
@@ -9,6 +11,8 @@ import useGetData from '../../hooks/useGetData';
 import useRefreshData from '../../hooks/useRefreshData';
 import { PRODUCTCATEGORIES_URL, SUPPLIERS_ROUTE, SUPPLIERS_URL } from '../../utils/constants';
 import ReactPaginate from 'react-paginate';
+import FeatherIcon from "feather-icons-react";
+
 const customSuppliers = [
     {
         supplierId:13654,
@@ -40,7 +44,7 @@ function Suppliers() {
        const {
         data: suppliers,
         setData: setSuppliers,
-        //refreshData,
+        dataReceived,
         dataCount 
       } = useGetData(SUPPLIERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
@@ -69,8 +73,13 @@ function Suppliers() {
 //       refreshData 
 //     );
 const handlePageClick = ({ selected: selectedPage }) => {
-  navigate(`/workersPositions/page/${selectedPage+1}`);
+  navigate(`/suppliers/page/${selectedPage+1}`);
 }
+const refreshPage = () => {
+  let paglink = document.querySelectorAll(".page-item");
+  paglink[0]?.firstChild.click();
+  refreshData()
+};
   return (
     <HelmetProvider>
     <Helmet>
@@ -109,11 +118,32 @@ const handlePageClick = ({ selected: selectedPage }) => {
           refreshData={() => refreshData()}
         />
       )}
+      <div>
+      <a
+                  className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
+                  href="#"
+                  data-bs-toggle="tooltip"
+                  data-placement="top"
+                  onClick={refreshPage}
+                  title=""
+                  data-bs-original-title="Refresh"
+                >
+                  <span className="icon">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="refresh-cw" />
+                    </span>
+                  </span>
+                </a>
+      </div>
     </section>
     <div className="productsClasses__Wrapper">
       <div className="productsClasses__table">
       {suppliers ? (
         <>
+        <div
+                    id="scrollableDiv"
+                    style={{ height: "80vh", overflow: "auto" }}
+                  >
                 <SuppliersTable 
                   confirmRef={confirmSuppliersRef}
                   selectedItem={selectedItem}
@@ -123,6 +153,7 @@ const handlePageClick = ({ selected: selectedPage }) => {
                   handleCloseModal={handleCloseModal}
                   suppliers={suppliers} 
                   setSuppliers={setSuppliers}
+                  dataReceived={dataReceived}
                   />
 <ReactPaginate
                       previousLabel = {"Հետ"}    
@@ -141,6 +172,7 @@ const handlePageClick = ({ selected: selectedPage }) => {
                       forcePage={currentPage - 1}
                       
 											/>
+                      </div>
                       </>
         ) : (
           ""

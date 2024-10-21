@@ -67,7 +67,7 @@ function IncomingProducts() {
     const {
       data: incomingProducts,
       setData: setIncomingProducts,
-      //refreshData,
+      dataReceived,
       dataCount
     } = useGetData(PRODUCTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
@@ -91,7 +91,7 @@ function IncomingProducts() {
         setCurrentPage(Number(pageNumber));
       }, [pageNumber]);
       const handlePageClick = ({ selected: selectedPage }) => {
-        navigate(`/products/page/${selectedPage+1}`);
+        navigate(`/products/incomingProducts/page/${selectedPage+1}`);
     }
     const refreshPage = () => {
       let paglink = document.querySelectorAll(".page-item");
@@ -203,6 +203,7 @@ function IncomingProducts() {
                           products={incomingProducts}
                           setProducts={setIncomingProducts}
                           refreshData={refreshData}
+                          dataReceived={dataReceived}
                           handleSearchPageCount={(data)=>handleSearchPageCount(data)}
   
                         />

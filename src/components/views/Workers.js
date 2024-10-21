@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom';
 import useRefreshData from '../../hooks/useRefreshData';
-import { USERS_URL, WORKERS_URL } from '../../utils/constants';
+import { WORKERS_URL } from '../../utils/constants';
 import useGetData from '../../hooks/useGetData';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { Dropdown } from "react-bootstrap";
@@ -36,7 +36,7 @@ function Workers() {
     dataCount
   } = useGetData(WORKERS_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
    const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-  const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage,pageNumber);
+  const { refreshData,data } = useRefreshData(WORKERS_URL, usersPerPage,pageNumber);
   useEffect(()=>{
     setWorkers(data)
     },[data])
@@ -58,7 +58,7 @@ function Workers() {
     setCurrentPage(Number(pageNumber));
   }, [pageNumber]);
   const handlePageClick = ({ selected: selectedPage }) => {
-    navigate(`/doctors/list/page/${selectedPage+1}`);
+    navigate(`/workers/workers/page/${selectedPage+1}`);
 }
   //--------------------------------------------------------------//
   // const { handleDeleteItem } = useDeleteData(
@@ -76,7 +76,7 @@ function Workers() {
   const refreshPage = () => {
     let paglink = document.querySelectorAll(".page-item");
     paglink[0]?.firstChild.click();
-    //refreshData()
+    refreshData()
   };
   //-------------------
   return (
@@ -184,7 +184,7 @@ function Workers() {
                       workers={workers}
                       setWorkers={setWorkers}
                       refreshData={refreshData}
-                      // dataReceived={dataReceived}
+                      dataReceived={dataReceived}
                     />
                        <ReactPaginate
                         previousLabel = {"Հետ"}    

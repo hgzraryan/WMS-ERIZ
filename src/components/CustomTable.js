@@ -4,7 +4,7 @@ import { Checkbox } from './Checkbox';
 import emptyTable from "../dist/svg/emptyTable.svg"
 import "../dist/css/data-table.css";
 
-function CustomTable({data,column}) {
+function CustomTable({data,column,dataReceived}) {
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 20,
@@ -109,7 +109,7 @@ function CustomTable({data,column}) {
             )
           })}
         </tbody>
-       ):(
+       ):dataReceived?(
         <tr class="table-placeholder">
           <td class="table-cell" >
             <div class="empty-normal">
@@ -120,7 +120,7 @@ function CustomTable({data,column}) {
             </div>
           </td>
         </tr>
-       )}        
+       ):<></>}       
     </table>
     </>
   )

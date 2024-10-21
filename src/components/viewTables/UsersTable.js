@@ -28,7 +28,8 @@ function UsersTable({
   handleCloseModal,
   users,
   setUsers,
-  refreshData
+  refreshData,
+  dataReceived
 }) {
   const axiosPrivate = useAxiosPrivate();
   const location = useLocation();
@@ -360,7 +361,7 @@ const setUserTypeStyle = (userType) => {
               keyName={selectedItem.username}
               delId={selectedItem.userId}
             />
-            <Table data={users} column={columns}/>
+            <Table data={users} column={columns} dataReceived={dataReceived}/>
 
 
     </>

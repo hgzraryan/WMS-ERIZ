@@ -97,8 +97,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
       password,
       maritalStatus,
     }) => {
-      debugger
-      const newWorker = {
+        const newWorker = {
         fullName: fullName,        
         username:user,
         password:password,

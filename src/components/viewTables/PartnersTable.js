@@ -6,9 +6,9 @@ import Highlighter from "react-highlight-words";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import PartnerEdit from "../editModals/PartnerEdit";
 import ComponentToConfirm from "../ComponentToConfirm";
-import Table from "../Table";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import PartnersInfoModal from "../infoModals/PartnersInfoModal";
+import CustomTable from "../CustomTable";
 
 function PartnersTable({
   confirmPartnerRef,
@@ -20,6 +20,7 @@ function PartnersTable({
   partners,
   setPartners,
   refreshData,
+  dataReceived
 }) {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
@@ -306,7 +307,7 @@ function PartnersTable({
         keyName={selectedItem.name}
         delId={selectedItem.partnerId}
       />
-      <Table data={partners} column={columns} />
+      <CustomTable data={partners} column={columns} dataReceived={dataReceived} />
     </>
   );
 }

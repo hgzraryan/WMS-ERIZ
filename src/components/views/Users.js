@@ -41,7 +41,7 @@ const Users = () => {
   const {
     data: users,
     setData: setUsers,
-   // refreshData,
+   dataReceived,
     dataCount
   } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
@@ -294,16 +294,6 @@ const Users = () => {
                     id="scrollableDiv"
                     style={{ height: "80vh", overflow: "auto" }}
                   >
-                    {/* <InfiniteScroll
-                      dataLength={users.length}
-                      next={() => checkData()}
-                      hasMore={hasMore}
-                      loader={<Loading />}
-                      scrollableTarget="scrollableDiv"
-                      endMessage={
-                        <p>Տվյալներ չեն հայտնաբերվել բեռնելու համար:</p>
-                      }
-                    > */}
                       <UsersTable
                         confirmRef={confirmUserRef}
                         selectedItem={selectedItem}
@@ -314,6 +304,7 @@ const Users = () => {
                         users={users}
                         setUsers={setUsers}
                         //getUsers={getUsers}
+                        dataReceived={dataReceived}
                         refreshData={()=>refreshData()}
                       />
                      <ReactPaginate

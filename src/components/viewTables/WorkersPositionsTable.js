@@ -21,7 +21,8 @@ function WorkersPositionsTable({
     handleCloseModal,
     workerRoles,
     setWorkerRoles,
-    refreshData
+    refreshData,
+    dataReceived
   }) {
     const [editRow, setEditRow] = useState(false);
     const handleOpenEditModal = (value) => {
@@ -135,7 +136,7 @@ function WorkersPositionsTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             />
-                <Table data={workerRoles} column={columns}/>
+                <Table data={workerRoles} column={columns} dataReceived={dataReceived}/>
 
     </>
   )

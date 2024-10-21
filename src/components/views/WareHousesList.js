@@ -201,7 +201,8 @@ function WareHousesList() {
   const {
     data: wareHouses,
     setData: setWarehouses,
-    dataCount
+    dataCount,
+    dataReceived
   } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage,searchCount,null,searchId,searchTerms);
   const { refreshData,data } = useRefreshData(WAREHOUSES_URL, usersPerPage);
   useEffect(()=>{
@@ -769,9 +770,14 @@ function WareHousesList() {
             //   }}
             // />
             <>
+            <div
+                    id="scrollableDiv"
+                    style={{ height: "80vh", overflow: "auto" }}
+                  >
             <CustomTable
             data={currentItems}
             column={productsColumns}
+            dataReceived={dataReceived}
             />
             <ReactPaginate
             previousLabel = {"Հետ"}    
@@ -791,6 +797,7 @@ function WareHousesList() {
             renderOnZeroPageCount={null}
 
             />
+            </div>
             </>
           ) : (
             ""

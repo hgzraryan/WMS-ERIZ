@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import { HelmetProvider,Helmet } from 'react-helmet-async'
-import { Dropdown } from "react-bootstrap";
-import Table from '../Table';
 import ComponentToConfirm from '../ComponentToConfirm';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
+import CustomTable from '../CustomTable';
 
 function ProductsListTable({
     confirmRef,
@@ -14,7 +13,8 @@ function ProductsListTable({
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    productsList}) {
+    productsList,
+    dataReceived}) {
 
         const [modalInfo, setModalInfo] = useState(false);
         const handleOpenInfoModal = (data) => {
@@ -95,7 +95,7 @@ function ProductsListTable({
         keyName={selectedItem.name}
         delId={selectedItem.productsListId}
       />
-      <Table data={productsList} column={columns} />
+      <CustomTable data={productsList} column={columns} dataReceived={dataReceived}/>
     </>
 );
 

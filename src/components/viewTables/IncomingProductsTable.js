@@ -15,7 +15,8 @@ function IncomingProductsTable({
   handleCloseModal,
   products,
   setProducts,
-  refreshData
+  refreshData,
+  dataReceived
 }) {
   const [modalPrint, setModalPrint] = useState("");
   const [modalInfo, setModalInfo] = useState(false);
@@ -161,7 +162,7 @@ function IncomingProductsTable({
        {!!modalPrint && (
         <IncomingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
       )}
-          <CustomTable data={products} column={columns} />
+          <CustomTable data={products} column={columns} dataReceived={dataReceived}/>
 
     </>
   )

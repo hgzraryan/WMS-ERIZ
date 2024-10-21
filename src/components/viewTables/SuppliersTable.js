@@ -12,7 +12,8 @@ function SuppliersTable({suppliers,
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    productCategories}) {
+    productCategories,
+    dataReceived}) {
       const [modalInfo, setModalInfo] = useState(false);
 
       const handleOpenInfoModal = (data) => {
@@ -190,9 +191,9 @@ function SuppliersTable({suppliers,
   return (
     <>
      {!!modalInfo && (
-        <SuppliersInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+        <SuppliersInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo} dataReceived={dataReceived}/>
       )}
-          <CustomTable data={suppliers} column={columns} />
+          <CustomTable data={suppliers} column={columns} dataReceived={dataReceived} />
 
     </>
   )

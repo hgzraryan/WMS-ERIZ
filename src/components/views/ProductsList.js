@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PRODUCTCATEGORIES_URL, PRODUCTSLIST_ROUTE, PRODUCTSLIST_URL } from '../../utils/constants';
 import useRefreshData from '../../hooks/useRefreshData';
 import useGetData from '../../hooks/useGetData';
@@ -9,8 +9,10 @@ import { Dropdown } from "react-bootstrap";
 import useDeleteData from '../../hooks/useDeleteData';
 import AddProductsList from '../addViews/AddProductsList';
 import ComponentToConfirm from '../ComponentToConfirm';
+import ReactPaginate from 'react-paginate';
 function ProductsList() {
     const { pageNumber } = useParams();
+    const navigate = useNavigate()
     //const [productsClasses,setProductsClasses] = useState(customproductsClasses)
     const [isOpen, setIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(Number(pageNumber));
@@ -25,7 +27,8 @@ function ProductsList() {
     const {
       data: productsList,
       setData: setProductsList,
-      dataCount
+      dataCount,
+      dataReceived
      } = useGetData(PRODUCTSLIST_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
      const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
      const { refreshData,data } = useRefreshData(PRODUCTSLIST_URL, usersPerPage);
@@ -36,6 +39,10 @@ function ProductsList() {
         setSelectedItemId(true);
         setSelectedItem((prev) => user);
       };
+      const handlePageClick = ({ selected: selectedPage }) => {
+        //setCurrentPage(selectedPage);
+        navigate(`/products/productsList/${selectedPage+1}`);
+      }
       const handleCloseModal = () => {
         setSelectedItemId(null);
       };
@@ -95,6 +102,7 @@ function ProductsList() {
     <div className="productsClasses__Wrapper">
       <div className="productsClasses__table">
       {productsList ? (
+        <>
                 <ProductsListTable 
                   confirmRef={confirmProductsListRef}
                   selectedItem={selectedItem}
@@ -104,8 +112,24 @@ function ProductsList() {
                   handleCloseModal={handleCloseModal}
                   productsList={productsList} 
                   setProductsList={setProductsList}
+                  dataReceived={dataReceived}
+                  />
+                <ReactPaginate
+                previousLabel = {"Հետ"}    
+                nextLabel = {"Առաջ"}
+                pageCount = {pageCount}
+                onPageChange = {handlePageClick}
+                initialPage = {0}
+                containerClassName={"pagination"}
+                pageLinkClassName = {"page-link"}
+                pageClassName = {"page-item"}
+                previousLinkClassName={"page-link"}
+                nextLinkClassName={"page-link"}
+                disabledLinkClassName={"disabled"}
+                //activeLinkClassName={"active"}
+                activeClassName={"active"}
                 />
-
+                </>
         ) : (
           ""
         )}

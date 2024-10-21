@@ -417,7 +417,7 @@ function AddOutgoingProduct({
                     <div className="separator-full"></div>
                     <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
 
-                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} />
+                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true}/>
                     </div>
                   </>:<></>
                   }

@@ -26,7 +26,8 @@ function ProductsClassesTable({
   handleDeleteItem,
   handleOpenModal,
   handleCloseModal,
-  productCategories}) {
+  productCategories,
+  dataReceived}) {
   const [modalData, setModalData] = useState(false);
 
   const handleOpenInfoModal = (data) => {
@@ -175,43 +176,8 @@ function ProductsClassesTable({
         keyName={selectedItem.name}
         delId={selectedItem.categoryId}
       />
-          <CustomTable data={productCategories} column={columns1} />
-          {/* <table {...getTableProps()} style={{ width: '60%', borderCollapse: 'collapse' }}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()} style={{ borderBottom: '1px solid #ddd' }}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()} style={{ padding: '8px', textAlign: 'left' }}>
-                {column.render('Header')}
-              </th>
-            ))} 
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <React.Fragment key={row.id}>
-              <tr {...row.getRowProps()} style={{ borderBottom: '1px solid #ddd' }}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    style={{
-                      padding: '8px',
-                      paddingLeft: `${row.depth * 20}px`, // Indentation based on depth
-                    }}
-                  >
-                    {cell.render('Cell')}
-                  </td>
-                ))}
-              </tr>
-            </React.Fragment>
-          );
-        })}
-      </tbody>
-    </table> */}
-
+          <CustomTable data={productCategories} column={columns1} dataReceived={dataReceived} />
+        
     </>
   )
 }

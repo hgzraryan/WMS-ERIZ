@@ -1,7 +1,7 @@
 {
   "name": "ERP_VTEAM_CLIENT",
   "version": "0.1.0",
-  "revision": "171024",
+  "revision": "221024",
   "private": true,
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.17.4",

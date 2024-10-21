@@ -5,6 +5,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Table from '../Table';
 import WorkersEdit from '../editModals/WorkersEdit';
 import WorkersInfoModal from '../infoModals/WorkersInfoModal';
+import CustomTable from '../CustomTable';
 
 function WorkersTable({
     confirmRef,
@@ -15,7 +16,8 @@ function WorkersTable({
     handleCloseModal,
     workers,
     setWorkers,
-    refreshData
+    refreshData,
+    dataReceived
   }) {
     const [editRow, setEditRow] = useState(false);
     const [modalInfo, setModalInfo] = useState(false);
@@ -194,7 +196,7 @@ function WorkersTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             /> */}
-                <Table data={workers} column={columns}/>
+                <CustomTable data={workers} column={columns} dataReceived={dataReceived}/>
     </>
   )
 }

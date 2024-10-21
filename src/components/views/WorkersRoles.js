@@ -252,6 +252,8 @@ function WorkersRoles() {
                         handleCloseModal={handleCloseModal}
                         workerRoles={workerRoles}
                         setWorkerRoles={setWorkerRoles}
+                        dataReceived={dataReceived}
+
                         // refreshData={refreshData}
                       />
                      <ReactPaginate

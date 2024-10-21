@@ -681,7 +681,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                 <div className="col-sm-12">
                               <Editor
                                 apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
+                                 onInit={(evt, editor) =>
                                   (editorRef.current = editor)
                                 }                                
                                 init={{
