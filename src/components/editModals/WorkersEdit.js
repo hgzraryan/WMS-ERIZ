@@ -226,7 +226,7 @@ const onGenderSelect = (event) => {
     >
       <Modal.Header closeButton>
         <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ավելացնել նոր աշխատակից
+          Թարմացնել աշխատակցի տվյալները
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import "../../dist/css/data-table.css";
@@ -117,11 +118,11 @@ function OutgoingProductsTable({
               width: 150,
               Cell: ({ row }) => (
                 <div className="d-flex align-items-center">
-                  <BiSolidInfoCircle
+                  {/* <BiSolidInfoCircle
                 cursor={"pointer"}
                 size={"1.5rem"}
                 //onClick={() => handleOpenInfoModal(row.original)}
-              />
+              /> */}
                   <div className="d-flex">
                   
                   <a

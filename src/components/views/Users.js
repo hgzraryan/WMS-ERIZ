@@ -25,7 +25,7 @@ const Users = () => {
   const navigate = useNavigate();
   const confirmUserRef = useRef("");
   const [isOpen, setIsOpen] = useState(false);
-  const [users, setUsers] = useState([]);
+ // const [users, setUsers] = useState([]);
   const [isOpenRole, setIsOpenRole] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -36,77 +36,79 @@ const Users = () => {
   const [searchParams,setSearchParams] = useState(null)
   const axiosPrivate = useAxiosPrivate();   
   const location = useLocation();   
-  const [dataCount, setDataCount] = useState(null);
+ // const [dataCount, setDataCount] = useState(null);
 
-  // const {
-  //   data: users,
-  //   setData: setUsers,
-  //   refreshData,
-  //   dataCount
-  // } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+  const {
+    data: users,
+    setData: setUsers,
+   // refreshData,
+    dataCount
+  } = useGetData(USERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) : Math.ceil(dataCount/usersPerPage)
   const { refreshData,data } = useRefreshData(USERS_URL, usersPerPage);
-
+  useEffect(()=>{
+    setUsers(data)
+    },[data])
   //-------------------
-  const handleSearchPageCount = (data) =>{
-    setSearchCount(data.count)
-    setSearchParams(data.params)
-  }
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-if(!searchCount){
+  // const handleSearchPageCount = (data) =>{
+  //   setSearchCount(data.count)
+  //   setSearchParams(data.params)
+  // }
+//   useEffect(() => {
+//     let isMounted = true;
+//     const controller = new AbortController();
+// if(!searchCount){
 
-  const getData = async () => {
-    try {
-      const response = await axiosPrivate.post(USERS_URL,{
-        signal: controller.signal,
-        page: currentPage===0?1:currentPage,
-        onPage: usersPerPage,
-      });
-      //console.log(response);
-      // if (
-        //   response.data.jsonString.length === 0 ||
-        //   response.data.jsonString.length < onPageCount
-        // ) {
-          //   setHasMore(false);
-        // }
-        isMounted &&
-          setUsers((prevUsers) => response.data.jsonString);
-          setDataCount(response.data.count)
-          //setCurrentPage((prev) => prev + 1);
-        } catch (err) {
-          console.error(err);
-          navigate("/login", { state: { from: location }, replace: true });
-        }
-      };
+//   const getData = async () => {
+//     try {
+//       const response = await axiosPrivate.post(USERS_URL,{
+//         signal: controller.signal,
+//         page: currentPage===0?1:currentPage,
+//         onPage: usersPerPage,
+//       });
+//       //console.log(response);
+//       // if (
+//         //   response.data.jsonString.length === 0 ||
+//         //   response.data.jsonString.length < onPageCount
+//         // ) {
+//           //   setHasMore(false);
+//         // }
+//         isMounted &&
+//           setUsers((prevUsers) => response.data.jsonString);
+//           setDataCount(response.data.count)
+//           //setCurrentPage((prev) => prev + 1);
+//         } catch (err) {
+//           console.error(err);
+//           navigate("/login", { state: { from: location }, replace: true });
+//         }
+//       };
       
-      getData();
+//       getData();
       
-    }else{
-      const getData = async () => {
-      // try {
-      //   const response = await axiosPrivate.post(searchUrl, {
-      //     params: searchParams,
-      //     page: currentPage===0?1:currentPage,
-      //     onPage: usersPerPage,
-      //     signal: controller.signal
-      //   });
-      //   //console.log('get search data')
-      //   setData(response.data.jsonString);
-      //   //setToggleSearchModal(false)  
-      //   //handleSearchPageCount(response.data.count)    
-      // }catch (err) {
-      //   console.error(err);
-      // }  
-    }; 
-    getData()
-    }
-      return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [currentPage,searchCount,searchParams,setUsers]);
+//     }else{
+//       const getData = async () => {
+//       // try {
+//       //   const response = await axiosPrivate.post(searchUrl, {
+//       //     params: searchParams,
+//       //     page: currentPage===0?1:currentPage,
+//       //     onPage: usersPerPage,
+//       //     signal: controller.signal
+//       //   });
+//       //   //console.log('get search data')
+//       //   setData(response.data.jsonString);
+//       //   //setToggleSearchModal(false)  
+//       //   //handleSearchPageCount(response.data.count)    
+//       // }catch (err) {
+//       //   console.error(err);
+//       // }  
+//     }; 
+//     getData()
+//     }
+//       return () => {
+//       isMounted = false;
+//       controller.abort();
+//     };
+//   }, [currentPage,searchCount,searchParams,setUsers]);
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     USERS_URL,
     confirmUserRef,
@@ -186,7 +188,7 @@ if(!searchCount){
                   {isOpen && (
                     <CreateUser
                       setIsOpen={setIsOpen}
-                      //refreshData={() => refreshData()}
+                      refreshData={() => refreshData()}
                       updateUsersCount={updateUsersCount}
                     />
                   )}
@@ -312,7 +314,7 @@ if(!searchCount){
                         users={users}
                         setUsers={setUsers}
                         //getUsers={getUsers}
-                        refreshData={refreshData}
+                        refreshData={()=>refreshData()}
                       />
                      <ReactPaginate
                       previousLabel = {"Հետ"}    

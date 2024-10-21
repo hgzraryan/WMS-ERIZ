@@ -123,11 +123,11 @@ function IncomingProductsTable({
             width: 250,
             Cell: ({ row }) => (
               <div className="d-flex align-items-center">
-                <BiSolidInfoCircle
+                {/* <BiSolidInfoCircle
               cursor={"pointer"}
               size={"1.5rem"}
               onClick={() => handleOpenInfoModal(row.original)}
-            />
+            /> */}
                 <div className="d-flex">
                 
                 <a
