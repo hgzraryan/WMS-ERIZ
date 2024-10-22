@@ -190,10 +190,10 @@ const Login = () => {
                                               />
                                           </div>
                                           <div className="form-group col-lg-12">
-                                              <div className="form-label-group">
+                                              {/* <div className="form-label-group">
                                                   <label>Ծածկագիր</label>
                                                   <a href="/reset-password" className="fs-7 fw-medium">Մոռացել ե՞ք ծածկագիրը</a>
-                                              </div>
+                                              </div> */}
                                               <div className="input-group password-check">
                                                   <span className="input-affix-wrapper affix-wth-text">
                                                   <input className="form-control" placeholder="Մուտքագրել ծածկագիրը" 

@@ -20,135 +20,7 @@ import CustomTable from "../CustomTable";
 import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
-
-const data1 = [
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 80,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 13500,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 15000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Բալ",
-    purchaseDate: "12-05-2024",
-    count: 2000,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 2600,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 2600,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 2600,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 2600,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-  {
-    productId: 21003,
-    name: "Խնձոր",
-    purchaseDate: "12-05-2024",
-    count: 2600,
-    unit: "կիլոգրամ",
-    productionDate: "-",
-    expiredDate: "-",
-  },
-];
+import moment from "moment";
 
 function WareHousesList() {
   const axiosPrivate = useAxiosPrivate();  
@@ -172,31 +44,8 @@ function WareHousesList() {
   const [itemsPerPage, setItemsPerPage] = useState(Math.round(window.innerHeight / 100));
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
-  const currentItems = data1.slice(itemOffset, endOffset);
+  const currentItems = wareHouseData.slice(itemOffset, endOffset);
 
-  // const customWarehouse = [
-  //   {
-  //     key: 1,
-  //     name: 'Մասիս',
-  //     age: 60,
-  //     address: 'New York No. 1 Lake Park',
-  //     children: [
-  //       {
-  //         key: 11,
-  //         name: 'Սառնարան',
-  //         phone: 1215,
-  //         address: 'Մասիս 1',
-  //       },
-  //       {
-  //         key: 12,
-  //         name: 'Չոր պահեստ',
-  //         phone: 1216,
-  //         address: 'Մասիս 2',
-  //       },
-  //     ],
-  //   },
-   
-  // ]
   const {
     data: wareHouses,
     setData: setWarehouses,
@@ -347,7 +196,6 @@ function WareHousesList() {
   const handleShowWareHouse = async (record, index) => {
     
     if(!record?.children?.length){
-      //setWareHouseData(data1);
       
       const getData = async () => {
         try {
@@ -363,7 +211,6 @@ function WareHousesList() {
     getData()
     console.log(record)
     console.log(index)
-    // setWareHouseDetails(dat);
   }else{
     return
   }
@@ -555,22 +402,40 @@ function WareHousesList() {
       Header: "Անվանում",
       accessor: "name",
       width: 200,
-      ...getColumnSearchProps("name"),
+    },
+    {
+      Header: "Գին",
+      accessor: "price",
+      width: 100,
     },
     {
       Header: "Քանակ",
-      accessor: "count",
+      accessor: "quantity",
+      Cell: ({ row }) => (
+        <div className="d-flex align-items-center">
+        {row?.dimension?.weight?row.original?.dimension?.weight:row.original?.volume}         
+        </div>
+      ),
       width: 100,
-      sorter: (a, b) => a.count - b.count,
     },
     {
       Header: "Չափման միավոր",
       accessor: "unit",
+      Cell: ({ row }) => (
+        <div className="d-flex align-items-center">
+        {row?.dimension?.weight?'կգ':'լիտր'}         
+        </div>
+      ),
       width: 150,
     },
     {
       Header: "Գնման ամսաթիվ",
-      accessor: "purchaseDate",
+      accessor: "createdAt",
+      Cell: ({ row }) => (
+        <div className="d-flex align-items-center">
+        {moment(row.original.createdAt).format('DD-MM-YYYY HH:mm')}         
+        </div>
+      ),
       width: 180,
     },
     {
@@ -584,17 +449,15 @@ function WareHousesList() {
       width: 180,
     },
     {
-      Header: "Գործողություններ",
-      accessor: "actions",
-      width: 200,
-      render: (_, record) => (
-        <Space size="middle" 
-        //onClick={console.log(record)}
-        >
-          <FeatherIcon icon="edit" width={20} />
-        </Space>
-      ),
+      Header: "Մատակարար",
+      accessor: "supplier",
+      width: 180,
     },
+    // {
+    //   Header: "Գործողություններ",
+    //   accessor: "actions",
+    //   width: 200,
+    // },
   ]);
   //resize column
   const handleResize =
@@ -624,7 +487,7 @@ function WareHousesList() {
 
   const handlePageClick = (event) => {
     console.log(event)
-    const newOffset = (event.selected * itemsPerPage) % data1.length;
+    const newOffset = (event.selected * itemsPerPage) % currentItems.length;
     console.log(
       `User requested page number ${event.selected}, which is offset ${newOffset}`
     );
@@ -780,7 +643,7 @@ function WareHousesList() {
                     style={{ height: "80vh", overflow: "auto" }}
                   >
             <CustomTable
-            data={wareHouseData}
+            data={currentItems}
             column={productsColumns}
             dataReceived={dataReceived}
             />
