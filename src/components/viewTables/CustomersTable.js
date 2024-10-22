@@ -3,8 +3,8 @@ import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import React, { useMemo, useState } from 'react'
 import { BiSolidInfoCircle } from "react-icons/bi";
 import ComponentToConfirm from '../ComponentToConfirm';
-import Table from '../Table';
 import CustomerEdit from '../editModals/CustomerEdit';
+import CustomTable from '../CustomTable';
 
 function CustomersTable({
     confirmRef,
@@ -184,7 +184,7 @@ function CustomersTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             />
-                <Table data={customers} column={columns}/>
+                <CustomTable data={customers} column={columns} dataReceived={true}/>
 
     </>
   )

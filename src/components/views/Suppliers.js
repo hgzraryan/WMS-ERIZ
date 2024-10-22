@@ -41,6 +41,8 @@ function Suppliers() {
        const [selectedItem, setSelectedItem] = useState("");
        const [selectedItemId, setSelectedItemId] = useState(null);
        const confirmSuppliersRef = useRef("");
+
+//-------------------------GetData---------------------------//  
        const {
         data: suppliers,
         setData: setSuppliers,
@@ -52,6 +54,7 @@ function Suppliers() {
     useEffect(()=>{
       setSuppliers(data)
       },[data])
+
        const handleOpenModal = (user) => {
         setSelectedItemId(true);
         setSelectedItem((prev) => user);
@@ -72,9 +75,17 @@ function Suppliers() {
 //       "name",
 //       refreshData 
 //     );
+
+//-------------------------PAGINATION---------------------------//  
+useEffect(() => {
+  setCurrentPage(Number(pageNumber));
+}, [pageNumber]);
 const handlePageClick = ({ selected: selectedPage }) => {
-  navigate(`/suppliers/page/${selectedPage+1}`);
+  navigate(`/companies/suppliers/page/${selectedPage+1}`);
 }
+
+//-------------------------refreshPage---------------------------//  
+
 const refreshPage = () => {
   let paglink = document.querySelectorAll(".page-item");
   paglink[0]?.firstChild.click();

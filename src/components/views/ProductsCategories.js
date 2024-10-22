@@ -38,28 +38,31 @@ function ProductsCategories() {
      const [selectedItem, setSelectedItem] = useState("");
      const [selectedItemId, setSelectedItemId] = useState(null);
      const confirmProductCategoriesRef = useRef("");
+//-------------------------GetData-----------------------------------//  
+const {
+  data: productCategories,
+  setData: setProductCategories,
+  dataCount,
+  dataReceived
+} = useGetData(PRODUCTCATEGORIES_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
+const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
+const { refreshData,data } = useRefreshData(PRODUCTCATEGORIES_URL, usersPerPage);
+useEffect(()=>{
+  setProductCategories(data)
+},[data])
 
-  const {
-    data: productCategories,
-    setData: setProductCategories,
-    dataCount,
-    dataReceived
-   } = useGetData(PRODUCTCATEGORIES_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
-   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-   const { refreshData,data } = useRefreshData(PRODUCTCATEGORIES_URL, usersPerPage);
-   useEffect(()=>{
-    setProductCategories(data)
-     },[data])
-     const handleOpenModal = (user) => {
-      setSelectedItemId(true);
-      setSelectedItem((prev) => user);
-    };
-    const handleCloseModal = () => {
-      setSelectedItemId(null);
-    };
-  const handleToggleCreateModal = (value) => {
-    setIsOpen((prev) => value);
-  };
+const handleOpenModal = (user) => {
+ setSelectedItemId(true);
+ setSelectedItem((prev) => user);
+};
+const handleCloseModal = () => {
+ setSelectedItemId(null);
+};
+const handleToggleCreateModal = (value) => {
+setIsOpen((prev) => value);
+};
+//-------------------------DeleteData-----------------------------------//  
+
   const { handleDeleteItem } = useDeleteData(
     PRODUCTCATEGORIES_URL,
     confirmProductCategoriesRef,
@@ -70,10 +73,18 @@ function ProductsCategories() {
     "name",
     refreshData 
   );
+//-------------------------PAAGINATION-----------------------------------//  
   const handlePageClick = ({ selected: selectedPage }) => {
     //setCurrentPage(selectedPage);
-    navigate(`/partners/page/${selectedPage+1}`);
+    navigate(`products/productsCategories/page/${selectedPage+1}`);
   }
+  //-------------------------refreshPage-----------------------------------//  
+
+  const refreshPage = () => {
+   let paglink = document.querySelectorAll(".page-item");
+   paglink[0]?.firstChild.click();
+   refreshData()
+ };
     return (
       <HelmetProvider>
         <Helmet>

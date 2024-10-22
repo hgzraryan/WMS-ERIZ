@@ -630,11 +630,9 @@ function WareHousesList() {
       onResize: handleResize(index),
     }),
   }));
-  const refreshPage = () => {
-    let paglink = document.querySelectorAll(".page-item");
-    paglink[0]?.firstChild.click();
-    refreshData()
-  };
+
+  //-------------------------PAGINATION-----------------------------------//  
+
   const handlePageClick = (event) => {
     console.log(event)
     const newOffset = (event.selected * itemsPerPage) % data1.length;
@@ -642,6 +640,13 @@ function WareHousesList() {
       `User requested page number ${event.selected}, which is offset ${newOffset}`
     );
     setItemOffset(newOffset);
+  };
+
+   //-------------------------refreshPage-----------------------------------//  
+  const refreshPage = () => {
+    let paglink = document.querySelectorAll(".page-item");
+    paglink[0]?.firstChild.click();
+    refreshData()
   };
   return (
     <HelmetProvider>

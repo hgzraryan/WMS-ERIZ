@@ -16,7 +16,7 @@ import {
 } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {  toast } from 'react-toastify';
-import { REGISTER_USER } from "../../utils/constants";
+import { REGISTER_USER, ROLES } from "../../utils/constants";
 import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
 import CustomDateComponent from "../CustomDateComponent";
@@ -27,12 +27,6 @@ import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-countr
 import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
 
-const roleState = [
-    { label:'Ադմին',name: "Admin", value: 5150 },
-    { label:'Հաստատող',name: "Approver", value: 3345 },
-    { label:'Փոփոխող',name: "Editor", value: 1984 },
-    { label:'Օգտատեր',name: "User", value: 2001 },
-  ]
 function CreateUser({ setIsOpen,refreshData }) {
   const [errMsg, setErrMsg] = useState("");
   const axiosPrivate = useAxiosPrivate();
@@ -638,7 +632,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                           {...field}                                          
                                           closeMenuOnSelect={true}
                                           components={animatedComponents}
-                                          options={roleState}
+                                          options={ROLES}
                                           styles={customStyles}
                                           placeholder={"Ընտրել"}
                                           menuPlacement="top"

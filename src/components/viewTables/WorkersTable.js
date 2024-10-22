@@ -2,7 +2,6 @@
 import React, { useMemo, useState } from 'react'
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import Table from '../Table';
 import WorkersEdit from '../editModals/WorkersEdit';
 import WorkersInfoModal from '../infoModals/WorkersInfoModal';
 import CustomTable from '../CustomTable';

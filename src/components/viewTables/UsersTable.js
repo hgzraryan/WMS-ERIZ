@@ -16,8 +16,7 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import { ROLES, USERS_URL } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import Table from "../Table";
-
+import CustomTable from "../CustomTable";
 
 function UsersTable({
   confirmRef,
@@ -361,7 +360,7 @@ const setUserTypeStyle = (userType) => {
               keyName={selectedItem.username}
               delId={selectedItem.userId}
             />
-            <Table data={users} column={columns} dataReceived={dataReceived}/>
+            <CustomTable data={users} column={columns} dataReceived={dataReceived}/>
 
 
     </>

@@ -494,8 +494,8 @@ const MainTemplate = () => {
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="productsClasses" || location.pathname==="/products/productsClasses"?"nav-link active":"nav-link"} to="./products/productsClasses/1"
-                                                        onClick={()=>handleSubmenuClick("products","productsClasses")}>
+                                                        <Link className={sisActive1==="productsCategories" || location.pathname==="/products/productsCategories"?"nav-link active":"nav-link"} to="./products/productsCategories/1"
+                                                        onClick={()=>handleSubmenuClick("products","productsCategories")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>

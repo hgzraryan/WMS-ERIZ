@@ -6,29 +6,21 @@ import { Editor } from "@tinymce/tinymce-react";
 import ErrorSvg from "../../dist/svg/error.svg";
 import { Input } from "../Input";
 import {
-  barcode_validation,
-  CountryOfOrigin_validation,
-  height_validation,
-  length_validation,
   volume_validation,
-  minCountWarning_validation,
-  name_validation,
   pallet_validation,
   Quantity_validation,
   reorderLevel_validation,
   Weight_validation,
-  width_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
-import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
+import { CountryDropdown,CountryRegionData  } from 'react-country-region-selector';
 import AddProductsList from "./AddProductsList";
-import { color } from "framer-motion";
 import moment from "moment";
 
 const customproductsClasses = [

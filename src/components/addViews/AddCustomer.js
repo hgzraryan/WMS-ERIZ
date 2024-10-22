@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { deleteNullProperties } from "../../utils/helper";
-import { LEGALFORMS_URL, REGISTER_CUSTOMER, REGISTER_PARTNER } from "../../utils/constants";
+import { LEGALFORMS_URL, REGISTER_CUSTOMER } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";

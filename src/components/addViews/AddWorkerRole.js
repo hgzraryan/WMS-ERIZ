@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Modal } from "react-bootstrap";
 import { REGISTER_WORKERROLE } from '../../utils/constants';
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import { name_validation, status_validation } from '../../utils/inputValidations';
+import { name_validation } from '../../utils/inputValidations';
 import { Input } from '../Input';
 import { Editor } from '@tinymce/tinymce-react';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";

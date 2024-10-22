@@ -38,6 +38,7 @@ const Users = () => {
   const location = useLocation();   
  // const [dataCount, setDataCount] = useState(null);
 
+//-------------------------GetData-----------------------------------//  
   const {
     data: users,
     setData: setUsers,
@@ -109,6 +110,8 @@ const Users = () => {
 //       controller.abort();
 //     };
 //   }, [currentPage,searchCount,searchParams,setUsers]);
+
+//-------------------------DeleteData-----------------------------------//  
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     USERS_URL,
     confirmUserRef,
@@ -118,18 +121,7 @@ const Users = () => {
     refreshData
     
   );
-  
-  useEffect(() => {
-    setCurrentPage(Number(pageNumber));
-  }, [pageNumber]);
-  const handlePageClick = ({ selected: selectedPage }) => {
-    navigate(`/users/users/page/${selectedPage+1}`);
-}
-  const refreshPage = () => {
-    let paglink = document.querySelectorAll(".page-item");
-    paglink[0]?.firstChild.click();
-    refreshData()
-  };
+
   const handleOpenModal = (user) => {
     setSelectedItemId(true);
     setSelectedItem((prev) => user);
@@ -137,8 +129,21 @@ const Users = () => {
   const handleCloseModal = () => {
     setSelectedItemId(null);
   };	
-	//-------------------------
-   
+//-------------------------PAGINATION-----------------------------------//  
+
+  useEffect(() => {
+    setCurrentPage(Number(pageNumber));
+  }, [pageNumber]);
+  const handlePageClick = ({ selected: selectedPage }) => {
+    navigate(`/users/users/page/${selectedPage+1}`);
+}
+ //-------------------------refreshPage-----------------------------------//  
+
+  const refreshPage = () => {
+    let paglink = document.querySelectorAll(".page-item");
+    paglink[0]?.firstChild.click();
+    refreshData()
+  };   
   return (
     <HelmetProvider>
 

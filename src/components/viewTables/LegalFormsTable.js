@@ -5,8 +5,8 @@ import { BiSolidInfoCircle } from "react-icons/bi";
 import { Checkbox } from '../Checkbox';
 import emptyTable from "../../dist/svg/emptyTable.svg"
 import ComponentToConfirm from '../ComponentToConfirm';
-import Table from '../Table';
 import LegalFormEdit from '../editModals/LegalFormEdit';
+import CustomTable from '../CustomTable';
 
 function LegalFormsTable({confirmRef,
     selectedItem,
@@ -120,7 +120,7 @@ function LegalFormsTable({confirmRef,
               keyName={selectedItem.name}
               delId={selectedItem.legalformId}
             />
-        <Table data={legalForms} column={columns}/>
+        <CustomTable data={legalForms} column={columns}/>
     </>
   )
 }

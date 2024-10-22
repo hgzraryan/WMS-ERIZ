@@ -23,7 +23,8 @@ function ProductsList() {
        const [selectedItem, setSelectedItem] = useState("");
        const [selectedItemId, setSelectedItemId] = useState(null);
        const confirmProductsListRef = useRef("");
-  
+
+//-------------------------GetData---------------------------//  
     const {
       data: productsList,
       setData: setProductsList,
@@ -39,26 +40,37 @@ function ProductsList() {
         setSelectedItemId(true);
         setSelectedItem((prev) => user);
       };
-      const handlePageClick = ({ selected: selectedPage }) => {
-        //setCurrentPage(selectedPage);
-        navigate(`/products/productsList/${selectedPage+1}`);
-      }
       const handleCloseModal = () => {
         setSelectedItemId(null);
       };
-    const handleToggleCreateModal = (value) => {
-      setIsOpen((prev) => value);
-    };
-    const { handleDeleteItem } = useDeleteData(
+      const handleToggleCreateModal = (value) => {
+        setIsOpen((prev) => value);
+      };
+//-------------------------DeleteData---------------------------// 
+      const { handleDeleteItem } = useDeleteData(
         PRODUCTSLIST_URL,
         confirmProductsListRef,
-      selectedItem,
-      setSelectedItemId,
-      productsList,
-      setProductsList,
-      "name",
-      refreshData 
+        selectedItem,
+        setSelectedItemId,
+        productsList,
+        setProductsList,
+        "name",
+        refreshData 
     );
+    //-------------------------PAGINATION---------------------------//  
+    useEffect(() => {
+      setCurrentPage(Number(pageNumber));
+    }, [pageNumber]);
+    const handlePageClick = ({ selected: selectedPage }) => {
+      navigate(`/products/productsList/${selectedPage+1}`);
+    }
+     //-------------------------refreshPage-----------------------------------//  
+
+     const refreshPage = () => {
+      let paglink = document.querySelectorAll(".page-item");
+      paglink[0]?.firstChild.click();
+      refreshData()
+    };
   return (
     <HelmetProvider>
     <Helmet>

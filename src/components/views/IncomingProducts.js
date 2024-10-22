@@ -64,6 +64,7 @@ function IncomingProducts() {
       setSearchCount(data.count)
       setSearchParams(data.params)
     }
+    //-------------------------GetData---------------------------//  
     const {
       data: incomingProducts,
       setData: setIncomingProducts,
@@ -86,13 +87,15 @@ function IncomingProducts() {
       "name",
       refreshData 
     );
-      //-------------------------PAGINATION---------------------------//  
+//-------------------------PAGINATION---------------------------//  
       useEffect(() => {
         setCurrentPage(Number(pageNumber));
       }, [pageNumber]);
       const handlePageClick = ({ selected: selectedPage }) => {
         navigate(`/products/incomingProducts/page/${selectedPage+1}`);
     }
+//-------------------------refreshPage---------------------------//  
+
     const refreshPage = () => {
       let paglink = document.querySelectorAll(".page-item");
       paglink[0]?.firstChild.click();

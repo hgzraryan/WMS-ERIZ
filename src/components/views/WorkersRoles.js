@@ -25,6 +25,7 @@ function WorkersRoles() {
   const [searchCount,setSearchCount] = useState(null)
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
+
   const handleToggleCreateModal = (value) => {
     setIsOpen((prev) => value);
   };
@@ -33,6 +34,7 @@ function WorkersRoles() {
     setSearchTerms(searchTerms)
     setSearchId(id)
   }
+//-------------------------GetData---------------------------//    
   const {
     data: workerRoles,
     setData: setWorkerRoles,
@@ -44,8 +46,8 @@ function WorkersRoles() {
   useEffect(()=>{
     setWorkerRoles(data)
     },[data])
-  //-------------------
-  
+
+//-------------------------DeleteData---------------------------//    
   const { handleDeleteItem,updateUsersCount } = useDeleteData(
     WORKERSROLES_URL,
     confirmWPRef,
@@ -56,20 +58,7 @@ function WorkersRoles() {
     "name",
     refreshData
     
-  );
-  
-    //-------------------------PAGINATION---------------------------//  
-    useEffect(() => {
-      setCurrentPage(Number(pageNumber));
-    }, [pageNumber]);
-    const handlePageClick = ({ selected: selectedPage }) => {
-      navigate(`/workersPositions/page/${selectedPage+1}`);
-  }
-  const refreshPage = () => {
-    let paglink = document.querySelectorAll(".page-item");
-    paglink[0]?.firstChild.click();
-    //refreshData()
-  };
+  );  
   const handleOpenModal = (user) => {
     setSelectedItemId(true);
     setSelectedItem((prev) => user);
@@ -77,7 +66,21 @@ function WorkersRoles() {
   const handleCloseModal = () => {
     setSelectedItemId(null);
   };	
-	//-------------------------
+//-------------------------PAGINATION---------------------------//  
+    useEffect(() => {
+      setCurrentPage(Number(pageNumber));
+    }, [pageNumber]);
+    const handlePageClick = ({ selected: selectedPage }) => {
+      navigate(`/workers/roles/page/${selectedPage+1}`);
+  }
+//-------------------------refreshPage---------------------------//  
+
+  const refreshPage = () => {
+    let paglink = document.querySelectorAll(".page-item");
+    paglink[0]?.firstChild.click();
+    refreshData()
+  };
+  
   return (
     <>
     <HelmetProvider>
@@ -259,7 +262,7 @@ function WorkersRoles() {
                      <ReactPaginate
                       previousLabel = {"Հետ"}    
                       nextLabel = {"Առաջ"}
-                      pageCount = {1}
+                      pageCount = {pageCount}
                       onPageChange = {handlePageClick}
                       //initialPage = {0}
                       containerClassName={"pagination"}

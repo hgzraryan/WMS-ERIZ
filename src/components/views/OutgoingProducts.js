@@ -28,10 +28,8 @@ function OutgoingProducts() {
     const [productCategories, setProductCategories] = useState([]);
     const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));
     const [currentPage, setCurrentPage] = useState(Number(pageNumber));
-    const [selectedItem, setSelectedItem] = useState("");
-  
-    const [selectedItemId, setSelectedItemId] = useState(null);
-  
+    const [selectedItem, setSelectedItem] = useState("");  
+    const [selectedItemId, setSelectedItemId] = useState(null);  
     const confirmAgentsRef = useRef("");
   
     useEffect(() => {
@@ -49,6 +47,7 @@ function OutgoingProducts() {
         fetchData();
       }, 500);
     }, [navigate]);
+
     const handleToggleCreateModal = (value) => {
       setIsOpen((prev) => value);
     };
@@ -61,11 +60,12 @@ function OutgoingProducts() {
     };
   const handleToggleExportModal = (value) => {
       setToggleExport((prev) => value);
-    };
+    };    
     const handleSearchPageCount = (data) =>{
       setSearchCount(data.count)
       setSearchParams(data.params)
     }
+//-------------------------GetData---------------------------//  
     const {
       data: outgoingProducts,
       setData: setOutgoingProducts,
@@ -77,7 +77,8 @@ function OutgoingProducts() {
     useEffect(()=>{
         setOutgoingProducts(data)
       },[data])
-      
+//-------------------------DeleteData---------------------------//  
+
     const { handleDeleteItem } = useDeleteData(
       PRODUCTS_URL,
       confirmAgentsRef,
@@ -88,13 +89,15 @@ function OutgoingProducts() {
       "name",
       refreshData 
     );
-      //-------------------------PAGINATION---------------------------//  
+//-------------------------PAGINATION---------------------------//  
       useEffect(() => {
         setCurrentPage(Number(pageNumber));
       }, [pageNumber]);
       const handlePageClick = ({ selected: selectedPage }) => {
         navigate(`/products/outgoingProducts/${selectedPage+1}`);
     }
+//-------------------------refreshPage---------------------------//  
+
     const refreshPage = () => {
       let paglink = document.querySelectorAll(".page-item");
       paglink[0]?.firstChild.click();

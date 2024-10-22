@@ -12,7 +12,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 
 function AddProductsList({
     handleToggleCreateModal,

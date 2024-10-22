@@ -49,24 +49,29 @@ function Partners() {
         refreshData
         
       );
+      const handleOpenModal = (user) => {
+        setSelectedItemId(true);
+        setSelectedItem((prev) => user);
+        console.log(user)
+      };
+      const handleCloseModal = () => {
+        setSelectedItemId(null);
+      };	
+//-------------------------PAGINATION---------------------------//  
+   useEffect(() => {
+    setCurrentPage(Number(pageNumber));
+  }, [pageNumber]);
    const handlePageClick = ({ selected: selectedPage }) => {
-    navigate(`/partners/page/${selectedPage+1}`);
+    navigate(`/companies/partners/page/${selectedPage+1}`);
     //updateUsersCount();
   }
+ //-------------------------refreshPage-----------------------------------//  
+
     const refreshPage = () => {
       let paglink = document.querySelectorAll(".page-item");
       paglink[0]?.firstChild.click();
       refreshData()
     };
-    const handleOpenModal = (user) => {
-      setSelectedItemId(true);
-      setSelectedItem((prev) => user);
-      console.log(user)
-    };
-    const handleCloseModal = () => {
-      setSelectedItemId(null);
-    };	
-      //-------------------------
   return (
     <HelmetProvider>
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { Modal } from "react-bootstrap";
-import { REGISTER_WORKER, REGISTER_WORKERROLE, WORKERSROLES_URL, } from '../../utils/constants';
+import { REGISTER_WORKER, WORKERSROLES_URL, } from '../../utils/constants';
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import { city_validation, email_validation, emergencyContactName_validation, fullName_validation, name_validation, password_validation, respPersonFullName_validation, status_validation, street_validation, user_validation, zipCode_validation } from '../../utils/inputValidations';
 import { Input } from '../Input';

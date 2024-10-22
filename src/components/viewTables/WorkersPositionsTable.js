@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import ComponentToConfirm from '../ComponentToConfirm';
-import Table from "../Table";
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { BiSolidInfoCircle } from 'react-icons/bi';
+import CustomTable from '../CustomTable';
 const asd = [
     {
         workerPositionId:11001,
@@ -136,7 +136,7 @@ function WorkersPositionsTable({
               keyName={selectedItem.name}
               delId={selectedItem.customerId}
             />
-                <Table data={workerRoles} column={columns} dataReceived={dataReceived}/>
+                <CustomTable data={workerRoles} column={columns} dataReceived={dataReceived}/>
 
     </>
   )
