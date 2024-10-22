@@ -9,7 +9,7 @@ import { Space, Table, Input, Button } from "antd";
 import { Dropdown } from "react-bootstrap";
 import AddWareHouse from "../addViews/AddWareHouse";
 import useGetData from "../../hooks/useGetData";
-import { USERS_URL, WAREHOUSES_URL } from "../../utils/constants";
+import { WAREHOUSES_URL } from "../../utils/constants";
 import WarehouseEdit from "../editModals/WarehouseEdit";
 import useDeleteData from "../../hooks/useDeleteData";
 import ComponentToConfirm from "../ComponentToConfirm";
@@ -167,7 +167,6 @@ function WareHousesList() {
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
   const [wareHouseData, setWareHouseData] = useState(false);
-  const [subPageageCount, setSubPageageCount] = useState(0);
   const [subCurrentPage, setSubCurrentPage] = useState(0);
 
   const [itemsPerPage, setItemsPerPage] = useState(Math.round(window.innerHeight / 100));
@@ -175,29 +174,29 @@ function WareHousesList() {
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data1.slice(itemOffset, endOffset);
 
-  const customWarehouse = [
-    {
-      key: 1,
-      name: 'Մասիս',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
-      children: [
-        {
-          key: 11,
-          name: 'Սառնարան',
-          phone: 1215,
-          address: 'Մասիս 1',
-        },
-        {
-          key: 12,
-          name: 'Չոր պահեստ',
-          phone: 1216,
-          address: 'Մասիս 2',
-        },
-      ],
-    },
+  // const customWarehouse = [
+  //   {
+  //     key: 1,
+  //     name: 'Մասիս',
+  //     age: 60,
+  //     address: 'New York No. 1 Lake Park',
+  //     children: [
+  //       {
+  //         key: 11,
+  //         name: 'Սառնարան',
+  //         phone: 1215,
+  //         address: 'Մասիս 1',
+  //       },
+  //       {
+  //         key: 12,
+  //         name: 'Չոր պահեստ',
+  //         phone: 1216,
+  //         address: 'Մասիս 2',
+  //       },
+  //     ],
+  //   },
    
-  ]
+  // ]
   const {
     data: wareHouses,
     setData: setWarehouses,
@@ -206,22 +205,12 @@ function WareHousesList() {
   } = useGetData(WAREHOUSES_URL, currentPage, usersPerPage,searchCount,null,searchId,searchTerms);
   const { refreshData,data } = useRefreshData(WAREHOUSES_URL, usersPerPage);
   useEffect(()=>{
-    setWarehouses(customWarehouse)
-    
+    setWarehouses(data)    
     },[data])
+
   const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-  const subPageageCount1 = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(data1.length/itemsPerPage)
-  const { handleDeleteItem,updateUsersCount } = useDeleteData(
-    WAREHOUSES_URL,
-    confirmWarehouseRef,
-    selectedItem,
-    setSelectedItemId,
-    wareHouses,
-    setWarehouses,
-    "name",
-    refreshData
-    
-  );
+  const subPageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(wareHouses?.length/itemsPerPage)
+  
   const handleOpenModal = (user) => {
     setSelectedItemId(true);
     setSelectedItem((prev) => user);
@@ -357,14 +346,14 @@ function WareHousesList() {
 //Warehouse info
   const handleShowWareHouse = async (record, index) => {
     
-    if(!record?.children){
-      setWareHouseData(data1);
+    if(!record?.children?.length){
+      //setWareHouseData(data1);
       
       const getData = async () => {
         try {
-          const response = await axiosPrivate.get(`warehouse/${record.key}`, );
+          const response = await axiosPrivate.get(`warehouseProducts/${record.warehouseId}`, );
         //console.log('get search data')
-        setWareHouseData(data1);
+        setWareHouseData(response.data.jsonString);
         //setToggleSearchModal(false)  
         //handleSearchPageCount(response.data.count)    
       }catch (err) {
@@ -641,7 +630,18 @@ function WareHousesList() {
     );
     setItemOffset(newOffset);
   };
+   //-------------------------DeleteData-----------------------------------//  
 
+  const { handleDeleteItem } = useDeleteData(
+    WAREHOUSES_URL,
+    confirmWarehouseRef,
+    selectedItem,
+    setSelectedItemId,
+    wareHouses,
+    setWarehouses,
+    "name",
+    refreshData    
+  );
    //-------------------------refreshPage-----------------------------------//  
   const refreshPage = () => {
     let paglink = document.querySelectorAll(".page-item");
@@ -726,7 +726,7 @@ function WareHousesList() {
       <div className="wareHouses__Wrapper">
         <div className="wareHouses__table">
         <Table
-  dataSource={customWarehouse}
+  dataSource={wareHouses}
   columns={wareHousesColumns}
   onRow={(record, index) => (
     {
@@ -741,7 +741,7 @@ function WareHousesList() {
         <p>{record.name}</p>
       </div>
     ),
-    rowExpandable: (record) => !!record.children,
+    rowExpandable: (record) => !!record.children?.length,
   }}
 />
 
@@ -780,14 +780,14 @@ function WareHousesList() {
                     style={{ height: "80vh", overflow: "auto" }}
                   >
             <CustomTable
-            data={currentItems}
+            data={wareHouseData}
             column={productsColumns}
             dataReceived={dataReceived}
             />
             <ReactPaginate
             previousLabel = {"Հետ"}    
             nextLabel = {"Առաջ"}
-            pageCount = {subPageageCount1}
+            pageCount = {subPageCount}
             onPageChange = {handlePageClick}
             //initialPage = {Number(pageNumber)}
             containerClassName={"pagination"}
@@ -800,7 +800,6 @@ function WareHousesList() {
             activeClassName={"active"}
             forcePage={subCurrentPage}
             renderOnZeroPageCount={null}
-
             />
             </div>
             </>

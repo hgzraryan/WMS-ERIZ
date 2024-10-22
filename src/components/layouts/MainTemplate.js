@@ -494,24 +494,24 @@ const MainTemplate = () => {
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="productsCategories" || location.pathname==="/products/productsCategories"?"nav-link active":"nav-link"} to="./products/productsCategories/1"
+                                                        <Link className={sisActive1==="productsCategories" || location.pathname==="/products/productsCategories"?"nav-link active":"nav-link"} to="./products/productsCategories/page/1"
                                                         onClick={()=>handleSubmenuClick("products","productsCategories")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>
-                                                        <Link className={sisActive1==="productsList" || location.pathname==="/products/productsList"?"nav-link active":"nav-link"} to="./products/productsList/1"
+                                                        <Link className={sisActive1==="productsList" || location.pathname==="/products/productsList"?"nav-link active":"nav-link"} to="./products/productsList/page/1"
                                                         onClick={()=>handleSubmenuClick("products","productsList")}>
                                                             <span className="nav-link-text">Ապրանքների ցանկ</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="incomingProducts" || location.pathname==="/products/incomingProducts"?"nav-link active":"nav-link"} to="./products/incomingProducts/1"
+                                                        <Link className={sisActive1==="incomingProducts" || location.pathname==="/products/incomingProducts"?"nav-link active":"nav-link"} to="./products/incomingProducts/page/1"
                                                         onClick={()=>handleSubmenuClick("products","incomingProducts")}>
                                                             <span className="nav-link-text">Ապրանքների մուտք</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className={sisActive1==="outgoingProducts" || location.pathname==="/products/outgoingProducts"?"nav-link active":"nav-link"} to="./products/outgoingProducts/1"
+                                                        <Link className={sisActive1==="outgoingProducts" || location.pathname==="/products/outgoingProducts"?"nav-link active":"nav-link"} to="./products/outgoingProducts/page/1"
                                                         onClick={()=>handleSubmenuClick("products","outgoingProducts")}>
                                                             <span className="nav-link-text">Ապրանքների ելք</span>
                                                         </Link>

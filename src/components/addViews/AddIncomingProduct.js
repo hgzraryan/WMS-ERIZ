@@ -11,6 +11,7 @@ import {
   Quantity_validation,
   reorderLevel_validation,
   Weight_validation,
+  barcode_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -188,7 +189,8 @@ function AddIncomingProduct({
     });
   const onSubmit = methods.handleSubmit(async (data) => {
     const newProd = {
-      name: data?.productName?.value || null,
+      name: data?.productName?.label || null,
+      productIdent: data?.productName?.value || null,
       countryOfOrigin:data.countryOfOrigin,
       stock: +data?.warehouse?.value || null,
       supplier: +data.suppliers?.value || null,
@@ -207,8 +209,8 @@ function AddIncomingProduct({
       producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       description: editorRef.current.getContent({ format: "text" }),
-      //barcode: data?.barcode,
-      // productCategory: data?.productCategory || 0,
+      barcode: data?.barcode,
+      productCategory: 6,
       // SKU:'1',
       //  attributs:attributs.map((el,index)=>{return{
       //   'attributeName':el.attributeName,
@@ -442,6 +444,12 @@ console.log(data)
                             </div>
                           </div>
                           <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...barcode_validation} />
+                            </div>
+                                                      </div>
+
+                          <div className="row gx-3">
                             {/* <div className="col-sm-6">
                               <Input {...barcode_validation} />
                             </div> */}
@@ -479,10 +487,27 @@ console.log(data)
                                       //    (option) =>
                                       //      option.value === productClassType
                                       //  )}
-                                      options={wareHouses?.map((item) => ({
-                                        value: item.warehouseId,
-                                        label: item.name,
-                                      }))}
+                                      // options={wareHouses?.map((item) => ({
+                                      //   value: item.warehouseId,
+                                      //   label: item.name,
+                                      // }))}
+                                      options={wareHouses?.map((item) => {
+                                        if(item?.children?.length){
+                                          return{
+                                            label:item?.name,
+                                            options:item.children.map((el)=>({
+                                              value: el.warehouseId,
+                                              label: el.name,
+                                            }))
+                                          }
+                                        }else{
+                                         return{
+
+                                           value: item.warehouseId,
+                                           label: item.name,
+                                          }
+                                        }
+                                      })}
                                       placeholder={"Ընտրել"}
                                     />
                                   )}
@@ -712,34 +737,25 @@ console.log(data)
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                              <Editor
+                                apiKey={process.env.REACT_APP_EDITOR_KEY}
+                                onInit={(evt, editor) =>
+                                  (editorRef.current = editor)
+                                }
+                                init={{
+                                  height:300,
+                                  plugins:
+                                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                                  tinycomments_mode: 'embedded',
+                                  tinycomments_author: 'Author name',
+                                  mergetags_list: [
+                                    { value: 'First.Name', title: 'First Name' },
+                                    { value: 'Email', title: 'Email' },
+                                  ],
+                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+                                }}
+                                
+                              />
                               </div>
                             </div>
                           </form>

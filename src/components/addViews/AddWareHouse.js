@@ -139,7 +139,8 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
       storekeeper,
       addPhone,
       phone,
-      salesAllowed
+      salesAllowed,
+      parentWarehouse
     }
   ) => {
       const newWarehouse = {
@@ -149,7 +150,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
         name,
         balance:+balance,
         storekeeper:storekeeper?.value,
-        parentWarehouse:parentWarehouses?.value,
+        parentWarehouse:parentWarehouse?.value||null,
         salesAllowed:salesAllowed?.value,
         contact: {
           email: email,
