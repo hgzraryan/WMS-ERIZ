@@ -15,9 +15,11 @@ import { balance_validation, city_validation, code_validation, email_validation,
 import { Input } from "../Input";
 import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
-import { WAREHOUSES_URL } from "../../utils/constants";
+import { WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import Select from "react-select";
 import { customStyles } from "../customStyles";
+import { useLocation, useNavigate } from "react-router-dom";
+import LoadingSpinner from "../LoadingSpinner";
 
 const storekeepers=[
   {
@@ -74,10 +76,16 @@ const salesAllowed=[
 },
 ]
 function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
+  const navigate = useNavigate();
+  const location = useLocation();
     const [additionalPhone, setAdditionalPhone] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
   const axiosPrivate = useAxiosPrivate();
+  const [workersList, setWorkersList] = useState([]);
   const [country, setCountry] = useState("");
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState('');
+  const [selectedWorker, setSelectedWorker] = useState([]);
   const editorRef = useRef(null);
   const [region, setRegion] = useState("");
   useEffect(() => {
@@ -89,6 +97,29 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
     setCountry(warehouse?.contact?.address?.country);
 
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const workers = await axiosPrivate.get(WORKERS_URL);
+        setWorkersList(workers?.data?.jsonString);
+
+        const tmp = workers?.data?.jsonString
+  ?.filter(el => el.workerId === warehouse?.storekeeper)
+  ?.map(({ workerId, fullName }) => ({
+    value: workerId,
+    label: `${workerId}.  ${fullName}`
+  }))[0];
+        setSelectedWorker(tmp)
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
+    setTimeout(() => {
+      fetchData();
+    }, 0);
+  }, [navigate]);
   const methods = useForm({
     mode: "onChange",
   });
@@ -101,6 +132,11 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
     e.preventDefault();
     setAdditionalPhone(value);
   };
+  
+  useEffect(() => {
+   
+  },[])
+ 
   const notify = (text) =>
     toast.success(text, {
       position: "top-right",
@@ -131,14 +167,13 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
         addPhone,
         phone,
       }) => {
-        debugger
         const newWarehouse = {
-          code:code?.trim() !== warehouse?.code ? code : null,
+          code:+code !== +warehouse?.code ? code : null,
           warehouseState:warehouseState?.value !== warehouse?.warehouseState ? warehouseState : null,
           type:type?.trim() !== warehouse?.type.trim() ? type : null,
           name:name?.trim() !== warehouse?.name?.trim() ? name : null,
           balance:balance !== warehouse?.balance ? balance : null,
-          storekeeper:storekeeper?.value !== warehouse?.storekeeper ? storekeeper : null,
+          storekeeper:storekeeper?.value !== warehouse?.storekeeper ? storekeeper?.value : null,
           subWirehouse:subWirehouse?.trim() !== warehouse?.subWirehouse?.type.trim() ? subWirehouse : null,
           contact: {
             email:email?.trim() !== warehouse?.contact?.email?.trim() ? email : null,
@@ -173,22 +208,22 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
         
         console.log(type)
       console.log(updatedFields);
-      // try {
-      //   await axiosPrivate.put(WAREHOUSES_URL, { updatedFields, id: warehouse.warehouseId }, {
-      //     headers: { "Content-Type": "application/json" },
-      //     withCredentials: true,
-      //   });
+      try {
+        await axiosPrivate.put(WAREHOUSES_URL, { updatedFields, id: warehouse.warehouseId }, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
 
-      //   handleToggleCreateModal(false);
-      //   refreshData();
-      //   notify(`Տվյալները  թարմացված է`);
-      // } catch (err) {
-      //   if (!err?.response) {
-      //     setErrMsg("No Server Response");
-      //   } else {
-      //     setErrMsg(" Failed");
-      //   }
-      // }
+        handleToggleCreateModal(false);
+        refreshData();
+        notify(`Տվյալները  թարմացված է`);
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else {
+          setErrMsg(" Failed");
+        }
+      }
     }
   );
   return (
@@ -203,6 +238,10 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      <Suspense fallback={<LoadingSpinner />}>
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : (
         <FormProvider {...methods}>
           <div className="contact-body contact-detail-body">
             <div data-simplebar className="nicescroll-bar">
@@ -319,9 +358,9 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                             </div>
                           </div>
                           <div className="row gx-3">
-                            <div className="col-sm-6">
+                            {/* <div className="col-sm-6">
                               <Input {...balance_validation} defaultValue={warehouse?.balance}/>
-                            </div>
+                            </div> */}
                             <div className="col-sm-6">
                                   <div className="d-flex justify-content-between me-2">
                                     <label
@@ -344,12 +383,19 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                     <Controller
                                       name="storekeeper"
                                       control={methods.control}
-                                      defaultValue={storekeepers.find((el)=>el.value===warehouse?.storekeeper)}
+                                      defaultValue={selectedWorker}
                                       rules={{ required: true }}
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={storekeepers}
+                                          options={workersList?.map((el)=>(
+
+                                            {                                              
+                                              value:el.workerId,
+                                              label: `${el?.workerId}․  ${el?.fullName}`
+                                            }
+                                          )
+                                      )}
                                           placeholder={"Ընտրել"}
                                           styles={customStyles}
                                         />
@@ -357,44 +403,7 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                     />
                                   </div>
                                 </div>
-                          </div>
-                          <div className="row gx-3">
-                          <div className="col-sm-6">
-                                  <div className="d-flex justify-content-between me-2">
-                                    <label
-                                      className="form-label"
-                                      htmlFor="subWarehouse"
-                                    >
-                                      Ենթապահեստ
-                                    </label>
-                                    {methods.formState.errors
-                                      .subWarehouse && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="form-control">
-                                    <Controller
-                                      name="subWarehouse"
-                                      control={methods.control}
-                                      defaultValue={subWarehouses.find((el)=>el.value===warehouse?.subWarehouse)}
-                                      rules={{ required: true }}
-                                      render={({ field }) => (
-                                        <Select
-                                          {...field}
-                                          options={subWarehouses}
-                                          placeholder={"Ընտրել"}
-                                          styles={customStyles}
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                            <div className="col-sm-6 d-flex">
+                                <div className="col-sm-6 d-flex">
                               <div className="col-sm-6">
                                 <div className="d-flex justify-content-between me-2">
                                   <label
@@ -485,6 +494,44 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
                                 )}
                               </div>
                             </div>
+                          </div>
+                          <div className="row gx-3">
+                          {/* <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="subWarehouse"
+                                    >
+                                      Ենթապահեստ
+                                    </label>
+                                    {methods.formState.errors
+                                      .subWarehouse && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="subWarehouse"
+                                      control={methods.control}
+                                      defaultValue={subWarehouses.find((el)=>el.value===warehouse?.subWarehouse)}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={subWarehouses}
+                                          placeholder={"Ընտրել"}
+                                          styles={customStyles}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div> */}
+                          
                           </div>
                           <div className="row gx-3 ">
                         <div className="col-sm-6">
@@ -719,6 +766,8 @@ function WarehouseEdit({ warehouse, setEditRow, refreshData }) {
             </div>
           </div>
         </FormProvider>
+        )}
+          </Suspense>
       </Modal.Body>
     </Modal>
   );

@@ -12,7 +12,7 @@ function IncomingOrderForm({data}) {
             </header> */}
             <section className="form-section" style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <div>
-                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>{" "+data?._id}</u></span></p>
+                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>{" "+data?.productId}</u></span></p>
                 </div>
                 <div style={{lineheight:'0'}}>
                     <p>{moment(data?.createdAt).format('DD-MM-YYYY HH:mm')}</p>
@@ -39,7 +39,7 @@ function IncomingOrderForm({data}) {
                         <tr>
                             <td>-----</td>
                             <td>-----</td>
-                            <td>{data?.price}</td>
+                            <td>{data?.price*12}</td>
                             <td>------</td>
                         </tr>
                     </tbody>
@@ -50,16 +50,20 @@ function IncomingOrderForm({data}) {
                 <table className="main-table"  style= {{width:'100%', marginTop:'20px'}}>
                     <thead>
                         <tr>
+                            <th>Պահեստ</th>
                             <th>Ապրանքի անվանումը</th>
                             <th>Քանակ</th>
+                            <th>Միավորի արժեք</th>
                             <th>Չափման միավոր</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>{data?.stock}</td>
                             <td>{data?.name}</td>
                             <td>10</td>
-                            <td>kg</td>
+                            <td>{data?.price}</td>
+                            <td>{data?.dimensions?.weight?'կգ':data?.volume?'լիտր':''}</td>
                         </tr>
                     </tbody>
                 </table>

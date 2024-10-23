@@ -38,8 +38,9 @@ function WareHousesList() {
   const [searchCount,setSearchCount] = useState(null)
   const [searchId,setSearchId] = useState(null)
   const [searchTerms,setSearchTerms] = useState(null)
-  const [wareHouseData, setWareHouseData] = useState(false);
+  const [wareHouseData, setWareHouseData] = useState([]);
   const [subCurrentPage, setSubCurrentPage] = useState(0);
+  const [subWareHouseName, setSubWareHouseName] = useState('');
 
   const [itemsPerPage, setItemsPerPage] = useState(Math.round(window.innerHeight / 100));
   const [itemOffset, setItemOffset] = useState(0);
@@ -201,6 +202,7 @@ function WareHousesList() {
         try {
           const response = await axiosPrivate.get(`warehouseProducts/${record.warehouseId}`, );
         //console.log('get search data')
+        setSubWareHouseName(record.name)
         setWareHouseData(response.data.jsonString);
         //setToggleSearchModal(false)  
         //handleSearchPageCount(response.data.count)    
@@ -423,7 +425,7 @@ function WareHousesList() {
       accessor: "unit",
       Cell: ({ row }) => (
         <div className="d-flex align-items-center">
-        {row?.dimension?.weight?'կգ':'լիտր'}         
+        {row?.dimension?.weight?'կգ':row?.volume?'լիտր':''}         
         </div>
       ),
       width: 150,
@@ -599,12 +601,15 @@ function WareHousesList() {
   size={"middle"}
   pagination={false}
   expandable={{
+    defaultExpandAllRows:true,
+    expandRowByClick:true,
     expandedRowRender: (record) => (
       <div className="custom-child-row">
-        <p>{record.name}</p>
+        <h5>{record.name}</h5>
       </div>
     ),
     rowExpandable: (record) => !!record.children?.length,
+    
   }}
 />
 
@@ -640,8 +645,13 @@ function WareHousesList() {
             <>
             <div
                     id="scrollableDiv"
-                    style={{ height: "80vh", overflow: "auto" }}
+                    style={{ height: "80vh", overflow: "auto"}}
                   >
+                    <div className="d-flex justify-content-center align-items-center">
+                      <h3 style={{color:'#018a54', letterSpacing:'2px',}}>
+                         {subWareHouseName}
+                        </h3>
+                         </div>
             <CustomTable
             data={currentItems}
             column={productsColumns}

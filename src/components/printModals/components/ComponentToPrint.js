@@ -153,7 +153,7 @@ const { inputRef } = Barcode({
               Մուտքի օրդեր
             </p>
           </div> */}
-          {action==='outgoing'?<OutgoingOrdersForm/>:action==='incoming'?<IncomingOrderForm/>:<></>}
+          {action==='outgoing'?<OutgoingOrdersForm  data={value}/>:action==='incoming'?<IncomingOrderForm data={value}/>:<></>}
           
           
 

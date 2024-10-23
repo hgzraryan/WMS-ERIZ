@@ -92,6 +92,13 @@ const refreshPage = () => {
   refreshData()
 };
   return (
+<>
+    {isOpen && (
+      <AddSupplier
+      handleToggleCreateModal={handleToggleCreateModal}
+      refreshData={() => refreshData()}
+      />
+    )}
     <HelmetProvider>
     <Helmet>
       <meta charSet="utf-8" />
@@ -101,8 +108,10 @@ const refreshPage = () => {
   
     <section
       className="dropdown p-3"
-      style={{ borderBottom: "3px solid #f6f6f6", display: "flex" }}
-    >
+      style={{ borderBottom: "3px solid #f6f6f6", display: "flex",justifyContent:'space-between' }}
+      >
+        <div style={{display:'flex'}}>
+
       <div className="me-2">
         <h3>Մատակարարներ</h3>
       </div>
@@ -112,7 +121,7 @@ const refreshPage = () => {
             variant="success"
             id="dropdown-basic"
             className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block"
-          >
+            >
             Ավելացնել նոր
           </Dropdown.Toggle>
 
@@ -123,12 +132,7 @@ const refreshPage = () => {
           </Dropdown.Menu>
         </Dropdown>
       </div>
-      {isOpen && (
-        <AddSupplier
-          handleToggleCreateModal={handleToggleCreateModal}
-          refreshData={() => refreshData()}
-        />
-      )}
+        </div>
       <div>
       <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
@@ -138,7 +142,7 @@ const refreshPage = () => {
                   onClick={refreshPage}
                   title=""
                   data-bs-original-title="Refresh"
-                >
+                  >
                   <span className="icon">
                     <span className="feather-icon">
                       <FeatherIcon icon="refresh-cw" />
@@ -154,7 +158,7 @@ const refreshPage = () => {
         <div
                     id="scrollableDiv"
                     style={{ height: "80vh", overflow: "auto" }}
-                  >
+                    >
                 <SuppliersTable 
                   confirmRef={confirmSuppliersRef}
                   selectedItem={selectedItem}
@@ -191,6 +195,7 @@ const refreshPage = () => {
       </div>
     </div>
   </HelmetProvider>
+        </>
   )
 }
 
