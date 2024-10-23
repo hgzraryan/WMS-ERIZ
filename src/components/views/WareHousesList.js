@@ -411,24 +411,20 @@ function WareHousesList() {
       width: 100,
     },
     {
-      Header: "Քանակ",
+      Header: "Հատ",
       accessor: "quantity",
-      Cell: ({ row }) => (
-        <div className="d-flex align-items-center">
-        {row?.dimension?.weight?row.original?.dimension?.weight:row.original?.volume}         
-        </div>
-      ),
       width: 100,
     },
     {
-      Header: "Չափման միավոր",
-      accessor: "unit",
+      Header: "Քանակ",
+      accessor: "quantity1",
       Cell: ({ row }) => (
         <div className="d-flex align-items-center">
-        {row?.dimension?.weight?'կգ':row?.volume?'լիտր':''}         
+        {row?.original?.dimensions?.volume || row?.original?.dimensions?.weight}         
+        {row?.original?.dimensions?.weight?'կգ':row.original?.dimensions?.volume?'լ':''}         
         </div>
       ),
-      width: 150,
+      width: 100,
     },
     {
       Header: "Գնման ամսաթիվ",
@@ -442,12 +438,12 @@ function WareHousesList() {
     },
     {
       Header: "Արտ․ժամկետ",
-      accessor: "productionDate",
+      accessor: "producedDate",
       width: 180,
     },
     {
       Header: "Պիտ․ ժամկետ",
-      accessor: "expiredDate",
+      accessor: "expiredAlertDay",
       width: 180,
     },
     {

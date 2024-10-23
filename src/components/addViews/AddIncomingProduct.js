@@ -210,7 +210,7 @@ function AddIncomingProduct({
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       description: editorRef.current.getContent({ format: "text" }),
       barcode: +data?.barcode,
-      productCategory:data?.productCategory || 6,
+      productCategory:data?.productCategory || 1,
       // SKU:'1',
       //  attributs:attributs.map((el,index)=>{return{
       //   'attributeName':el.attributeName,
