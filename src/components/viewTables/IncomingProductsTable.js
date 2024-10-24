@@ -97,7 +97,7 @@ function IncomingProductsTable({
                 <div  className="name">Մատակարար</div>
               </>
             ),
-            accessor: "supplier",
+            accessor: "supplierName",
             sortable: true,
             width: 200,
             
@@ -109,7 +109,7 @@ function IncomingProductsTable({
                 <div  className="name">Պահեստ</div>
               </>
             ),
-            accessor: "stock",
+            accessor: "warehouseName",
             sortable: true,
             width: 150,
             

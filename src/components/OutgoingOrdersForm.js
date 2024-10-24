@@ -42,7 +42,7 @@ function OutgoingOrdersForm({data}) {
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացված է</h6><div className='line' style={{width:'80%'}}></div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գնորդ</h6><div className='line' style={{width:'80%'}}>{data?.partner}</div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(անունը,ստորագրությունը)</p>
                 </div>

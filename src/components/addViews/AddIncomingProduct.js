@@ -190,6 +190,8 @@ function AddIncomingProduct({
   const onSubmit = methods.handleSubmit(async (data) => {
     const newProd = {
       name: data?.productName?.label || null,
+      currentProductId: data?.productName?.value || null,
+      productCategory: data?.productName?.categoryId || null,
       productIdent: data?.productName?.value || null,
       countryOfOrigin:data.countryOfOrigin,
       stock: +data?.warehouse?.value || null,
@@ -210,7 +212,7 @@ function AddIncomingProduct({
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       description: editorRef.current.getContent({ format: "text" }),
       barcode: +data?.barcode,
-      productCategory:data?.productCategory || 1,
+      //productCategory:data?.productCategory || 1,
       // SKU:'1',
       //  attributs:attributs.map((el,index)=>{return{
       //   'attributeName':el.attributeName,
@@ -388,6 +390,7 @@ console.log(data)
                                     {...field}
                                     value={field.value}
                                     options={productsList?.map((item) => ({
+                                      categoryId: item.category,
                                       value: item.productListId,
                                       label: item.name,
                                     }))}

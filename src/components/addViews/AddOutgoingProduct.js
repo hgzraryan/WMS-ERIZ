@@ -40,7 +40,7 @@ function AddOutgoingProduct({
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();  
-  console.log('outgoingList',outgoingList)
+  //console.log('outgoingList',outgoingList)
   const handleInputChange = useCallback((e, rowId) => {    
     const { value } = e.target;
     setRowInputValues((prevValues) => ({
@@ -53,9 +53,15 @@ function AddOutgoingProduct({
     setNewProduct((prev) => value);
 
   };
-  const fetchDataByProduct = async () => {
+  const onPartnerSelect = (data) => {
+    setPartners(data.value);
+  };
+  const fetchDataByProduct = async (productListId) => {
     try {
-      const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
+      const respProductsList = await axiosPrivate.post('/productById',{
+        productListId:productListId,
+
+      });
       setFetchedProductsList(respProductsList?.data?.jsonString);
 
       setIsLoading(false);
@@ -67,24 +73,42 @@ function AddOutgoingProduct({
     
   };
   const handleOutgoingProductsList = async (e,row) => {
-  e.preventDefault()
-    
-    //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
-    const tmp = {}
-    tmp.id=row.original.productId
-    tmp.name=row.original.name
-    tmp.input=rowInputValues[row.original.productId]
-    tmp.warehouse=row.original.warehouse
-    tmp.subWarehouse=row.original.name
-
-    const tmpData = []
-     tmpData.push(tmp)
-     setOutgoingList((prev)=>[tmp,...prev])    
-  };
+    console.log(row)
+    e.preventDefault()
+      
+      //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
+      const tmp = {}
+      tmp.id=row.original.productId
+      tmp.name=row.original.name
+      tmp.input=rowInputValues[row.original.productId]
+      tmp.warehouse=row.original.warehouse
+      tmp.subWarehouse=row.original.name
   
-  const onProductSelect = async() =>{
-   const asd = await fetchDataByProduct()
-    setFetchedProductsList(asd)
+      const tmpData = []
+       tmpData.push(tmp)
+       setOutgoingList((prev)=>[tmp,...prev])    
+    };
+  // const handleOutgoingProductsList = async (e, row) => {
+  //   e.preventDefault();
+  
+  //   const { productId, name, warehouse } = row.original;
+  //   const input = rowInputValues[productId];
+  
+  //   const tmp = {
+  //     id: productId,
+  //     name,
+  //     input,
+  //     warehouse,
+  //     subWarehouse: name,
+  //   };
+  
+  //   setOutgoingList(prev => [tmp, ...prev]);
+  // };
+  
+  const onProductSelect = async(data) =>{
+    console.log(data)
+   const tmp = await fetchDataByProduct(data.value)
+    setFetchedProductsList(tmp)
   }
   const handleDeleteselected = (deleteId) =>{
    const tmp = outgoingList.filter((el)=>el.id!==deleteId)
@@ -395,6 +419,7 @@ function AddOutgoingProduct({
                                     options={productsList?.map((item) => ({
                                       value: item.productId,
                                       label: item.name,
+                                      currentProductId:item.productId
                                     }))}
                                     placeholder={"Ընտրել"}
                                     onChange={(val) => {
@@ -407,6 +432,53 @@ function AddOutgoingProduct({
                                     </div>
                               </div>
                             </div>
+                            <div className="col-sm-12">
+                                      <div className="d-flex justify-content-between me-2">
+                                        <label
+                                          className="form-label"
+                                          htmlFor="partner"
+                                        >
+                                          Գործընկեր
+                                        </label>
+                                        {methods.formState.errors.partner && (
+                                          <span className="error text-red">
+                                            <span>
+                                              <img
+                                                src={ErrorSvg}
+                                                alt="errorSvg"
+                                              />
+                                            </span>{" "}
+                                            պարտադիր
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="form-control">
+                                        <Controller
+                                          name="partner"
+                                          control={methods.control}
+                                          defaultValue={null}
+                                          rules={{ required: true }}
+                                          render={({ field }) => (
+                                            <Select
+                                              {...field}
+                                              onChange={(val) => {
+                                                field.onChange(val.value);
+                                                onPartnerSelect(val);
+                                              }}
+                                              // value={partners.find(
+                                              //   (option) =>
+                                              //     option.value === partnerName
+                                              // )}
+                                              options={partners.map((partner) => ({
+                                                value: partner.partnerId,
+                                                label: `${partner?.partnerId}․  ${partner?.name}`,
+                                              }))}
+                                              placeholder={"Ընտրել"}
+                                            />
+                                          )}
+                                        />
+                                      </div>
+                                    </div>
                             
                           </div>
                         </div>

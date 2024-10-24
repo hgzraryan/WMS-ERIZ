@@ -21,7 +21,7 @@ function IncomingOrderForm({data}) {
                 </div>
             </section>
             <section className='form-section' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column', lineheight:0}}>           
-                <p>{data?.supplier}</p> 
+                <p>{data?.supplierName}</p> 
             <div className='line' style={{fontWeight:'bold'}}/>
             <p>(Մատակարարի անվանում)</p>
             </section>
@@ -39,7 +39,7 @@ function IncomingOrderForm({data}) {
                         <tr>
                             <td>-----</td>
                             <td>-----</td>
-                            <td>{data?.price*12}</td>
+                            <td>{data?.price*data?.quantity}</td>
                             <td>------</td>
                         </tr>
                     </tbody>
@@ -59,11 +59,11 @@ function IncomingOrderForm({data}) {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{data?.stock}</td>
+                            <td>{data?.warehouseName}</td>
                             <td>{data?.name}</td>
                             <td>10</td>
                             <td>{data?.price}</td>
-                            <td>{data?.dimensions?.weight?'կգ':data?.volume?'լիտր':''}</td>
+                            <td>{data?.dimensions?.weight?'կգ':data?.dimensions?.volume?'լիտր':''}</td>
                         </tr>
                     </tbody>
                 </table>

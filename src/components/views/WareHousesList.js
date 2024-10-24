@@ -406,6 +406,11 @@ function WareHousesList() {
       width: 200,
     },
     {
+      Header: "Պահեստ",
+      accessor: "warehouseName",
+      width: 200,
+    },
+    {
       Header: "Գին",
       accessor: "price",
       width: 100,
@@ -442,14 +447,14 @@ function WareHousesList() {
       width: 180,
     },
     {
-      Header: "Պիտ․ ժամկետ",
+      Header: "Զգուշացման ամսաթիվ",
       accessor: "expiredAlertDay",
       width: 180,
     },
     {
       Header: "Մատակարար",
-      accessor: "supplier",
-      width: 180,
+      accessor: "supplierName",
+      width: 200,
     },
     // {
     //   Header: "Գործողություններ",
