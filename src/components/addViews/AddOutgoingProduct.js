@@ -80,9 +80,9 @@ function AddOutgoingProduct({
       const tmp = {}
       tmp.id=row.original.productId
       tmp.name=row.original.name
-      tmp.input=rowInputValues[row.original.productId]
-      tmp.warehouse=row.original.warehouse
-      tmp.subWarehouse=row.original.name
+      tmp.outgoingCount=+rowInputValues[row.original.productId]
+      tmp.warehouse=row.original.warehouseName
+      //tmp.subWarehouse=row.original.name
   
       const tmpData = []
        tmpData.push(tmp)
@@ -107,8 +107,8 @@ function AddOutgoingProduct({
   
   const onProductSelect = async(data) =>{
     console.log(data)
-   const tmp = await fetchDataByProduct(data.value)
-    setFetchedProductsList(tmp)
+  const tmp = await fetchDataByProduct(data.currentProductId)
+   setFetchedProductsList(tmp)
   }
   const handleDeleteselected = (deleteId) =>{
    const tmp = outgoingList.filter((el)=>el.id!==deleteId)
@@ -160,7 +160,7 @@ function AddOutgoingProduct({
   
 
     try {
-      await axiosPrivate.post(REGISTER_PRODUCT, outgoingList, {
+      await axiosPrivate.post(REGISTER_PRODUCT, {customer:data.partner.value,outgoingList:outgoingList}, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -209,7 +209,7 @@ function AddOutgoingProduct({
             <div>Պահեստ</div>
           </>
         ),
-        accessor: "warehouse",
+        accessor: "warehouseName",
         width: 120,
         sortable: true,
         // Cell: ({ row }) => (
@@ -218,21 +218,21 @@ function AddOutgoingProduct({
         //   </div>
         // ),
       },
-      {
-        Header: (event) => (
-          <>
-            <div>Արտադրման ժամկետ</div>
-          </>
-        ),
-        accessor: "phone",
-        width: 180,
-        Cell: ({ row }) => (
-          <div className="d-flex align-items-center">
-            {moment(row.original?.createdAt).format('DD-MM-YYYY')}
-          </div>
-        ),
+      // {
+      //   Header: (event) => (
+      //     <>
+      //       <div>Արտադրման ժամկետ</div>
+      //     </>
+      //   ),
+      //   accessor: "phone",
+      //   width: 180,
+      //   Cell: ({ row }) => (
+      //     <div className="d-flex align-items-center">
+      //       {moment(row.original?.createdAt).format('DD-MM-YYYY')}
+      //     </div>
+      //   ),
         
-      },
+      // },
       {
         Header: (event) => (
           <>
@@ -240,22 +240,17 @@ function AddOutgoingProduct({
             <div  className="columnHeader">Մուտքի ամսաթիվ</div>
           </>
         ),
-        accessor: "mainCurrency",
+        accessor: "createdAt",
         style: {
            // Custom style for the 'description' column
         },
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            {moment(row.original?.createdAt).format('DD-MM-YYYY')}
+          </div>
+        ),
         width: 180,
         
-      },
-      {
-        Header: (event) => (
-          <>
-           
-            <div  className="columnHeader">Մնացորդ</div>
-          </>
-        ),
-        accessor: "balance",
-        width: 100,
       },
       {
         Header: (event) => (
@@ -264,7 +259,17 @@ function AddOutgoingProduct({
             <div  className="columnHeader">Գին</div>
           </>
         ),
-        accessor: "priceList",
+        accessor: "price",
+        width: 100,
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Մնացորդ</div>
+          </>
+        ),
+        accessor: "quantity",
         width: 100,
       },
      
@@ -419,7 +424,7 @@ function AddOutgoingProduct({
                                     options={productsList?.map((item) => ({
                                       value: item.productId,
                                       label: item.name,
-                                      currentProductId:item.productId
+                                      currentProductId:item.currentProductId
                                     }))}
                                     placeholder={"Ընտրել"}
                                     onChange={(val) => {
@@ -438,7 +443,7 @@ function AddOutgoingProduct({
                                           className="form-label"
                                           htmlFor="partner"
                                         >
-                                          Գործընկեր
+                                          Գնորդ
                                         </label>
                                         {methods.formState.errors.partner && (
                                           <span className="error text-red">
@@ -461,10 +466,10 @@ function AddOutgoingProduct({
                                           render={({ field }) => (
                                             <Select
                                               {...field}
-                                              onChange={(val) => {
-                                                field.onChange(val.value);
-                                                onPartnerSelect(val);
-                                              }}
+                                              // onChange={(val) => {
+                                              //   field.onChange(val.value);
+                                              //   onPartnerSelect(val);
+                                              // }}
                                               // value={partners.find(
                                               //   (option) =>
                                               //     option.value === partnerName
@@ -504,7 +509,7 @@ function AddOutgoingProduct({
                       </header>
                   {outgoingList.map((el,index)=>{
                     return<ul>
-                      <li key = {el.id} ><FeatherIcon  icon={'minus'} style={{cursor:'pointer', border:'1px solid #edebeb', borderRadius:'10px',marginRight:'10px'}} onClick={()=>handleDeleteselected(el.id)}/>{(index+1) + "." + el.name+"("+el.id+") - "+el.input} </li>
+                      <li key = {el.id} ><FeatherIcon  icon={'minus'} style={{cursor:'pointer', border:'1px solid #edebeb', borderRadius:'10px',marginRight:'10px'}} onClick={()=>handleDeleteselected(el.id)}/>{'['+(el.id)+']' + "." + el.name+"- "+el.outgoingCount} </li>
                       
                       <div className="separator"></div>
 
