@@ -23,7 +23,7 @@ function ProductsSummaryTable({
             () => [
               {
                 Header: "ID",
-                accessor: "productListId",
+                accessor: "warehouseBalanceId",
                 width: 80,
               },
               {
@@ -33,8 +33,18 @@ function ProductsSummaryTable({
               },
               {
                 Header: "Քանակ",
-                accessor: "productCount",
+                accessor: "balance",
                 width: 250,
+              },
+              {
+                Header: "Չափման միավոր",
+                accessor: "unit",
+                Cell: ({ row }) => (
+                  <div className="d-flex align-items-center">
+                   {row.original?.unit==='weight'?'կգ':row.original?.unit==='volume'?'Լիտր':''}
+                  </div>
+                ),
+                width: 150,
               },
               {
                 Header: "Գործողություններ",

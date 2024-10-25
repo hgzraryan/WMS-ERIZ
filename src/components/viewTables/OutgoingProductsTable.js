@@ -13,7 +13,7 @@ function OutgoingProductsTable({
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    products,
+    outgoingProducts,
     setProducts,
     refreshData,
     dataReceived
@@ -154,7 +154,7 @@ function OutgoingProductsTable({
        {!!modalPrint && (
         <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
       )}
-            <CustomTable data={products} column={columns} dataReceived={dataReceived}/>
+            <CustomTable data={outgoingProducts} column={columns} dataReceived={dataReceived}/>
   
       </>
     )

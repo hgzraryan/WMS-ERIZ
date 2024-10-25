@@ -7,7 +7,7 @@ import ErrorSvg from "../../dist/svg/error.svg";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, PRODUCTS_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import AddProductsList from "./AddProductsList";
 import CustomTable from "../CustomTable";
@@ -80,6 +80,7 @@ function AddOutgoingProduct({
       const tmp = {}
       tmp.id=row.original.productId
       tmp.name=row.original.name
+      tmp.productListId=row.original.currentProductId
       tmp.outgoingCount=+rowInputValues[row.original.productId]
       tmp.warehouse=row.original.warehouseName
       tmp.price=row.original.price
@@ -123,7 +124,7 @@ function AddOutgoingProduct({
         const partnersResp = await axiosPrivate.get(PARTNERS_URL);
         setPartners(partnersResp?.data?.jsonString);
 
-        const respProductsList = await axiosPrivate.get(PRODUCTS_URL);
+        const respProductsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(respProductsList?.data?.jsonString);
 
         setIsLoading(false);
@@ -275,10 +276,19 @@ console.log(data)
         Header: (event) => (
           <>
            
-            <div  className="columnHeader">Մնացորդ</div>
+            <div  className="columnHeader">Մուտք</div>
           </>
         ),
         accessor: "quantity",
+        width: 100,
+      },
+      {
+        Header: (event) => (
+          <>           
+            <div  className="columnHeader">Մնացորդ</div>
+          </>
+        ),
+        accessor: "balance",
         width: 100,
       },
      
@@ -431,9 +441,9 @@ console.log(data)
                                     {...field}
                                     value={field.value}
                                     options={productsList?.map((item) => ({
-                                      value: item.productId,
+                                      value: item.productListId,
                                       label: item.name,
-                                      currentProductId:item.currentProductId
+                                      currentProductId:item.productListId
                                     }))}
                                     placeholder={"Ընտրել"}
                                     onChange={(val) => {

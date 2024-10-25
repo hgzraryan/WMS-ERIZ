@@ -198,6 +198,7 @@ function AddIncomingProduct({
       stock: +data?.warehouse?.value || null,
       supplier: +data.suppliers?.value || null,
       quantity: +data.quantity || null,
+      balance: +data.quantity || null,
       dimensions:{
         //height: +data.height || null,
         //length: +data.length || null,

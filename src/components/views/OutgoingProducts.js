@@ -205,7 +205,7 @@ function OutgoingProducts() {
                           //handleDeleteItem={handleDeleteItem}
                           handleOpenModal={handleOpenModal}
                           handleCloseModal={handleCloseModal}
-                          products={outgoingProducts}
+                          outgoingProducts={outgoingProducts}
                           setProducts={setOutgoingProducts}
                           refreshData={refreshData}
                           dataReceived={dataReceived}

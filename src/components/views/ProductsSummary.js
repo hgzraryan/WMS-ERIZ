@@ -26,7 +26,7 @@ function ProductsSummary() {
       setData: setProductsSummary,
       dataCount,
       dataReceived
-     } = useGetData(PRODUCTSLIST_URL,currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
+     } = useGetData('/warehouseBalance',currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
      const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
      const { refreshData,data } = useRefreshData(PRODUCTSLIST_URL, usersPerPage);
      useEffect(()=>{
