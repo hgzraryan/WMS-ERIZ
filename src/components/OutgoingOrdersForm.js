@@ -12,7 +12,7 @@ function OutgoingOrdersForm({data}) {
             </header> */}
             <section className="form-section" style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <div>
-                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ԵԼՔԻ ՕՐԴԵՐ N<span><u>{" "+data?._id}</u></span></p>
+                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ԵԼՔԻ ՕՐԴԵՐ N<span><u>{" "+data?.outgoingProductId}</u></span></p>
                 </div>
                 <div style={{lineheight:'0'}}>
                     <p>{moment(data?.createdAt).format('DD-MM-YYYY HH:mm')}</p>
@@ -26,14 +26,16 @@ function OutgoingOrdersForm({data}) {
                         <tr>
                             <th>Ապրանքի անվանումը</th>
                             <th>Քանակ</th>
-                            <th>Չափման միավոր</th>
+                            <th>Գումար</th>
+                            <th>Ընդհանուր</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>{data?.name}</td>
-                            <td>10</td>
-                            <td>kg</td>
+                            <td>{data?.outgoingCount}</td>
+                            <td>{data?.price}</td>
+                            <td>{data?.price*data?.outgoingCount}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -42,7 +44,7 @@ function OutgoingOrdersForm({data}) {
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
-                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գնորդ</h6><div className='line' style={{width:'80%'}}>{data?.partner}</div>
+                    <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գնորդ</h6><div className='line' style={{width:'80%'}}>{data?.customer}</div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(անունը,ստորագրությունը)</p>
                 </div>

@@ -32,7 +32,7 @@ function OutgoingProductsTable({
                   <div  className="columnHeader">ID</div>
                 </>
               ),
-              accessor: "productId",
+              accessor: "outgoingProductId",
               sortable: true,
               width: 100,
               
@@ -53,12 +53,24 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Դասակարգ</div>
+                  <div  className="name">Հաճախորդ</div>
                 </>
               ),
-              accessor: "productCategory",
+              accessor: "customer",
               sortable: true,
               width: 200,
+              
+            },
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="name">Քանակ</div>
+                </>
+              ),
+              accessor: "outgoingCount",
+              sortable: true,
+              width: 150,
               
             },
             {
@@ -89,22 +101,10 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Մատակարար</div>
-                </>
-              ),
-              accessor: "supplier",
-              sortable: true,
-              width: 200,
-              
-            },
-            {
-              Header: (event) => (
-                <>
-                  
                   <div  className="name">Պահեստ</div>
                 </>
               ),
-              accessor: "stock",
+              accessor: "warehouse",
               sortable: true,
               width: 200,
               

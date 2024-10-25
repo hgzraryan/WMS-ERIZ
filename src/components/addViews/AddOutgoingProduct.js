@@ -82,6 +82,9 @@ function AddOutgoingProduct({
       tmp.name=row.original.name
       tmp.outgoingCount=+rowInputValues[row.original.productId]
       tmp.warehouse=row.original.warehouseName
+      tmp.price=row.original.price
+      tmp.barcode=row.original.barcode
+      tmp.currency=row.original.currency
       //tmp.subWarehouse=row.original.name
   
       const tmpData = []
@@ -158,9 +161,15 @@ function AddOutgoingProduct({
  
   const onSubmit = methods.handleSubmit(async (data) => {
   
-
+console.log(data)
     try {
-      await axiosPrivate.post(REGISTER_PRODUCT, {customer:data.partner.value,outgoingList:outgoingList}, {
+      await axiosPrivate.post('/registerOutgoing', 
+        {
+          customer:data.partner.value,
+          outgoingList:outgoingList,
+          description: editorRef.current.getContent({ format: "text" }),
+
+        }, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

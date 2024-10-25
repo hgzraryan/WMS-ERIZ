@@ -125,7 +125,7 @@ function AddIncomingProduct({
       try {
         const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(productsList?.data?.jsonString);
-
+        console.log(productsList?.data?.jsonString)
         const suppliersList = await axiosPrivate.get(SUPPLIERS_URL);
         setSuppliersList(suppliersList?.data?.jsonString);
 
@@ -188,9 +188,10 @@ function AddIncomingProduct({
       theme: "light",
     });
   const onSubmit = methods.handleSubmit(async (data) => {
+    console.log(data)
     const newProd = {
       name: data?.productName?.label || null,
-      currentProductId: data?.productName?.value || null,
+      currentProductId: data?.productName?.productListId || null,
       productCategory: data?.productName?.categoryId || null,
       productIdent: data?.productName?.value || null,
       countryOfOrigin:data.countryOfOrigin,
@@ -390,6 +391,7 @@ console.log(data)
                                     {...field}
                                     value={field.value}
                                     options={productsList?.map((item) => ({
+                                      productListId: item.productListId,
                                       categoryId: item.category,
                                       value: item.productListId,
                                       label: item.name,

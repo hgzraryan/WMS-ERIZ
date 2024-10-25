@@ -71,9 +71,9 @@ function OutgoingProducts() {
       setData: setOutgoingProducts,
       dataReceived,
       dataCount
-    } = useGetData(PRODUCTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+    } = useGetData('/outgoingList',currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-    const { refreshData,data } = useRefreshData(PRODUCTS_URL, usersPerPage);
+    const { refreshData,data } = useRefreshData('/outgoingList', usersPerPage);
     useEffect(()=>{
         setOutgoingProducts(data)
       },[data])

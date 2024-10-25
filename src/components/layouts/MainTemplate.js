@@ -493,15 +493,21 @@ const MainTemplate = () => {
                                             <li className="nav-item">
                                                 <ul className="nav flex-column">
                                                     <li className="nav-item">
-                                                    <li className="nav-item">
                                                         <Link className={sisActive1==="productsCategories" || location.pathname==="/products/productsCategories"?"nav-link active":"nav-link"} to="./products/productsCategories/page/1"
                                                         onClick={()=>handleSubmenuClick("products","productsCategories")}>
                                                             <span className="nav-link-text">Ապրանքի դասակարգեր</span>
                                                         </Link>
                                                     </li>
+                                                    <li className="nav-item">
                                                         <Link className={sisActive1==="productsList" || location.pathname==="/products/productsList"?"nav-link active":"nav-link"} to="./products/productsList/page/1"
                                                         onClick={()=>handleSubmenuClick("products","productsList")}>
-                                                            <span className="nav-link-text">Ապրանքների ցանկ</span>
+                                                            <span className="nav-link-text">Ապրանքատեսակների ցանկ</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productsSummary" || location.pathname==="/products/productsSummary"?"nav-link active":"nav-link"} to="./products/productsSummary/page/1"
+                                                        onClick={()=>handleSubmenuClick("products","productsSummary")}>
+                                                            <span className="nav-link-text">Ապրանքներ</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
