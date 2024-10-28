@@ -68,7 +68,7 @@ function ProductsSummary() {
       style={{ borderBottom: "3px solid #f6f6f6", display: "flex" }}
     >
       <div className="me-2">
-        <h3>Ապրանքների տեսակներ</h3>
+        <h3>Ապրանքների Մնացորդներ</h3>
       </div>
       <div>
         

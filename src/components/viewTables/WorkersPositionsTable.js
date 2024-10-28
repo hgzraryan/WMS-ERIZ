@@ -69,53 +69,53 @@ function WorkersPositionsTable({
             ),
             width: 300,
           },
-          {
-            Header: (event) => (
-              <>
-                <div className="columnHeader">Գործողություններ</div>
-              </>
-            ),
-            accessor: "actions",
-            width: 300,
-            Cell: ({ row }) => (
-              <div className="d-flex align-items-center">
-                 <div className="d-flex">
-                  <a
-                    className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                    data-bs-toggle="tooltip"
-                    data-placement="top"
-                    title="Edit"
-                    href="#"
-                    onClick={() => handleOpenEditModal(row.original)}
+          // {
+          //   Header: (event) => (
+          //     <>
+          //       <div className="columnHeader">Գործողություններ</div>
+          //     </>
+          //   ),
+          //   accessor: "actions",
+          //   width: 300,
+          //   Cell: ({ row }) => (
+          //     <div className="d-flex align-items-center">
+          //        <div className="d-flex">
+          //         <a
+          //           className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+          //           data-bs-toggle="tooltip"
+          //           data-placement="top"
+          //           title="Edit"
+          //           href="#"
+          //           onClick={() => handleOpenEditModal(row.original)}
     
-                  >
-                    <span className="icon">
-                      <span className="feather-icon">
-                        <FeatherIcon icon="edit" />
-                      </span>
-                    </span>
-                  </a>
-                  <a
-                    className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                    data-bs-toggle="tooltip"
-                    onClick={() => handleOpenModal(row.original)}
-                    data-placement="top"
-                    title=""
-                    data-bs-original-title="Delete"
-                    href="#"
-                  >
-                    <span className="icon">
-                      <span className="feather-icon">
-                        <FeatherIcon icon="trash" />
-                      </span>
-                    </span>
-                  </a>
-                </div>
-              </div>
-            ),
-            disableSortBy: true,
+          //         >
+          //           <span className="icon">
+          //             <span className="feather-icon">
+          //               <FeatherIcon icon="edit" />
+          //             </span>
+          //           </span>
+          //         </a>
+          //         <a
+          //           className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+          //           data-bs-toggle="tooltip"
+          //           onClick={() => handleOpenModal(row.original)}
+          //           data-placement="top"
+          //           title=""
+          //           data-bs-original-title="Delete"
+          //           href="#"
+          //         >
+          //           <span className="icon">
+          //             <span className="feather-icon">
+          //               <FeatherIcon icon="trash" />
+          //             </span>
+          //           </span>
+          //         </a>
+          //       </div>
+          //     </div>
+          //   ),
+          //   disableSortBy: true,
             
-          },
+          // },
         ],
         []
       );

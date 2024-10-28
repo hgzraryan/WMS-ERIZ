@@ -30,7 +30,7 @@ const { inputRef } = Barcode({
     <div className="wrapper " style={{ margin:'20px 40px 0 40px' }} ref={ref}>
       <header
             className="header"
-            style={{ display: "flex", justifyContent: "space-between",margin:'20px 40px 0 40px' }}
+            style={{ display: "flex", justifyContent: "space-between", margin:'0 40px 0 40px' }}
           >
             <div>
               <div
@@ -49,7 +49,7 @@ const { inputRef } = Barcode({
                     textTransform: "uppercase",
                   }}
                 >
-                  «Էրիզ»
+                  Master ice
                 </p>
                 {/* <img
                   width={"40px"}
@@ -58,17 +58,7 @@ const { inputRef } = Barcode({
                   alt="Logo"
                   style={{ marginLeft: "1rem", marginRight: "1rem" }}
                 /> */}
-                <p
-                  style={{
-                    fontSize: "2.5rem",
-                    color: "#018a54",
-                    letterSpacing: "5px",
-                    fontWeight: "bolder",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  ՍՊԸ
-                </p>
+                
               </div>
               {/* <div
                 style={{
@@ -91,6 +81,8 @@ const { inputRef } = Barcode({
             </div>
             <div>
               <div>
+                <ul>
+                  <li>
                 <div
                   style={{
                     display: "flex",
@@ -100,14 +92,13 @@ const { inputRef } = Barcode({
                 >
                   <p
                     style={{
-                      fontSize: "2.5rem",
                       color: "#018a54",
                       letterSpacing: "5px",
                       fontWeight: "bolder",
                       textTransform: "uppercase",
                     }}
                   >
-                    'ERIZ'
+                    'Էլիզ'
                   </p>
                   {/* <img
                     width={"40px"}
@@ -118,16 +109,108 @@ const { inputRef } = Barcode({
                   /> */}
                   <p
                     style={{
-                      fontSize: "2.5rem",
                       color: "#018a54",
                       letterSpacing: "5px",
                       fontWeight: "bolder",
                       textTransform: "uppercase",
                     }}
                   >
-                    LLC
+                    ՍՊԸ
                   </p>
                 </div>
+
+                  </li>
+                  <li>
+                <div
+                  style={{
+                    fontSize:'.5rem',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize:'.8rem',
+
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    ք․Մասիս 
+                  </p>
+                  {/* <img
+                    width={"40px"}
+                    height={"40px"}
+                    src={mainLogo}
+                    alt="Logo"
+                    style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                  /> */}
+                  <p
+                    style={{
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                  </p>
+                </div>
+
+                  </li>
+                  <li>
+                <div
+                  style={{
+                    fontSize:'.8rem',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize:'.8rem',
+
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Հ․Վարդանյան 52
+                  </p>
+                  {/* <img
+                    width={"40px"}
+                    height={"40px"}
+                    src={mainLogo}
+                    alt="Logo"
+                    style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                  /> */}
+                </div>
+
+                  </li>
+                </ul>
+                {/* <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "2.3rem",
+                      color: "#4eafcb",
+                      textTransform: "uppercase",
+                      fontWeight: "bolder",
+                      marginTop: "-10px",
+                    }}
+                  >
+                    Laboratory
+                  </p>
+                </div> */}
               </div>
             </div>
           </header>

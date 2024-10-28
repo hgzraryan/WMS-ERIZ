@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,Suspense } from "react";
 import { deleteNullProperties } from "../../utils/helper";
-import { PARTNERS_URL, REGISTER_PARTNER } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTCATEGORIES_URL, REGISTER_PARTNER } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
@@ -28,6 +28,8 @@ import {
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
+import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../LoadingSpinner";
 const companyTypes = [
   {
     label: "Ֆիզիկական անձ",
@@ -70,31 +72,16 @@ const partnerTypes = [
     value: "Investor",
   },
 ];
-const productCategories = [
-  {
-    label: "Մրգեր",
-    value: "fruits",
-  },
-  {
-    label: "Հյութեր",
-    value: "յuices",
-  },
-  {
-    label: "Մսամթերք",
-    value: "meat",
-  },
-  {
-    label: "Ծովամթերք",
-    value: "seafood",
-  },
-];
 function PartnerEdit({ partner, setEditRow, refreshData }) {
+  const navigate = useNavigate();
     const [additionalPhone, setAdditionalPhone] = useState(false);
     const axiosPrivate = useAxiosPrivate();
     const [country, setCountry] = useState("");
-    const [errMsg, setErrMsg] = useState("");
-    const editorRef = useRef(null);
     const [region, setRegion] = useState("");
+    const [errMsg, setErrMsg] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const editorRef = useRef(null);
+    const [productCategories, setProductCategories] = useState([]);
      useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան";
@@ -103,6 +90,21 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
     }
     setCountry(partner?.contact?.address?.country);
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productCategoriesList = await axiosPrivate.get(PRODUCTCATEGORIES_URL);
+        setProductCategories(productCategoriesList?.data?.jsonString);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        //navigate("/login", { state: { from: location }, replace: true });
+      }
+    };
+    setTimeout(() => {
+      fetchData();
+    }, 0);
+  }, [navigate]);
     const { trigger } = useForm();
     const methods = useForm({
       mode: "onChange",
@@ -148,6 +150,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
           productCategories,
         }
       ) => {
+console.log(productCategories)
         const newPartner = {
           name:name?.trim() !== partner?.name?.trim() ? name : null,
           companyType: companyType?.value?.trim()!== partner?.companyType?.trim()? companyType?.value : null,
@@ -156,7 +159,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
           bankAccNumber:bankAccNumber?.toString().trim() !== partner?.bankAccNumber?.toString().trim() ? bankAccNumber : null,
           currency: currency?.value?.trim()!== partner?.currency?.trim()? currency?.value : null,
           partnerType:partnerType?.value?.trim()!== partner?.partnerType?.trim()? partnerType?.value : null,
-          productCategories: productCategories.map((el) => el.value).toString()!==partner?.productCategories.toString()?productCategories.map((el) => el.value):null,
+          //productCategories: productCategories?.map((el) => el?.value)!==partner?.productCategories?productCategories?.map((el) => el?.value):null,
           contact: {
             email:email?.trim() !== partner?.contact?.email?.trim() ? email : null,
             phone:phone?.trim() !== partner?.contact?.phone?.trim() ? phone : null,
@@ -188,7 +191,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
         };
         const updatedFields = deleteNullProperties(newPartner);
   
-        console.log(newPartner);
+       // console.log(newPartner);
         try {
           await axiosPrivate.put(PARTNERS_URL, { updatedFields, id: partner.partnerId }, {
             headers: { "Content-Type": "application/json" },
@@ -220,6 +223,10 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
+    <Suspense fallback={<LoadingSpinner />}>
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : (
       <FormProvider {...methods}>
         <div className="contact-body contact-detail-body">
           <div data-simplebar className="nicescroll-bar">
@@ -574,7 +581,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                           </div>
                         </div>
 
-                        <div className="row gx-3">
+                        {/* <div className="row gx-3">
                           <div className="col-sm-6">
                             <div className="d-flex justify-content-between me-2">
                               <label
@@ -596,18 +603,21 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                               <Controller
                                 name="productCategories"
                                 control={methods.control}
-                                defaultValue={partner?.productCategories.map((elem)=>productCategories.find((el)=>el.value===elem)).flat(1)}
+                                defaultValue={partner?.productCategories.map((elem) => {
+                                  const el = productCategories.find((el) => el.categoryId === elem);
+                                  return { value: el?.categoryId, label: el?.name };
+                              })[0]}
+
                                 rules={{ required: true }}
                                 render={({ field }) => (
                                   <Select
                                     {...field}
                                     isMulti
                                     closeMenuOnSelect={false}
-                                    options={productCategories.map(
+                                    options={productCategories?.map(
                                       (elem) => ({
-                                        value: elem.value,
-                                        label: elem?.label,
-                                        //price: elem?.price
+                                        value: elem.categoryId,
+                                        label: elem?.name,
                                       })
                                     )}
                                     placeholder={"Ընտրել"}
@@ -617,7 +627,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                               />
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -653,7 +663,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
                                 onInit={(evt, editor) =>
                                   (editorRef.current = editor)
                                 }
-                                initialValue={partner.additional}
+                                initialValue={partner?.additional}
                                 init={{
                                   height: 300,
                                   plugins:
@@ -708,6 +718,8 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
           </div>
         </div>
       </FormProvider>
+      )}
+          </Suspense>
     </Modal.Body>
   </Modal>
   )

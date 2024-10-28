@@ -818,10 +818,10 @@ export const Supplier_validation = {
 };
 export const Quantity_validation = {
   name: "quantity",
-  label: "Քանակ",
+  label: "Քանակ(հատ)",
   type: "text",
   id: "quantity",
-  placeholder: "Քանակ",
+  placeholder: "հատ",
   validation: {
     required: {
       value: false,
@@ -909,10 +909,10 @@ export const pallet_validation = {
 };
 export const volume_validation = {
   name: "volume",
-  label: "Լիտր",
+  label: "Ծավալ(լիտր)",
   type: "number",
   id: "volume",
-  placeholder: "Լիտր",
+  placeholder: "լիտր",
   validation: {
     required: {
       value: false,

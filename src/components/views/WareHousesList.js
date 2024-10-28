@@ -421,6 +421,11 @@ function WareHousesList() {
       width: 100,
     },
     {
+      Header: "Մնացորդ",
+      accessor: "balance",
+      width: 100,
+    },
+    {
       Header: "Քանակ",
       accessor: "quantity1",
       Cell: ({ row }) => (

@@ -88,9 +88,22 @@ export const CHANGE_USERPASSWORD = "/changeUserPassword";
 
 //user Roles
 export const ROLES = {
-    User: 2001,
-    // Editor: 1984,
-    // Approver: 6010,
-    Admin: 5150,
-    SuperAdmin:5050
-  };
+  User: 2001,
+  Editor: 1984,
+  Approver: 3345,
+  Admin: 5150,
+  SuperAdmin:5050
+};
+export const ROLESTATE = [
+  { label:'Ադմին',name: "Admin", value: 5150 },
+  { label:'Հաստատող',name: "Approver", value: 3345 },
+  { label:'Փոփոխող',name: "Editor", value: 1984 },
+  { label:'Օգտատեր',name: "User", value: 2001 },
+  { label:'Համակարգի ադմինիստրատոր',name: "SuperAdmin", value: 5050 },  
+]
+export const CURRENCIES = [
+  { value: "051", label: "AMD" },
+  { value: "840", label: "USD" },
+  { value: "978", label: "EUR" },
+  { value: "643", label: "RUB" },
+];

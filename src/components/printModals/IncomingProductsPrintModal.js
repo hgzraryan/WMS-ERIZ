@@ -141,7 +141,7 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
                     textTransform: "uppercase",
                   }}
                 >
-                  «Էրիզ»
+                  Master ice
                 </p>
                 {/* <img
                   width={"40px"}
@@ -150,17 +150,7 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
                   alt="Logo"
                   style={{ marginLeft: "1rem", marginRight: "1rem" }}
                 /> */}
-                <p
-                  style={{
-                    fontSize: "2.5rem",
-                    color: "#018a54",
-                    letterSpacing: "5px",
-                    fontWeight: "bolder",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  ՍՊԸ
-                </p>
+                
               </div>
               {/* <div
                 style={{
@@ -183,6 +173,8 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
             </div>
             <div>
               <div>
+                <ul>
+                  <li>
                 <div
                   style={{
                     display: "flex",
@@ -192,14 +184,13 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
                 >
                   <p
                     style={{
-                      fontSize: "2.5rem",
                       color: "#018a54",
                       letterSpacing: "5px",
                       fontWeight: "bolder",
                       textTransform: "uppercase",
                     }}
                   >
-                    'ERIZ'
+                    'Էլիզ'
                   </p>
                   {/* <img
                     width={"40px"}
@@ -210,16 +201,89 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
                   /> */}
                   <p
                     style={{
-                      fontSize: "2.5rem",
                       color: "#018a54",
                       letterSpacing: "5px",
                       fontWeight: "bolder",
                       textTransform: "uppercase",
                     }}
                   >
-                    LLC
+                    ՍՊԸ
                   </p>
                 </div>
+
+                  </li>
+                  <li>
+                <div
+                  style={{
+                    fontSize:'.5rem',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize:'.8rem',
+
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    ք․Մասիս 
+                  </p>
+                  {/* <img
+                    width={"40px"}
+                    height={"40px"}
+                    src={mainLogo}
+                    alt="Logo"
+                    style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                  /> */}
+                  <p
+                    style={{
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                  </p>
+                </div>
+
+                  </li>
+                  <li>
+                <div
+                  style={{
+                    fontSize:'.8rem',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize:'.8rem',
+
+                      color: "#018a54",
+                      letterSpacing: "5px",
+                      fontWeight: "bolder",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Հ․Վարդանյան 52
+                  </p>
+                  {/* <img
+                    width={"40px"}
+                    height={"40px"}
+                    src={mainLogo}
+                    alt="Logo"
+                    style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                  /> */}
+                </div>
+
+                  </li>
+                </ul>
                 {/* <div
                   style={{
                     display: "flex",

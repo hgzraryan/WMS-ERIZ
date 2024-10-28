@@ -26,7 +26,7 @@ function IncomingOrderForm({data}) {
             <p>(Մատակարարի անվանում)</p>
             </section>
             <section className="form-section" style={{marginBottom:'30px'}}>
-                <table className="main-table" style= {{width:'100%', marginTop:'20px'}}>
+                {/* <table className="main-table" style= {{width:'100%', marginTop:'20px'}}>
                     <thead>
                         <tr>
                             <th>Թղթակցող հաշիվը</th>
@@ -43,7 +43,7 @@ function IncomingOrderForm({data}) {
                             <td>------</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> */}
             </section>
 
             <section className="form-section">
@@ -69,13 +69,13 @@ function IncomingOrderForm({data}) {
                 </table>
             </section>
             <section className="form-section" >
-                <div style={{ marginBottom:'50px'}}>
+                {/* <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
                     <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Ստացված է</h6><div className='line' style={{width:'80%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(անունը,ստորագրությունը)</p>
-                </div>
+                </div> */}
                 <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
@@ -83,7 +83,7 @@ function IncomingOrderForm({data}) {
                 </div>
                    
                 </div>
-                <div style={{ marginBottom:'50px'}}>
+                {/* <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
                     <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գումարը</h6><div className='line' style={{width:'84%'}}></div>
@@ -96,20 +96,20 @@ function IncomingOrderForm({data}) {
                     <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Կցվում են</h6><div className='line' style={{width:'84%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(Կցվող փաստաթղթերի Էջերի թիվը)</p>
-                </div>
+                </div> */}
             </section>
             <section className="form-section" style={{display:'flex', justifyContent:'space-between', }}>
 
                 <div className="signature">
-                    <p>Վճարող </p>
+                    <p>Ուղարկող </p>
                     <p>_____________________</p>
                 </div>
                 <div className="signature">
-                    <p>Գլխավոր հաշվապահ</p>
+                    <p>Վարորդ</p>
                     <p>_____________________</p>
                 </div>
                 <div className="signature">
-                    <p>Գանձապահ </p>
+                    <p>Ստացող </p>
                     <p>_____________________</p>
                 </div>
             </section>

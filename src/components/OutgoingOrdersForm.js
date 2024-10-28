@@ -34,8 +34,10 @@ function OutgoingOrdersForm({data}) {
                         <tr>
                             <td>{data?.name}</td>
                             <td>{data?.outgoingCount}</td>
-                            <td>{data?.price}</td>
-                            <td>{data?.price*data?.outgoingCount}</td>
+                            <td></td>
+                            <td></td>
+                            {/* <td>{data?.price}</td>
+                            <td>{data?.price*data?.outgoingCount}</td> */}
                         </tr>
                     </tbody>
                 </table>
@@ -55,7 +57,7 @@ function OutgoingOrdersForm({data}) {
                 </div>
                    
                 </div>
-                <div style={{ marginBottom:'50px'}}>
+                {/* <div style={{ marginBottom:'50px'}}>
 
                 <div className="section" style={{display:'flex'}}>
                     <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Գումարը</h6><div className='line' style={{width:'84%'}}></div>
@@ -68,7 +70,7 @@ function OutgoingOrdersForm({data}) {
                     <h6 style={{marginRight:'5px',marginBottom:0, alignContent:'end'}}>Կցվում են</h6><div className='line' style={{width:'84%'}}></div>
                 </div>
                     <p style={{display:'flex', justifyContent:'center', alignItems:'center'}}>(Կցվող փաստաթղթերի Էջերի թիվը)</p>
-                </div>
+                </div> */}
             </section>
             <section className="form-section" style={{display:'flex', justifyContent:'space-between', }}>
 
@@ -77,7 +79,7 @@ function OutgoingOrdersForm({data}) {
                     <p>_____________________</p>
                 </div>
                 <div className="signature">
-                    <p>Վճարող </p>
+                    <p>Վարորդ </p>
                     <p>_____________________</p>
                 </div>
                 <div className="signature">

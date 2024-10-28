@@ -16,7 +16,7 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
@@ -24,69 +24,7 @@ import { CountryDropdown,CountryRegionData  } from 'react-country-region-selecto
 import AddProductsList from "./AddProductsList";
 import moment from "moment";
 
-const customproductsClasses = [
-  {
-    id: 1,
-    name: "Electronics",
-    value: "Electronics",
-    label: "Էլեկտրոնիկա",
-  },
-  {
-    id: 2,
-    name: "Clothing",
-    value: "Clothing",
-    label: "Հագուստ",
-  },
-  {
-    id: 3,
-    name: "Food",
-    value: "Food",
-    label: "Սնունդ",
-  },
-  {
-    id: 1,
-    name: "Furniture",
-    value: "Furniture",
-    label: "Կահույք",
-  },
-  {
-    id: 2,
-    name: "Books",
-    value: "Books",
-    label: "Գրքեր",
-  },
-  {
-    id: 3,
-    name: "Beauty",
-    value: "Beauty",
-    label: "Խնամք",
-  },
-];
-const productTypes = [
-  {
-    productTypeId: 13654,
-    productTypeName: "Հավի բուդ ոսկորով",
-  },
-  {
-    productTypeId: 13655,
-    productTypeName: "Հավի բուդ առանց ոսկոր",
-  },
-  {
-    productTypeId: 13656,
-    productTypeName: "Հավի թև ոսկորով",
-  },
-  {
-    productTypeId: 13657,
-    productTypeName: "Հավի թև առանց ոսկոր",
-  },
-  
-];
-const currencies = [
-  { value: "051", label: "AMD" },
-  { value: "840", label: "USD" },
-  { value: "978", label: "EUR" },
-  { value: "643", label: "RUB" },
-];
+
 function AddIncomingProduct({
   handleToggleCreateModal,
   productCategories,
@@ -149,7 +87,7 @@ function AddIncomingProduct({
     setNewProduct((prev) => true);
   };
   const handleCurrencyChange = (e) => {
-    const asd = currencies.filter((el)=>
+    const asd = CURRENCIES.filter((el)=>
       el.label===e.target?.value
     )
     console.log(asd)
@@ -198,7 +136,7 @@ function AddIncomingProduct({
       stock: +data?.warehouse?.value || null,
       supplier: +data.suppliers?.value || null,
       quantity: +data.quantity || null,
-      balance: +data.quantity || null,
+      balance: +data.weight || +data?.volume || null,
       dimensions:{
         //height: +data.height || null,
         //length: +data.length || null,
@@ -212,6 +150,7 @@ function AddIncomingProduct({
       reorderLevel: +data?.reorderLevel,
       producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
+      expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
       description: editorRef.current.getContent({ format: "text" }),
       barcode: +data?.barcode,
       //productCategory:data?.productCategory || 1,
@@ -450,12 +389,6 @@ console.log(data)
                             </div>
                           </div>
                           <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...barcode_validation} />
-                            </div>
-                                                      </div>
-
-                          <div className="row gx-3">
                             {/* <div className="col-sm-6">
                               <Input {...barcode_validation} />
                             </div> */}
@@ -564,21 +497,21 @@ console.log(data)
                           </div>
 
                           <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...Quantity_validation} />
+                          <div className="col-sm-6">
+                              <Input {...pallet_validation} />
                             </div>
                             <div className="col-sm-6">
-                              <Input {...Weight_validation} />
+                              <Input {...Quantity_validation} />
                             </div>
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
+                              <Input {...Weight_validation} />
+                            </div>
+                            <div className="col-sm-6">
                               <Input {...volume_validation} />
                             </div>
                             
-                          <div className="col-sm-6">
-                              <Input {...pallet_validation} />
-                            </div>
                           </div>
 
                           <div className="row gx-3">                           
@@ -593,7 +526,7 @@ console.log(data)
                                   onChange={handleCurrencyChange}
                                   style={{ border: "none", outline: "none" }}
                                 >
-                                  {currencies.map((el) => (
+                                  {CURRENCIES.map((el) => (
                                     <option value={el.value}>{el.label}</option>
                                   ))}
                                 </select>
@@ -642,7 +575,37 @@ console.log(data)
                                 </div>
                               </div>
                             </div> 
-                          <div className="col-sm-6">
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="birthday"
+                                  >
+                                    Պիտանելիության ամսաթիվ
+                                  </label>
+                                  {methods.formState.errors.expirationDate && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>{" "}
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <CustomDateComponent
+                                    name="expirationDate"
+                                    control={methods.control}
+                                  />
+                                </div>
+                              </div>
+                            </div> 
+                          </div> 
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...barcode_validation} />
+                            </div>
                           <div className="col-sm-6">
                               <div className="form-group">
                                 <div className="d-flex justify-content-between me-2">
@@ -669,7 +632,6 @@ console.log(data)
                                 </div>
                               </div>
                             </div> 
-                          </div>
                           </div>
                           {/* {attributs?.map((el) => {
                             console.log("attributs", attributs);

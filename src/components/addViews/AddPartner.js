@@ -156,7 +156,7 @@ function AddPartner({ setIsOpen, refreshData }) {
         bankAccNumber:+bankAccNumber,
         currency: currency?.value,
         partnerType: partnerType?.value,
-        productCategories: productCategories.map((el) => el.value),
+        productCategories: productCategories?.map((el) => el.value),
         contact: {
           email: email,
           phone: phone,

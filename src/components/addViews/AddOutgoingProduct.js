@@ -13,6 +13,7 @@ import AddProductsList from "./AddProductsList";
 import CustomTable from "../CustomTable";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 function AddOutgoingProduct({
   handleToggleCreateModal,
@@ -41,6 +42,17 @@ function AddOutgoingProduct({
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();  
   //console.log('outgoingList',outgoingList)
+  const notify = (text) =>
+    toast.success(text, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   const handleInputChange = useCallback((e, rowId) => {    
     const { value } = e.target;
     setRowInputValues((prevValues) => ({
@@ -177,7 +189,9 @@ console.log(data)
 
       handleToggleCreateModal(false);
       refreshData();
-     
+      notify(
+        `Ապրանքը  ելքագրված է`
+      );
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -259,7 +273,7 @@ console.log(data)
             {moment(row.original?.createdAt).format('DD-MM-YYYY')}
           </div>
         ),
-        width: 180,
+        width: 140,
         
       },
       {
@@ -281,6 +295,25 @@ console.log(data)
         ),
         accessor: "quantity",
         width: 100,
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Պիտ. ամսաթիվ</div>
+          </>
+        ),
+        accessor: "expirationDate",
+        style: {
+           // Custom style for the 'description' column
+        },
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            {moment(row.original?.expirationDate).format('DD-MM-YYYY')}
+          </div>
+        ),
+        width: 120,
+        
       },
       {
         Header: (event) => (
@@ -620,7 +653,7 @@ console.log(data)
                         className="btn btn-primary"
                         data-bs-dismiss="modal"
                       >
-                        Ավելացնել
+                        Ելքագրել
                       </button>
                     </div>
                   </Form>
