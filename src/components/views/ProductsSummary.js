@@ -28,7 +28,7 @@ function ProductsSummary() {
       dataReceived
      } = useGetData('/warehouseBalance',currentPage,usersPerPage,searchCount,null,searchId,searchTerms);
      const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-     const { refreshData,data } = useRefreshData(PRODUCTSLIST_URL, usersPerPage);
+     const { refreshData,data } = useRefreshData('/warehouseBalance', usersPerPage);
      useEffect(()=>{
         setProductsSummary(data)
        },[data])
@@ -91,7 +91,7 @@ function ProductsSummary() {
                   />
                 <ReactPaginate
                 previousLabel = {"Հետ"}    
-                nextLabel = {"Առաջ"}
+                nextLabel = {"Առաջ"}H
                 pageCount = {pageCount}
                 onPageChange = {handlePageClick}
                 initialPage = {0}
