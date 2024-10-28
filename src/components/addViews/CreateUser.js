@@ -27,6 +27,13 @@ import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-countr
 import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
 
+const roleState = [
+  { label:'Ադմին',name: "Admin", value: 5150 },
+  { label:'Հաստատող',name: "Approver", value: 3345 },
+  { label:'Փոփոխող',name: "Editor", value: 1984 },
+  { label:'Օգտատեր',name: "User", value: 2001 },
+  { label:'Համակարգի ադմինիստրատոր',name: "SuperAdmin", value: 5050 },  
+]
 function CreateUser({ setIsOpen,refreshData }) {
   const [errMsg, setErrMsg] = useState("");
   const axiosPrivate = useAxiosPrivate();
@@ -632,7 +639,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                                           {...field}                                          
                                           closeMenuOnSelect={true}
                                           components={animatedComponents}
-                                          options={ROLES}
+                                          options={roleState}
                                           styles={customStyles}
                                           placeholder={"Ընտրել"}
                                           menuPlacement="top"
