@@ -50,7 +50,7 @@ function ProductsListTable({
                         onClick={() => handleOpenInfoModal(row.original)}
                       />
                       </div>
-                       <a
+                       {/* <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                     data-bs-toggle="tooltip"
                     onClick={() => handleOpenModal(row.original)}
@@ -64,7 +64,7 @@ function ProductsListTable({
                         <FeatherIcon icon="trash" />
                       </span>
                     </span>
-                  </a>
+                  </a> */}
                     </div>
                   ),
                 disableSortBy: true,

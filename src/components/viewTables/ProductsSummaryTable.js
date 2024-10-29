@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
+import ProductsSummaryInfo from '../infoModals/ProductsSummaryInfo';
 
 function ProductsSummaryTable({
     confirmRef,
@@ -70,6 +71,9 @@ function ProductsSummaryTable({
           );
   return (
     <>
+     {!!modalInfo && (
+        <ProductsSummaryInfo modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+      )}
       <CustomTable data={productsSummary} column={columns} dataReceived={dataReceived}/>
     </>
 );

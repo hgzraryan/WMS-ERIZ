@@ -182,7 +182,7 @@ const Users = () => {
 
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => setIsOpen(true)}>
-                        Աշխատակից
+                        Օգտատեր
                       </Dropdown.Item>
                       {/* <Dropdown.Item onClick={() => setIsOpenRole(true)}>
                         Դեր

@@ -482,6 +482,7 @@ console.log(data)
                                     onChange={(val) => {
                                         field.onChange(val);
                                         onProductSelect(val);
+                                        setOutgoingList([])
                                       }}
                                       />
                                     )}

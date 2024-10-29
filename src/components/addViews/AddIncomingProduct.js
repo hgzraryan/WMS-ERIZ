@@ -604,7 +604,7 @@ console.log(data)
                           </div> 
                           <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...barcode_validation} />
+                              <Input {...barcode_validation} validation={{required:{ value:false}}} />
                             </div>
                           <div className="col-sm-6">
                               <div className="form-group">

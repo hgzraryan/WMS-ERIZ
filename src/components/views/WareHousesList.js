@@ -21,6 +21,9 @@ import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { BiSolidInfoCircle } from "react-icons/bi";
+import PartnersInfoModal from "../infoModals/PartnersInfoModal";
+import WarehouseInfoModal from "../infoModals/WarehouseInfoModal";
 
 function WareHousesList() {
   const axiosPrivate = useAxiosPrivate();  
@@ -46,7 +49,12 @@ function WareHousesList() {
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = wareHouseData.slice(itemOffset, endOffset);
+  const [modalInfo, setModalInfo] = useState(false);
 
+  const handleOpenInfoModal = (e,data) => {
+        e.stopPropagation()
+        setModalInfo((prev) => data);
+      };
   const {
     data: wareHouses,
     setData: setWarehouses,
@@ -309,6 +317,12 @@ function WareHousesList() {
       render: (_, record) => (
         <>
         <Space size="middle" onClick={() => handleOpenEditModal(record)}>
+      
+              <BiSolidInfoCircle
+              cursor={"pointer"}
+              size={"1.5rem"}
+              onClick={(e) => handleOpenInfoModal(e,record)}
+            />
           <FeatherIcon icon="edit" width={20} />
           {/* <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
@@ -521,6 +535,10 @@ function WareHousesList() {
   };
   return (
     <HelmetProvider>
+      
+      {!!modalInfo && (
+        <WarehouseInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+      )}
       <Helmet>
         <meta charSet="utf-8" />
         <title>Explore Warehouse</title>

@@ -13,6 +13,7 @@ import {
   city_validation,
   street_validation,
   zipCode_validation,
+  emergencyContactName_validation,
 } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {  toast } from 'react-toastify';
@@ -119,6 +120,8 @@ function CreateUser({ setIsOpen,refreshData }) {
     gender,
     maritalStatus,
     roles,
+    emergencyContactNumber,
+    emergencyContactName,
     dateOfBirth,
     }) => {
    
@@ -136,6 +139,8 @@ function CreateUser({ setIsOpen,refreshData }) {
           country: country,
           zipCode: zipCode,
         },
+        emergencyContactName:emergencyContactName,
+        emergencyContactNumber:emergencyContactNumber,
       },
       gender: gender,
       maritalStatus:maritalStatus,
@@ -160,7 +165,7 @@ function CreateUser({ setIsOpen,refreshData }) {
       
       handleToggleCreateModal(false);
       refreshData();
-      notify(`${newUser.firstname} ${newUser.lastname} աշխատակիցը ավելացված է`)
+      notify(`${newUser.firstname} ${newUser.lastname} օգտատերը ավելացված է`)
 
     } catch (err) {
       if (!err?.response) {
@@ -248,7 +253,7 @@ function CreateUser({ setIsOpen,refreshData }) {
     >
       <Modal.Header closeButton>
         <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ավելացնել նոր աշխատակից
+          Ավելացնել նոր Օգտատեր
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -290,7 +295,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                         />
                       </div>
                       <div className="cp-name text-truncate mt-3">
-                        Աշխատակցի նկարը
+                      Օգտատիրոջ նկարը
                       </div>
 
                       <div
@@ -577,6 +582,22 @@ function CreateUser({ setIsOpen,refreshData }) {
                             </div>
                             <div className="col-sm-6">
                               <Input {...password_validation} />
+                            </div>
+                          </div>
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...emergencyContactName_validation} />
+                            </div>
+                            <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                              <label className="form-label" htmlFor="phoneNumber">
+                              Լրացուցիչ կոնտակտի հեռախոս
+                              </label>
+                              {methods.formState.errors.emergencyContactNumber && (
+                                    <span className="error text-red"><span><img src={ErrorSvg} alt="errorSvg"/></span> պարտադիր</span>
+                                    )}
+                                    </div>                              
+                              <CustomPhoneComponent name="emergencyContactNumber"  control={methods.control} />     
                             </div>
                           </div>
                        

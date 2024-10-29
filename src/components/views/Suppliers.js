@@ -169,6 +169,7 @@ const refreshPage = () => {
                   suppliers={suppliers} 
                   setSuppliers={setSuppliers}
                   dataReceived={dataReceived}
+                  refreshData={refreshData}
                   />
 <ReactPaginate
                       previousLabel = {"Հետ"}    

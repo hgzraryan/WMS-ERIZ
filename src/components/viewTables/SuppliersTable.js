@@ -4,6 +4,7 @@ import CustomTable from '../CustomTable';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import SuppliersInfoModal from '../infoModals/SuppliersInfoModal';
+import SupplierEdit from '../editModals/SupplierEdit';
 
 function SuppliersTable({suppliers,
     confirmRef,
@@ -13,9 +14,14 @@ function SuppliersTable({suppliers,
     handleOpenModal,
     handleCloseModal,
     productCategories,
+    refreshData,
     dataReceived}) {
       const [modalInfo, setModalInfo] = useState(false);
+      const [editRow, setEditRow] = useState(false);
 
+      const handleOpenEditModal = (value) => {
+        setEditRow((prev) => value);
+      };
       const handleOpenInfoModal = (data) => {
          
          setModalInfo((prev) => data);
@@ -132,7 +138,7 @@ function SuppliersTable({suppliers,
             />
             </div>
                 <div className="d-flex">
-                {/* <a
+                <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                     data-bs-toggle="tooltip"
                     data-placement="top"
@@ -146,7 +152,7 @@ function SuppliersTable({suppliers,
                         <FeatherIcon icon="edit" />
                       </span>
                     </span>
-                  </a> */}
+                  </a>
                   <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
                     data-bs-toggle="tooltip"
@@ -192,6 +198,9 @@ function SuppliersTable({suppliers,
     <>
      {!!modalInfo && (
         <SuppliersInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo} dataReceived={dataReceived}/>
+      )}
+       {!!editRow && (
+        <SupplierEdit supplier={editRow} setEditRow={setEditRow} refreshData={refreshData} />
       )}
           <CustomTable data={suppliers} column={columns} dataReceived={dataReceived} />
 
