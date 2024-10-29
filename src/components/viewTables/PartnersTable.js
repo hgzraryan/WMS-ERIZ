@@ -35,6 +35,9 @@ function PartnersTable({
      
      setModalInfo((prev) => data);
    };
+   const handleUserPage = async(partnerId) =>{
+    navigate(`/companies/partners/${partnerId}`)
+}
   // const getColumnSearchProps = (dataIndex) => {
   //     return {
   //       filterDropdown: ({
@@ -152,6 +155,9 @@ function PartnersTable({
       {
         Header: "Անվանում",
         accessor: "name",
+        Cell: ({ row }) => <div
+        onClick={() => handleUserPage(row.original?.partnerId)}
+        style={{cursor:'pointer'}}>{row.original?.name}</div>,
         width: 250,
       },
       {

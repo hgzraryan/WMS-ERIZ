@@ -5,6 +5,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import SuppliersInfoModal from '../infoModals/SuppliersInfoModal';
 import SupplierEdit from '../editModals/SupplierEdit';
+import { useNavigate } from 'react-router-dom';
 
 function SuppliersTable({suppliers,
     confirmRef,
@@ -16,9 +17,12 @@ function SuppliersTable({suppliers,
     productCategories,
     refreshData,
     dataReceived}) {
+      const navigate = useNavigate()
       const [modalInfo, setModalInfo] = useState(false);
       const [editRow, setEditRow] = useState(false);
-
+      const handleUserPage = async(partnerId) =>{
+        navigate(`/companies/partners/${partnerId}`)
+    }
       const handleOpenEditModal = (value) => {
         setEditRow((prev) => value);
       };
@@ -50,6 +54,9 @@ function SuppliersTable({suppliers,
             ),
             accessor: "name",
             sortable: true,
+            Cell: ({ row }) => <div
+            onClick={() => handleUserPage(row.original?.supplierId)}
+            style={{cursor:'pointer'}}>{row.original?.name}</div>,
             width: 300,
             
           },

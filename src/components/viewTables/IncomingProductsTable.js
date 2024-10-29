@@ -61,7 +61,7 @@ function IncomingProductsTable({
                 <div  className="name">Դասակարգ</div>
               </>
             ),
-            accessor: "productCategory",
+            accessor: "productCategoryName",
             sortable: true,
             width: 200,
             

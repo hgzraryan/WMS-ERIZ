@@ -11,6 +11,8 @@ export const LOUNGE_ROUTE = 'lounge'
 
 export const PRIVILIGE_ROUTE = 'users/privileges'
 export const USERS_ID_ROUTE = 'users/users/:id'
+export const PARTNERS_ID_ROUTE = 'companies/partners/:id'
+export const SUPPLIERS_ID_ROUTE = 'companies/suppliers/:id'
 export const ROLES_ROUTE = 'users/roles'
 export const WORKERSROLES_ROUTE = 'workers/roles/page/:pageNumber'
 export const WORKERS_ROUTE = 'workers/workers/page/:pageNumber'
