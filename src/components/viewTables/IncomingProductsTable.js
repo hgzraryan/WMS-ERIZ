@@ -80,6 +80,17 @@ function IncomingProductsTable({
           },
           {
             Header: (event) => (
+              <>                
+                <div  className="quantity">Մնացորդ</div>
+              </>
+            ),
+            accessor: "balance",
+            sortable: true,
+            width: 100,
+            
+          },
+          {
+            Header: (event) => (
               <>
                 
                 <div  className="name">Արժեք</div>
