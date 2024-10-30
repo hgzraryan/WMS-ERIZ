@@ -62,7 +62,8 @@ import {
   WORKERSROLES_ROUTE,
   PRODUCTSSUMMARY_ROUTE,
   PARTNERS_ID_ROUTE,
-  SUPPLIERS_ID_ROUTE
+  SUPPLIERS_ID_ROUTE,
+  PRODUCTSMOVEMENTS_ROUTE
 } from "./utils/constants";
 import Suppliers from "./components/views/Suppliers";
 import ProductsList from "./components/views/ProductsList";
@@ -96,6 +97,7 @@ const ProductsCategories = lazy(()=>  import("./components/views/ProductsCategor
 const Products = lazy(()=>  import("./components/views/Products"));
 const IncomingProducts = lazy(()=>  import("./components/views/IncomingProducts"));
 const OutgoingProducts = lazy(()=>  import("./components/views/OutgoingProducts"));
+const ProductMovements = lazy(()=>  import("./components/views/ProductMovements"));
 const ProductsSummary = lazy(()=>  import("./components/views/ProductsSummary"));
 const PurchaseOne = lazy(()=>  import("./components/views/PurchaseOne"));
 const PurchaseTwo = lazy(()=>  import("./components/views/PurchaseTwo"));
@@ -172,6 +174,7 @@ function App() {
                 <Route path={PRODUCTS_ROUTE} element={<Products />} />
                 <Route path={INCOMINGPRODUCTS_ROUTE} element={<IncomingProducts />} />
                 <Route path={OUTGOINGPRODUCTS_ROUTE } element={<OutgoingProducts />} />
+                <Route path={PRODUCTSMOVEMENTS_ROUTE } element={<ProductMovements />} />
                 <Route path={PRODUCTSLIST_ROUTE} element={<ProductsList />} />
                 <Route path={PURCHASEONE_ROUTE} element={<PurchaseOne />} />
                 <Route path={PURCHASETWO_ROUTE} element={<PurchaseTwo />} />

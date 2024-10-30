@@ -106,7 +106,7 @@ function IncomingOrderForm({data}) {
                 </div>
                 <div className="signature">
                     <p>Վարորդ</p>
-                    <p>_____________________</p>
+                    <p style={{textDecoration:'underline'}}>{data.driverName}</p>
                 </div>
                 <div className="signature">
                     <p>Ստացող </p>

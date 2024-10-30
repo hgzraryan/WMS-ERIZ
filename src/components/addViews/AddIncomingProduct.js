@@ -16,13 +16,14 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, SUPPLIERS_URL, WAREHOUSES_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, SUPPLIERS_URL, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
 import { CountryDropdown,CountryRegionData  } from 'react-country-region-selector';
 import AddProductsList from "./AddProductsList";
 import moment from "moment";
+import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
 
 
 function AddIncomingProduct({
@@ -43,6 +44,7 @@ function AddIncomingProduct({
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
   const [suppliersList, setSuppliersList] = useState([])
+  const [workers, setWorkers] = useState([])
   const editorRef = useRef(null);
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
@@ -64,8 +66,12 @@ function AddIncomingProduct({
         const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(productsList?.data?.jsonString);
         console.log(productsList?.data?.jsonString)
+
         const suppliersList = await axiosPrivate.get(SUPPLIERS_URL);
         setSuppliersList(suppliersList?.data?.jsonString);
+
+        const workersList = await axiosPrivate.get(WORKERS_URL);
+        setWorkers(workersList?.data?.jsonString);
 
         const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
         setWareHouses(wareHousesReps?.data?.jsonString);
@@ -135,6 +141,7 @@ function AddIncomingProduct({
       countryOfOrigin:data.countryOfOrigin,
       stock: +data?.warehouse?.value || null,
       supplier: +data.suppliers?.value || null,
+      driver: +data.driver?.value || null,
       quantity: +data.quantity || null,
       balance: +data.weight || +data?.volume || null,
       dimensions:{
@@ -151,6 +158,7 @@ function AddIncomingProduct({
       producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
+      actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
       description: editorRef.current.getContent({ format: "text" }),
       barcode: +data?.barcode,
       //productCategory:data?.productCategory || 1,
@@ -495,6 +503,52 @@ console.log(data)
                               </div>
                             </div>
                           </div>
+                          <div className="row gx-3">
+                          <div className="col-sm-6">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="driver"
+                                    >
+                                      Վարորդ
+                                    </label>
+                                    {methods.formState.errors
+                                      .driver && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="driver"
+                                      control={methods.control}
+                                      defaultValue={null}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={workers?.map((el)=>(
+
+                                            {                                              
+                                              value:el.workerId,
+                                              label: `${el?.workerId}․  ${el?.fullName}`
+                                            }
+                                          )
+                                      )}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-sm-6">
+                              <Input {...barcode_validation} validation={{required:{ value:false}}} />
+                            </div>
+                          </div>
 
                           <div className="row gx-3">
                           <div className="col-sm-6">
@@ -603,9 +657,7 @@ console.log(data)
                             </div> 
                           </div> 
                           <div className="row gx-3">
-                            <div className="col-sm-6">
-                              <Input {...barcode_validation} validation={{required:{ value:false}}} />
-                            </div>
+                            
                           <div className="col-sm-6">
                               <div className="form-group">
                                 <div className="d-flex justify-content-between me-2">
@@ -628,6 +680,35 @@ console.log(data)
                                   <CustomDateComponent
                                     name="expiredAlertDay"
                                     control={methods.control}
+                                  />
+                                </div>
+                              </div>
+                            </div> 
+                          <div className="col-sm-6">
+                              <div className="form-group">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="actionDate"
+                                  >
+                                    Մուտքի ամսաթիվ
+                                  </label>
+                                  {methods.formState.errors.actionDate && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>{" "}
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <CustomDateTimeComponent
+                                    name="actionDate"
+                                    methods={methods} 
+                                    control={methods.control} 
+                                    defaultValue={new Date()}
+                                    required={true}
                                   />
                                 </div>
                               </div>

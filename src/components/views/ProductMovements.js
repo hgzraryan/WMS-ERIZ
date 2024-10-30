@@ -4,17 +4,14 @@ import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { Dropdown } from "react-bootstrap";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { PRODUCTCATEGORIES_URL, PRODUCTS_URL } from '../../utils/constants';
-import useRefreshData from '../../hooks/useRefreshData';
 import useGetData from '../../hooks/useGetData';
-import IncomingProductsTable from '../viewTables/IncomingProductsTable';
+import { PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
+import useRefreshData from '../../hooks/useRefreshData';
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+import ProductMovementsTable from '../viewTables/ProductMovementsTable';
 import ReactPaginate from 'react-paginate';
-import useDeleteData from '../../hooks/useDeleteData';
-import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
-import AddIncomingProduct from '../addViews/AddIncomingProduct';
-import OutgoingProductsTable from '../viewTables/OutgoingProductsTable';
-import AddOutgoingProduct from '../addViews/AddOutgoingProduct';
-function OutgoingProducts() {
+
+function ProductMovements() {
     const { pageNumber } = useParams();
     const navigate = useNavigate()
     const location = useLocation();
@@ -32,21 +29,21 @@ function OutgoingProducts() {
     const [selectedItemId, setSelectedItemId] = useState(null);  
     const confirmAgentsRef = useRef("");
   
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const productCategoriesResp = await axiosPrivate.get(PRODUCTCATEGORIES_URL);
-          setProductCategories(productCategoriesResp?.data?.jsonString);
-          //setIsLoading(false);
-        } catch (err) {
-          console.log(err);
-          //navigate("/login", { state: { from: location }, replace: true });
-        }
-      };
-      setTimeout(() => {
-        fetchData();
-      }, 500);
-    }, [navigate]);
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     try {
+    //       const productCategoriesResp = await axiosPrivate.get(PR);
+    //       setProductCategories(productCategoriesResp?.data?.jsonString);
+    //       //setIsLoading(false);
+    //     } catch (err) {
+    //       console.log(err);
+    //       //navigate("/login", { state: { from: location }, replace: true });
+    //     }
+    //   };
+    //   setTimeout(() => {
+    //     fetchData();
+    //   }, 500);
+    // }, [navigate]);
 
     const handleToggleCreateModal = (value) => {
       setIsOpen((prev) => value);
@@ -71,30 +68,19 @@ function OutgoingProducts() {
       setData: setOutgoingProducts,
       dataReceived,
       dataCount
-    } = useGetData('/outgoingList',currentPage,usersPerPage,searchCount,null,searchParams);
+    } = useGetData(PRODUCTSMOVEMENTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-    const { refreshData,data } = useRefreshData('/outgoingList', usersPerPage);
+    const { refreshData,data } = useRefreshData(PRODUCTSMOVEMENTS_URL, usersPerPage);
     useEffect(()=>{
         setOutgoingProducts(data)
       },[data])
-//-------------------------DeleteData---------------------------//  
 
-    const { handleDeleteItem } = useDeleteData(
-      PRODUCTS_URL,
-      confirmAgentsRef,
-      selectedItem,
-      setSelectedItemId,
-      outgoingProducts,
-      setOutgoingProducts,
-      "name",
-      refreshData 
-    );
 //-------------------------PAGINATION---------------------------//  
       useEffect(() => {
         setCurrentPage(Number(pageNumber));
       }, [pageNumber]);
       const handlePageClick = ({ selected: selectedPage }) => {
-        navigate(`/products/outgoingProducts/page/${selectedPage+1}`);
+        navigate(`/products/productsMovements/${selectedPage+1}`);
     }
 //-------------------------refreshPage---------------------------//  
 
@@ -124,32 +110,8 @@ function OutgoingProducts() {
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      <h1>Պահեստի ելքեր</h1>
+                      <h1>Պահեստի շարժ</h1>
                     </a>
-                  </div>
-                  <div className="dropdown ms-3">
-                  <Dropdown>
-                <Dropdown.Toggle
-                  variant="success"
-                  id="dropdown-basic"
-                  className="btn btn-sm btn-outline-secondary flex-shrink-0 dropdown-toggle d-lg-inline-block"
-                  >
-                  Ելքագրել
-                </Dropdown.Toggle>
-    
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setIsOpen(true)}>
-                    Ապրանք
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              {isOpen && (
-              <AddOutgoingProduct
-              handleToggleCreateModal={handleToggleCreateModal}
-              productCategories={productCategories}
-              refreshData={() => refreshData()}
-              />
-            )}
                   </div>
                 </div>
                 <div className="contact-options-wrap">
@@ -198,7 +160,7 @@ function OutgoingProducts() {
                       id="scrollableDiv"
                       style={{overflow: "auto" }}
                     >
-                        <OutgoingProductsTable
+                        <ProductMovementsTable
                           confirmRef={confirmAgentsRef}
                           selectedItem={selectedItem}
                           selectedItemId={selectedItemId}
@@ -241,4 +203,5 @@ function OutgoingProducts() {
     )
   }
 
-export default OutgoingProducts
+
+export default ProductMovements

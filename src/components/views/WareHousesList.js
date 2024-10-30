@@ -455,7 +455,7 @@ function WareHousesList() {
       accessor: "createdAt",
       Cell: ({ row }) => (
         <div className="d-flex align-items-center">
-        {moment(row.original.createdAt).format('DD-MM-YYYY HH:mm')}         
+        {moment(row.original?.actionDate).format('DD-MM-YYYY HH:mm')}         
         </div>
       ),
       width: 180,

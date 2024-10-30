@@ -58,6 +58,18 @@ function IncomingProductsTable({
             Header: (event) => (
               <>
                 
+                <div  className="name">Մուտքի ամսաթիվ</div>
+              </>
+            ),
+            accessor: "actionDate",
+            sortable: true,
+            width: 150,
+            
+          },
+          {
+            Header: (event) => (
+              <>
+                
                 <div  className="name">Դասակարգ</div>
               </>
             ),

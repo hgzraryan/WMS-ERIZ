@@ -7,13 +7,14 @@ import ErrorSvg from "../../dist/svg/error.svg";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PARTNERS_URL, PRODUCTS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL } from "../../utils/constants";
+import { PARTNERS_URL, PRODUCTS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import AddProductsList from "./AddProductsList";
 import CustomTable from "../CustomTable";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import moment from "moment";
 import { toast } from "react-toastify";
+import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
 
 function AddOutgoingProduct({
   handleToggleCreateModal,
@@ -36,6 +37,7 @@ function AddOutgoingProduct({
   const [rowInputValues, setRowInputValues] = useState({});
   const [outgoingList, setOutgoingList] = useState([]);
   const [focusedInputId, setFocusedInputId] = useState(null); // Tracks which input is focused
+  const [workers, setWorkers] = useState([])
 
   const editorRef = useRef(null);
   const navigate = useNavigate();
@@ -136,6 +138,9 @@ function AddOutgoingProduct({
         const partnersResp = await axiosPrivate.get(PARTNERS_URL);
         setPartners(partnersResp?.data?.jsonString);
 
+        const workersList = await axiosPrivate.get(WORKERS_URL);
+        setWorkers(workersList?.data?.jsonString);
+
         const respProductsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(respProductsList?.data?.jsonString);
 
@@ -179,6 +184,8 @@ console.log(data)
       await axiosPrivate.post('/registerOutgoing', 
         {
           customer:data.partner.value,
+          driver:data.driver.value,
+          actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
           outgoingList:outgoingList,
           description: editorRef.current.getContent({ format: "text" }),
 
@@ -537,6 +544,76 @@ console.log(data)
                                         />
                                       </div>
                                     </div>
+                            <div className="col-sm-12">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="driver"
+                                    >
+                                      Վարորդ
+                                    </label>
+                                    {methods.formState.errors
+                                      .driver && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="driver"
+                                      control={methods.control}
+                                      defaultValue={null}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          options={workers?.map((el)=>(
+
+                                            {                                              
+                                              value:el.workerId,
+                                              label: `${el?.workerId}․  ${el?.fullName}`
+                                            }
+                                          )
+                                      )}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                            </div>
+                            <div className="col-sm-6">
+                              <div className="form-group">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="actionDate"
+                                  >
+                                    Ելքի ամսաթիվ
+                                  </label>
+                                  {methods.formState.errors.actionDate && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" />
+                                      </span>{" "}
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <CustomDateTimeComponent
+                                    name="actionDate"
+                                    methods={methods} 
+                                    control={methods.control} 
+                                    defaultValue={new Date()}
+                                    required={true}
+                                  />
+                                </div>
+                              </div>
+                            </div> 
                             
                           </div>
                         </div>

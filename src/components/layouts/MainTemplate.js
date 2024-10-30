@@ -522,6 +522,12 @@ const MainTemplate = () => {
                                                             <span className="nav-link-text">Ապրանքների ելք</span>
                                                         </Link>
                                                     </li>
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="productsMovements" || location.pathname==="/products/productsMovements"?"nav-link active":"nav-link"} to="./products/productsMovements/page/1"
+                                                        onClick={()=>handleSubmenuClick("products","productsMovements")}>
+                                                            <span className="nav-link-text">Ապրանքների շարժ</span>
+                                                        </Link>
+                                                    </li>
                                                 </ul>	
                                             </li>	
                                         </ul>	

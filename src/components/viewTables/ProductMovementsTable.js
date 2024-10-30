@@ -1,12 +1,10 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
-
-function OutgoingProductsTable({
+function ProductMovementsTable({
     confirmRef,
     selectedItem,
     selectedItemId,
@@ -58,7 +56,7 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Ելքի ամսաթիվ</div>
+                  <div  className="name">Ամսաթիվ</div>
                 </>
               ),
               accessor: "actionDate",
@@ -70,14 +68,26 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Հաճախորդ</div>
+                  <div  className="name">Շարժ</div>
                 </>
               ),
-              accessor: "customer",
+              accessor: "action",
               sortable: true,
               width: 200,
               
             },
+            {
+                Header: (event) => (
+                  <>
+                    
+                    <div  className="name">Շարժ</div>
+                  </>
+                ),
+                accessor: "price",
+                sortable: true,
+                width: 200,
+                
+              },
             {
               Header: (event) => (
                 <>
@@ -85,7 +95,7 @@ function OutgoingProductsTable({
                   <div  className="name">Քանակ</div>
                 </>
               ),
-              accessor: "outgoingCount",
+              accessor: "quantity",
               sortable: true,
               Cell: ({ row }) => (
                 <div className="d-flex align-items-center justify-content-center">
@@ -95,84 +105,8 @@ function OutgoingProductsTable({
               width: 100,
               
             },
-            {
-              Header: (event) => (
-                <>
-                  
-                  <div  className="name">Արժեք</div>
-                </>
-              ),
-              accessor: "price",
-              sortable: true,
-              Cell: ({ row }) => (
-                <div className="d-flex align-items-center justify-content-center">
-                 {row.original?.price}
-                </div>
-              ),
-              width: 150,
-              
-            },
-            {
-              Header: (event) => (
-                <>
-                  
-                  <div  className="name">Արժույթ</div>
-                </>
-              ),
-              accessor: "currency",
-              sortable: true,
-              width: 100,
-              
-            },
-            {
-              Header: (event) => (
-                <>
-                  
-                  <div  className="name">Պահեստ</div>
-                </>
-              ),
-              accessor: "warehouse",
-              sortable: true,
-              width: 200,
-              
-            },
-            {
-              Header: (event) => (
-                <>
-                  <div className="columnHeader">Գործողություններ</div>
-                </>
-              ),
-              accessor: "actions",
-              width: 150,
-              Cell: ({ row }) => (
-                <div className="d-flex align-items-center">
-                  {/* <BiSolidInfoCircle
-                cursor={"pointer"}
-                size={"1.5rem"}
-                //onClick={() => handleOpenInfoModal(row.original)}
-              /> */}
-                  <div className="d-flex">
-                  
-                  <a
-                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                      data-bs-toggle="tooltip"
-                      data-placement="top"
-                      title="Print"
-                      href="#"
-                      onClick={() => handleOpenPrintModal(row.original)}
-                    >
-                      <span className="icon">
-                        <span className="feather-icon">
-                          <FeatherIcon icon="printer" />
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              ),
-              disableSortBy: true,
-              
-            },
+           
+           
           ],
           []
         );
@@ -187,4 +121,4 @@ function OutgoingProductsTable({
     )
   }
 
-export default OutgoingProductsTable
+export default ProductMovementsTable
