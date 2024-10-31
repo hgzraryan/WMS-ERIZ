@@ -80,7 +80,7 @@ function ProductMovements() {
         setCurrentPage(Number(pageNumber));
       }, [pageNumber]);
       const handlePageClick = ({ selected: selectedPage }) => {
-        navigate(`/products/productsMovements/${selectedPage+1}`);
+        navigate(`/products/productsMovements/page/${selectedPage+1}`);
     }
 //-------------------------refreshPage---------------------------//  
 

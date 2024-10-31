@@ -34,7 +34,9 @@ function ProductMovementsTable({
               sortable: true,
               Cell: ({ row }) => (
                 <div className="d-flex align-items-center justify-content-center">
-                 {row.original?.outgoingProductId}
+                 {row.original?.actionId }
+                 {row.original?.actionType==='incoming'?<FeatherIcon icon='arrow-down'/>:row.original?.actionType==='outgoing'?<FeatherIcon icon='arrow-up'/>:'' }
+                 {}
                 </div>
               ),
               width: 80,
@@ -47,7 +49,7 @@ function ProductMovementsTable({
                   <div  className="name">Անվանում</div>
                 </>
               ),
-              accessor: "name",
+              accessor: "productName",
               sortable: true,
               width: 350,
               
@@ -65,22 +67,10 @@ function ProductMovementsTable({
               
             },
             {
-              Header: (event) => (
-                <>
-                  
-                  <div  className="name">Շարժ</div>
-                </>
-              ),
-              accessor: "action",
-              sortable: true,
-              width: 200,
-              
-            },
-            {
                 Header: (event) => (
                   <>
                     
-                    <div  className="name">Շարժ</div>
+                    <div  className="price">Գումար</div>
                   </>
                 ),
                 accessor: "price",
@@ -92,21 +82,56 @@ function ProductMovementsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Քանակ</div>
+                  <div  className="quantity">Քանակ</div>
                 </>
               ),
               accessor: "quantity",
               sortable: true,
               Cell: ({ row }) => (
                 <div className="d-flex align-items-center justify-content-center">
-                 {row.original?.outgoingCount}
+                 {row.original?.quantity+" " +row.original?.unit}
                 </div>
               ),
-              width: 100,
-              
-            },
-           
-           
+              width: 100,              
+            },    
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="quantity">Մնացորդ</div>
+                </>
+              ),
+              accessor: "balance",
+              sortable: true,
+              Cell: ({ row }) => (
+                <div className="d-flex align-items-center justify-content-center">
+                 {row.original?.balance}
+                </div>
+              ),
+              width: 100,              
+            },    
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="quantity">Վարորդ</div>
+                </>
+              ),
+              accessor: "driver",
+              sortable: true,
+              width: 200,              
+            },    
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="quantity">Պահեստ</div>
+                </>
+              ),
+              accessor: "warehouse",
+              sortable: true,
+              width: 200,              
+            },    
           ],
           []
         );

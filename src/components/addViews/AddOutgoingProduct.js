@@ -96,9 +96,11 @@ function AddOutgoingProduct({
       tmp.name=row.original.name
       tmp.productListId=row.original.currentProductId
       tmp.outgoingCount=+rowInputValues[row.original.productId]
-      tmp.warehouse=row.original.warehouseName
+      tmp.unit=row.original.dimensions.weight?'kg':row.original.dimensions.volume?'liter':''
+      tmp.warehouse=row.original.warehouseId
       tmp.price=row.original.price
       tmp.barcode=row.original.barcode
+      tmp.balance=row.original.balance-(+rowInputValues[row.original.productId])
       tmp.currency=row.original.currency
       //tmp.subWarehouse=row.original.name
   

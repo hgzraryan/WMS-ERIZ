@@ -15,7 +15,7 @@ function OutgoingOrdersForm({data}) {
                     <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ԵԼՔԻ ՕՐԴԵՐ N<span><u>{" "+data?.outgoingProductId}</u></span></p>
                 </div>
                 <div style={{lineheight:'0'}}>
-                    <p>{moment(data?.createdAt).format('DD-MM-YYYY HH:mm')}</p>
+                    <p>{moment(data?.actionDate).format('DD-MM-YYYY HH:mm')}</p>
                     <div className='line'></div>
                     <p>(կազմման ամսաթիվ)</p>
                 </div>

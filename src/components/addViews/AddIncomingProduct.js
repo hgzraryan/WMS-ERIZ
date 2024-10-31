@@ -144,6 +144,7 @@ function AddIncomingProduct({
       driver: +data.driver?.value || null,
       quantity: +data.quantity || null,
       balance: +data.weight || +data?.volume || null,
+      unit:data.weight?'kg':data.volume?"liter":'',
       dimensions:{
         //height: +data.height || null,
         //length: +data.length || null,

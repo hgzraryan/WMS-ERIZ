@@ -8,7 +8,7 @@ import { prefix } from "@fortawesome/free-solid-svg-icons";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
-import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, MOVEMENTSOFPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, SUPPLIERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
+import { ACCESSWARRANT_ROUTE, COMPILATION_ROUTE, DEFACTURA_ROUTE, DISASSEMBLY_ROUTE, EXPIREDOBSPRODUCTS_ROUTE, FRAGMENTATION_ROUTE, INVENTORYBYSCANNER_ROUTE, INVENTORY_ROUTE, LISTOFPRODUCTVALUES_ROUTE, LISTOFSET_ROUTE, MINLIMITPRODUCTS_ROUTE, PARTNERS_ROUTE, PRICELIST_ROUTE, PRODUCTCHECKOUT_ROUTE, PRODUCTCOVER_ROUTE, PRODUCTREASSESSMENT_ROUTE, REQUIREMENTS_ROUTE, RETAILPURCHASE_ROUTE, SUPPLIERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 import sideSetupSvg from '../../dist/svg/sideSetup.svg'
 import packageJson from '../../../package.json';
 
@@ -613,12 +613,6 @@ const MainTemplate = () => {
                                                         <Link className={sisActive1==="retailPurchase" || location.pathname=== RETAILPURCHASE_ROUTE?"nav-link active":"nav-link"} to={RETAILPURCHASE_ROUTE}
                                                         onClick={()=>handleSubmenuClick("warehouses","retailPurchase")}>
                                                             <span className="nav-link-text">Ապրանքների ձեռքբերում մանրածախ</span>
-                                                        </Link>
-                                                    </li>
-                                                    <li className="nav-item">
-                                                        <Link className={sisActive1==="movementsOfProducts" || location.pathname=== MOVEMENTSOFPRODUCTS_ROUTE?"nav-link active":"nav-link"} to={MOVEMENTSOFPRODUCTS_ROUTE}
-                                                        onClick={()=>handleSubmenuClick("warehouses","movementsOfProducts")}>
-                                                            <span className="nav-link-text">Ապրանքների տեղաշարժ</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">

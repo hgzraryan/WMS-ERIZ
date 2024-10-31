@@ -39,7 +39,6 @@ import {
   PRODUCTCOVER_ROUTE,
   ACCESSWARRANT_ROUTE,
   RETAILPURCHASE_ROUTE,
-  MOVEMENTSOFPRODUCTS_ROUTE,
   PRODUCTREASSESSMENT_ROUTE,
   PRODUCTCHECKOUT_ROUTE,
   INVENTORY_ROUTE,
@@ -122,7 +121,6 @@ const InventoryByScanner = lazy(()=>  import("./components/views/InventoryByScan
 const Inventory = lazy(()=>  import("./components/views/Inventory"));
 const ProductCheckout = lazy(()=>  import("./components/views/ProductCheckout"));
 const ProductReassessment = lazy(()=>  import("./components/views/ProductReassessment"));
-const MovementsOfProducts = lazy(()=>  import("./components/views/MovementsOfProducts"));
 const RetailPurchase = lazy(()=>  import("./components/views/RetailPurchase"));
 const AccessWarrant = lazy(()=>  import("./components/views/AccessWarrant"));
 const ProductCover = lazy(()=>  import("./components/views/ProductCover"));
@@ -184,7 +182,6 @@ function App() {
                 <Route path={PRODUCTCOVER_ROUTE} element={<ProductCover />} />
                 <Route path={ACCESSWARRANT_ROUTE} element={<AccessWarrant />} />
                 <Route path={RETAILPURCHASE_ROUTE} element={<RetailPurchase />} />
-                <Route path={MOVEMENTSOFPRODUCTS_ROUTE} element={<MovementsOfProducts />} />
                 <Route path={PRODUCTREASSESSMENT_ROUTE} element={<ProductReassessment />} />
                 <Route path={PRODUCTCHECKOUT_ROUTE} element={<ProductCheckout />} />
                 <Route path={INVENTORY_ROUTE} element={<Inventory />} />

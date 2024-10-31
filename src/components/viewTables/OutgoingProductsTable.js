@@ -99,6 +99,23 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
+                  <div  className="name">Մնացորդ</div>
+                </>
+              ),
+              accessor: "balance",
+              sortable: true,
+              Cell: ({ row }) => (
+                <div className="d-flex align-items-center justify-content-center">
+                 {row.original?.balance}
+                </div>
+              ),
+              width: 100,
+              
+            },
+            {
+              Header: (event) => (
+                <>
+                  
                   <div  className="name">Արժեք</div>
                 </>
               ),
