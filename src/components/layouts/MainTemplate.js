@@ -13,6 +13,7 @@ import sideSetupSvg from '../../dist/svg/sideSetup.svg'
 import packageJson from '../../../package.json';
 
 const MainTemplate = () => {
+    const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
     const logout = useLogout();
@@ -66,6 +67,26 @@ const MainTemplate = () => {
     // subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
   }, [location?.pathname]);
    //--------------------------------------
+   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const getAllCount = async () => {
+        try {
+            const response = await axiosPrivate.get('/allCount', {
+                signal: controller.signal
+            });
+                  isMounted && dispatch(checkUsersCount(response.data?.usersCount));
+        } catch (err) {
+            console.error(err);
+            navigate('/login', { state: { from: location }, replace: true });
+        }
+    }
+    getAllCount();
+    return () => {
+        isMounted = false;
+        controller.abort();
+    }
+}, [])
     const signOut = async () => {
         await logout();
         navigate('/login');
