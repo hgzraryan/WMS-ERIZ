@@ -12,6 +12,7 @@ import profileBgImg from "../../dist/img/profile-bg.jpg";
 import moment from "moment";
 import ResetPasswordModal from "../ResetPasswordModal";
 import resetPassSVG from "../../dist/svg/resetPass.svg";
+import { ROLES } from "../../utils/constants";
 
 function UserDetails() {
   const axiosPrivate = useAxiosPrivate()
@@ -23,6 +24,9 @@ function UserDetails() {
 
   const [activeLink, setActiveLink] = useState('tab_summery'); 
   const [pageTab, setPageTab] = useState('tab_summery')
+  const storedUserRoles = JSON.parse(localStorage.getItem('userRoles'));
+  const storedUser = JSON.parse(localStorage.getItem('userData'));
+  const [superAdmin,setSuperAdmin]=useState(storedUserRoles.includes(ROLES?.SuperAdmin))
   const handleOpenResetPassModal = (value) => {
     setResetPassword((prev) => value);
    };
@@ -98,7 +102,7 @@ function UserDetails() {
                 </span>
               </a> */}
               {/* password can be changed only by current useror superAdmin */}
-              {/* {(superAdmin || storedUser?.userId === userDetails.userId) &&
+              {(superAdmin || storedUser?.userId === userDetails.userId) &&
                          <a
                          className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                          data-bs-toggle="tooltip"
@@ -120,7 +124,7 @@ function UserDetails() {
              
                 </span>
               </a>
-               }  */}
+               } 
                       {/* <i
                         className="bi-check-circle-fill fs-6 text-blue"
                         data-bs-toggle="tooltip"
