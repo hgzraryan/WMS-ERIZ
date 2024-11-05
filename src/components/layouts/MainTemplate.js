@@ -19,6 +19,8 @@ const MainTemplate = () => {
     const logout = useLogout();
     const dispatch = useDispatch()
     const selectMenu = useSelector(selectedMenu)
+    const [userData,setUserData]=useState('')
+
     const [activeDropdown, setActiveDropdown] = useState( localStorage.getItem("selectedMenu") || selectMenu);
     //-------------------
     const usersCount = useSelector(selectUsersCount)
@@ -43,7 +45,9 @@ const MainTemplate = () => {
 	
 	
 	const [sisActive1, ssetIsActive1] = useState(localStorage.getItem("activeSubMenu") || false);
-	
+    const handleUserPage = async(userId) =>{      
+        navigate(`/users/users/${userId}`)
+    }
     const handleSubmenuClick = (menu,subMenu) => {
         ssetIsActive1(subMenu)
         msetIsActive1(menu)
@@ -57,14 +61,14 @@ const MainTemplate = () => {
   
    //--------------------------------------
    useEffect(() => {
-    // localStorage.setItem("activeMenu", JSON.stringify(location.pathname.split('/')[1]));
-    // const subMenuIsActiveData = JSON.parse(localStorage.getItem('activeSubMenu'));
-    // const menuIsActiveData = JSON.parse(localStorage.getItem('activeMenu'));
-    // //const storedUserData = JSON.parse(localStorage.getItem('userData'));
+    localStorage.setItem("activeMenu", JSON.stringify(location.pathname.split('/')[1]));
+    const subMenuIsActiveData = JSON.parse(localStorage.getItem('activeSubMenu'));
+    const menuIsActiveData = JSON.parse(localStorage.getItem('activeMenu'));
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
-    // //storedUserData?setUserData(storedUserData):setUserData('')
-    // menuIsActiveData?msetIsActive1(menuIsActiveData):msetIsActive1('')
-    // subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
+    storedUserData?setUserData(storedUserData):setUserData('')
+    menuIsActiveData?msetIsActive1(menuIsActiveData):msetIsActive1('')
+    subMenuIsActiveData?ssetIsActive1(subMenuIsActiveData):ssetIsActive1('')
   }, [location?.pathname]);
    //--------------------------------------
    useEffect(() => {
@@ -276,6 +280,13 @@ const MainTemplate = () => {
                                                     </div>
                                                     <div className="media-body">
                                                         <div className="fs-7">{}</div>
+                                                        <div style={{ color: "black" }}>
+                                <p style={{ textDecoration:'underline', cursor:'pointer'}} onClick={()=>handleUserPage(userData?.userId)}>
+
+                                {userData?.firstname + " "}
+                                {userData?.lastname}
+                                </p>
+                              </div>
                                                         <a href="/login" className="d-block fs-8 link-secondary" onClick={signOut}><u>Դուրս գալ</u></a>
                                                     </div>
                                                 </div>
