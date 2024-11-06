@@ -4,6 +4,8 @@ import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
+import { ColumnFilter } from '../ColumnFilter';
+import { PRODUCTSMOVEMENTS__SEARCH_URL, PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
 function ProductMovementsTable({
     confirmRef,
     selectedItem,
@@ -11,12 +13,15 @@ function ProductMovementsTable({
     handleDeleteItem,
     handleOpenModal,
     handleCloseModal,
-    outgoingProducts,
-    setProducts,
+    productMovements,
+    setProductMovements,
     refreshData,
+    handleSearchPageCount,
     dataReceived
   }) {
     const [modalPrint, setModalPrint] = useState("");
+    const [filterData, setFilterData] = useState({});
+    const [filterDataJSON, setFilterDataJSON] = useState('');
     const handleOpenPrintModal = (data) => {
       setModalPrint((prev) => data);
       
@@ -63,6 +68,22 @@ function ProductMovementsTable({
               ),
               accessor: "actionDate",
               sortable: true,
+              Filter: ({ column: { id } })=>(
+                <ColumnFilter
+                  id={id}
+                  setData={setProductMovements}
+                  data={productMovements}
+                  placeholder={['startDate','endDate']}
+                  getUrl={PRODUCTSMOVEMENTS_URL}
+                  searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
+                  handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                  filterData={filterData}
+                  setFilterData={(newFilterData) => {
+                      setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                      setFilterData(newFilterData)   
+                  }}
+                />
+              ),    
               width: 150,
               
             },
@@ -140,7 +161,7 @@ function ProductMovementsTable({
        {!!modalPrint && (
         <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
       )}
-            <CustomTable data={outgoingProducts} column={columns} dataReceived={dataReceived}/>
+            <CustomTable data={productMovements} column={columns} dataReceived={dataReceived}/>
   
       </>
     )

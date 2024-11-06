@@ -43,7 +43,7 @@ const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null
           
           getData();
           
-        }else{
+        }else if(searchCount && searchUrl){
           const getData = async () => {
           try {
             const response = await axiosPrivate.post(searchUrl, {

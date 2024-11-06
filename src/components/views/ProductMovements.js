@@ -59,20 +59,21 @@ function ProductMovements() {
       setToggleExport((prev) => value);
     };    
     const handleSearchPageCount = (data) =>{
+      
       setSearchCount(data.count)
       setSearchParams(data.params)
     }
 //-------------------------GetData---------------------------//  
     const {
-      data: outgoingProducts,
-      setData: setOutgoingProducts,
+      data: productMovements,
+      setData: setProductMovements,
       dataReceived,
       dataCount
     } = useGetData(PRODUCTSMOVEMENTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
     const { refreshData,data } = useRefreshData(PRODUCTSMOVEMENTS_URL, usersPerPage);
     useEffect(()=>{
-        setOutgoingProducts(data)
+      setProductMovements(data)
       },[data])
 
 //-------------------------PAGINATION---------------------------//  
@@ -167,8 +168,8 @@ function ProductMovements() {
                           //handleDeleteItem={handleDeleteItem}
                           handleOpenModal={handleOpenModal}
                           handleCloseModal={handleCloseModal}
-                          outgoingProducts={outgoingProducts}
-                          setProducts={setOutgoingProducts}
+                          productMovements={productMovements}
+                          setProductMovements={setProductMovements}
                           refreshData={refreshData}
                           dataReceived={dataReceived}
                           handleSearchPageCount={(data)=>handleSearchPageCount(data)}

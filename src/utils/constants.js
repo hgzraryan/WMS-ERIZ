@@ -89,6 +89,10 @@ export const REGISTER_WORKER = "/registerWorker";
 export const CHANGE_USERPASSWORD = "/changeUserPassword";
 
 
+export const PRODUCTSMOVEMENTS__SEARCH_URL = "/searchProductsMovements";
+
+
+
 //user Roles
 export const ROLES = {
   User: 2001,

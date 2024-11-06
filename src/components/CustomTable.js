@@ -52,7 +52,7 @@ function CustomTable({data,column,dataReceived}) {
       );
   return (
     <>    
-    <table className="table nowrap w-100 mb-5 dataTable no-footer" {...getTableProps()}>
+    <table className="table nowrap w-100 mb-5 dataTable no-footer " style={{minHeight:'300px'}}{...getTableProps()}>
     <thead>
       {headerGroups.map((headerGroup) => (
         <tr {...headerGroup.getHeaderGroupProps()}>

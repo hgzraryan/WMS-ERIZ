@@ -91201,3 +91201,6 @@ td{
   height: 100%;
   cursor: col-resize;
 }
+.form-control.custom-datepicker{
+  min-width: 350px;
+  }
