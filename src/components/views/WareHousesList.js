@@ -9,7 +9,7 @@ import { Space, Table, Input, Button } from "antd";
 import { Dropdown } from "react-bootstrap";
 import AddWareHouse from "../addViews/AddWareHouse";
 import useGetData from "../../hooks/useGetData";
-import { WAREHOUSES_URL } from "../../utils/constants";
+import { ROLES, WAREHOUSES_URL } from "../../utils/constants";
 import WarehouseEdit from "../editModals/WarehouseEdit";
 import useDeleteData from "../../hooks/useDeleteData";
 import ComponentToConfirm from "../ComponentToConfirm";
@@ -24,6 +24,7 @@ import moment from "moment";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import PartnersInfoModal from "../infoModals/PartnersInfoModal";
 import WarehouseInfoModal from "../infoModals/WarehouseInfoModal";
+import WarehouseProductsTransferModal from "./WarehouseProductsTransferModal";
 
 function WareHousesList() {
   const axiosPrivate = useAxiosPrivate();  
@@ -50,7 +51,15 @@ function WareHousesList() {
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = wareHouseData.slice(itemOffset, endOffset);
   const [modalInfo, setModalInfo] = useState(false);
+  const storedUserRoles = JSON.parse(localStorage.getItem('userRoles'));
+  const [superAdmin,setSuperAdmin]=useState(storedUserRoles?.includes(ROLES?.SuperAdmin)||[])
+  const [transfer, setTransfer] = useState(false);
 
+  const handleOpenTransferModal = (e,value) => {
+    debugger
+    e.stopPropagation()
+    setTransfer((prev) => value);
+  };
   const handleOpenInfoModal = (e,data) => {
         e.stopPropagation()
         setModalInfo((prev) => data);
@@ -234,14 +243,14 @@ function WareHousesList() {
     {
       title: "Անվանում",
       dataIndex: "name",
-      width: "20%",
+      width: "10%",
     },
     {
       title: "Հեռախոս",
       dataIndex: "phone",
       render: (_, record) => (
         <Space>
-          {record?.phone}
+          {record?.contact?.phone}
         </Space>
       ),
       width: "10%",
@@ -264,7 +273,7 @@ function WareHousesList() {
           {record?.contact?.email}
         </Space>
       ),
-      width: "20%",
+      width: "15%",
     },
     {
       title: "Պահեստապետ",
@@ -291,11 +300,11 @@ function WareHousesList() {
       dataIndex: "code",
       width: "10%",
     },
-    {
-      title: "Հաշվեկշիռ",
-      dataIndex: "balance",
-      width: "10%",
-    },
+    // {
+    //   title: "Հաշվեկշիռ",
+    //   dataIndex: "balance",
+    //   width: "10%",
+    // },
     {
       title: "Կարգավիճակ",
       dataIndex: "state",
@@ -308,21 +317,40 @@ function WareHousesList() {
           :''}
         </Space>
       ),
-      width: "10%",
+      width: "5%",
     },
     {
       title: "Գործողություններ",
       dataIndex: "actions",
-      width: "10%",
+      width: "25%",
       render: (_, record) => (
         <>
-        <Space size="middle" onClick={() => handleOpenEditModal(record)}>
+        <div size="small" onClick={() => handleOpenEditModal(record)}>
       
               <BiSolidInfoCircle
               cursor={"pointer"}
               size={"1.5rem"}
               onClick={(e) => handleOpenInfoModal(e,record)}
             />
+             {!!superAdmin && !record?.children?.length ?
+                     <a
+                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                     data-bs-toggle="tooltip"
+                     data-placement="top"
+                     title="Transfer"
+                     href="#"
+                     onClick={(e) => handleOpenTransferModal(e,record)}
+                     
+                     >
+                      {console.log(record)}
+                  <span className="icon me-">
+                    <span className="feather-icon">
+                      <FeatherIcon icon="repeat" />
+                    </span>
+                  </span>
+                </a>
+                :''                  
+              }
           <FeatherIcon icon="edit" width={20} />
           {/* <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
@@ -381,7 +409,6 @@ function WareHousesList() {
                     </span>
                   </span>
                 </a> */}
-        </Space>
         <Space size="middle" onClick={() => handleOpenEditModal(record)}>
           {/* <FeatherIcon icon="edit" width={20} /> */}
           <a
@@ -404,6 +431,7 @@ function WareHousesList() {
                   </span>
                 </a>
         </Space>
+    </div>
                   </>
       ),
     },
@@ -535,7 +563,9 @@ function WareHousesList() {
   };
   return (
     <HelmetProvider>
-      
+           {!!transfer &&  (
+      <WarehouseProductsTransferModal transfer={transfer} setTransfer={setTransfer} refreshData={refreshData} />
+    )}
       {!!modalInfo && (
         <WarehouseInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
       )}
@@ -594,6 +624,7 @@ function WareHousesList() {
         )}
                   </div>
                   <div>
+                 
 
          <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"

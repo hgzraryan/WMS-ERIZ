@@ -91,6 +91,8 @@ export const CHANGE_USERPASSWORD = "/changeUserPassword";
 
 export const PRODUCTSMOVEMENTS__SEARCH_URL = "/searchProductsMovements";
 
+export const TRANSFERPRODUCTS_URL = "/transferWarehouseProducts";
+
 
 
 //user Roles

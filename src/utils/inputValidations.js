@@ -907,6 +907,19 @@ export const pallet_validation = {
     },
   },
 };
+export const count_validation = {
+  name: "count",
+  label: "Քանակ",
+  type: "number",
+  id: "count",
+  placeholder: "Քանակ",
+  validation: {
+    required: {
+      value: false,
+      message: "պարտադիր",
+    },
+  },
+};
 export const volume_validation = {
   name: "volume",
   label: "Ծավալ(լիտր)",

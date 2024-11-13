@@ -87,6 +87,11 @@ function IncomingProductsTable({
             ),
             accessor: "quantity",
             sortable: true,
+            Cell: ({ row }) => (
+              <div className="d-flex align-items-center">
+              {row.original?.dimensions?.weight ||  row.original?.dimensions?.volume}
+              </div>
+            ),
             width: 100,
             
           },
