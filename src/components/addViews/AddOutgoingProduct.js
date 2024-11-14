@@ -92,15 +92,15 @@ function AddOutgoingProduct({
       
       //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
       const tmp = {}
-      tmp.id=row.original.productId
+      tmp.id=row.original.incomingProductId
       tmp.name=row.original.name
       tmp.productListId=row.original.currentProductId
-      tmp.outgoingCount=+rowInputValues[row.original.productId]
+      tmp.outgoingCount=+rowInputValues[row.original.incomingProductId]
       tmp.unit=row.original.dimensions.weight?'kg':row.original.dimensions.volume?'liter':''
       tmp.warehouse=row.original.warehouseId
       tmp.price=row.original.price
       tmp.barcode=row.original.barcode
-      tmp.balance=row.original.balance-(+rowInputValues[row.original.productId])
+      tmp.balance=row.original.balance-(+rowInputValues[row.original.incomingProductId])
       tmp.currency=row.original.currency
       //tmp.subWarehouse=row.original.name
   
@@ -220,7 +220,7 @@ console.log(data)
             <div  className="columnHeader">ID</div>
           </>
         ),
-        accessor: "productId",
+        accessor: "incomingProductId",
         sortable: true,
         width: 60,
         
@@ -348,10 +348,10 @@ console.log(data)
             
             <div className="d-flex">
             <EditableInput
-                rowId={row.original.productId}
-                value={rowInputValues[row?.original?.productId] || ""}
+                rowId={row.original.incomingProductId}
+                value={rowInputValues[row?.original?.incomingProductId] || ""}
                 handleInputChange={handleInputChange}
-                isFocused={focusedInputId === row.original.productId}
+                isFocused={focusedInputId === row.original.incomingProductId}
                 onFocus={handleFocus}
               />
             <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button>

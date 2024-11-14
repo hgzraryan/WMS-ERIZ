@@ -37,7 +37,7 @@ function IncomingProductsTable({
                 <div  className="columnHeader">ID</div>
               </>
             ),
-            accessor: "productId",
+            accessor: "incomingProductId",
             sortable: true,
             width: 100,
             

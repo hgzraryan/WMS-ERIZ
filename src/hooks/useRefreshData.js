@@ -7,7 +7,6 @@ const useRefreshData = (url, usersPerPage,pageNumber=1) => {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
-//debugger
   const refreshData = async () => {
     try {
       const controller = new AbortController();

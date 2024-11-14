@@ -12,7 +12,7 @@ function IncomingOrderForm({data}) {
             </header> */}
             <section className="form-section" style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
                 <div>
-                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>{" "+data?.productId}</u></span></p>
+                    <p style={{fontSize:'20px'}}>ՊԱՀԵՍՏԻ ՄՈՒՏՔԻ ՕՐԴԵՐ N<span><u>{" "+data?.incomingProductId}</u></span></p>
                 </div>
                 <div style={{lineheight:'0'}}>
                     <p>{moment(data?.createdAt).format('DD-MM-YYYY HH:mm')}</p>

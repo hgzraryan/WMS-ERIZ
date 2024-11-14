@@ -56,7 +56,6 @@ function WareHousesList() {
   const [transfer, setTransfer] = useState(false);
 
   const handleOpenTransferModal = (e,value) => {
-    debugger
     e.stopPropagation()
     setTransfer((prev) => value);
   };
@@ -439,7 +438,7 @@ function WareHousesList() {
   const [productsColumns, setProductsColumns] = useState([
     {
       Header: "ID",
-      accessor: "productId",
+      accessor: "incomingProductId",
       width: 80,
     },
     {

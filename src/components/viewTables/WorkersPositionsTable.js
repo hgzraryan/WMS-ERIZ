@@ -37,7 +37,7 @@ function WorkersPositionsTable({
                 <div  className="columnHeader">ID</div>
               </>
             ),
-            accessor: "workerPositionId",
+            accessor: "workerRoleId",
             sortable: true,
             width: 80,
             

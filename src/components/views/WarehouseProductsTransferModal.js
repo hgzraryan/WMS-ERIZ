@@ -40,7 +40,6 @@ const notify = (text) =>
 //       setDiagnosticsPrice(totalPayed)  
 //     };
   const onProductSelect = ({data}) => {
-//debugger
     setCurrentProduct(data)
     setProductBalance(data?.balance)  
     };
@@ -289,8 +288,8 @@ const notify = (text) =>
                                           options={warehouseProducts?.map((item) => 
                                             
     
-                                             { return { value: item.productId,
-                                               label:item.productId+"․ "+item.name +"/ Մնացորդ-"+item?.balance,
+                                             { return { value: item.incomingProductId,
+                                               label:item.incomingProductId+"․ "+item.name +"/ Մնացորդ-"+item?.balance,
                                                balance:item?.balance,
                                               data:item}
                                               }
