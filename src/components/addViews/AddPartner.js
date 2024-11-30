@@ -23,8 +23,10 @@ import {
   name_validation,
   respPersonFullName_validation,
   street_validation,
+  tin_validation,
   zipCode_validation,
 } from "../../utils/inputValidations";
+
 import { Input } from "../Input";
 import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
@@ -58,16 +60,16 @@ const currencies = [
 ];
 const partnerTypes = [
   {
-    label: "Վերավաճառող",
-    value: "Reseller",
+    label: "Մատակարար",
+    value: "supplier",
   },
   {
-    label: "Արտադրող",
-    value: "Producer",
+    label: "Գնորդ",
+    value: "buyer",
   },
   {
-    label: "Ներդրող",
-    value: "Investor",
+    label: "Այլ",
+    value: "other",
   },
 ];
 const productCategories = [
@@ -146,6 +148,7 @@ function AddPartner({ setIsOpen, refreshData }) {
         street,
         zipCode,
         productCategories,
+        tin
       }
     ) => {
       const newPartner = {
@@ -154,8 +157,9 @@ function AddPartner({ setIsOpen, refreshData }) {
         respPersonFullName,
         bankName,
         bankAccNumber:+bankAccNumber,
+        tin:+tin,
         currency: currency?.value,
-        partnerType: partnerType?.value,
+        partnerType: partnerType?.map((el) => el.value),
         productCategories: productCategories?.map((el) => el.value),
         contact: {
           email: email,
@@ -440,7 +444,9 @@ function AddPartner({ setIsOpen, refreshData }) {
                                   rules={{ required: true }}
                                   render={({ field }) => (
                                     <Select
-                                      {...field}
+                                    {...field}
+                                    isMulti
+                                    closeMenuOnSelect={false}
                                       options={partnerTypes}
                                       placeholder={"Ընտրել"}
                                       styles={customStyles}
@@ -591,6 +597,9 @@ function AddPartner({ setIsOpen, refreshData }) {
                                 />
                               </div>
                             </div>
+                            <div className="col-sm-6">
+                                <Input {...tin_validation} />
+                              </div>
                           </div>
                         </div>
                       </div>

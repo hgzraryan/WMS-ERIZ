@@ -1,5 +1,5 @@
  /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -12,7 +12,16 @@ import profileBgImg from "../../dist/img/profile-bg.jpg";
 import moment from "moment";
 import ResetPasswordModal from "../ResetPasswordModal";
 import resetPassSVG from "../../dist/svg/resetPass.svg";
-
+import { Checkbox } from "../Checkbox";
+import {
+  useBlockLayout,
+  useFilters,
+  useResizeColumns,
+  useRowSelect,
+  useSortBy,
+  useTable,
+} from "react-table";
+import CustomTable from "../CustomTable";
 function PartnerDetails() {
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate();
@@ -44,6 +53,136 @@ function PartnerDetails() {
     };
     getData();
   }, []);
+  const columns1 = useMemo(
+    () => [
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="columnHeader">ID</div>
+          </>
+        ),
+        accessor: "outgoingProductId",
+        sortable: true,
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center justify-content-center">
+           {row.original?.actionId }
+           {row.original?.actionType==='incoming'?<FeatherIcon icon='arrow-down'/>:row.original?.actionType==='outgoing'?<FeatherIcon icon='arrow-up'/>:'' }
+           {}
+          </div>
+        ),
+        width: 80,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="name">Անվանում</div>
+          </>
+        ),
+        accessor: "productName",
+        sortable: true,
+        width: 350,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="name">Ամսաթիվ</div>
+          </>
+        ),
+        accessor: "actionDate",
+        sortable: true,
+        // Filter: ({ column: { id } })=>(
+        //   <ColumnFilter
+        //     id={id}
+        //     setData={setProductMovements}
+        //     data={productMovements}
+        //     placeholder={['startDate','endDate']}
+        //     getUrl={PRODUCTSMOVEMENTS_URL}
+        //     searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
+        //     handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+        //     filterData={filterData}
+        //     setFilterData={(newFilterData) => {
+        //         setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+        //         setFilterData(newFilterData)   
+        //     }}
+        //   />
+        // ),    
+        width: 150,
+        
+      },
+      {
+          Header: (event) => (
+            <>
+              
+              <div  className="price">Գումար</div>
+            </>
+          ),
+          accessor: "price",
+          sortable: true,
+          width: 200,
+          
+        },
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="quantity">Քանակ</div>
+          </>
+        ),
+        accessor: "quantity",
+        sortable: true,
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center justify-content-center">
+           {row.original?.quantity+" " +row.original?.unit}
+          </div>
+        ),
+        width: 100,              
+      },    
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="quantity">Մնացորդ</div>
+          </>
+        ),
+        accessor: "balance",
+        sortable: true,
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center justify-content-center">
+           {row.original?.balance}
+          </div>
+        ),
+        width: 100,              
+      },    
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="quantity">Վարորդ</div>
+          </>
+        ),
+        accessor: "driver",
+        sortable: true,
+        width: 200,              
+      },    
+      {
+        Header: (event) => (
+          <>
+            
+            <div  className="quantity">Պահեստ</div>
+          </>
+        ),
+        accessor: "warehouse",
+        sortable: true,
+        width: 200,              
+      },    
+    ],
+    []
+  );
 
   return (
     <>
@@ -79,9 +218,7 @@ function PartnerDetails() {
                       <span className={`badge badge-indicator ${userDetails.isActive ? 'badge-success' : 'badge-danger'} badge-indicator-xl position-bottom-end-overflow-1 me-1`}></span>
                     </div>
                     <h4>
-                      {userDetails?.lastname +
-                        " " +
-                        userDetails?.firstname}
+                      {userDetails?.name}
                          {/* <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                 data-bs-toggle="tooltip"
@@ -179,6 +316,25 @@ function PartnerDetails() {
                       <span className="nav-link-text">Գլխավոր</span>
                     </a>
                   </li>
+                  <li className="nav-item">
+                    <a
+                      data-bs-toggle="tab"
+                      href="#"
+                      className={`nav-link ${
+                        activeLink === "tab_movements" ? "active" : ""
+                      }`}
+                      onClick={() => handleLinkClick("tab_movements")}
+                    >
+                      <span className="nav-icon-wrap">
+                        <span className="nav-icon-wrap">
+                          <span className="svg-icon">
+                          <FeatherIcon icon="repeat" />
+                          </span>
+                        </span>
+                      </span>
+                      <span className="nav-link-text">Ապրանքների շարժ</span>
+                    </a>
+                  </li>
                 </ul>
               </header>
               <div className="row mt-7">
@@ -267,24 +423,11 @@ function PartnerDetails() {
                             <li className="list-group-item border-0">
                               <span>
                                 <i className="bi bi-file-earmark-person text-disabled me-2"></i>
-                                <span className="text-muted">Լրացուցիչ կոնտակտ:</span>
+                                <span className="text-muted">Պատասխանատու անձ:</span>
                               </span>
-                              <span className="ms-2">{userDetails?.contact?.emergencyContactName}</span>
+                              <span className="ms-2">{userDetails?.respPersonFullName}</span>
                             </li>
-                            <li className="list-group-item border-0">
-                              <span>
-                                <i className="bi bi-phone text-disabled me-2"></i>
-                                <span className="text-muted">Լրացուցիչ կոնտակտի հեռախոս:</span>
-                              </span>
-                              <span className="ms-2">{userDetails?.contact?.emergencyContactNumber}</span>
-                            </li>
-                            <li className="list-group-item border-0">
-                              <span>
-                                <i className="bi bi-file-earmark-person text-disabled me-2"></i>
-                                <span className="text-muted">Ծածկանուն:</span>
-                              </span>
-                              <span className="ms-2">{userDetails?.username}</span>
-                            </li>
+                           
                             {/* <li className="list-group-item border-0">
                             <span>
                               <i className="bi bi-info text-disabled me-2"></i>
@@ -416,6 +559,19 @@ function PartnerDetails() {
                       </div>
                     </div>
                   </>
+                )}
+                  {pageTab === "tab_movements" && (
+                  <section className="d-flex flex-column">
+                    {/* <div
+                      className="d-flex justify-content-center align-items-center"
+                      style={{ border: "1px solid #000", borderRadius: "16px" }}
+                    >
+                      <h4>Ախտորոշումներ</h4>
+                    </div> */}
+                    <div>
+                    <CustomTable data={[]} column={columns1} dataReceived={true} />
+                    </div>
+                  </section>
                 )}
               </div>
             </div>

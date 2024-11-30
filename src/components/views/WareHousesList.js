@@ -498,8 +498,8 @@ function WareHousesList() {
       width: 180,
     },
     {
-      Header: "Մատակարար",
-      accessor: "supplierName",
+      Header: "Գործընկեր",
+      accessor: "partnerName",
       width: 200,
     },
     // {

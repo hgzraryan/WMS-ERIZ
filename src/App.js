@@ -54,18 +54,14 @@ import {
   PARTNERS_ROUTE,
   SETUP_ROUTE,
   LEGALFORMS_ROUTE,
-  SUPPLIERS_ROUTE,
   PRODUCTSLIST_ROUTE,
   INCOMINGPRODUCTS_ROUTE,
   OUTGOINGPRODUCTS_ROUTE,
   WORKERSROLES_ROUTE,
   PRODUCTSSUMMARY_ROUTE,
   PARTNERS_ID_ROUTE,
-  SUPPLIERS_ID_ROUTE,
   PRODUCTSMOVEMENTS_ROUTE
 } from "./utils/constants";
-import Suppliers from "./components/views/Suppliers";
-import ProductsList from "./components/views/ProductsList";
 const Register = lazy(()=>  import("./components/Register"));
 const Login = lazy(()=>  import("./components/Login"));
 const PrivacyPolicy = lazy(()=>  import("./components/PrivacyPolicy"));
@@ -73,7 +69,7 @@ const Home = lazy(()=>  import("./components/Home"));
 const Users = lazy(()=>  import("./components/views/Users"));
 const UserDetails = lazy(()=>  import("./components/viewDetails/UserDetails"));
 const PartnerDetails = lazy(()=>  import("./components/viewDetails/PartnerDetails"));
-const SupplierDetails = lazy(()=>  import("./components/viewDetails/SupplierDetails"));
+//const SupplierDetails = lazy(()=>  import("./components/viewDetails/SupplierDetails"));
 const Layout = lazy(()=>  import("./components/layouts/Layout"));
 const Editor = lazy(()=>  import("./components/Editor"));
 const Admin = lazy(()=>  import("./components/Admin"));
@@ -91,6 +87,8 @@ const Workers = lazy(()=>  import("./components/views/Workers"));
 const Customers = lazy(()=>  import("./components/views/Customers"));
 const Companies = lazy(()=>  import("./components/views/Companies"));
 const Partners = lazy(()=>  import("./components/views/Partners"));
+// const Suppliers = lazy(()=>  import("./components/views/Suppliers"));
+const ProductsList = lazy(()=>  import("./components/views/ProductsList"));
 const Brands = lazy(()=>  import("./components/views/Brands"));
 const ProductsCategories = lazy(()=>  import("./components/views/ProductsCategories"));
 const Products = lazy(()=>  import("./components/views/Products"));
@@ -159,13 +157,13 @@ function App() {
                 <Route path={USERS_ROUTE} element={<Users />} />
                 <Route path={USERS_ID_ROUTE} element={<UserDetails />} />
                 <Route path={PARTNERS_ID_ROUTE} element={<PartnerDetails />} />
-                <Route path={SUPPLIERS_ID_ROUTE} element={<SupplierDetails />} />
+                {/* <Route path={SUPPLIERS_ID_ROUTE} element={<SupplierDetails />} /> */}
                 <Route path={WORKERSROLES_ROUTE} element={<WorkersRoles />}/>
                 <Route path={WORKERS_ROUTE} element={<Workers />} />
                 <Route path={CUSTOMERS_ROUTE} element={<Customers />} />
                 <Route path={COMPANIES_ROUTE} element={<Companies />} />
                 <Route path={PARTNERS_ROUTE} element={<Partners />} />
-                <Route path={SUPPLIERS_ROUTE} element={<Suppliers />} />
+                {/* <Route path={SUPPLIERS_ROUTE} element={<Suppliers />} /> */}
                 <Route path={BRANDS_ROUTE} element={<Brands />} />
                 <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsCategories />} />
                 <Route path={PRODUCTSSUMMARY_ROUTE} element={<ProductsSummary />} />

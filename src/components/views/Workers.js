@@ -123,7 +123,7 @@ function Workers() {
                    {isOpen && (
                     <AddWorker
                       handleToggleCreateModal={handleToggleCreateModal}
-                      //refreshData={() => refreshData()}
+                      refreshData={() => refreshData()}
                     />
                   )} 
                 </div>

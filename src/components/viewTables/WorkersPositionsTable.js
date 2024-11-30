@@ -55,6 +55,17 @@ function WorkersPositionsTable({
           },
           {
             Header: (event) => (
+              <>                
+                <div  className="columnHeader">Տեսակ</div>
+              </>
+            ),
+            accessor: "type",
+            sortable: true,
+            width: 300,
+            
+          },
+          {
+            Header: (event) => (
               <>
                
                 <div  className="columnHeader">Կարգավիճակ</div>

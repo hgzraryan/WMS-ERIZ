@@ -18,7 +18,7 @@ function Partners() {
     const [isOpen, setIsOpen] = useState(false);  
     const [selectedItem, setSelectedItem] = useState("");  
     const [selectedItemId, setSelectedItemId] = useState(null);  
-    const [currentPage, setCurrentPage] = useState(0);    
+    const [currentPage, setCurrentPage] = useState(Number(pageNumber));
     const [usersPerPage, setUsersPerPage] = useState(Math.round((window.innerHeight / 100)));   
     const [searchCount,setSearchCount] = useState(null)
     const [searchParams,setSearchParams] = useState(null)

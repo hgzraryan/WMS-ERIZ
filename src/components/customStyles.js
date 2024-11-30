@@ -36,15 +36,15 @@ export const customStyles = {
     },
     multiValueLabel: (styles, { data }) => ({
         ...styles,
-        backgroundColor: "#0096fb",
+        backgroundColor: "#018a54",
         color: "#fff",
       }),
       multiValueRemove: (styles, { data }) => ({
         ...styles,
-        backgroundColor: "#0096fb",
+        backgroundColor: "#018a54",
         color: "#e8e3e3",
         ":hover": {
-          backgroundColor: "#0096fb",
+          backgroundColor: "#018a54s",
           color: "#eb3434",
         },
       }),

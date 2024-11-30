@@ -16,7 +16,7 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, SUPPLIERS_URL, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
@@ -43,7 +43,8 @@ function AddIncomingProduct({
   const [country, setCountry] = useState('')
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
-  const [suppliersList, setSuppliersList] = useState([])
+  const [partnersList, setPartnersList] = useState([])
+  //const [suppliersList, setSuppliersList] = useState([])
   const [workers, setWorkers] = useState([])
   const editorRef = useRef(null);
  useEffect(() => {
@@ -67,8 +68,8 @@ function AddIncomingProduct({
         setProductsList(productsList?.data?.jsonString);
         console.log(productsList?.data?.jsonString)
 
-        const suppliersList = await axiosPrivate.get(SUPPLIERS_URL);
-        setSuppliersList(suppliersList?.data?.jsonString);
+        const partnersList = await axiosPrivate.get(PARTNERS_URL);
+        setPartnersList(partnersList?.data?.jsonString);
 
         const workersList = await axiosPrivate.get(WORKERS_URL);
         setWorkers(workersList?.data?.jsonString);
@@ -140,7 +141,7 @@ function AddIncomingProduct({
       productIdent: data?.productName?.value || null,
       countryOfOrigin:data.countryOfOrigin,
       stock: +data?.warehouse?.value || null,
-      supplier: +data.suppliers?.value || null,
+      partner: +data.partners?.value || null,
       driver: +data.driver?.value || null,
       quantity: +data.quantity || null,
       balance: +data.weight || +data?.volume || null,
@@ -314,7 +315,7 @@ console.log(data)
                               <div className="d-flex justify-content-between me-2">
                                 <label
                                   className="form-label"
-                                  htmlFor="suppliers"
+                                  htmlFor="partners"
                                 >
                                   Անվանում
                                 </label>
@@ -466,11 +467,11 @@ console.log(data)
                               <div className="d-flex justify-content-between me-2">
                                 <label
                                   className="form-label"
-                                  htmlFor="suppliers"
+                                  htmlFor="partners"
                                 >
                                   Մատակարարներ
                                 </label>
-                                {methods.formState.errors.suppliers && (
+                                {methods.formState.errors.partners && (
                                   <span className="error text-red">
                                     <span>
                                       <img src={ErrorSvg} alt="errorSvg" />
@@ -481,7 +482,7 @@ console.log(data)
                               </div>
                               <div className="form-control">
                                 <Controller
-                                  name="suppliers"
+                                  name="partners"
                                   control={methods.control}
                                   defaultValue={null}
                                   rules={{ required: true }}
@@ -489,8 +490,8 @@ console.log(data)
                                     <Select
                                       {...field}
                                       value={field.value}
-                                      options={suppliersList?.map((item) => ({
-                                        value: item.supplierId,
+                                      options={partnersList?.map((item) => ({
+                                        value: item.partnerId,
                                         label: item.name,
                                       }))}
                                       placeholder={"Ընտրել"}

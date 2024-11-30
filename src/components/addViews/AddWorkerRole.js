@@ -14,6 +14,20 @@ const StatusTypes = [
     { value: 1, label: "Ակտիվ" },
     { value: 0, label: "Ոչ ակտիվ" },
   ];
+  const RolesTypes = [
+    {
+      label: "Պահեստապետ",
+      value: "keeper",
+    },
+    {
+      label: "Վարորդ",
+      value: "driver",
+    },
+    {
+      label: "Աշխատակից",
+      value: "worker",
+    },
+  ];
 function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
     const [errMsg, setErrMsg] = useState("");
     const axiosPrivate = useAxiosPrivate();
@@ -37,9 +51,10 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
       progress: undefined,
       theme: "light",
     });
-    const onSubmit = methods.handleSubmit(async ({name,StatusTypes}) => {
+    const onSubmit = methods.handleSubmit(async ({name,statusType,roleType}) => {
       const newWorkerRole = {
-        isActive:StatusTypes.value,
+        isActive:statusType.value,
+        type:roleType.value,
         name:name,
         additional: editorRef.current.getContent({ format: "text" }),
       };
@@ -120,12 +135,12 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                                         <div className="d-flex justify-content-between me-2">
                                           <label
                                             className="form-label"
-                                            htmlFor="StatusTypes"
+                                            htmlFor="statusType"
                                           >
                                             Կարգավիճակ
                                           </label>
                                           {methods.formState.errors
-                                            .StatusTypes && (
+                                            .statusType && (
                                             <span className="error text-red">
                                               <span>
                                                 <img src={ErrorSvg} alt="errorSvg" />
@@ -136,7 +151,7 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                                         </div>
                                         <div className="form-control">
                                           <Controller
-                                            name="StatusTypes"
+                                            name="statusType"
                                             control={methods.control}
                                             defaultValue={null}
                                             rules={{ required: true }}
@@ -150,6 +165,41 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                                           />
                                         </div>
                                       </div>
+                            </div>
+                            <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="partnerType"
+                                >
+                                  Պաշտոնի տեսակը
+                                </label>
+                                {methods.formState.errors.partnerType && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="roleType"
+                                  control={methods.control}
+                                  defaultValue={null}
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                      options={RolesTypes}
+                                      placeholder={"Ընտրել"}
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
                             </div>
                           </div>
                         </div>

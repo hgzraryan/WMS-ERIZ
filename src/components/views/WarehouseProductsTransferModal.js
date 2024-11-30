@@ -111,7 +111,7 @@ const notify = (text) =>
           productIdent: currentProduct?.productIdent || null,
           countryOfOrigin:currentProduct.countryOfOrigin,
           stock: data?.impWarehouse?.value || null,
-          supplier: currentProduct.supplier || null,
+          partner: currentProduct.partner || null,
           driver: currentProduct.driver || null,
           quantity:data.quantity || null,
           balance:+data?.weight || +data?.volume || null,

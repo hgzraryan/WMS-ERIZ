@@ -137,7 +137,7 @@ function IncomingProductsTable({
                 <div  className="name">Մատակարար</div>
               </>
             ),
-            accessor: "supplierName",
+            accessor: "partnerName",
             sortable: true,
             width: 200,
             

@@ -140,8 +140,9 @@ function AddOutgoingProduct({
         const partnersResp = await axiosPrivate.get(PARTNERS_URL);
         setPartners(partnersResp?.data?.jsonString);
 
-        const workersList = await axiosPrivate.get(WORKERS_URL);
-        setWorkers(workersList?.data?.jsonString);
+        const driversList = await axiosPrivate.get(WORKERS_URL);
+        const tmp = driversList?.data?.jsonString.filter((el)=>el.workerRoleType==='driver')
+        setWorkers(tmp);
 
         const respProductsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(respProductsList?.data?.jsonString);
@@ -457,7 +458,7 @@ console.log(data)
                               <div className="d-flex justify-content-between me-2">
                                 <label
                                   className="form-label"
-                                  htmlFor="suppliers"
+                                  htmlFor="productList"
                                 >
                                   Անվանում
                                 </label>

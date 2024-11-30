@@ -21,7 +21,7 @@ function IncomingOrderForm({data}) {
                 </div>
             </section>
             <section className='form-section' style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column', lineheight:0}}>           
-                <p>{data?.supplierName}</p> 
+                <p>{data?.parnerName}</p> 
             <div className='line' style={{fontWeight:'bold'}}/>
             <p>(Մատակարարի անվանում)</p>
             </section>

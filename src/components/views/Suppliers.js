@@ -50,7 +50,7 @@ function Suppliers() {
         dataCount 
       } = useGetData(SUPPLIERS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
-    const { refreshData,data } = useRefreshData(SUPPLIERS_URL, usersPerPage);
+    const { refreshData,data } = useRefreshData(SUPPLIERS_URL, usersPerPage,pageNumber);
     useEffect(()=>{
       setSuppliers(data)
       },[data])
