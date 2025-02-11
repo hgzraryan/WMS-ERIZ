@@ -65,7 +65,7 @@ const partnerTypes = [
   },
   {
     label: "Գնորդ",
-    value: "buyer",
+    value: "customer",
   },
   {
     label: "Այլ",

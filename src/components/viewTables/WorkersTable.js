@@ -122,6 +122,28 @@ function WorkersTable({
           {
             Header: (event) => (
               <>
+                <div  className="columnHeader">Պաշտոն</div>
+              </>
+            ),
+            Cell: ({ row }) => (
+              <div >
+              {
+                row?.original?.workerRoleType === "driver"
+                ? "Վարորդ"
+                : row?.original?.workerRoleType === "keeper"
+                ? "Պահեստապետ"
+                : row?.original?.workerRoleType === "worker"
+                ? "Աշխատակից"
+                : "Unknown"
+              }
+            </div>
+            ),
+            accessor: "workerRoleType",
+            width: 180,
+          },
+          {
+            Header: (event) => (
+              <>
                 <div className="columnHeader">Գործողություններ</div>
               </>
             ),

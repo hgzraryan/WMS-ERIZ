@@ -91204,3 +91204,9 @@ td{
 .form-control.custom-datepicker{
   min-width: 350px;
   }
+  .total-view-table{
+    min-height: 300px;
+    max-width: 377px !important; /* !important works here */
+    overflow-x: auto; /* Ensures content doesn't break the width */
+    display: block; /* Helps enforce max-width */
+  }

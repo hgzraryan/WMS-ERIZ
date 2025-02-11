@@ -4,14 +4,7 @@ import ComponentToConfirm from '../ComponentToConfirm';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import CustomTable from '../CustomTable';
-const asd = [
-    {
-        workerPositionId:11001,
-        name:'Pahestapet',
-        status:'Active',
 
-    }
-]
 function WorkersPositionsTable({
     confirmRef,
     selectedItem,

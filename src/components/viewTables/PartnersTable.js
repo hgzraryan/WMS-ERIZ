@@ -210,13 +210,17 @@ function PartnersTable({
         accessor: "partnerType",
         Cell: ({ row }) => (
           <div>
-            {row?.original?.partnerType === "Producer"
-              ? "Արտադրող"
-              : row?.original?.partnerType === "Reseller"
-              ? "Վերավաճառող"
-              : row?.original?.partnerType === "Investor"
-              ? "Ներդրող"
-              : ""}
+            {Object.values(row?.original?.partnerType || {}).map((el, index) => (
+              <div key={index}>
+                {el === "buyer"
+                  ? "Գնորդ"
+                  : el === "supplier"
+                  ? "Մատակարար"
+                  : el === "Other"
+                  ? "Այլ"
+                  : "Unknown"}
+              </div>
+            ))}
           </div>
         ),
         width: 200,

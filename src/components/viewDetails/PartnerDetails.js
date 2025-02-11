@@ -215,7 +215,7 @@ function PartnerDetails() {
                         alt="user"
                         className="avatar-img border border-4 border-white"
                       />
-                      <span className={`badge badge-indicator ${userDetails.isActive ? 'badge-success' : 'badge-danger'} badge-indicator-xl position-bottom-end-overflow-1 me-1`}></span>
+                      {/* <span className={`badge badge-indicator ${userDetails.isActive ? 'badge-success' : 'badge-danger'} badge-indicator-xl position-bottom-end-overflow-1 me-1`}></span> */}
                     </div>
                     <h4>
                       {userDetails?.name}
@@ -414,9 +414,9 @@ function PartnerDetails() {
                             <li className="list-group-item border-0">
                               <span>
                                 <i className="bi bi-briefcase-fill text-disabled me-2"></i>
-                                <span className="text-muted">Դերեր:</span>
+                                <span className="text-muted">Գործընկերոջ տեսակը:</span>
                               </span>
-                              <span className="ms-2">{userDetails?.roles && Object.keys(userDetails?.roles).map((el)=>{
+                              <span className="ms-2">{userDetails?.partnerType && Object.values(userDetails?.partnerType).map((el)=>{
                                 return el+", " 
                               })}</span>
                             </li>

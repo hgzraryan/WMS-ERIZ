@@ -23,6 +23,7 @@ import {
   name_validation,
   respPersonFullName_validation,
   street_validation,
+  tin_validation,
   zipCode_validation,
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
@@ -60,16 +61,16 @@ const currencies = [
 ];
 const partnerTypes = [
   {
-    label: "Վերավաճառող",
-    value: "Reseller",
+    label: "Մատակարար",
+    value: "supplier",
   },
   {
-    label: "Արտադրող",
-    value: "Producer",
+    label: "Գնորդ",
+    value: "customer",
   },
   {
-    label: "Ներդրող",
-    value: "Investor",
+    label: "Այլ",
+    value: "other",
   },
 ];
 function PartnerEdit({ partner, setEditRow, refreshData }) {
@@ -579,6 +580,11 @@ console.log(productCategories)
                           <div className="col-sm-6">
                             <Input {...email_validation} defaultValue={partner?.contact?.email}/>
                           </div>
+                        </div>
+                        <div className="row gx-3">
+                        <div className="col-sm-6">
+                                <Input {...tin_validation} defaultValue={partner?.tin}/>
+                              </div>
                         </div>
 
                         {/* <div className="row gx-3">

@@ -17,6 +17,7 @@ function WarehouseProductsTransferModal({transfer,setTransfer,refreshData}) {
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
     const [warehouses, setWarehouses] = useState([]);
+    const [filteredWarehouses, setFilteredWarehouses] = useState([]);
     const [warehouseProducts, setWarehouseProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [productBalance, setProductBalance] = useState(0);
@@ -79,6 +80,15 @@ const notify = (text) =>
           try {
             const warehousesResp = await axiosPrivate.get(WAREHOUSES_URL);
             setWarehouses(warehousesResp?.data?.jsonString);
+            setFilteredWarehouses(warehousesResp?.data?.jsonString
+              .filter((el,index)=>{
+                if(!!el.children){
+                  return el?.children[index]?.warehouseId !== transfer?.warehouseId
+                }else{
+                  return el?.warehouseId!==transfer?.warehouseId
+                }
+              }
+            ));
 
             const warehousesProductsResp = await axiosPrivate.get(`/warehouseProducts/${transfer?.warehouseId}`);
             setWarehouseProducts(warehousesProductsResp?.data?.jsonString);
@@ -197,6 +207,7 @@ const notify = (text) =>
                                       htmlFor="expWarehouse"
                                       placeholder={"Ընտրել"}
                                     >
+                                      Ելքագրվող պահեստ
                                     </label>
                                     {methods.formState.errors.expWarehouse && (
                                       <span className="error text-red">
@@ -333,7 +344,7 @@ const notify = (text) =>
                                           {...field}
                                           value={field.value}
                                           components={animatedComponents}
-                                          options={warehouses?.map((item) => {
+                                          options={filteredWarehouses?.map((item) => {
                                             if(item?.children?.length){
                                               return{
                                                 label:item?.name,
@@ -344,7 +355,6 @@ const notify = (text) =>
                                               }
                                             }else{
                                              return{
-    
                                                value: item.warehouseId,
                                                label: item.name,
                                               }

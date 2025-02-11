@@ -15,6 +15,7 @@ import { BiSolidInfoCircle } from "react-icons/bi";
 import moment from "moment";
 import { toast } from "react-toastify";
 import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
+import TotalView from "../viewTables/TotalView";
 
 function AddOutgoingProduct({
   handleToggleCreateModal,
@@ -212,7 +213,6 @@ console.log(data)
       }
     }
   });
-
   const fetchedDataColumn = useMemo(
     () => [
       {
@@ -397,6 +397,120 @@ console.log(data)
     ],
     [rowInputValues]
   );
+  const fetchedDataColumn1 = useMemo(
+    () => [
+      // {
+      //   Header: (event) => (
+      //     <>                
+      //       <div  className="columnHeader">ID</div>
+      //     </>
+      //   ),
+      //   accessor: "incomingProductId",
+      //   sortable: true,
+      //   width: 60,
+        
+      // },
+      {
+        Header: (event) => (
+          <>                
+            <div  className="columnHeader">Անվանում</div>
+          </>
+        ),
+        accessor: "name",
+        sortable: true,
+        width:300,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Քանակ</div>
+          </>
+        ),
+        accessor: "createdAt",
+        style: {
+           // Custom style for the 'description' column
+        },
+        width: 60,
+        
+      },
+      // {
+      //   Header: (event) => (
+      //     <>
+           
+      //       <div  className="columnHeader">Գին</div>
+      //     </>
+      //   ),
+      //   accessor: "price",
+      //   width: 80,
+      // },
+      {
+        Header: (event) => (
+          <>
+           
+            <div  className="columnHeader">Ընդհանուր</div>
+          </>
+        ),
+        accessor: "price",
+        width: 80,
+      },     
+      {
+        Header: (event) => (
+          <>
+            <div className="columnHeader"></div>
+          </>
+        ),
+        accessor: "actions",
+        width: 60,
+        
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            
+            <div className="d-flex">
+           <FeatherIcon icon='trash' size={12}/>
+            {/* <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button> */}
+            </div>
+            {/* <div className="d-flex">
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                data-bs-toggle="tooltip"
+                data-placement="top"
+                title="Edit"
+                href="#"
+                onClick={() => handleOpenEditModal(row.original)}
+
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="edit" />
+                  </span>
+                </span>
+              </a>
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                data-bs-toggle="tooltip"
+                onClick={() => handleOpenModal(row.original)}
+                data-placement="top"
+                title=""
+                data-bs-original-title="Delete"
+                href="#"
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="trash" />
+                  </span>
+                </span>
+              </a>
+            </div> */}
+          </div>
+        ),
+        disableSortBy: true,
+        
+      },
+    ],
+    [rowInputValues]
+  );
   const handleFocus = (rowId) => {
     setFocusedInputId(rowId);
   };
@@ -430,7 +544,8 @@ console.log(data)
                     autoComplete="off"
                     className="container"
                   >
-                    <div className="card">
+                    <section className="d-flex justify-content-between">
+                    <div className="card w-100">
                       <div className="card-header">
                         <a href="#">Ապրանքի տվյալներ</a>
                         <button
@@ -542,7 +657,7 @@ console.log(data)
                                                 label: `${partner?.partnerId}․  ${partner?.name}`,
                                               }))}
                                               placeholder={"Ընտրել"}
-                                            />
+                                            /> 
                                           )}
                                         />
                                       </div>
@@ -622,6 +737,19 @@ console.log(data)
                         </div>
                       </div>
                     </div>
+                    {/* <div className="card w-35">
+                      <div className="card-header d-flex" style={{backgroundColor:'#018a54',fontSize:'24px', color:'#fff', borderRadius:'10px' }}> 
+                        <p>Դուրսբերում</p>
+                        <p>{}</p>
+                        
+                      </div>
+                      <div className="card-body p-0">
+                        <div className="modal-body p-0">
+                        <TotalView column={fetchedDataColumn1} data={fetchedProductsList} dataReceived={true}/>
+                        </div>
+                      </div>
+                    </div> */}
+                    </section>
                   {(!!fetchedProductsList && fetchedProductsList.length) ?
                   <>
                     <div className="separator-full"></div>
