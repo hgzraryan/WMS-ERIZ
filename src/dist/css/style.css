@@ -140,6 +140,7 @@ Project:	Jampack
 @import url(bootstrap-icons.css);
 @import url(flaticon.css);
 @import url(prism.css);
+@import url(customStyles.scss);
 @import url(../../vendors/simplebar/dist/simplebar.min.css);
 @import url(../../vendors/owl.carousel/dist/assets/owl.carousel.min.css);
 @import url(../../vendors/owl.carousel/dist/assets/owl.theme.default.min.css);

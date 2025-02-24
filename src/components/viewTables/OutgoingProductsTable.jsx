@@ -5,7 +5,6 @@ import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
-import ConfirmOutgoingModal from '../ConfirmIncomingModal';
 
 function OutgoingProductsTable({
     outgoingProducts,

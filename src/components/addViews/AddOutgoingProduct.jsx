@@ -9,25 +9,27 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { PARTNERS_URL, PRODUCTS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
-import AddProductsList from "./AddProductsList";
 import CustomTable from "../CustomTable";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import moment from "moment";
 import { toast } from "react-toastify";
 import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
 import TotalView from "../viewTables/TotalView";
+import { Input } from "../Input";
+import { price_validation } from "../../utils/inputValidations";
+import ReactQuillEditor from "../views/ReactQuillEditor";
 const test = [
   {
-    name:'xozi bud',
-    count:5,
-    price:1200,
-    totalPrice:6000
+    name: 'xozi bud',
+    count: 5,
+    price: 1200,
+    totalPrice: 6000
   },
   {
-    name:'xozi glux',
-    count:3,
-    price:1500,
-    totalPrice:4500
+    name: 'xozi glux',
+    count: 3,
+    price: 1500,
+    totalPrice: 4500
   },
 ]
 function AddOutgoingProduct({
@@ -52,11 +54,12 @@ function AddOutgoingProduct({
   const [outgoingList, setOutgoingList] = useState([]);
   const [focusedInputId, setFocusedInputId] = useState(null); // Tracks which input is focused
   const [workers, setWorkers] = useState([])
+  const [additionalData, setAdditionalData] = useState('')
 
   const editorRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosPrivate = useAxiosPrivate();  
+  const axiosPrivate = useAxiosPrivate();
   //console.log('outgoingList',outgoingList)
   const notify = (text) =>
     toast.success(text, {
@@ -69,25 +72,34 @@ function AddOutgoingProduct({
       progress: undefined,
       theme: "light",
     });
-  const handleInputChange = useCallback((e, rowId) => {    
-    const { value } = e.target;
-    setRowInputValues((prevValues) => ({
-      ...prevValues,
-      [rowId]: value,
-    }));
-  }, []);
-
-  const handleToggleCreateProductModal = (value) => {
-    setNewProduct((prev) => value);
-
+  // const handleInputChange = useCallback((e, rowId) => {
+  //   const { value } = e.target;
+  //   console.log(value)
+  //   setRowInputValues((prevValues) => ({
+  //     ...prevValues,
+  //     [rowId]: value,
+  //   }));
+  // }, []);
+  const handleInputChange = (e, rowId) => {
+    const value = e.target.value;
+  
+    setRowInputValues((prevValues) => {
+      if (!value.trim()) {
+        // If input is empty, delete the key from state
+        const updatedValues = { ...prevValues };
+        delete updatedValues[rowId];
+        return updatedValues;
+      }
+      return { ...prevValues, [rowId]: value };
+    });
   };
   const onPartnerSelect = (data) => {
     setPartners(data.value);
   };
   const fetchDataByProduct = async (productListId) => {
     try {
-      const respProductsList = await axiosPrivate.post('/productById',{
-        productListId:productListId,
+      const respProductsList = await axiosPrivate.post('/productById', {
+        productListId: productListId,
 
       });
       setFetchedProductsList(respProductsList?.data?.jsonString);
@@ -98,36 +110,47 @@ function AddOutgoingProduct({
       console.log(err);
       navigate("/login", { state: { from: location }, replace: true });
     }
-    
+
   };
-  const handleOutgoingProductsList = async (e,row) => {
+  const handleOutgoingProductsList = async (e, row) => {
     console.log(row)
-    e.preventDefault()
+    console.log(rowInputValues)
+    // debugger
+    // if(Object.keys(rowInputValues).length && (row.original.incomingProductId===Object.keys(rowInputValues)[0])){
+
+      e.preventDefault()
       
       //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
       const tmp = {}
-      tmp.id=row.original.incomingProductId
-      tmp.name=row.original.name
-      tmp.productListId=row.original.currentProductId
-      tmp.outgoingCount=+rowInputValues[row.original.incomingProductId]
-      tmp.unit=row.original.dimensions.weight?'kg':row.original.dimensions.volume?'liter':''
-      tmp.warehouse=row.original.warehouseId
-      tmp.price=row.original.price
-      tmp.barcode=row.original.barcode
-      tmp.balance=row.original.balance-(+rowInputValues[row.original.incomingProductId])
-      tmp.currency=row.original.currency
+      tmp.id = row.original.incomingProductId
+      tmp.name = row.original.name
+      tmp.productListId = row.original.currentProductId
+      tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
+      tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
+      tmp.warehouse = row.original.warehouseId
+      tmp.price = row.original.price
+      tmp.barcode = row.original.barcode
+      tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
+      tmp.currency = row.original.currency
       //tmp.subWarehouse=row.original.name
-  
+      
       const tmpData = []
-       tmpData.push(tmp)
-       setOutgoingList((prev)=>[tmp,...prev])    
-    };
+      tmpData.push(tmp)
+      setOutgoingList((prev) => [tmp, ...prev])
+    // }else{
+    //   return null
+    // }
+  };
+
+
+
+
   // const handleOutgoingProductsList = async (e, row) => {
   //   e.preventDefault();
-  
+
   //   const { productId, name, warehouse } = row.original;
   //   const input = rowInputValues[productId];
-  
+
   //   const tmp = {
   //     id: productId,
   //     name,
@@ -135,18 +158,26 @@ function AddOutgoingProduct({
   //     warehouse,
   //     subWarehouse: name,
   //   };
-  
+
   //   setOutgoingList(prev => [tmp, ...prev]);
   // };
-  
-  const onProductSelect = async(data) =>{
+
+  const onProductSelect = async (data) => {
     console.log(data)
-  const tmp = await fetchDataByProduct(data.currentProductId)
-   setFetchedProductsList(tmp)
+    const tmp = await fetchDataByProduct(data.currentProductId)
+    setFetchedProductsList(tmp)
   }
-  const handleDeleteselected = (deleteId) =>{
-   const tmp = outgoingList.filter((el)=>el.id!==deleteId)
-   setOutgoingList(tmp)
+  const handleDeleteselected = (deleteId) => {
+    const tmp = outgoingList.filter((el) => el.id !== deleteId)
+    setOutgoingList(tmp)
+    setRowInputValues((prevValues) => {
+      if (deleteId) {
+        // If input is empty, delete the key from state
+        const updatedValues = { ...prevValues };
+        delete updatedValues[deleteId];
+        return updatedValues;
+      }
+    });
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -155,7 +186,7 @@ function AddOutgoingProduct({
         setPartners(partnersResp?.data?.jsonString);
 
         const driversList = await axiosPrivate.get(WORKERS_URL);
-        const tmp = driversList?.data?.jsonString.filter((el)=>el.workerRoleType==='driver')
+        const tmp = driversList?.data?.jsonString.filter((el) => el.workerRoleType === 'driver')
         setWorkers(tmp);
 
         const respProductsList = await axiosPrivate.get(PRODUCTSLIST_URL);
@@ -170,7 +201,7 @@ function AddOutgoingProduct({
     setTimeout(() => {
       fetchData();
     }, 500);
-  }, [navigate,newProduct]);
+  }, [navigate, newProduct]);
 
 
   useEffect(() => {
@@ -193,27 +224,31 @@ function AddOutgoingProduct({
   const methods = useForm({
     mode: "onChange",
   });
- 
+
   const onSubmit = methods.handleSubmit(async (data) => {
-  
-console.log(data)
-    try {
-      await axiosPrivate.post('/registerOutgoing', 
+debugger
+    console.log(outgoingList)
+    console.log(data)
+    console.log(outgoingList.lenght)
+   
+      try {
+        await axiosPrivate.post('/registerOutgoing',
         {
-          customer:data.partner.value,
-          driver:data.driver.value,
-          actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-          outgoingList:outgoingList,
-          description: editorRef.current.getContent({ format: "text" }),
-
+          customer: data.partner.value,
+          driver: data.driver.value,
+          price: +data.price,
+          actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
+          outgoingList: outgoingList,
+          description: additionalData,
+          
         }, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
 
-      handleToggleCreateModal(false);
-      refreshData();
-      notify(
+        handleToggleCreateModal(false);
+        refreshData();
+        notify(
         `Ապրանքը  ելքագրված է`
       );
     } catch (err) {
@@ -224,31 +259,34 @@ console.log(data)
       } else {
         setErrMsg(" Failed");
       }
+      
     }
+    //setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
+    
   });
   const fetchedDataColumn = useMemo(
     () => [
       {
         Header: (event) => (
-          <>                
-            <div  className="columnHeader">ID</div>
+          <>
+            <div className="columnHeader">ID</div>
           </>
         ),
         accessor: "incomingProductId",
         sortable: true,
         width: 60,
-        
+
       },
       {
         Header: (event) => (
-          <>                
-            <div  className="columnHeader">Անվանում</div>
+          <>
+            <div className="columnHeader">Անվանում</div>
           </>
         ),
         accessor: "name",
         sortable: true,
         width: 100,
-        
+
       },
       {
         Header: (event) => (
@@ -261,7 +299,7 @@ console.log(data)
         sortable: true,
         // Cell: ({ row }) => (
         //   <div className="d-flex align-items-center">
-            
+
         //   </div>
         // ),
       },
@@ -278,18 +316,18 @@ console.log(data)
       //       {moment(row.original?.createdAt).format('DD-MM-YYYY')}
       //     </div>
       //   ),
-        
+
       // },
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Մուտքի ամսաթիվ</div>
+
+            <div className="columnHeader">Մուտքի ամսաթիվ</div>
           </>
         ),
         accessor: "createdAt",
         style: {
-           // Custom style for the 'description' column
+          // Custom style for the 'description' column
         },
         Cell: ({ row }) => (
           <div className="d-flex align-items-center">
@@ -297,13 +335,13 @@ console.log(data)
           </div>
         ),
         width: 140,
-        
+
       },
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Գին</div>
+
+            <div className="columnHeader">Գին</div>
           </>
         ),
         accessor: "price",
@@ -312,23 +350,13 @@ console.log(data)
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Մուտք</div>
-          </>
-        ),
-        accessor: "quantity",
-        width: 100,
-      },
-      {
-        Header: (event) => (
-          <>
-           
-            <div  className="columnHeader">Պիտ. ամսաթիվ</div>
+
+            <div className="columnHeader">Պիտ. ամսաթիվ</div>
           </>
         ),
         accessor: "expirationDate",
         style: {
-           // Custom style for the 'description' column
+          // Custom style for the 'description' column
         },
         Cell: ({ row }) => (
           <div className="d-flex align-items-center">
@@ -336,18 +364,18 @@ console.log(data)
           </div>
         ),
         width: 120,
-        
+
       },
       {
         Header: (event) => (
-          <>           
-            <div  className="columnHeader">Մնացորդ</div>
+          <>
+            <div className="columnHeader">Մնացորդ</div>
           </>
         ),
         accessor: "balance",
         width: 100,
       },
-     
+
       {
         Header: (event) => (
           <>
@@ -356,19 +384,38 @@ console.log(data)
         ),
         accessor: "actions",
         width: 150,
+
+        Cell: ({ row }) => {
+          const isInputEmpty = !rowInputValues[row.original.incomingProductId]?.trim();
+          const handleButtonClick = (e, row) => {
+            handleOutgoingProductsList(e, row); // Call your existing function
         
-        Cell: ({ row }) => (
+            // Clear the input for the current row
+            setRowInputValues((prevValues) => ({
+              ...prevValues,
+              [row.original.incomingProductId]: "", // Reset input to empty string
+            }));
+          }
+          return(
+
           <div className="d-flex align-items-center">
-            
+
             <div className="d-flex">
-            <EditableInput
+              <EditableInput
                 rowId={row.original.incomingProductId}
                 value={rowInputValues[row?.original?.incomingProductId] || ""}
                 handleInputChange={handleInputChange}
                 isFocused={focusedInputId === row.original.incomingProductId}
                 onFocus={handleFocus}
               />
-            <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button>
+              {console.log(rowInputValues)}
+              <button 
+              disabled={isInputEmpty}
+              className="btn btn-primary" 
+              style={{ marginLeft: '5px', width: '40px', height: '30px', padding: '1px' }} 
+              onClick={(e) => handleButtonClick(e, row)}>
+              Ելք
+              </button>
             </div>
             {/* <div className="d-flex">
               <a
@@ -403,9 +450,9 @@ console.log(data)
               </a>
             </div> */}
           </div>
-        ),
+        )},
         disableSortBy: true,
-        
+
       },
     ],
     [rowInputValues]
@@ -421,46 +468,46 @@ console.log(data)
       //   accessor: "incomingProductId",
       //   sortable: true,
       //   width: 60,
-        
+
       // },
       {
         Header: (event) => (
-          <>                
-            <div  className="columnHeader">Անվանում</div>
+          <>
+            <div className="columnHeader">Անվանում</div>
           </>
         ),
         accessor: "name",
         sortable: true,
-        width:80,
+        width: 80,
         Cell: ({ row }) => (
           <div className="d-flex justify-content-center">
-          {row.original.name}
+            {row.original.name}
           </div>
         ),
       },
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Քանակ</div>
+
+            <div className="columnHeader">Քանակ</div>
           </>
         ),
         accessor: "count",
         style: {
-           // Custom style for the 'description' column
+          // Custom style for the 'description' column
         },
         width: 60,
         Cell: ({ row }) => (
           <div className="d-flex justify-content-center">
-          {row.original.count}
+            {row.original.count}
           </div>
         ),
-        
+
       },
       // {
       //   Header: (event) => (
       //     <>
-           
+
       //       <div  className="columnHeader">Գին</div>
       //     </>
       //   ),
@@ -470,33 +517,33 @@ console.log(data)
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Գին</div>
+
+            <div className="columnHeader">Գին</div>
           </>
         ),
         accessor: "price",
         width: 80,
         Cell: ({ row }) => (
           <div className="d-flex justify-content-center">
-          {row.original.price}
+            {row.original.price}
           </div>
         ),
-      },     
+      },
       {
         Header: (event) => (
           <>
-           
-            <div  className="columnHeader">Ընդհանուր</div>
+
+            <div className="columnHeader">Ընդհանուր</div>
           </>
         ),
         accessor: "totalPrice",
         width: 80,
         Cell: ({ row }) => (
           <div className="d-flex justify-content-center">
-          {row.original.totalPrice}
+            {row.original.totalPrice}
           </div>
         ),
-      },     
+      },
       {
         Header: (event) => (
           <>
@@ -505,13 +552,13 @@ console.log(data)
         ),
         accessor: "actions",
         width: 30,
-        
+
         Cell: ({ row }) => (
           <div className="d-flex">
-            
+
             <div className="d-flex align-items-center">
-           <FeatherIcon icon='trash' size={16}/>
-            {/* <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button> */}
+              <FeatherIcon icon='trash' size={16} />
+              {/* <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button> */}
             </div>
             {/* <div className="d-flex">
               <a
@@ -548,7 +595,7 @@ console.log(data)
           </div>
         ),
         disableSortBy: true,
-        
+
       },
     ],
     [rowInputValues]
@@ -558,153 +605,147 @@ console.log(data)
   };
   return (
     <>
-    {newProduct && (
-        <AddProductsList
-          handleToggleCreateModal={handleToggleCreateProductModal}
-          refreshData={() => refreshData()}
-        />
-      )}
-    <Modal
-      show={() => true}
-      size="xl"
-      onHide={() => handleToggleCreateModal(false)}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-          Ապրանքի դուրս բերում
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <FormProvider {...methods}>
-          <div className="contact-body contact-detail-body">
-            <div data-simplebar className="nicescroll-bar">
-              <div className="d-flex flex-xxl-nowrap flex-wrap">
-                <div className="contact-info w-100">
-                  <Form
-                    onSubmit={(e) => e.preventDefault()}
-                    noValidate
-                    autoComplete="off"
-                    className="container"
-                  >
-                    <section className="d-flex justify-content-between">
-                    <div className="card w-60">
-                      <div className="card-header">
-                        <a href="#">Ապրանքի տվյալներ</a>
-                        <button
-                          className="btn btn-xs btn-icon btn-rounded btn-light"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title=""
-                          data-bs-original-title="Edit"
-                        >
-                          <span
-                            className="icon"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editInfo"
-                          >
-                            <span class="feather-icon">
-                              <FeatherIcon icon="edit-2" />
-                            </span>
-                          </span>
-                        </button>
-                      </div>
-                      <div className="card-body">
-                        <div className="modal-body">
-                          <div className="row gx-3 mb-2">
-                          <div className="col-sm-12 ">
-                              <div className="d-flex justify-content-between me-2">
-                                <label
-                                  className="form-label"
-                                  htmlFor="productList"
-                                >
-                                  Անվանում
-                                </label>
-                                {methods.formState.errors.productName && (
-                                  <span className="error text-red">
-                                    <span>
-                                      <img src={ErrorSvg} alt="errorSvg" />
-                                    </span>{" "}
-                                    պարտադիր
-                                  </span>
-                                )}
-                              </div>
-                              <div className="form-control d-flex justify-content-between">
-                                <div className="flex-grow-1 me-1">
-
-                                <Controller
-                                  name="productName"
-                                  control={methods.control}
-                                  defaultValue={null}
-                                  rules={{ required: true }}
-                                  render={({ field }) => (
-                                    <Select
-                                    {...field}
-                                    value={field.value}
-                                    options={productsList?.map((item) => ({
-                                      value: item.productListId,
-                                      label: item.name,
-                                      currentProductId:item.productListId
-                                    }))}
-                                    placeholder={"Ընտրել"}
-                                    onChange={(val) => {
-                                        field.onChange(val);
-                                        onProductSelect(val);
-                                        setOutgoingList([])
-                                      }}
-                                      />
+      <Modal
+        show={() => true}
+        size="xl"
+        onHide={() => handleToggleCreateModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ width: "100%", textAlign: "center" }}>
+            Ապրանքի դուրս բերում
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormProvider {...methods}>
+            <div className="contact-body contact-detail-body">
+              <div data-simplebar className="nicescroll-bar">
+                <div className="d-flex flex-xxl-nowrap flex-wrap">
+                  <div className="contact-info w-100">
+                    <Form
+                      onSubmit={(e) => e.preventDefault()}
+                      noValidate
+                      autoComplete="off"
+                      className="container"
+                    >
+                      <section className="d-flex justify-content-between">
+                        <div className="card w-100">
+                          <div className="card-header">
+                            <a href="#">Ապրանքի տվյալներ</a>
+                            <button
+                              className="btn btn-xs btn-icon btn-rounded btn-light"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title=""
+                              data-bs-original-title="Edit"
+                            >
+                              <span
+                                className="icon"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editInfo"
+                              >
+                                <span class="feather-icon">
+                                  <FeatherIcon icon="edit-2" />
+                                </span>
+                              </span>
+                            </button>
+                          </div>
+                          <div className="card-body">
+                            <div className="modal-body">
+                              <div className="row gx-3 mb-2">
+                                <div className="col-sm-12 ">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="productList"
+                                    >
+                                      Անվանում
+                                    </label>
+                                    {methods.formState.errors.productName && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img src={ErrorSvg} alt="errorSvg" />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
                                     )}
-                                    />
-                                    </div>
-                              </div>
-                            </div>
-                            <div className="col-sm-12">
-                                      <div className="d-flex justify-content-between me-2">
-                                        <label
-                                          className="form-label"
-                                          htmlFor="partner"
-                                        >
-                                          Գնորդ
-                                        </label>
-                                        {methods.formState.errors.partner && (
-                                          <span className="error text-red">
-                                            <span>
-                                              <img
-                                                src={ErrorSvg}
-                                                alt="errorSvg"
-                                              />
-                                            </span>{" "}
-                                            պարտադիր
-                                          </span>
+                                  </div>
+                                  <div className="form-control d-flex justify-content-between">
+                                    <div className="flex-grow-1 me-1">
+
+                                      <Controller
+                                        name="productName"
+                                        control={methods.control}
+                                        defaultValue={null}
+                                        rules={{ required: true }}
+                                        render={({ field }) => (
+                                          <Select
+                                            {...field}
+                                            value={field.value}
+                                            options={productsList?.map((item) => ({
+                                              value: item.productListId,
+                                              label: item.name,
+                                              currentProductId: item.productListId
+                                            }))}
+                                            placeholder={"Ընտրել"}
+                                            onChange={(val) => {
+                                              field.onChange(val);
+                                              onProductSelect(val);
+                                              setOutgoingList([])
+                                            }}
+                                          />
                                         )}
-                                      </div>
-                                      <div className="form-control">
-                                        <Controller
-                                          name="partner"
-                                          control={methods.control}
-                                          defaultValue={null}
-                                          rules={{ required: true }}
-                                          render={({ field }) => (
-                                            <Select
-                                              {...field}
-                                              // onChange={(val) => {
-                                              //   field.onChange(val.value);
-                                              //   onPartnerSelect(val);
-                                              // }}
-                                              // value={partners.find(
-                                              //   (option) =>
-                                              //     option.value === partnerName
-                                              // )}
-                                              options={partners.map((partner) => ({
-                                                value: partner.partnerId,
-                                                label: `${partner?.partnerId}․  ${partner?.name}`,
-                                              }))}
-                                              placeholder={"Ընտրել"}
-                                            /> 
-                                          )}
-                                        />
-                                      </div>
+                                      />
                                     </div>
-                            <div className="col-sm-12">
+                                  </div>
+                                </div>
+                                <div className="col-sm-12">
+                                  <div className="d-flex justify-content-between me-2">
+                                    <label
+                                      className="form-label"
+                                      htmlFor="partner"
+                                    >
+                                      Գնորդ
+                                    </label>
+                                    {methods.formState.errors.partner && (
+                                      <span className="error text-red">
+                                        <span>
+                                          <img
+                                            src={ErrorSvg}
+                                            alt="errorSvg"
+                                          />
+                                        </span>{" "}
+                                        պարտադիր
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="form-control">
+                                    <Controller
+                                      name="partner"
+                                      control={methods.control}
+                                      defaultValue={null}
+                                      rules={{ required: true }}
+                                      render={({ field }) => (
+                                        <Select
+                                          {...field}
+                                          // onChange={(val) => {
+                                          //   field.onChange(val.value);
+                                          //   onPartnerSelect(val);
+                                          // }}
+                                          // value={partners.find(
+                                          //   (option) =>
+                                          //     option.value === partnerName
+                                          // )}
+                                          options={partners.map((partner) => ({
+                                            value: partner.partnerId,
+                                            label: `${partner?.partnerId}․  ${partner?.name}`,
+                                          }))}
+                                          placeholder={"Ընտրել"}
+                                        />
+                                      )}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-sm-12">
                                   <div className="d-flex justify-content-between me-2">
                                     <label
                                       className="form-label"
@@ -714,13 +755,13 @@ console.log(data)
                                     </label>
                                     {methods.formState.errors
                                       .driver && (
-                                      <span className="error text-red">
-                                        <span>
-                                          <img src={ErrorSvg} alt="errorSvg" />
-                                        </span>{" "}
-                                        պարտադիր
-                                      </span>
-                                    )}
+                                        <span className="error text-red">
+                                          <span>
+                                            <img src={ErrorSvg} alt="errorSvg" />
+                                          </span>{" "}
+                                          պարտադիր
+                                        </span>
+                                      )}
                                   </div>
                                   <div className="form-control">
                                     <Controller
@@ -731,190 +772,179 @@ console.log(data)
                                       render={({ field }) => (
                                         <Select
                                           {...field}
-                                          options={workers?.map((el)=>(
+                                          options={workers?.map((el) => (
 
-                                            {                                              
-                                              value:el.workerId,
+                                            {
+                                              value: el.workerId,
                                               label: `${el?.workerId}․  ${el?.fullName}`
                                             }
                                           )
-                                      )}
+                                          )}
                                           placeholder={"Ընտրել"}
                                         />
                                       )}
                                     />
                                   </div>
-                            </div>
-                            <div className="col-sm-6">
-                              <div className="form-group">
-                                <div className="d-flex justify-content-between me-2">
-                                  <label
-                                    className="form-label"
-                                    htmlFor="actionDate"
-                                  >
-                                    Ելքի ամսաթիվ
-                                  </label>
-                                  {methods.formState.errors.actionDate && (
-                                    <span className="error text-red">
-                                      <span>
-                                        <img src={ErrorSvg} alt="errorSvg" />
-                                      </span>{" "}
-                                      պարտադիր
-                                    </span>
-                                  )}
                                 </div>
-                                <div>
-                                  <CustomDateTimeComponent
-                                    name="actionDate"
-                                    methods={methods} 
-                                    control={methods.control} 
-                                    defaultValue={new Date()}
-                                    required={true}
-                                  />
+                                <div className="col-sm-6">
+                                  <Input {...price_validation} />
                                 </div>
+                                <div className="col-sm-6">
+                                  <div className="form-group">
+                                    <div className="d-flex justify-content-between me-2">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="actionDate"
+                                      >
+                                        Ելքի ամսաթիվ
+                                      </label>
+                                      {methods.formState.errors.actionDate && (
+                                        <span className="error text-red">
+                                          <span>
+                                            <img src={ErrorSvg} alt="errorSvg" />
+                                          </span>{" "}
+                                          պարտադիր
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div>
+                                      <CustomDateTimeComponent
+                                        name="actionDate"
+                                        methods={methods}
+                                        control={methods.control}
+                                        defaultValue={new Date()}
+                                        required={true}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+
                               </div>
-                            </div> 
-                            
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="card w-35">
-                      <div className="card-header d-flex" style={{backgroundColor:'#018a54',fontSize:'24px', color:'#fff', borderRadius:'10px' }}> 
-                        <p>Դուրսբերում</p>
-                        <p>{}</p>
-                        
-                      </div>
-                      <div className="card-body p-0">
-                        <div className="modal-body p-0">
-                        <TotalView column={fetchedDataColumn1} data={test} dataReceived={true}/>
-                        </div>
-                      </div>
-                    </div>
-                    </section>
-                  {(!!fetchedProductsList && fetchedProductsList.length) ?
-                  <>
-                    <div className="separator-full"></div>
-                    <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
+                        {/* <div className="card w-35">
+                          <div className="card-header d-flex" style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff', borderRadius: '10px' }}>
+                            <p>Դուրսբերում</p>
+                            <p>{ }</p>
 
-                  <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true}/>
-                    </div>
-                  </>:<></>
-                  }
-                    {(!!outgoingList && outgoingList.length) ?
-                  <>
-                    <div className="separator-full"></div>
-                    <div style={{border:'1px solid #edebeb', borderRadius:'10px', padding:'10px'}}>
-                      <header>
-                        <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                        <h4>Դուրս գրվող ապրանքներ</h4>
-                        </div>
-                      </header>
-                  {outgoingList.map((el,index)=>{
-                    return<ul>
-                      <li key = {el.id} ><FeatherIcon  icon={'minus'} style={{cursor:'pointer', border:'1px solid #edebeb', borderRadius:'10px',marginRight:'10px'}} onClick={()=>handleDeleteselected(el.id)}/>{'['+(el.id)+']' + "." + el.name+"- "+el.outgoingCount} </li>
-                      
-                      <div className="separator"></div>
+                          </div>
+                          <div className="card-body p-0">
+                            <div className="modal-body p-0">
+                              <TotalView column={fetchedDataColumn1} data={test} dataReceived={true} />
+                            </div>
+                          </div>
+                        </div> */}
+                      </section>
+                      {(!!fetchedProductsList && fetchedProductsList.length) ?
+                        <>
+                          <div className="separator-full"></div>
+                          <div style={{ border: '3px solid #edebeb', borderRadius: '10px', padding: '10px' }}>
 
-                    </ul>
-                  })}
-                  <footer>
-                    <div>
+                            <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
+                          </div>
+                        </> : <></>
+                      }
+                      {(!!outgoingList && outgoingList.length) ?
+                        <>
+                          <div className="separator-full"></div>
+                          <div style={{ border: '1px solid #edebeb', borderRadius: '10px' }}>
+                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff',borderRadius: '10px 10px 0 0',padding:'10px'}}>
+                              <div className="flex-center">
+                                <h4>Դուրս գրվող ապրանքներ</h4>
+                              </div>
+                            </header>
+                            {outgoingList.map((el, index) => {
+                              return <ul>
+                                <li style={{margin:'5px 0', fontSize:'22px'}} key={el.id} >
+                                  <FeatherIcon icon={'x'} style={{color:'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
+                                    onClick={() => handleDeleteselected(el.id)} />
+                                    {'[' + (el.id) + '].' + el.name + "- " + el.outgoingCount + el.unit} 
+                                  </li>
+                                <div className="separator"></div>
 
-                    </div>
-                  </footer>
-                    </div>
-                  </>:<></>
-                  }
+                              </ul>
+                            })}
+                            <footer>
+                              <div>
 
-                    <div className="separator-full"></div>
-                    <div className="card">
-                      <div className="card-header">
-                        <a href="#">Հավելյալ տվյալներ</a>
-                        <button
-                          className="btn btn-xs btn-icon btn-rounded btn-light"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title=""
-                          data-bs-original-title="Edit"
-                        >
-                          <span
-                            class="icon"
-                            data-bs-toggle="modal"
-                            data-bs-target="#moreContact"
+                              </div>
+                            </footer>
+                          </div>
+                        </> : <></>
+                      }
+
+                      <div className="separator-full"></div>
+                      <div className="card">
+                        <div className="card-header">
+                          <a href="#">Հավելյալ տվյալներ</a>
+                          <button
+                            className="btn btn-xs btn-icon btn-rounded btn-light"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title=""
+                            data-bs-original-title="Edit"
                           >
-                            <span class="feather-icon">
-                              <FeatherIcon icon="edit-2" />
+                            <span
+                              class="icon"
+                              data-bs-toggle="modal"
+                              data-bs-target="#moreContact"
+                            >
+                              <span class="feather-icon">
+                                <FeatherIcon icon="edit-2" />
+                              </span>
                             </span>
-                          </span>
-                        </button>
-                      </div>
-                      <div className="card-body" style={{ zIndex: "0" }}>
-                        <div className="modal-body">
+                          </button>
+                        </div>
+                        <div className="card-body" style={{ zIndex: "0" }}>
+                          <div className="modal-body">
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                              {/* <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              /> */}
                               </div>
                             </div>
                           </form>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="separator-full"></div>
-
-                    <div className="modal-footer align-items-center">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => handleToggleCreateModal(false)}
-                      >
-                        Չեղարկել
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onSubmit}
-                        className="btn btn-primary"
-                        data-bs-dismiss="modal"
-                      >
-                        Ելքագրել
-                      </button>
-                    </div>
-                  </Form>
+                      <div className="separator-full"></div>
+                      {console.log(Object.values(rowInputValues).length)}
+                      {console.log(Object.values(rowInputValues))}
+                      {
+                        !Object.values(rowInputValues).length &&
+                      <div className="error-wrapper">
+                      <p style={{color:'orange', fontSize:'18px'}}>{errMsg}</p>
+                      </div>
+                      }
+                      <div className="modal-footer align-items-center">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={() => handleToggleCreateModal(false)}
+                        >
+                          Չեղարկել
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onSubmit}
+                          className="btn btn-primary"
+                          data-bs-dismiss="modal"
+                        >
+                          Ելքագրել
+                        </button>
+                      </div>
+                    </Form>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </FormProvider>
-      </Modal.Body>
-    </Modal>
+          </FormProvider>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
