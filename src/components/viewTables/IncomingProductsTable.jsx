@@ -5,6 +5,7 @@ import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import IncomingProductsPrintModal from '../printModals/IncomingProductsPrintModal';
+import ConfirmIncomingModal from '../ConfirmIncomingModal';
 
 function IncomingProductsTable({
   confirmRef,
@@ -20,6 +21,8 @@ function IncomingProductsTable({
 }) {
   const [modalPrint, setModalPrint] = useState("");
   const [modalInfo, setModalInfo] = useState(false);
+  const [repeatIncoming, setRepeateIncoming] = useState("");
+
   const handleOpenInfoModal = (data) => {
     
     setModalInfo((prev) => data);
@@ -27,6 +30,9 @@ function IncomingProductsTable({
   const handleOpenPrintModal = (data) => {
     setModalPrint((prev) => data);
     
+  }; 
+  const handleOpenRepeatModal = (data) => {
+    setRepeateIncoming((prev) => data);
   }; 
     const columns = useMemo(
         () => [
@@ -185,6 +191,25 @@ function IncomingProductsTable({
                       </span>
                     </span>
                   </a>
+                  
+                  <a
+                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                      data-bs-toggle="tooltip"
+                      data-placement="top"
+                      title="Repeat"
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent default anchor behavior
+                        e.stopPropagation(); // Stop event bubbling
+                        handleOpenRepeatModal(row.original); // Call your function
+                      }}
+                    >
+                      <span className="icon">
+                        <span className="feather-icon">
+                          <FeatherIcon icon="repeat" />
+                        </span>
+                      </span>
+                    </a>
                 </div>
               </div>
             ),
@@ -201,6 +226,9 @@ function IncomingProductsTable({
       )} */}
        {!!modalPrint && (
         <IncomingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
+      )}
+       {!!repeatIncoming && (
+        <ConfirmIncomingModal modalData={repeatIncoming} setRepeateOutgoing={setRepeateIncoming} refreshData={refreshData}/>
       )}
           <CustomTable data={products} column={columns} dataReceived={dataReceived}/>
 

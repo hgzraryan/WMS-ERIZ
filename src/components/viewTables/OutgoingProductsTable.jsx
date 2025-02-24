@@ -5,7 +5,7 @@ import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
-import ConfirmOutgoingModal from '../ConfirmOutgoingModal';
+import ConfirmOutgoingModal from '../ConfirmIncomingModal';
 
 function OutgoingProductsTable({
     outgoingProducts,
@@ -13,13 +13,9 @@ function OutgoingProductsTable({
     dataReceived
   }) {
     const [modalPrint, setModalPrint] = useState("");
-    const [repeatOutgoing, setRepeateOutgoing] = useState("");
     const handleOpenPrintModal = (data) => {
       setModalPrint((prev) => data);
     };
-    const handleOpenRepeatModal = (data) => {
-      setRepeateOutgoing((prev) => data);
-    }; 
       const columns = useMemo(
           () => [
             {
@@ -184,24 +180,6 @@ function OutgoingProductsTable({
                         </span>
                       </span>
                     </a>
-                  <a
-                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                      data-bs-toggle="tooltip"
-                      data-placement="top"
-                      title="Repeat"
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent default anchor behavior
-                        e.stopPropagation(); // Stop event bubbling
-                        handleOpenRepeatModal(row.original); // Call your function
-                      }}
-                    >
-                      <span className="icon">
-                        <span className="feather-icon">
-                          <FeatherIcon icon="repeat" />
-                        </span>
-                      </span>
-                    </a>
                   </div>
                 </div>
               ),
@@ -215,9 +193,6 @@ function OutgoingProductsTable({
       <>
        {!!modalPrint && (
         <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
-      )}
-       {!!repeatOutgoing && (
-        <ConfirmOutgoingModal modalData={repeatOutgoing} setRepeateOutgoing={setRepeateOutgoing} refreshData={refreshData}/>
       )}
             <CustomTable data={outgoingProducts} column={columns} dataReceived={dataReceived}/>
   
