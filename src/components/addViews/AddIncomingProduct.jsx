@@ -12,6 +12,7 @@ import {
   reorderLevel_validation,
   Weight_validation,
   barcode_validation,
+  sellingPrice_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ import { CountryDropdown,CountryRegionData  } from 'react-country-region-selecto
 import AddProductsList from "./AddProductsList";
 import moment from "moment";
 import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
+import ReactQuillEditor from "../views/ReactQuillEditor";
 
 
 function AddIncomingProduct({
@@ -44,9 +46,9 @@ function AddIncomingProduct({
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
   const [partnersList, setPartnersList] = useState([])
+  const [additionalData, setAdditionalData] = useState([])
   //const [suppliersList, setSuppliersList] = useState([])
   const [workers, setWorkers] = useState([])
-  const editorRef = useRef(null);
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան"
@@ -156,12 +158,13 @@ function AddIncomingProduct({
       palletCount:+data?.pallet,
       currency:currency,
       price:+amount,
+      sellingPrice:+data.sellingPrice,
       reorderLevel: +data?.reorderLevel,
       producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
       actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-      description: editorRef.current.getContent({ format: "text" }),
+      description: additionalData,
       barcode: +data?.barcode,
       //productCategory:data?.productCategory || 1,
       // SKU:'1',
@@ -601,6 +604,11 @@ console.log(data)
                               </div>
                             </div>
                             <div className="col-sm-6">
+                              <Input {...sellingPrice_validation} />
+                            </div>
+                          </div>
+                          <div className="row gx-3">  
+                            <div className="col-sm-6">
                               <Input {...reorderLevel_validation} />
                             </div>
                           </div>
@@ -788,24 +796,9 @@ console.log(data)
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                              <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                init={{
-                                  height:300,
-                                  plugins:
-                                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                  mergetags_list: [
-                                    { value: 'First.Name', title: 'First Name' },
-                                    { value: 'Email', title: 'Email' },
-                                  ],
-                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                }}
-                                
+                              <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                               </div>
                             </div>

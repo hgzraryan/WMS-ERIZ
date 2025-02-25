@@ -56,7 +56,7 @@ function ProductMovementsTable({
               ),
               accessor: "productName",
               sortable: true,
-              width: 350,
+              width: 250,
               
             },
             {
@@ -96,7 +96,7 @@ function ProductMovementsTable({
                 ),
                 accessor: "price",
                 sortable: true,
-                width: 200,
+                width: 100,
                 
               },
             {
@@ -130,6 +130,28 @@ function ProductMovementsTable({
                 </div>
               ),
               width: 100,              
+            },    
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="quantity1">Գնորդ</div>
+                </>
+              ),
+              accessor: "driver1",
+              sortable: true,
+              width: 200,              
+            },    
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="quantity2">Մատակարար</div>
+                </>
+              ),
+              accessor: "driver2",
+              sortable: true,
+              width: 200,              
             },    
             {
               Header: (event) => (

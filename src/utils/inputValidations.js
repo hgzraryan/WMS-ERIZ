@@ -346,6 +346,23 @@ export const price_validation = {
     },
   },
 }
+export const sellingPrice_validation = {
+  name: 'sellingPrice',
+  label: 'Վաճառքի գին',
+  type: 'number',
+  id: 'sellingPrice',
+  placeholder: "Վաճառքի գին",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+    maxLength: {
+      value: 10,
+      message: '10 characters max',
+    },
+  },
+}
 export const unit_validation = {
   name: 'unit',
   label: 'Չափման միավոր',

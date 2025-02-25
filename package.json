@@ -23,6 +23,7 @@
     "antd": "^5.17.2",
     "axios": "^0.24.0",
     "bootstrap": "^4.6.2",
+    "bourbon": "^7.3.0",
     "css-loader": "^6.7.3",
     "feather-icons-react": "^0.6.2",
     "framer-motion": "^10.16.5",
@@ -84,5 +85,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://127.0.0.1:5443"
+  "proxy": "https://37.186.119.16:5443"
 }

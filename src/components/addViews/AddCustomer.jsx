@@ -20,6 +20,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { customStyles } from "../customStyles";
 import { city_validation, code_validation, email_validation, name_validation, price_validation, street_validation, zipCode_validation } from "../../utils/inputValidations";
 import { useLocation, useNavigate } from "react-router-dom";
+import ReactQuillEditor from "../views/ReactQuillEditor";
 const currencies = [
     {
       label: "ՀՀ դրամ",
@@ -53,8 +54,8 @@ function AddCustomer({handleToggleCreateModal,refreshData}) {
   const [errMsg, setErrMsg] = useState("");
   const [legalForms, setLegalForms] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const editorRef = useRef(null);
   const [region, setRegion] = useState("");
+  const [additionalData, setAdditionalData] = useState('')
 
   useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
@@ -137,7 +138,7 @@ function AddCustomer({handleToggleCreateModal,refreshData}) {
         },
         status:status?.value,
         priceList:+price,
-        additional: editorRef.current.getContent({ format: "text" }),
+        additional: additionalData,
       };
        const updatedData = deleteNullProperties(newCustomer);
 
@@ -545,24 +546,9 @@ function AddCustomer({handleToggleCreateModal,refreshData}) {
                         <form>
                           <div className="row gx-12">
                             <div className="col-sm-12">
-                            <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                init={{
-                                  height: 300,
-                                  plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                  mergetags_list: [
-                                    { value: 'First.Name', title: 'First Name' },
-                                    { value: 'Email', title: 'Email' },
-                                  ],
-                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                }}
-                                
+                            <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                             </div>
                           </div>

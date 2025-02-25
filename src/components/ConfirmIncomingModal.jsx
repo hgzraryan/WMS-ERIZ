@@ -30,7 +30,8 @@ function ConfirmIncomingModal({modalData,
            
             ) => {
               const newOutgoingProduct = {
-                outgoingProductId:modalData.outgoingProductId,
+                ...modalData,
+                incomingProductId:modalData.incomingProductId,
                
               };
               const updatedData = deleteNullProperties(newOutgoingProduct);
@@ -62,7 +63,7 @@ function ConfirmIncomingModal({modalData,
            >
              <Modal.Header closeButton>
                <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-               Կրկնօրնակել {modalData.outgoingProductId} համարի գործարքը
+               {`Կրկնօրնակել <${modalData.incomingProductId}> համարի գործարքը`}
                </Modal.Title>
              </Modal.Header>
              <Modal.Body>        
@@ -116,7 +117,7 @@ function ConfirmIncomingModal({modalData,
                         className="btn btn-primary"
                         data-bs-dismiss="modal"
                       >
-                        Ավելացնել
+                        Կրկնօրնակել
                       </button>
                          </div>
              </Modal.Body>

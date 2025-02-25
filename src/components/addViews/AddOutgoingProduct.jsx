@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
 import TotalView from "../viewTables/TotalView";
 import { Input } from "../Input";
-import { price_validation } from "../../utils/inputValidations";
+import { price_validation, sellingPrice_validation } from "../../utils/inputValidations";
 import ReactQuillEditor from "../views/ReactQuillEditor";
 const test = [
   {
@@ -56,11 +56,9 @@ function AddOutgoingProduct({
   const [workers, setWorkers] = useState([])
   const [additionalData, setAdditionalData] = useState('')
 
-  const editorRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
-  //console.log('outgoingList',outgoingList)
   const notify = (text) =>
     toast.success(text, {
       position: "top-right",
@@ -84,8 +82,8 @@ function AddOutgoingProduct({
     const value = e.target.value;
   
     setRowInputValues((prevValues) => {
+      // If input is empty, delete the key from state
       if (!value.trim()) {
-        // If input is empty, delete the key from state
         const updatedValues = { ...prevValues };
         delete updatedValues[rowId];
         return updatedValues;
@@ -115,12 +113,8 @@ function AddOutgoingProduct({
   const handleOutgoingProductsList = async (e, row) => {
     console.log(row)
     console.log(rowInputValues)
-    // debugger
-    // if(Object.keys(rowInputValues).length && (row.original.incomingProductId===Object.keys(rowInputValues)[0])){
-
       e.preventDefault()
-      
-      //const inputValue = Object.keys(rowInputValues).filter((el)=>el===row.original.productId)
+      debugger
       const tmp = {}
       tmp.id = row.original.incomingProductId
       tmp.name = row.original.name
@@ -132,14 +126,10 @@ function AddOutgoingProduct({
       tmp.barcode = row.original.barcode
       tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
       tmp.currency = row.original.currency
-      //tmp.subWarehouse=row.original.name
       
       const tmpData = []
       tmpData.push(tmp)
       setOutgoingList((prev) => [tmp, ...prev])
-    // }else{
-    //   return null
-    // }
   };
 
 
@@ -201,24 +191,6 @@ function AddOutgoingProduct({
     setTimeout(() => {
       fetchData();
     }, 500);
-  }, [navigate, newProduct]);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const wareHousesReps = await axiosPrivate.get(WAREHOUSES_URL);
-        setWareHouses(wareHousesReps?.data?.jsonString);
-
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-        navigate("/login", { state: { from: location }, replace: true });
-      }
-    };
-    setTimeout(() => {
-      fetchData();
-    }, 500);
   }, [navigate]);
 
   const methods = useForm({
@@ -227,20 +199,16 @@ function AddOutgoingProduct({
 
   const onSubmit = methods.handleSubmit(async (data) => {
 debugger
-    console.log(outgoingList)
-    console.log(data)
-    console.log(outgoingList.lenght)
-   
-      try {
-        await axiosPrivate.post('/registerOutgoing',
+   if(outgoingList.length){
+     try {
+       await axiosPrivate.post('/registerOutgoing',
         {
           customer: data.partner.value,
           driver: data.driver.value,
-          price: +data.price,
+          sellingPrice: +data.sellingPrice,
           actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
           outgoingList: outgoingList,
           description: additionalData,
-          
         }, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -259,10 +227,10 @@ debugger
       } else {
         setErrMsg(" Failed");
       }
-      
     }
-    //setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
-    
+  }else if(!outgoingList.length){
+    setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
+  }
   });
   const fetchedDataColumn = useMemo(
     () => [
@@ -303,21 +271,6 @@ debugger
         //   </div>
         // ),
       },
-      // {
-      //   Header: (event) => (
-      //     <>
-      //       <div>Արտադրման ժամկետ</div>
-      //     </>
-      //   ),
-      //   accessor: "phone",
-      //   width: 180,
-      //   Cell: ({ row }) => (
-      //     <div className="d-flex align-items-center">
-      //       {moment(row.original?.createdAt).format('DD-MM-YYYY')}
-      //     </div>
-      //   ),
-
-      // },
       {
         Header: (event) => (
           <>
@@ -389,6 +342,7 @@ debugger
           const isInputEmpty = !rowInputValues[row.original.incomingProductId]?.trim();
           const handleButtonClick = (e, row) => {
             handleOutgoingProductsList(e, row); // Call your existing function
+            setErrMsg('')
         
             // Clear the input for the current row
             setRowInputValues((prevValues) => ({
@@ -451,149 +405,6 @@ debugger
             </div> */}
           </div>
         )},
-        disableSortBy: true,
-
-      },
-    ],
-    [rowInputValues]
-  );
-  const fetchedDataColumn1 = useMemo(
-    () => [
-      // {
-      //   Header: (event) => (
-      //     <>                
-      //       <div  className="columnHeader">ID</div>
-      //     </>
-      //   ),
-      //   accessor: "incomingProductId",
-      //   sortable: true,
-      //   width: 60,
-
-      // },
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader">Անվանում</div>
-          </>
-        ),
-        accessor: "name",
-        sortable: true,
-        width: 80,
-        Cell: ({ row }) => (
-          <div className="d-flex justify-content-center">
-            {row.original.name}
-          </div>
-        ),
-      },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Քանակ</div>
-          </>
-        ),
-        accessor: "count",
-        style: {
-          // Custom style for the 'description' column
-        },
-        width: 60,
-        Cell: ({ row }) => (
-          <div className="d-flex justify-content-center">
-            {row.original.count}
-          </div>
-        ),
-
-      },
-      // {
-      //   Header: (event) => (
-      //     <>
-
-      //       <div  className="columnHeader">Գին</div>
-      //     </>
-      //   ),
-      //   accessor: "price",
-      //   width: 80,
-      // },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Գին</div>
-          </>
-        ),
-        accessor: "price",
-        width: 80,
-        Cell: ({ row }) => (
-          <div className="d-flex justify-content-center">
-            {row.original.price}
-          </div>
-        ),
-      },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Ընդհանուր</div>
-          </>
-        ),
-        accessor: "totalPrice",
-        width: 80,
-        Cell: ({ row }) => (
-          <div className="d-flex justify-content-center">
-            {row.original.totalPrice}
-          </div>
-        ),
-      },
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader"></div>
-          </>
-        ),
-        accessor: "actions",
-        width: 30,
-
-        Cell: ({ row }) => (
-          <div className="d-flex">
-
-            <div className="d-flex align-items-center">
-              <FeatherIcon icon='trash' size={16} />
-              {/* <button className="btn btn-primary" style={{marginLeft:'5px',width:'40px', height:'30px',padding:'1px'}} onClick={(e)=>handleOutgoingProductsList(e,row)}>Ելք</button> */}
-            </div>
-            {/* <div className="d-flex">
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                data-bs-toggle="tooltip"
-                data-placement="top"
-                title="Edit"
-                href="#"
-                onClick={() => handleOpenEditModal(row.original)}
-
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="edit" />
-                  </span>
-                </span>
-              </a>
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                data-bs-toggle="tooltip"
-                onClick={() => handleOpenModal(row.original)}
-                data-placement="top"
-                title=""
-                data-bs-original-title="Delete"
-                href="#"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="trash" />
-                  </span>
-                </span>
-              </a>
-            </div> */}
-          </div>
-        ),
         disableSortBy: true,
 
       },
@@ -787,7 +598,7 @@ debugger
                                   </div>
                                 </div>
                                 <div className="col-sm-6">
-                                  <Input {...price_validation} />
+                                <Input {...sellingPrice_validation} validation={{ required: { value: true, message: "պարտադիր" } }} />
                                 </div>
                                 <div className="col-sm-6">
                                   <div className="form-group">
@@ -839,6 +650,10 @@ debugger
                       {(!!fetchedProductsList && fetchedProductsList.length) ?
                         <>
                           <div className="separator-full"></div>
+                          <div className="flex-center">
+                          <h4 className="">Ընտրեք դուրս գրվող ապրանքը</h4>
+                          </div>
+                            
                           <div style={{ border: '3px solid #edebeb', borderRadius: '10px', padding: '10px' }}>
 
                             <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
@@ -857,7 +672,7 @@ debugger
                             {outgoingList.map((el, index) => {
                               return <ul>
                                 <li style={{margin:'5px 0', fontSize:'22px'}} key={el.id} >
-                                  <FeatherIcon icon={'x'} style={{color:'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
+                                  <FeatherIcon icon={'trash'} style={{color:'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
                                     onClick={() => handleDeleteselected(el.id)} />
                                     {'[' + (el.id) + '].' + el.name + "- " + el.outgoingCount + el.unit} 
                                   </li>
@@ -901,10 +716,10 @@ debugger
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                              {/* <ReactQuillEditor
+                              <ReactQuillEditor
                                 value={additionalData}
                                 onChange={setAdditionalData}
-                              /> */}
+                              />
                               </div>
                             </div>
                           </form>
@@ -912,13 +727,11 @@ debugger
                         </div>
                       </div>
                       <div className="separator-full"></div>
-                      {console.log(Object.values(rowInputValues).length)}
-                      {console.log(Object.values(rowInputValues))}
                       {
-                        !Object.values(rowInputValues).length &&
+                      (!Object.values(rowInputValues).length || errMsg.length) ?
                       <div className="error-wrapper">
                       <p style={{color:'orange', fontSize:'18px'}}>{errMsg}</p>
-                      </div>
+                      </div>:<></>
                       }
                       <div className="modal-footer align-items-center">
                         <button

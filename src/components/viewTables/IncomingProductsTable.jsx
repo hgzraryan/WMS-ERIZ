@@ -32,6 +32,7 @@ function IncomingProductsTable({
     
   }; 
   const handleOpenRepeatModal = (data) => {
+    console.log(data)
     setRepeateIncoming((prev) => data);
   }; 
     const columns = useMemo(
