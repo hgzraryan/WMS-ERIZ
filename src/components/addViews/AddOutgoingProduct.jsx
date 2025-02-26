@@ -80,7 +80,7 @@ function AddOutgoingProduct({
   // }, []);
   const handleInputChange = (e, rowId) => {
     const value = e.target.value;
-  
+
     setRowInputValues((prevValues) => {
       // If input is empty, delete the key from state
       if (!value.trim()) {
@@ -113,23 +113,23 @@ function AddOutgoingProduct({
   const handleOutgoingProductsList = async (e, row) => {
     console.log(row)
     console.log(rowInputValues)
-      e.preventDefault()
-      debugger
-      const tmp = {}
-      tmp.id = row.original.incomingProductId
-      tmp.name = row.original.name
-      tmp.productListId = row.original.currentProductId
-      tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
-      tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
-      tmp.warehouse = row.original.warehouseId
-      tmp.price = row.original.price
-      tmp.barcode = row.original.barcode
-      tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
-      tmp.currency = row.original.currency
-      
-      const tmpData = []
-      tmpData.push(tmp)
-      setOutgoingList((prev) => [tmp, ...prev])
+    e.preventDefault()
+
+    const tmp = {}
+    tmp.id = row.original.incomingProductId
+    tmp.name = row.original.name
+    tmp.productListId = row.original.currentProductId
+    tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
+    tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
+    tmp.warehouse = row.original.warehouseId
+    tmp.price = row.original.price
+    tmp.barcode = row.original.barcode
+    tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
+    tmp.currency = row.original.currency
+
+    const tmpData = []
+    tmpData.push(tmp)
+    setOutgoingList((prev) => [tmp, ...prev])
   };
 
 
@@ -198,18 +198,18 @@ function AddOutgoingProduct({
   });
 
   const onSubmit = methods.handleSubmit(async (data) => {
-debugger
-   if(outgoingList.length){
-     try {
-       await axiosPrivate.post('/registerOutgoing',
-        {
-          customer: data.partner.value,
-          driver: data.driver.value,
-          sellingPrice: +data.sellingPrice,
-          actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-          outgoingList: outgoingList,
-          description: additionalData,
-        }, {
+
+    if (outgoingList.length) {
+      try {
+        await axiosPrivate.post('/registerOutgoing',
+          {
+            customer: data.partner.value,
+            driver: data.driver.value,
+            sellingPrice: +data.sellingPrice,
+            actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
+            outgoingList: outgoingList,
+            description: additionalData,
+          }, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
@@ -217,20 +217,20 @@ debugger
         handleToggleCreateModal(false);
         refreshData();
         notify(
-        `Ապրանքը  ելքագրված է`
-      );
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg("Username Taken");
-      } else {
-        setErrMsg(" Failed");
+          `Ապրանքը  ելքագրված է`
+        );
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else if (err.response?.status === 409) {
+          setErrMsg("Username Taken");
+        } else {
+          setErrMsg(" Failed");
+        }
       }
+    } else if (!outgoingList.length) {
+      setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
     }
-  }else if(!outgoingList.length){
-    setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
-  }
   });
   const fetchedDataColumn = useMemo(
     () => [
@@ -343,35 +343,35 @@ debugger
           const handleButtonClick = (e, row) => {
             handleOutgoingProductsList(e, row); // Call your existing function
             setErrMsg('')
-        
+
             // Clear the input for the current row
             setRowInputValues((prevValues) => ({
               ...prevValues,
               [row.original.incomingProductId]: "", // Reset input to empty string
             }));
           }
-          return(
+          return (
 
-          <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center">
 
-            <div className="d-flex">
-              <EditableInput
-                rowId={row.original.incomingProductId}
-                value={rowInputValues[row?.original?.incomingProductId] || ""}
-                handleInputChange={handleInputChange}
-                isFocused={focusedInputId === row.original.incomingProductId}
-                onFocus={handleFocus}
-              />
-              {console.log(rowInputValues)}
-              <button 
-              disabled={isInputEmpty}
-              className="btn btn-primary" 
-              style={{ marginLeft: '5px', width: '40px', height: '30px', padding: '1px' }} 
-              onClick={(e) => handleButtonClick(e, row)}>
-              Ելք
-              </button>
-            </div>
-            {/* <div className="d-flex">
+              <div className="d-flex">
+                <EditableInput
+                  rowId={row.original.incomingProductId}
+                  value={rowInputValues[row?.original?.incomingProductId] || ""}
+                  handleInputChange={handleInputChange}
+                  isFocused={focusedInputId === row.original.incomingProductId}
+                  onFocus={handleFocus}
+                />
+                {console.log(rowInputValues)}
+                <button
+                  disabled={isInputEmpty}
+                  className="btn btn-primary"
+                  style={{ marginLeft: '5px', width: '40px', height: '30px', padding: '1px' }}
+                  onClick={(e) => handleButtonClick(e, row)}>
+                  Ելք
+                </button>
+              </div>
+              {/* <div className="d-flex">
               <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                 data-bs-toggle="tooltip"
@@ -403,8 +403,9 @@ debugger
                 </span>
               </a>
             </div> */}
-          </div>
-        )},
+            </div>
+          )
+        },
         disableSortBy: true,
 
       },
@@ -598,7 +599,7 @@ debugger
                                   </div>
                                 </div>
                                 <div className="col-sm-6">
-                                <Input {...sellingPrice_validation} validation={{ required: { value: true, message: "պարտադիր" } }} />
+                                  <Input {...sellingPrice_validation} validation={{ required: { value: true, message: "պարտադիր" } }} />
                                 </div>
                                 <div className="col-sm-6">
                                   <div className="form-group">
@@ -651,9 +652,9 @@ debugger
                         <>
                           <div className="separator-full"></div>
                           <div className="flex-center">
-                          <h4 className="">Ընտրեք դուրս գրվող ապրանքը</h4>
+                            <h4 className="">Ընտրեք դուրս գրվող ապրանքը</h4>
                           </div>
-                            
+
                           <div style={{ border: '3px solid #edebeb', borderRadius: '10px', padding: '10px' }}>
 
                             <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
@@ -664,22 +665,31 @@ debugger
                         <>
                           <div className="separator-full"></div>
                           <div style={{ border: '1px solid #edebeb', borderRadius: '10px' }}>
-                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff',borderRadius: '10px 10px 0 0',padding:'10px'}}>
+                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff', borderRadius: '10px 10px 0 0', padding: '10px', marginBottom: '20px' }}>
                               <div className="flex-center">
                                 <h4>Դուրս գրվող ապրանքներ</h4>
                               </div>
                             </header>
-                            {outgoingList.map((el, index) => {
-                              return <ul>
-                                <li style={{margin:'5px 0', fontSize:'22px'}} key={el.id} >
-                                  <FeatherIcon icon={'trash'} style={{color:'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
-                                    onClick={() => handleDeleteselected(el.id)} />
-                                    {'[' + (el.id) + '].' + el.name + "- " + el.outgoingCount + el.unit} 
-                                  </li>
-                                <div className="separator"></div>
+                            <ul>
+                              {outgoingList.map((el, index) => {
+                                return (
+                                  <>
+                                    <div className="d-flex gap-5 mb-2 justify-content-between">
+                                      <li key={el.id} >
+                                        {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit}
+                                      </li>
+                                      <div>
+                                        <FeatherIcon icon={'trash'} style={{ color: 'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
+                                          onClick={() => handleDeleteselected(el.id)} />
+                                      </div>
+                                      <div className="separator m-0 p-0"></div>
 
-                              </ul>
-                            })}
+                                    </div>
+                                  </>
+                                )
+
+                              })}
+                            </ul>
                             <footer>
                               <div>
 
@@ -713,25 +723,25 @@ debugger
                         </div>
                         <div className="card-body" style={{ zIndex: "0" }}>
                           <div className="modal-body">
-                          <form>
-                            <div className="row gx-12">
-                              <div className="col-sm-12">
-                              <ReactQuillEditor
-                                value={additionalData}
-                                onChange={setAdditionalData}
-                              />
+                            <form>
+                              <div className="row gx-12">
+                                <div className="col-sm-12">
+                                  <ReactQuillEditor
+                                    value={additionalData}
+                                    onChange={setAdditionalData}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          </form>
+                            </form>
                           </div>
                         </div>
                       </div>
                       <div className="separator-full"></div>
                       {
-                      (!Object.values(rowInputValues).length || errMsg.length) ?
-                      <div className="error-wrapper">
-                      <p style={{color:'orange', fontSize:'18px'}}>{errMsg}</p>
-                      </div>:<></>
+                        (!Object.values(rowInputValues).length || errMsg.length) ?
+                          <div className="error-wrapper">
+                            <p style={{ color: 'orange', fontSize: '18px' }}>{errMsg}</p>
+                          </div> : <></>
                       }
                       <div className="modal-footer align-items-center">
                         <button
