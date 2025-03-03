@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PATIENTS__SEARCH_URL } from "../utils/constants";
 
 const useGetData = (url,currentPage,usersPerPage,searchCount=null,searchUrl=null,searchParams=null) => {
     const [data, setData] = useState([]);
