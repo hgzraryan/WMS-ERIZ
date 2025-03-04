@@ -14,17 +14,10 @@ import {
   email_validation,
   emergencyContactName_validation,
   fullName_validation,
-  name_validation,
-  password_validation,
-  respPersonFullName_validation,
-  status_validation,
   street_validation,
-  user_validation,
   zipCode_validation,
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
-import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Select from "react-select";
 import ErrorSvg from "../../dist/svg/error.svg";
 import CustomPhoneComponent from "../CustomPhoneComponent";
@@ -37,9 +30,9 @@ import {
 import moment from "moment";
 import { deleteNullProperties } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 function WorkersEdit({ worker, setEditRow, refreshData }) {
-  console.log(worker)
   const navigate = useNavigate();
   const [errMsg, setErrMsg] = useState("");
   const [workerRoles, setWorkerRoles] = useState([]);
@@ -49,6 +42,7 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
   const [gender, setGender] = useState("");
+  const [additionalData, setAdditionalData] = useState('')
 
   const onGenderSelect = (event) => {
     setGender((prev) => event.target.value);
@@ -110,7 +104,6 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
     mode: "onChange",
   });
 
-  const editorRef = useRef(null);
 
   const notify = (text) =>
     toast.success(text, {
@@ -167,7 +160,7 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
         emergencyContactNumber: emergencyContactNumber,
         profilePictureUrl: "profilePictureUrl",
         isActive: 1,
-        additional: editorRef.current.getContent({ format: "text" }),
+        additional: additionalData,
       };
       console.log(workerRole)
       
@@ -234,9 +227,9 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
             ? emergencyContactNumber
             : null,
         additional:
-          editorRef.current.getContent({ format: "text" }).trim() !==
+          additionalData !==
           worker?.additional?.trim()
-            ? editorRef.current.getContent({ format: "text" })
+            ? additionalData
             : null,
         //profilePictureUrl: "profilePictureUrl",
         //isActive: isActive,
@@ -302,7 +295,7 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
                             data-bs-toggle="modal"
                             data-bs-target="#editInfo"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -777,11 +770,11 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
                           data-bs-original-title="Edit"
                         >
                           <span
-                            class="icon"
+                            className="icon"
                             data-bs-toggle="modal"
                             data-bs-target="#moreContact"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -792,36 +785,10 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                {console.log()}
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  initialValue={worker?.additional}
-                                  init={{
-                                    height: 300,
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                               <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                               </div>
                             </div>
                           </form>

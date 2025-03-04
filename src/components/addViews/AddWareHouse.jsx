@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import React, { useEffect, useRef, useState } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Modal } from "react-bootstrap";
@@ -14,7 +15,6 @@ import {
   email_validation,
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
 import { REGISTER_WAREHOUSE, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { toast } from "react-toastify";
 import {
@@ -26,6 +26,7 @@ import { deleteNullProperties } from "../../utils/helper";
 import Select from "react-select";
 import { customStyles } from "../customStyles";
 import { useLocation, useNavigate } from "react-router-dom";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 const warehouseType=[
   {
@@ -69,7 +70,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const editorRef = useRef(null);
+  const [additionalData, setAdditionalData] = useState('')
   const [region, setRegion] = useState("");
   const [parentWarehouses, setParentWarehouses] = useState([]);
   const [workers, setWorkers] = useState([]);
@@ -164,7 +165,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
             zipCode: zipCode,
           },
         },
-        additional: editorRef.current.getContent({ format: "text" }),
+        additional: additionalData,
       };
       const updatedData = deleteNullProperties(newWarehouse)
 
@@ -225,7 +226,7 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                             data-bs-toggle="modal"
                             data-bs-target="#editInfo"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -634,11 +635,11 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                           data-bs-original-title="Edit"
                         >
                           <span
-                            class="icon"
+                            className="icon"
                             data-bs-toggle="modal"
                             data-bs-target="#moreContact"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -649,33 +650,10 @@ function AddWareHouse({ handleToggleCreateModal, refreshData }) {
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    height: 300,
-                                    plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                              <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                               </div>
                             </div>
                           </form>

@@ -5,16 +5,16 @@ import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { Input } from '../Input';
 import { name_validation } from '../../utils/inputValidations';
-import { Editor } from '@tinymce/tinymce-react';
 import { LEGALFORMS_URL, REGISTER_LEGALFORM } from '../../utils/constants';
 import { deleteNullProperties } from '../../utils/helper';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
+import ReactQuillEditor from '../ReactQuillEditor';
 function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
     const navigate = useNavigate()
     const [errMsg, setErrMsg] = useState("");
-    const editorRef = useRef(null);
+    const [additionalData, setAdditionalData] = useState('')
 
     const location = useLocation();
 
@@ -44,7 +44,7 @@ function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
         ) => {
           const newLegalForm = {
             name:name?.trim() !== legalForm?.name?.trim() ? name : null,
-            additional: editorRef.current.getContent({ format: "text" }).trim()!==legalForm?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
+            additional: additionalData!==legalForm?.additional?.trim()?additionalData:null,
     
 
           };
@@ -102,7 +102,7 @@ function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
                           data-bs-toggle="modal"
                           data-bs-target="#editInfo"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>
@@ -132,11 +132,11 @@ function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
                         data-bs-original-title="Edit"
                       >
                         <span
-                          class="icon"
+                          className="icon"
                           data-bs-toggle="modal"
                           data-bs-target="#moreContact"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>
@@ -147,25 +147,9 @@ function LegalFormEdit({ legalForm, setEditRow, refreshData }) {
                         <form>
                           <div className="row gx-12">
                             <div className="col-sm-12">
-                            <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                initialValue={legalForm?.additional}
-                                init={{
-                                  height: 300,
-                                  plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                  mergetags_list: [
-                                    { value: 'First.Name', title: 'First Name' },
-                                    { value: 'Email', title: 'Email' },
-                                  ],
-                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                }}
-                                
+                            <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                             </div>
                           </div>

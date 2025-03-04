@@ -11,7 +11,7 @@ import { deleteNullProperties } from '../../utils/helper';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
-import ReactQuillEditor from '../views/ReactQuillEditor';
+import ReactQuillEditor from '../ReactQuillEditor';
 
 function AddLegalForm({handleToggleCreateModal,refreshData}) {
     const navigate = useNavigate()
@@ -108,7 +108,7 @@ function AddLegalForm({handleToggleCreateModal,refreshData}) {
                           data-bs-toggle="modal"
                           data-bs-target="#editInfo"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>
@@ -138,11 +138,11 @@ function AddLegalForm({handleToggleCreateModal,refreshData}) {
                         data-bs-original-title="Edit"
                       >
                         <span
-                          class="icon"
+                          className="icon"
                           data-bs-toggle="modal"
                           data-bs-target="#moreContact"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>

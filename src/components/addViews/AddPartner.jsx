@@ -28,8 +28,8 @@ import {
 } from "../../utils/inputValidations";
 
 import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
+import ReactQuillEditor from "../ReactQuillEditor";
 const companyTypes = [
   {
     label: "Ֆիզիկական անձ",
@@ -96,7 +96,7 @@ function AddPartner({ setIsOpen, refreshData }) {
   const axiosPrivate = useAxiosPrivate();
   const [country, setCountry] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const editorRef = useRef(null);
+  const [additionalData, setAdditionalData] = useState('')
   const [region, setRegion] = useState("");
   useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
@@ -173,7 +173,7 @@ function AddPartner({ setIsOpen, refreshData }) {
             zipCode: zipCode,
           },
         },
-        additional: editorRef.current.getContent({ format: "text" }),
+        additional:additionalData,
       };
       const updatedData = deleteNullProperties(newPartner);
 
@@ -234,7 +234,7 @@ function AddPartner({ setIsOpen, refreshData }) {
                             data-bs-toggle="modal"
                             data-bs-target="#editInfo"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -616,11 +616,11 @@ function AddPartner({ setIsOpen, refreshData }) {
                           data-bs-original-title="Edit"
                         >
                           <span
-                            class="icon"
+                            className="icon"
                             data-bs-toggle="modal"
                             data-bs-target="#moreContact"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -631,33 +631,10 @@ function AddPartner({ setIsOpen, refreshData }) {
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    height: 300,
-                                    plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                              <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                               </div>
                             </div>
                           </form>

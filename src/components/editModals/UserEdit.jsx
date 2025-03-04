@@ -26,13 +26,14 @@ import {
 import LoadingSpinner from "../LoadingSpinner";
 import { deepEqual, deleteNullProperties, objToArrWithObjects } from "../../utils/helper";
 import { USERS_URL } from "../../utils/constants";
-import { Editor } from "@tinymce/tinymce-react";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 function UserEdit({ user, setEditRow, refreshData }) {
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const [country, setCountry] = useState("");
+  const [additionalData, setAdditionalData] = useState('')
   const [region, setRegion] = useState("");
   const [gender, setGender] = useState("");
   const [merried, setMerried] = useState("");
@@ -41,7 +42,6 @@ function UserEdit({ user, setEditRow, refreshData }) {
   const methods = useForm({
     mode: "onChange",
   });
-  const editorRef = useRef(null);
 
   const animatedComponents = makeAnimated();
   const colourStyles = {
@@ -168,7 +168,7 @@ function UserEdit({ user, setEditRow, refreshData }) {
         roles:!deepEqual(objToArrWithObjects(user?.roles),roles)?onRoleSelect(roles):null ,
         birthday:
           user?.birthday !== newDateOfBirthString ? newDateOfBirthString : null,
-          additionalData: editorRef.current.getContent({ format: "text" }).trim()!==user?.additionalData?.trim()?editorRef.current.getContent({ format: "text" }):null,
+          additionalData: additionalData!==user?.additionalData?.trim()?additionalData:null,
 
       };
       // formData.append("text", JSON.stringify(newUser));
@@ -281,7 +281,7 @@ function UserEdit({ user, setEditRow, refreshData }) {
                                   data-bs-toggle="modal"
                                   data-bs-target="#editInfo"
                                 >
-                                  <span class="feather-icon">
+                                  <span className="feather-icon">
                                     <FeatherIcon icon="edit-2" />
                                   </span>
                                 </span>
@@ -648,11 +648,11 @@ function UserEdit({ user, setEditRow, refreshData }) {
                             data-bs-original-title="Edit"
                           >
                             <span
-                              class="icon"
+                              className="icon"
                               data-bs-toggle="modal"
                               data-bs-target="#moreContact"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>
@@ -663,24 +663,9 @@ function UserEdit({ user, setEditRow, refreshData }) {
                             <form>
                               <div className="row gx-12">
                                    <div className="col-sm-12">
-                              <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                initialValue={user?.additionalData}
-                                init={{
-                                  plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                  mergetags_list: [
-                                    { value: 'First.Name', title: 'First Name' },
-                                    { value: 'Email', title: 'Email' },
-                                  ],
-                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                }}
-                                
+                                   <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                               </div>
                               </div>

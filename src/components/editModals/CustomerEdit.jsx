@@ -20,7 +20,6 @@ import {
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
 import {
   city_validation,
@@ -33,6 +32,7 @@ import {
 } from "../../utils/inputValidations";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
+import ReactQuillEditor from "../ReactQuillEditor";
 const currencies = [
   {
     label: "ՀՀ դրամ",
@@ -68,6 +68,7 @@ function CustomerEdit({ customer, setEditRow, refreshData }) {
   const [isLoading, setIsLoading] = useState(false);
   const editorRef = useRef(null);
   const [region, setRegion] = useState("");
+  const [additionalData, setAdditionalData] = useState('')
 
   useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
@@ -173,7 +174,7 @@ function CustomerEdit({ customer, setEditRow, refreshData }) {
           },
         status: status?.value?.trim() !== customer?.status?.trim() ? status?.value : null,
         priceList: +price !== +customer?.priceList ? +price : null,
-        additional: editorRef.current.getContent({ format: "text" }).trim()!==customer?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
+        additional: additionalData!==customer?.additional?.trim()?additionalData:null,
     };
       const updatedFields = deleteNullProperties(updatedCustomer);
 
@@ -233,7 +234,7 @@ function CustomerEdit({ customer, setEditRow, refreshData }) {
                                 data-bs-toggle="modal"
                                 data-bs-target="#editInfo"
                               >
-                                <span class="feather-icon">
+                                <span className="feather-icon">
                                   <FeatherIcon icon="edit-2" />
                                 </span>
                               </span>
@@ -618,11 +619,11 @@ function CustomerEdit({ customer, setEditRow, refreshData }) {
                               data-bs-original-title="Edit"
                             >
                               <span
-                                class="icon"
+                                className="icon"
                                 data-bs-toggle="modal"
                                 data-bs-target="#moreContact"
                               >
-                                <span class="feather-icon">
+                                <span className="feather-icon">
                                   <FeatherIcon icon="edit-2" />
                                 </span>
                               </span>
@@ -633,36 +634,10 @@ function CustomerEdit({ customer, setEditRow, refreshData }) {
                               <form>
                                 <div className="row gx-12">
                                   <div className="col-sm-12">
-                                    <Editor
-                                      apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                      onInit={(evt, editor) =>
-                                        (editorRef.current = editor)
-                                      }
-                                      initialValue={customer?.additional}
-
-                                      init={{
-                                        height: 300,
-                                        plugins:
-                                          "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                        toolbar:
-                                          "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                        tinycomments_mode: "embedded",
-                                        tinycomments_author: "Author name",
-                                        mergetags_list: [
-                                          {
-                                            value: "First.Name",
-                                            title: "First Name",
-                                          },
-                                          { value: "Email", title: "Email" },
-                                        ],
-                                        ai_request: (request, respondWith) =>
-                                          respondWith.string(() =>
-                                            Promise.reject(
-                                              "See docs to implement AI Assistant"
-                                            )
-                                          ),
-                                      }}
-                                    />
+                                  <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                                   </div>
                                 </div>
                               </form>

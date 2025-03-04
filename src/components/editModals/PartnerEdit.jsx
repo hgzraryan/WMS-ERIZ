@@ -27,10 +27,10 @@ import {
   zipCode_validation,
 } from "../../utils/inputValidations";
 import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
+import ReactQuillEditor from "../ReactQuillEditor";
 const companyTypes = [
   {
     label: "Ֆիզիկական անձ",
@@ -83,6 +83,8 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
     const [isLoading, setIsLoading] = useState(true);
     const editorRef = useRef(null);
     const [productCategories, setProductCategories] = useState([]);
+    const [additionalData, setAdditionalData] = useState('')
+
      useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան";
@@ -151,7 +153,8 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
           productCategories,
         }
       ) => {
-console.log(productCategories)
+console.log(partnerType)
+console.log(partner)
         const newPartner = {
           name:name?.trim() !== partner?.name?.trim() ? name : null,
           companyType: companyType?.value?.trim()!== partner?.companyType?.trim()? companyType?.value : null,
@@ -159,7 +162,7 @@ console.log(productCategories)
           bankName:bankName?.trim() !== partner?.bankName?.trim() ? bankName : null,
           bankAccNumber:bankAccNumber?.toString().trim() !== partner?.bankAccNumber?.toString().trim() ? bankAccNumber : null,
           currency: currency?.value?.trim()!== partner?.currency?.trim()? currency?.value : null,
-          partnerType:partnerType?.value?.trim()!== partner?.partnerType?.trim()? partnerType?.value : null,
+          //partnerType:partnerType?.value?.trim()!== partner?.partnerType?.trim()? partnerType?.value : null,
           //productCategories: productCategories?.map((el) => el?.value)!==partner?.productCategories?productCategories?.map((el) => el?.value):null,
           contact: {
             email:email?.trim() !== partner?.contact?.email?.trim() ? email : null,
@@ -188,7 +191,7 @@ console.log(productCategories)
                   : null,
             },
           },
-          additional: editorRef.current.getContent({ format: "text" }).trim()!==partner?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
+          additional: additionalData!==partner?.additional?.trim()?additionalData:null,
         };
         const updatedFields = deleteNullProperties(newPartner);
   
@@ -254,7 +257,7 @@ console.log(productCategories)
                           data-bs-toggle="modal"
                           data-bs-target="#editInfo"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>
@@ -439,7 +442,7 @@ console.log(productCategories)
                               />
                             </div>
                           </div>
-                          <div className="col-sm-6">
+                          {/* <div className="col-sm-6">
                             <div className="d-flex justify-content-between me-2">
                               <label
                                 className="form-label"
@@ -472,7 +475,7 @@ console.log(productCategories)
                                 )}
                               />
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="row gx-3 mb-3 mt-3">
                         <div className="col-sm-6">
@@ -649,11 +652,11 @@ console.log(productCategories)
                         data-bs-original-title="Edit"
                       >
                         <span
-                          class="icon"
+                          className="icon"
                           data-bs-toggle="modal"
                           data-bs-target="#moreContact"
                         >
-                          <span class="feather-icon">
+                          <span className="feather-icon">
                             <FeatherIcon icon="edit-2" />
                           </span>
                         </span>
@@ -664,34 +667,9 @@ console.log(productCategories)
                         <form>
                           <div className="row gx-12">
                             <div className="col-sm-12">
-                              <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                initialValue={partner?.additional}
-                                init={{
-                                  height: 300,
-                                  plugins:
-                                    "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
-                                  toolbar:
-                                    "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                  tinycomments_mode: "embedded",
-                                  tinycomments_author: "Author name",
-                                  mergetags_list: [
-                                    {
-                                      value: "First.Name",
-                                      title: "First Name",
-                                    },
-                                    { value: "Email", title: "Email" },
-                                  ],
-                                  ai_request: (request, respondWith) =>
-                                    respondWith.string(() =>
-                                      Promise.reject(
-                                        "See docs to implement AI Assistant"
-                                      )
-                                    ),
-                                }}
+                            <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                             </div>
                           </div>

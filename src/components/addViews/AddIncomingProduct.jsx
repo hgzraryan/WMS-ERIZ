@@ -2,7 +2,6 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import { Editor } from "@tinymce/tinymce-react";
 import ErrorSvg from "../../dist/svg/error.svg";
 import { Input } from "../Input";
 import {
@@ -25,7 +24,7 @@ import { CountryDropdown,CountryRegionData  } from 'react-country-region-selecto
 import AddProductsList from "./AddProductsList";
 import moment from "moment";
 import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
-import ReactQuillEditor from "../views/ReactQuillEditor";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 
 function AddIncomingProduct({
@@ -305,7 +304,7 @@ console.log(data)
                             data-bs-toggle="modal"
                             data-bs-target="#editInfo"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -585,8 +584,8 @@ console.log(data)
                                   onChange={handleCurrencyChange}
                                   style={{ border: "none", outline: "none" }}
                                 >
-                                  {CURRENCIES.map((el) => (
-                                    <option value={el.value}>{el.label}</option>
+                                  {CURRENCIES.map((el,i) => (
+                                    <option key={i} value={el.value}>{el.label}</option>
                                   ))}
                                 </select>
                                 <input
@@ -781,11 +780,11 @@ console.log(data)
                           data-bs-original-title="Edit"
                         >
                           <span
-                            class="icon"
+                            className="icon"
                             data-bs-toggle="modal"
                             data-bs-target="#moreContact"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>

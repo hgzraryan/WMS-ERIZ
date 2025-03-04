@@ -119,7 +119,7 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                               data-bs-toggle="modal"
                               data-bs-target="#editInfo"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>
@@ -216,11 +216,11 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                             data-bs-original-title="Edit"
                           >
                             <span
-                              class="icon"
+                              className="icon"
                               data-bs-toggle="modal"
                               data-bs-target="#moreContact"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>

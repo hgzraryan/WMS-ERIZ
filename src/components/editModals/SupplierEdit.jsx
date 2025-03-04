@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState,Suspense } from "react";
 import { deleteNullProperties } from "../../utils/helper";
-import { PARTNERS_URL, SUPPLIERS_URL } from "../../utils/constants";
+import {  SUPPLIERS_URL } from "../../utils/constants";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
@@ -13,7 +13,6 @@ import {
   RegionDropdown,
   CountryRegionData,
 } from "react-country-region-selector";
-import Select from "react-select";
 import { toast } from "react-toastify";
 import {
   bankAccNumber_validation,
@@ -23,22 +22,20 @@ import {
   director_validation,
   email_validation,
   name_validation,
-  respPersonFullName_validation,
   street_validation,
   tin_validation,
   zipCode_validation,
 } from "../../utils/inputValidations";
-import { Input } from "../Input";
-import { Editor } from "@tinymce/tinymce-react";
-import { customStyles } from "../customStyles";
-import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
+import ReactQuillEditor from "../ReactQuillEditor";
+import { Input } from "../Input";
 function SupplierEdit({ supplier, setEditRow, refreshData }) {
     const [errMsg, setErrMsg] = useState("");
     const axiosPrivate = useAxiosPrivate();
     const [country, setCountry] = useState('')
     const [region, setRegion] = useState('')
     const [isLoading, setIsLoading] = useState(false);
+    const [additionalData, setAdditionalData] = useState('')
 
   useEffect(() => {
       if (CountryRegionData[11][0] === "Armenia") {
@@ -53,7 +50,6 @@ function SupplierEdit({ supplier, setEditRow, refreshData }) {
     });
     const { trigger } = useForm();
   
-    const editorRef = useRef(null);
 
     const notify = (text) =>
     toast.success(text, {
@@ -109,7 +105,7 @@ function SupplierEdit({ supplier, setEditRow, refreshData }) {
             },
           },
          description:description?.trim() !== supplier?.description?.trim() ? description : null,
-         additional: editorRef.current.getContent({ format: "text" }).trim()!==supplier?.additional?.trim()?editorRef.current.getContent({ format: "text" }):null,
+         additional: additionalData!==supplier?.additional?.trim()?additionalData:null,
         };
         const updatedFields = deleteNullProperties(updatedSupplier);
       console.log(updatedSupplier);
@@ -174,7 +170,7 @@ function SupplierEdit({ supplier, setEditRow, refreshData }) {
                               data-bs-toggle="modal"
                               data-bs-target="#editInfo"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>
@@ -338,11 +334,11 @@ function SupplierEdit({ supplier, setEditRow, refreshData }) {
                             data-bs-original-title="Edit"
                           >
                             <span
-                              class="icon"
+                              className="icon"
                               data-bs-toggle="modal"
                               data-bs-target="#moreContact"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>
@@ -354,26 +350,10 @@ function SupplierEdit({ supplier, setEditRow, refreshData }) {
                               <div className="row gx-12">
                                 <div className="col-sm-12">
                                   {console.log()}
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  initialValue={supplier?.additional}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    height:300,
-                                    plugins:
-                                    "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                    tinycomments_mode: 'embedded',
-                                    tinycomments_author: 'Author name',
-                                    mergetags_list: [
-                                      { value: 'First.Name', title: 'First Name' },
-                                      { value: 'Email', title: 'Email' },
-                                    ],
-                                    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                  }}
-                                  
-                                />
+                               <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                                 </div>
                               </div>
                             </form>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 
 import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
@@ -8,10 +9,10 @@ import { name_validation } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { PRODUCTCATEGORIES_URL, REGISTER_PRODUCTSLIST } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import { Editor } from "@tinymce/tinymce-react";
 import Select from "react-select";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 function AddProductsList({
     handleToggleCreateModal,
@@ -21,7 +22,7 @@ function AddProductsList({
     const navigate = useNavigate()
 
     const axiosPrivate = useAxiosPrivate();
-    const editorRef = useRef(null);
+    const [additionalData, setAdditionalData] = useState('')
     const [errMsg, setErrMsg] = useState("");
 
     const [productCategories, setProductCategories] = useState([]);
@@ -59,7 +60,7 @@ function AddProductsList({
         const newProductsList = {
           name: data?.name || null,
           category: data?.productCategory?.value || 0,
-          description: editorRef.current.getContent({ format: "text" }),
+          description: additionalData,
         };
     
         const updatedData = deleteNullProperties(newProductsList)
@@ -159,8 +160,8 @@ function AddProductsList({
                                           label: "Առանց դասակարգ",
                                         },
                                         ...productCategories?.map((item) => ({
-                                          value: item.categoryId,
-                                          label: item.name,
+                                          value: item?.categoryId,
+                                          label: item?.name,
                                         })),
                                       ]}
                                       placeholder={"Ընտրել"}
@@ -185,34 +186,10 @@ function AddProductsList({
                           <form>
                             <div className="row gx-12">
                               <div className="col-sm-12">
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    plugins:
-                                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-
-                                    toolbar:
-                                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                                    tinycomments_mode: "embedded",
-                                    tinycomments_author: "Author name",
-                                    mergetags_list: [
-                                      {
-                                        value: "First.Name",
-                                        title: "First Name",
-                                      },
-                                      { value: "Email", title: "Email" },
-                                    ],
-                                    ai_request: (request, respondWith) =>
-                                      respondWith.string(() =>
-                                        Promise.reject(
-                                          "See docs to implement AI Assistant"
-                                        )
-                                      ),
-                                  }}
-                                />
+                              <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                               </div>
                             </div>
                           </form>

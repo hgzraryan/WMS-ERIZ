@@ -25,8 +25,8 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import 'react-phone-number-input/style.css'
 import { CountryDropdown, RegionDropdown,CountryRegionData  } from 'react-country-region-selector';
-import { Editor } from "@tinymce/tinymce-react";
 import { customStyles } from "../customStyles";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 const roleState = [
   { label:'Ադմին',name: "Admin", value: 5150 },
@@ -48,7 +48,7 @@ function CreateUser({ setIsOpen,refreshData }) {
   const [merried, setMerried] = useState(""); 
   const [country, setCountry] = useState('')
   const [region, setRegion] = useState('')
-  const editorRef = useRef(null);
+  const [additionalData, setAdditionalData] = useState('')
 
 
   const { trigger } = useForm();
@@ -126,7 +126,7 @@ function CreateUser({ setIsOpen,refreshData }) {
     }) => {
    
     const newUser = {
-      additionalData: editorRef.current.getContent({ format: "text" }),
+      additionalData: additionalData,
       firstname:firstName,
       lastname:lastName,
       email:email,
@@ -320,7 +320,7 @@ function CreateUser({ setIsOpen,refreshData }) {
                             data-bs-toggle="modal"
                             data-bs-target="#editInfo"
                           >
-                            <span class="feather-icon">
+                            <span className="feather-icon">
                               <FeatherIcon icon="edit-2" />
                             </span>
                           </span>
@@ -686,11 +686,11 @@ function CreateUser({ setIsOpen,refreshData }) {
                               data-bs-original-title="Edit"
                             >
                               <span
-                                class="icon"
+                                className="icon"
                                 data-bs-toggle="modal"
                                 data-bs-target="#moreContact"
                               >
-                                <span class="feather-icon">
+                                <span className="feather-icon">
                                   <FeatherIcon icon="edit-2" />
                                 </span>
                               </span>
@@ -701,24 +701,9 @@ function CreateUser({ setIsOpen,refreshData }) {
                               <form>
                                 <div className="row gx-12">
                                 <div className="col-sm-12">
-                              <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                 onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }                                
-                                init={{
-                                  height:300,
-                                  plugins:"anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",
-                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                  mergetags_list: [
-                                    { value: 'First.Name', title: 'First Name' },
-                                    { value: 'Email', title: 'Email' },
-                                  ],
-                                  ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                }}
-                                
+                                <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                               </div>
                                 </div>

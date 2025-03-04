@@ -2,7 +2,6 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import { Editor } from "@tinymce/tinymce-react";
 import ErrorSvg from "../../dist/svg/error.svg";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,7 +16,7 @@ import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
 import TotalView from "../viewTables/TotalView";
 import { Input } from "../Input";
 import { price_validation, sellingPrice_validation } from "../../utils/inputValidations";
-import ReactQuillEditor from "../views/ReactQuillEditor";
+import ReactQuillEditor from "../ReactQuillEditor";
 const test = [
   {
     name: 'xozi bud',
@@ -455,7 +454,7 @@ function AddOutgoingProduct({
                                 data-bs-toggle="modal"
                                 data-bs-target="#editInfo"
                               >
-                                <span class="feather-icon">
+                                <span className="feather-icon">
                                   <FeatherIcon icon="edit-2" />
                                 </span>
                               </span>
@@ -711,11 +710,11 @@ function AddOutgoingProduct({
                             data-bs-original-title="Edit"
                           >
                             <span
-                              class="icon"
+                              className="icon"
                               data-bs-toggle="modal"
                               data-bs-target="#moreContact"
                             >
-                              <span class="feather-icon">
+                              <span className="feather-icon">
                                 <FeatherIcon icon="edit-2" />
                               </span>
                             </span>
