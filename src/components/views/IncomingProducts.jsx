@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useRef, useState } from 'react'
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import { Dropdown } from "react-bootstrap";
@@ -203,8 +202,8 @@ function IncomingProducts() {
                           //handleDeleteItem={handleDeleteItem}
                           handleOpenModal={handleOpenModal}
                           handleCloseModal={handleCloseModal}
-                          products={incomingProducts}
-                          setProducts={setIncomingProducts}
+                          incomingProducts={incomingProducts}
+                          setIncomingProducts={setIncomingProducts}
                           refreshData={refreshData}
                           dataReceived={dataReceived}
                           handleSearchPageCount={(data)=>handleSearchPageCount(data)}

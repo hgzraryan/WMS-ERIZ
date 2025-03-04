@@ -5,7 +5,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import { ColumnFilter } from '../ColumnFilter';
-import { PRODUCTSMOVEMENTS__SEARCH_URL, PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
+import { PRODUCTMOVEMENTSBYPRODUCT_SEARCH_URL, PRODUCTSMOVEMENTS__SEARCH_URL, PRODUCTSMOVEMENTS_ROUTE, PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
 function ProductMovementsTable({
     confirmRef,
     selectedItem,
@@ -57,8 +57,23 @@ function ProductMovementsTable({
               accessor: "productName",
               sortable: true,
               width: 250,
-              
-            },
+              Filter: ({ column: { id } })=>(
+                <ColumnFilter
+                  id={id}
+                  setData={setProductMovements}
+                  data={productMovements}
+                  placeholder={'Անվանում'}
+                  getUrl={PRODUCTSMOVEMENTS_URL}
+                  searchUrl={PRODUCTMOVEMENTSBYPRODUCT_SEARCH_URL}
+                  handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                  filterData={filterData}
+                  setFilterData={(newFilterData) => {
+                      setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                      setFilterData(newFilterData)   
+                  }}
+                />
+              ),    
+                       },
             {
               Header: (event) => (
                 <>
@@ -68,22 +83,22 @@ function ProductMovementsTable({
               ),
               accessor: "actionDate",
               sortable: true,
-              Filter: ({ column: { id } })=>(
-                <ColumnFilter
-                  id={id}
-                  setData={setProductMovements}
-                  data={productMovements}
-                  placeholder={['startDate','endDate']}
-                  getUrl={PRODUCTSMOVEMENTS_URL}
-                  searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
-                  handleSearchPageCount={(val)=>handleSearchPageCount(val)}
-                  filterData={filterData}
-                  setFilterData={(newFilterData) => {
-                      setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
-                      setFilterData(newFilterData)   
-                  }}
-                />
-              ),    
+              // Filter: ({ column: { id } })=>(
+              //   <ColumnFilter
+              //     id={id}
+              //     setData={setProductMovements}
+              //     data={productMovements}
+              //     placeholder={['startDate','endDate']}
+              //     getUrl={PRODUCTSMOVEMENTS_URL}
+              //     searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
+              //     handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+              //     filterData={filterData}
+              //     setFilterData={(newFilterData) => {
+              //         setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+              //         setFilterData(newFilterData)   
+              //     }}
+              //   />
+              // ),    
               width: 150,
               
             },

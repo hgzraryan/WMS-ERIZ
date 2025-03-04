@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon'
 import React from 'react'
 
@@ -61,7 +60,7 @@ function Setup() {
     {setupData.map((el,id)=>{
             return(
 
-                <div style={{border:'1px solid #018a54', display:'flex',alignItems:'center',padding:'20px',borderRadius:'10px',minWidth:'350px'}}>
+                <div key={id} style={{border:'1px solid #018a54', display:'flex',alignItems:'center',padding:'20px',borderRadius:'10px',minWidth:'350px'}}>
                     <div className="avatar avatar-icon avatar-soft-info avatar-sm me-2">
                  <span className="initial-wrap">
                    <img src={el.icon} alt='setupItem' width={'25px'} height={'25px'}/>

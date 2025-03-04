@@ -72,6 +72,12 @@ export const PRODUCTSMOVEMENTS_URL = '/productsMovements'
 export const SUPPLIERS_URL = '/supplierList'
 export const WORKERS_URL = '/workerList'
 export const WORKERSROLES_URL = '/workerRoleList'
+export const OUTGOINGPRODUCTS_URL = '/outgoingProducts'
+
+export const OUTGOINGLISTBYCUSTOMER_SEARCH_URL = "/searchOutgoingListByCustomer";
+export const INCOMINGPRODUCTSBYPRODUCT_SEARCH_URL = "/searchIncomingProductsByProduct";
+export const OUTGOINGLISTBYPRODUCT_SEARCH_URL = "/searchOutgoingListByProduct";
+export const PRODUCTMOVEMENTSBYPRODUCT_SEARCH_URL = "/searchProductMovementsByProduct";
 
 
 export const REGISTER_USER = "/registerUser";

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useRef, useState } from "react";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import FeatherIcon from "feather-icons-react";

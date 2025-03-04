@@ -1,17 +1,24 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
+import { ColumnFilter } from '../ColumnFilter';
+import {  CUSTOMERS_URL, OUTGOINGLISTBYCUSTOMER_SEARCH_URL, OUTGOINGLISTBYPRODUCT_SEARCH_URL, OUTGOINGPRODUCTS_URL } from '../../utils/constants';
 
 function OutgoingProductsTable({
     outgoingProducts,
+    setOutgoingProducts,    
+  handleSearchPageCount,
     refreshData,
     dataReceived
   }) {
     const [modalPrint, setModalPrint] = useState("");
+    const [filterData, setFilterData] = useState({});
+    const [filterDataJSON, setFilterDataJSON] = useState('');
+
     const handleOpenPrintModal = (data) => {
       setModalPrint((prev) => data);
     };
@@ -44,6 +51,22 @@ function OutgoingProductsTable({
               accessor: "name",
               sortable: true,
               width: 350,
+              Filter: ({ column: { id } })=>(
+                <ColumnFilter
+                  id={id}
+                  setData={setOutgoingProducts}
+                  data={outgoingProducts}
+                  placeholder={'Անվանում'}
+                  getUrl={OUTGOINGPRODUCTS_URL}
+                  searchUrl={OUTGOINGLISTBYPRODUCT_SEARCH_URL}
+                  handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                  filterData={filterData}
+                  setFilterData={(newFilterData) => {
+                      setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                      setFilterData(newFilterData)   
+                  }}
+                />
+              ),    
               
             },
             {
@@ -68,6 +91,22 @@ function OutgoingProductsTable({
               accessor: "customer",
               sortable: true,
               width: 200,
+              Filter: ({ column: { id } })=>(
+                <ColumnFilter
+                  id={id}
+                  setData={setOutgoingProducts}
+                  data={outgoingProducts}
+                  placeholder={'Հաճախորդ'}
+                  getUrl={OUTGOINGPRODUCTS_URL}
+                  searchUrl={OUTGOINGLISTBYCUSTOMER_SEARCH_URL}
+                  handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                  filterData={filterData}
+                  setFilterData={(newFilterData) => {
+                      setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                      setFilterData(newFilterData)   
+                  }}
+                />
+              ),    
             },
             {
               Header: (event) => (

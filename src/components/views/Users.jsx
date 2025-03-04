@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-lone-blocks */
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import "../../dist/css/data-table.css";
@@ -6,6 +5,8 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import IncomingProductsPrintModal from '../printModals/IncomingProductsPrintModal';
 import ConfirmIncomingModal from '../ConfirmIncomingModal';
+import { ColumnFilter } from '../ColumnFilter';
+import { INCOMINGPRODUCTSBYPRODUCT_SEARCH_URL, PRODUCTS_URL, PRODUCTSLIST_URL } from '../../utils/constants';
 
 function IncomingProductsTable({
   confirmRef,
@@ -14,15 +15,17 @@ function IncomingProductsTable({
   handleDeleteItem,
   handleOpenModal,
   handleCloseModal,
-  products,
-  setProducts,
+  incomingProducts,
+  setIncomingProducts,
   refreshData,
-  dataReceived
+  dataReceived,
+  handleSearchPageCount
 }) {
   const [modalPrint, setModalPrint] = useState("");
   const [modalInfo, setModalInfo] = useState(false);
   const [repeatIncoming, setRepeateIncoming] = useState("");
-
+  const [filterData, setFilterData] = useState({});
+  const [filterDataJSON, setFilterDataJSON] = useState('');
   const handleOpenInfoModal = (data) => {
     
     setModalInfo((prev) => data);
@@ -59,6 +62,22 @@ function IncomingProductsTable({
             accessor: "name",
             sortable: true,
             width: 300,
+            Filter: ({ column: { id } })=>(
+              <ColumnFilter
+                id={id}
+                setData={setIncomingProducts}
+                data={incomingProducts}
+                placeholder={'Անվանում'}
+                getUrl={PRODUCTS_URL}
+                searchUrl={INCOMINGPRODUCTSBYPRODUCT_SEARCH_URL}
+                handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                filterData={filterData}
+                setFilterData={(newFilterData) => {
+                    setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                    setFilterData(newFilterData)   
+                }}
+              />
+            ),    
             
           },
           {
@@ -82,7 +101,7 @@ function IncomingProductsTable({
             ),
             accessor: "productCategoryName",
             sortable: true,
-            width: 200,
+            width: 150,
             
           },
           {
@@ -121,6 +140,18 @@ function IncomingProductsTable({
               </>
             ),
             accessor: "price",
+            sortable: true,
+            width: 100,
+            
+          },
+          {
+            Header: (event) => (
+              <>
+                
+                <div  className="name">Վաճառք</div>
+              </>
+            ),
+            accessor: "sellingPrice",
             sortable: true,
             width: 100,
             
@@ -231,7 +262,7 @@ function IncomingProductsTable({
        {!!repeatIncoming && (
         <ConfirmIncomingModal modalData={repeatIncoming} setRepeateOutgoing={setRepeateIncoming} refreshData={refreshData}/>
       )}
-          <CustomTable data={products} column={columns} dataReceived={dataReceived}/>
+          <CustomTable data={incomingProducts} column={columns} dataReceived={dataReceived}/>
 
     </>
   )

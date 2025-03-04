@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-undef */
 import React, { useEffect, useRef, useState } from 'react'
 import { Dropdown } from "react-bootstrap";

@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { axiosPrivate } from "../api/axios";
 import useDebounce from "../hooks/useDebounce";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import CustomDateComponentRange from "./CustomDateComponentRange";
-import moment from "moment";
-import { useForm } from "react-hook-form";
 
 export const ColumnFilter = ({
   column,
@@ -179,12 +176,7 @@ export const ColumnFilter = ({
   }, [debouncedSearch]);
 
   const handleSearchInputChange = (value) => {
-    if(value.length){
-      const tmp = value?.map((el)=>el=moment(el).format('YYYY-MM-DD'))
-      setSearchTerms(tmp);
-    }else (
-      setSearchTerms(value)
-    )
+    setSearchTerms(value);
     //setFilterData({[id]:debouncedSearch})
   };
 
@@ -209,9 +201,7 @@ export const ColumnFilter = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [toggleSearchModal]);
-  const methods = useForm({
-    mode: "onChange",
-  });
+
   return (
     <>
       <div style={{ position: "relative" }}>
@@ -219,7 +209,8 @@ export const ColumnFilter = ({
           className="d-flex justify-content-center align-items-center"
           onClick={handleSearchClick}
           style={{
-            backgroundColor: searchTerms ? "#4eafcb" : "",
+            backgroundColor: searchTerms ? "#01945c" : "",
+            color:searchTerms ? "#fff" : "#000",
             padding: "5px",
             borderRadius: "5px",
           }}
@@ -237,16 +228,7 @@ export const ColumnFilter = ({
               boxShadow: "0 6px 16px 0 rgba(0, 0, 0, 0.1)",
               zIndex: 1000,
             }}
-            >
-              {id==='actionDate' 
-              ? 
-            <CustomDateComponentRange 
-            name="actionDateRange" 
-            handleDateChanged={(data)=>handleSearchInputChange(data)} 
-            control={methods.control} 
-            maxDate={moment(new Date()).format('MM-DD-YYYY')}
-            />
-            :
+          >
             <input
               type={id === "age" || id === "patientId" ? "number" : "search"}
               onClick={(e) => e.stopPropagation()}
@@ -264,13 +246,12 @@ export const ColumnFilter = ({
                 padding: "5px",
               }}
             />
-            }
             <div className="d-flex">
               <button
                 className="btn__search"
                 onClick={handleSearch}
                 style={{
-                  backgroundColor: "#4eafcb",
+                  backgroundColor: "#01945c",
                   color: "#fff",
                   margin: "5px",
                   borderRadius: "5px",
