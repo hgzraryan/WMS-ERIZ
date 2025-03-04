@@ -79,7 +79,6 @@ function AddOutgoingProduct({
   // }, []);
   const handleInputChange = (e, rowId) => {
     const value = e.target.value;
-
     setRowInputValues((prevValues) => {
       // If input is empty, delete the key from state
       if (!value.trim()) {
@@ -110,8 +109,6 @@ function AddOutgoingProduct({
 
   };
   const handleOutgoingProductsList = async (e, row) => {
-    console.log(row)
-    console.log(rowInputValues)
     e.preventDefault()
 
     const tmp = {}
@@ -152,7 +149,6 @@ function AddOutgoingProduct({
   // };
 
   const onProductSelect = async (data) => {
-    console.log(data)
     const tmp = await fetchDataByProduct(data.currentProductId)
     setFetchedProductsList(tmp)
   }
@@ -339,6 +335,7 @@ function AddOutgoingProduct({
 
         Cell: ({ row }) => {
           const isInputEmpty = !rowInputValues[row.original.incomingProductId]?.trim();
+          const isMoreThanAvailable = +rowInputValues[row.original.incomingProductId]>row.original?.balance;
           const handleButtonClick = (e, row) => {
             handleOutgoingProductsList(e, row); // Call your existing function
             setErrMsg('')
@@ -360,15 +357,28 @@ function AddOutgoingProduct({
                   handleInputChange={handleInputChange}
                   isFocused={focusedInputId === row.original.incomingProductId}
                   onFocus={handleFocus}
+                  isMoreThanAvailable={isMoreThanAvailable}
                 />
-                {console.log(rowInputValues)}
+                 
                 <button
-                  disabled={isInputEmpty}
+                  disabled={isInputEmpty || isMoreThanAvailable}
                   className="btn btn-primary"
-                  style={{ marginLeft: '5px', width: '40px', height: '30px', padding: '1px' }}
+                  style={{ 
+                    marginLeft: '5px', 
+                    width: '40px', 
+                    height: '30px', 
+                    padding: '1px',
+                    border:isMoreThanAvailable?"1px solid red !important":"none" }}
                   onClick={(e) => handleButtonClick(e, row)}>
                   Ելք
                 </button>
+                
+                {/* {isMoreThanAvailable && 
+                <div className="flex-center">
+
+                <p style={{color:"red", fontSize:'12px'}}>Սխալ քանակ</p>
+                </div>
+                } */}
               </div>
               {/* <div className="d-flex">
               <a
@@ -772,7 +782,7 @@ function AddOutgoingProduct({
 }
 
 export default AddOutgoingProduct;
-const EditableInput = ({ rowId, value, handleInputChange, isFocused, onFocus }) => {
+const EditableInput = ({ rowId, value, handleInputChange, isFocused, onFocus,isMoreThanAvailable }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -782,13 +792,17 @@ const EditableInput = ({ rowId, value, handleInputChange, isFocused, onFocus }) 
   }, [isFocused]);
 
   return (
+    <>
     <input
       ref={inputRef}
       className="form-control"
-      style={{ width: "70px", height: "30px", padding: "1px" }}
+      style={{ width: "70px", height: "30px", padding: "1px",
+        border:isMoreThanAvailable?'3px solid red':'' 
+      }}
       value={value}
       onChange={(e) => handleInputChange(e, rowId)}
       onFocus={() => onFocus(rowId)}
-    />
+      />
+      </>
   );
 };
