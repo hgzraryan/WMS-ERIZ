@@ -10,6 +10,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import Select from "react-select";
 import ErrorSvg from "../../dist/svg/error.svg";
+import ReactQuillEditor from '../ReactQuillEditor';
 const StatusTypes = [
     { value: 1, label: "Ակտիվ" },
     { value: 0, label: "Ոչ ակտիվ" },
@@ -31,6 +32,7 @@ const StatusTypes = [
 function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
     const [errMsg, setErrMsg] = useState("");
     const axiosPrivate = useAxiosPrivate();
+    const [additionalData, setAdditionalData] = useState('')
   
 
     const methods = useForm({
@@ -38,7 +40,6 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
     });
     const { trigger } = useForm();
   
-    const editorRef = useRef(null);
 
     const notify = (text) =>
     toast.success(text, {
@@ -56,7 +57,7 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
         isActive:statusType.value,
         type:roleType.value,
         name:name,
-        additional: editorRef.current.getContent({ format: "text" }),
+        additional: additionalData,
       };
   
       console.log(newWorkerRole);
@@ -232,25 +233,10 @@ function AddWorkerRole({ handleToggleCreateModal, refreshData }) {
                               <div className="row gx-12">
                                 <div className="col-sm-12">
                                   {console.log()}
-                                <Editor
-                                  apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                  onInit={(evt, editor) =>
-                                    (editorRef.current = editor)
-                                  }
-                                  init={{
-                                    height:300,
-                                    plugins:
-                                    "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker",                                  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                    tinycomments_mode: 'embedded',
-                                    tinycomments_author: 'Author name',
-                                    mergetags_list: [
-                                      { value: 'First.Name', title: 'First Name' },
-                                      { value: 'Email', title: 'Email' },
-                                    ],
-                                    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-                                  }}
-                                  
-                                />
+                                  <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
+                              />
                                 </div>
                               </div>
                             </form>

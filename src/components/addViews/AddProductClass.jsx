@@ -10,6 +10,7 @@ import ErrorSvg from "../../dist/svg/error.svg";
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { REGISTER_PRODUCTCATEGORY } from '../../utils/constants';
+import ReactQuillEditor from "../ReactQuillEditor";
 
 const attributeTypes = [
   { value: "kg", label: "Կիլոգրամ" },
@@ -25,6 +26,7 @@ function AddProductClass({ handleToggleCreateModal ,refreshData}) {
   const [units, setUnits] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [errMsg, setErrMsg] = useState("");
+  const [additionalData, setAdditionalData] = useState('')
 
   const handleInputChange = ( event) => {
     setInputValue(prev=>event)
@@ -48,7 +50,7 @@ function AddProductClass({ handleToggleCreateModal ,refreshData}) {
     const newAttribute = {
       name: data?.name,
       attributs:attributs,
-      additional: editorRef.current.getContent({ format: "text" }),
+      additional: additionalData,
 
     };
     //const updatedData = deleteNullProperties(newDiagnose)
@@ -241,19 +243,9 @@ function AddProductClass({ handleToggleCreateModal ,refreshData}) {
                         <div className="modal-body">
                           <div className="row gx-12">
                             <div className="col-sm-12">
-                              <Editor
-                                apiKey={process.env.REACT_APP_EDITOR_KEY}
-                                onInit={(evt, editor) =>
-                                  (editorRef.current = editor)
-                                }
-                                init={{
-                                  plugins:
-                                    'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount pagembed linkchecker',
-                                  toolbar:
-                                    'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                                  tinycomments_mode: 'embedded',
-                                  tinycomments_author: 'Author name',
-                                }}
+                            <ReactQuillEditor
+                                value={additionalData}
+                                onChange={setAdditionalData}
                               />
                             </div>
                           </div>
