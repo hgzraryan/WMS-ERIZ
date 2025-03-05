@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useRef, useState } from "react";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -212,7 +211,7 @@ function PartnersTable({
           <div>
             {Object.values(row?.original?.partnerType || {}).map((el, index) => (
               <div key={index}>
-                {el === "buyer"
+                {el === "customer"
                   ? "Գնորդ"
                   : el === "supplier"
                   ? "Մատակարար"

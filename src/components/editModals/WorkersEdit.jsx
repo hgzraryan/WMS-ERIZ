@@ -250,7 +250,7 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
 
         setEditRow(false);
         refreshData();
-        notify(`${updatedWorker.fullName}–ի տվյալները թարմացված են`);
+        notify(`${worker.fullName}–ի տվյալները թարմացված են`);
       } catch (err) {
         if (!err?.response) {
           setErrMsg("No Server Response");
@@ -786,7 +786,7 @@ function WorkersEdit({ worker, setEditRow, refreshData }) {
                             <div className="row gx-12">
                               <div className="col-sm-12">
                                <ReactQuillEditor
-                                value={additionalData}
+                                value={additionalData || worker.additional}
                                 onChange={setAdditionalData}
                               />
                               </div>

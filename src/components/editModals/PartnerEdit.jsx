@@ -150,6 +150,7 @@ function PartnerEdit({ partner, setEditRow, refreshData }) {
           city,
           street,
           zipCode,
+          tin,
           productCategories,
         }
       ) => {
@@ -162,6 +163,7 @@ console.log(partner)
           bankName:bankName?.trim() !== partner?.bankName?.trim() ? bankName : null,
           bankAccNumber:bankAccNumber?.toString().trim() !== partner?.bankAccNumber?.toString().trim() ? bankAccNumber : null,
           currency: currency?.value?.trim()!== partner?.currency?.trim()? currency?.value : null,
+          tin: tin?.toString().trim() !== partner?.tin?.toString().trim() ? tin : null,
           //partnerType:partnerType?.value?.trim()!== partner?.partnerType?.trim()? partnerType?.value : null,
           //productCategories: productCategories?.map((el) => el?.value)!==partner?.productCategories?productCategories?.map((el) => el?.value):null,
           contact: {
@@ -668,7 +670,7 @@ console.log(partner)
                           <div className="row gx-12">
                             <div className="col-sm-12">
                             <ReactQuillEditor
-                                value={additionalData}
+                                value={additionalData|| partner?.additional}
                                 onChange={setAdditionalData}
                               />
                             </div>

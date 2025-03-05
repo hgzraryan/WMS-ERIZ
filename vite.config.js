@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
       port: 5444,
       proxy: {
         '/api': {
-          target: 'https://37.186.119.16:5443', // Backend server
+          target: 'https://37.157.213.96:5443', // Backend server
           changeOrigin: true, // Ensure the request appears to come from the frontend server
           secure:false,
           rewrite: (path) => path.replace(/^\/api/, ''),

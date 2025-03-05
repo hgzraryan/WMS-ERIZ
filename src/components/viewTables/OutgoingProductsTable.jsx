@@ -6,7 +6,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import { ColumnFilter } from '../ColumnFilter';
-import {  CUSTOMERS_URL, OUTGOINGLISTBYCUSTOMER_SEARCH_URL, OUTGOINGLISTBYPRODUCT_SEARCH_URL, OUTGOINGPRODUCTS_URL } from '../../utils/constants';
+import {   OUTGOINGLIST_SEARCH_URL,OUTGOINGPRODUCTS_URL } from '../../utils/constants';
 
 function OutgoingProductsTable({
     outgoingProducts,
@@ -58,7 +58,7 @@ function OutgoingProductsTable({
                   data={outgoingProducts}
                   placeholder={'Անվանում'}
                   getUrl={OUTGOINGPRODUCTS_URL}
-                  searchUrl={OUTGOINGLISTBYPRODUCT_SEARCH_URL}
+                  searchUrl={OUTGOINGLIST_SEARCH_URL}
                   handleSearchPageCount={(val)=>handleSearchPageCount(val)}
                   filterData={filterData}
                   setFilterData={(newFilterData) => {
@@ -98,7 +98,7 @@ function OutgoingProductsTable({
                   data={outgoingProducts}
                   placeholder={'Հաճախորդ'}
                   getUrl={OUTGOINGPRODUCTS_URL}
-                  searchUrl={OUTGOINGLISTBYCUSTOMER_SEARCH_URL}
+                  searchUrl={OUTGOINGLIST_SEARCH_URL}
                   handleSearchPageCount={(val)=>handleSearchPageCount(val)}
                   filterData={filterData}
                   setFilterData={(newFilterData) => {

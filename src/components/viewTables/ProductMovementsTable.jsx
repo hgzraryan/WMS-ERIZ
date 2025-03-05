@@ -5,7 +5,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModal';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import { ColumnFilter } from '../ColumnFilter';
-import { PRODUCTMOVEMENTSBYPRODUCT_SEARCH_URL, PRODUCTSMOVEMENTS__SEARCH_URL, PRODUCTSMOVEMENTS_ROUTE, PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
+import { PRODUCTSMOVEMENTS__SEARCH_URL, PRODUCTSMOVEMENTS_ROUTE, PRODUCTSMOVEMENTS_URL } from '../../utils/constants';
 function ProductMovementsTable({
     confirmRef,
     selectedItem,
@@ -64,7 +64,7 @@ function ProductMovementsTable({
                   data={productMovements}
                   placeholder={'Անվանում'}
                   getUrl={PRODUCTSMOVEMENTS_URL}
-                  searchUrl={PRODUCTMOVEMENTSBYPRODUCT_SEARCH_URL}
+                  searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
                   handleSearchPageCount={(val)=>handleSearchPageCount(val)}
                   filterData={filterData}
                   setFilterData={(newFilterData) => {

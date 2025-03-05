@@ -664,7 +664,7 @@ function UserEdit({ user, setEditRow, refreshData }) {
                               <div className="row gx-12">
                                    <div className="col-sm-12">
                                    <ReactQuillEditor
-                                value={additionalData}
+                                value={additionalData || user.additionalData}
                                 onChange={setAdditionalData}
                               />
                               </div>

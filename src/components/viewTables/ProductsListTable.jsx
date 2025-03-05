@@ -1,10 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState } from 'react'
-import { HelmetProvider,Helmet } from 'react-helmet-async'
+import  { useMemo, useState } from 'react'
 import ComponentToConfirm from '../ComponentToConfirm';
 import { BiSolidInfoCircle } from 'react-icons/bi';
-import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import CustomTable from '../CustomTable';
+import ProductsListInfoModal from '../infoModals/ProductsListInfoModal';
 
 function ProductsListTable({
     confirmRef,
@@ -95,6 +93,9 @@ function ProductsListTable({
         keyName={selectedItem.name}
         delId={selectedItem.productsListId}
       />
+         {!!modalInfo && (
+        <ProductsListInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
+      )}
       <CustomTable data={productsList} column={columns} dataReceived={dataReceived}/>
     </>
 );

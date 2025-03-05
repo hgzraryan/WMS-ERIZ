@@ -6,7 +6,7 @@ import { BiSolidInfoCircle } from 'react-icons/bi';
 import IncomingProductsPrintModal from '../printModals/IncomingProductsPrintModal';
 import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import { ColumnFilter } from '../ColumnFilter';
-import { INCOMINGPRODUCTSBYPRODUCT_SEARCH_URL, PRODUCTS_URL, PRODUCTSLIST_URL } from '../../utils/constants';
+import { INCOMINGPRODUCTS_SEARCH_URL, PRODUCTS_URL } from '../../utils/constants';
 
 function IncomingProductsTable({
   confirmRef,
@@ -69,7 +69,7 @@ function IncomingProductsTable({
                 data={incomingProducts}
                 placeholder={'Անվանում'}
                 getUrl={PRODUCTS_URL}
-                searchUrl={INCOMINGPRODUCTSBYPRODUCT_SEARCH_URL}
+                searchUrl={INCOMINGPRODUCTS_SEARCH_URL}
                 handleSearchPageCount={(val)=>handleSearchPageCount(val)}
                 filterData={filterData}
                 setFilterData={(newFilterData) => {
@@ -178,6 +178,22 @@ function IncomingProductsTable({
             accessor: "partnerName",
             sortable: true,
             width: 200,
+            Filter: ({ column: { id } })=>(
+              <ColumnFilter
+                id={id}
+                setData={setIncomingProducts}
+                data={incomingProducts}
+                placeholder={'Մատակարար'}
+                getUrl={PRODUCTS_URL}
+                searchUrl={INCOMINGPRODUCTS_SEARCH_URL}
+                handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+                filterData={filterData}
+                setFilterData={(newFilterData) => {
+                    setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+                    setFilterData(newFilterData)   
+                }}
+              />
+            ),    
             
           },
           {
