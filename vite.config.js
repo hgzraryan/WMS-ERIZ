@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       open: true,
-      port: 3000,
+      host:true,
+      hot:true,
+      allowedHosts:['erp.eriz.am'],
+      port: 5444,
       proxy: {
         '/api': {
           target: 'https://37.186.119.16:5443', // Backend server
