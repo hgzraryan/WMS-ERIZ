@@ -9,6 +9,7 @@ import useRefreshData from '../../hooks/useRefreshData';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import ProductMovementsTable from '../viewTables/ProductMovementsTable';
 import ReactPaginate from 'react-paginate';
+import ExportData from '../ExportData';
 
 function ProductMovements() {
     const { pageNumber } = useParams();
@@ -91,6 +92,11 @@ function ProductMovements() {
     };
     return (
       <HelmetProvider>
+        <ExportData 
+      handleToggleExportModal = {handleToggleExportModal}
+      toggleExport={toggleExport}
+      section='productsMovements'
+      />
        <Helmet>
           <meta charSet="utf-8" />
           <title>Explore Outgoing Products</title>
@@ -115,6 +121,18 @@ function ProductMovements() {
                   </div>
                 </div>
                 <div className="contact-options-wrap">
+                <a
+                  className="btn btn-icon btn-flush-dark flush-soft-hover dropdown-toggle no-caret active"
+                  href="#"
+                  data-bs-toggle="dropdown"
+                >
+                  <span className="icon">
+                    <span className="feather-icon"
+                    onClick={handleToggleExportModal}>
+                      <FeatherIcon icon="download" />
+                    </span>
+                  </span>
+                </a>
                   <div className="dropdown-menu dropdown-menu-end">
                     <a className="dropdown-item active" href="contact.html">
                       <span className="feather-icon dropdown-icon">

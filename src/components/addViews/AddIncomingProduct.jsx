@@ -157,7 +157,7 @@ function AddIncomingProduct({
       palletCount:+data?.pallet,
       currency:currency,
       price:+amount,
-      sellingPrice:+data.sellingPrice,
+      sellingPrice:0,//+data.sellingPrice,
       reorderLevel: +data?.reorderLevel,
       producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
@@ -603,14 +603,17 @@ console.log(data)
                               </div>
                             </div>
                             <div className="col-sm-6">
-                              <Input {...sellingPrice_validation} />
+                              <Input {...reorderLevel_validation} />
                             </div>
+                            {/* <div className="col-sm-6">
+                              <Input {...sellingPrice_validation} />
+                            </div> */}
                           </div>
-                          <div className="row gx-3">  
+                          {/* <div className="row gx-3">  
                             <div className="col-sm-6">
                               <Input {...reorderLevel_validation} />
                             </div>
-                          </div>
+                          </div> */}
                           <div className="row gx-3">
                             <div className="col-sm-6">
                               <div className="form-group">

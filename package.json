@@ -1,7 +1,7 @@
 {
   "name": "ERP_VTEAM_CLIENT",
   "version": "0.1.0",
-  "revision": "141124",
+  "revision": "100325",
   "private": true,
   "type": "module",
   "devDependencies": {
@@ -41,6 +41,7 @@
     "react": "^18.3.1",
     "react-bootstrap": "^2.7.4",
     "react-country-region-selector": "^3.6.1",
+    "react-csv": "^2.2.2",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18.3.1",
     "react-full-screen": "^1.1.1",
@@ -65,7 +66,8 @@
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.7.3",
     "validator": "^13.7.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "vite",

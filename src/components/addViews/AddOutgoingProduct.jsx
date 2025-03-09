@@ -668,7 +668,12 @@ function AddOutgoingProduct({
 
                             <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
                           </div>
-                        </> : <></>
+                        </> : 
+                        <>
+                        <div className="no_balance flex-center">
+                          <p style={{fontSize:'20px', color:'red'}}>Տվյալ ապրանքից մնացորդներ չկան</p>
+                        </div>
+                        </>
                       }
                       {(!!outgoingList && outgoingList.length) ?
                         <>
