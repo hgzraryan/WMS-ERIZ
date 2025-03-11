@@ -31,16 +31,19 @@ function ProductMovementsTable({
             {
               Header: (event) => (
                 <>
-                  
                   <div  className="columnHeader">ID</div>
                 </>
               ),
               accessor: "outgoingProductId",
               sortable: true,
               Cell: ({ row }) => (
-                <div className="d-flex align-items-center justify-content-center">
+                <div className="d-flex align-items-center justify-content-center gap-2">
                  {row.original?.actionId }
-                 {row.original?.actionType==='incoming'?<FeatherIcon icon='arrow-down'/>:row.original?.actionType==='outgoing'?<FeatherIcon icon='arrow-up'/>:'' }
+                 {row.original?.actionType==='incoming'
+                 ?<FeatherIcon icon='arrow-down'/>
+                 :row.original?.actionType==='outgoing'
+                 ?<FeatherIcon icon='arrow-up'/>
+                 :'' }
                  {}
                 </div>
               ),
