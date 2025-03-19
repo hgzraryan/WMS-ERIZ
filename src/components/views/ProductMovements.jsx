@@ -133,26 +133,6 @@ function ProductMovements() {
                     </span>
                   </span>
                 </a>
-                  <div className="dropdown-menu dropdown-menu-end">
-                    <a className="dropdown-item active" href="contact.html">
-                      <span className="feather-icon dropdown-icon">
-                        <FeatherIcon icon="list" />
-                      </span>
-                      <span>List View</span>
-                    </a>
-                    <a className="dropdown-item" href="contact-cards.html">
-                      <span className="feather-icon dropdown-icon">
-                        <FeatherIcon icon="grid" />
-                      </span>
-                      <span>Grid View</span>
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <span className="feather-icon dropdown-icon">
-                        <FeatherIcon icon="server" />
-                      </span>
-                      <span>Compact View</span>
-                    </a>
-                  </div>
   
                   <a
                     className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"

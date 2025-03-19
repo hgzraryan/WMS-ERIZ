@@ -6,6 +6,9 @@ import useGetData from '../../hooks/useGetData';
 import { HelmetProvider,Helmet } from 'react-helmet-async'
 import ReactPaginate from 'react-paginate';
 import ProductsSummaryTable from '../viewTables/ProductsSummaryTable';
+import ExportData from '../ExportData';
+import FeatherIcon from "feather-icons-react/build/FeatherIcon";
+
 function ProductsSummary() {
 
     const { pageNumber } = useParams();
@@ -19,6 +22,7 @@ function ProductsSummary() {
        const [selectedItem, setSelectedItem] = useState("");
        const [selectedItemId, setSelectedItemId] = useState(null);
        const confirmProductsListRef = useRef("");
+    const [toggleExport, setToggleExport] = useState(false);
 
 //-------------------------GetData---------------------------//  
     const {
@@ -48,6 +52,9 @@ function ProductsSummary() {
     const handlePageClick = ({ selected: selectedPage }) => {
       navigate(`/products/productsSummary/${selectedPage+1}`);
     }
+    const handleToggleExportModal = (value) => {
+      setToggleExport((prev) => value);
+    };    
      //-------------------------refreshPage-----------------------------------//  
 
      const refreshPage = () => {
@@ -56,6 +63,109 @@ function ProductsSummary() {
       refreshData()
     };
   return (
+    <HelmetProvider>
+    <ExportData 
+  handleToggleExportModal = {handleToggleExportModal}
+  toggleExport={toggleExport}
+  section='productsSummary'
+  />
+   <Helmet>
+      <meta charSet="utf-8" />
+      <title>Ապրանքների Մնացորդներ</title>
+      <link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
+    </Helmet>
+    <div className="contactapp-wrap" style={{height:'100%'}}>
+      <div className="contactapp-content">
+        <div className="contactapp-detail-wrap w-100">
+          <header className="contact-header">
+            <div className="d-flex align-items-center">
+              <div className="dropdown">
+                <a
+                  className="contactapp-title link-dark"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <h1>Ապրանքների Մնացորդներ</h1>
+                </a>
+              </div>
+            </div>
+            <div className="contact-options-wrap">
+            <a
+              className="btn btn-icon btn-flush-dark flush-soft-hover dropdown-toggle no-caret active"
+              href="#"
+              data-bs-toggle="dropdown"
+            >
+              <span className="icon">
+                <span className="feather-icon"
+                onClick={handleToggleExportModal}>
+                  <FeatherIcon icon="download" />
+                </span>
+              </span>
+            </a>
+
+              <a
+                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
+                href="#"
+                data-bs-toggle="tooltip"
+                data-placement="top"
+                onClick={refreshPage}
+                title=""
+                data-bs-original-title="Refresh"
+              >
+                <span className="icon">
+                  <span className="feather-icon">
+                    <FeatherIcon icon="refresh-cw" />
+                  </span>
+                </span>
+              </a>
+            </div>
+          </header>
+          <div className="contact-body">
+            <div data-simplebar className="nicescroll-bar">
+              <div className="contact-list-view">
+                <div
+                  id="scrollableDiv"
+                  style={{overflow: "auto" }}
+                >
+                            <ProductsSummaryTable 
+                  confirmRef={confirmProductsListRef}
+                  selectedItem={selectedItem}
+                  selectedItemId={selectedItemId}
+                  //handleDeleteItem={handleDeleteItem}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  productsSummary={productsSummary} 
+                  setProductsList={setProductsSummary}
+                  dataReceived={dataReceived}
+                  />
+                <ReactPaginate
+                previousLabel = {"Հետ"}    
+                nextLabel = {"Առաջ"}H
+                pageCount = {pageCount}
+                onPageChange = {handlePageClick}
+                initialPage = {0}
+                containerClassName={"pagination"}
+                pageLinkClassName = {"page-link"}
+                pageClassName = {"page-item"}
+                previousLinkClassName={"page-link"}
+                nextLinkClassName={"page-link"}
+                disabledLinkClassName={"disabled"}
+                //activeLinkClassName={"active"}
+                activeClassName={"active"}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+     
+  {/* </HelmetProvider>
     <HelmetProvider>
     <Helmet>
       <meta charSet="utf-8" />
@@ -111,7 +221,8 @@ function ProductsSummary() {
           
       </div>
     </div>
-  </HelmetProvider>
+    */}
+  </HelmetProvider> 
   )
 }
 

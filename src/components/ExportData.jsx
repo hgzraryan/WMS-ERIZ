@@ -253,7 +253,12 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
         generationDate: moment(item.generationDate).format('DD-MM-YYYY HH:mm'),
         updatedAt: moment(item.updatedAt).format('DD-MM-YYYY HH:mm'),
       }));
-    }else{
+    }else if(section === 'productsSummary'){
+      exportData = exportData?.map(el => ({      
+          ...el,
+          createdAt:moment(el?.createdAt).format('DD-MM-YYYY HH:mm'),
+          updatedAt:moment(el?.updatedAt).format('DD-MM-YYYY HH:mm'),          
+      }))}else{
       return
     }
     const workBook = utils.book_new()
@@ -287,7 +292,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
                     autoComplete="off"
                     className="container"
                   >
-                    {section !== 'researchList' ?
+                    {section !== 'productsSummary' ?
                       <>
                         <div className="card" style={{ minHeight: '300px' }}>
                           <div className="card-header">

@@ -11,6 +11,7 @@ import IncomingProductsTable from '../viewTables/IncomingProductsTable';
 import ReactPaginate from 'react-paginate';
 import useDeleteData from '../../hooks/useDeleteData';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
+import ExportData from '../ExportData';
 
 
 function Products() {
@@ -101,6 +102,11 @@ const handleToggleExportModal = (value) => {
   };
   return (
     <HelmetProvider>
+         <ExportData 
+      handleToggleExportModal = {handleToggleExportModal}
+      toggleExport={toggleExport}
+      section='productsMovements'
+      />
      <Helmet>
         <meta charSet="utf-8" />
         <title>Explore Product</title>
@@ -182,6 +188,18 @@ const handleToggleExportModal = (value) => {
                   <span className="icon">
                     <span className="feather-icon">
                       <FeatherIcon icon="refresh-cw" />
+                    </span>
+                  </span>
+                </a>
+                <a
+                  className="btn btn-icon btn-flush-dark flush-soft-hover dropdown-toggle no-caret active"
+                  href="#"
+                  data-bs-toggle="dropdown"
+                >
+                  <span className="icon">
+                    <span className="feather-icon"
+                    onClick={handleToggleExportModal}>
+                      <FeatherIcon icon="download" />
                     </span>
                   </span>
                 </a>
