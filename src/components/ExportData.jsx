@@ -99,21 +99,26 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
     console.log(data)
     const newReportDates = {
       startDate: data?.dates.startDate ? moment(data?.dates.startDate).format('YYYY-MM-DD') : null,
-      endDate: data?.dates.endDate ? moment(data?.dates.endDate).format('YYYY-MM-DD') : null,
+      endDate: data?.dates.endDate ? moment(data?.dates.endDate).format('YYYY-MM-DD')+' 23:59:59'  : null,
       currentProduct:(exportType==='currentProduct' && data?.currentProduct) ? data?.currentProduct?.id: null,
-      warehouse: (exportType==='warehouse' && data?.warehouse) ? data?.warehouse?.id: null
+      warehouse: (exportType==='warehouse' && data?.warehouse) ? data?.warehouse?.id: null,
+      type:(section==='productsMovements' && exportType==='productsMovements')
+      ?'all'
+      :(section==='productsMovements' && exportType==='currentProduct')
+      ?'currentProduct'
+      :(section==='productsMovements' && exportType==='warehouse')
+      ?'warehouse'
+      :null
     }
     const updatedFields = deleteNullProperties(newReportDates);
     console.log(updatedFields)
 
     try {
       setIsLoading(true);
-      const response = await axiosPrivate.post(`/reportExport/${exportType === 'productsMovements'
-        ? section
-        : exportType === 'currentProduct'
-        ? section + '/currentProduct' 
-        : exportType === 'warehouse'
-        ? section + '/warehouse':''}`, updatedFields)
+      console.log(section)
+      const response = await axiosPrivate.post(`/reportExport${section === 'productsMovements'
+        ? `/${section}`
+        :''}`, updatedFields)
       setExportData(response?.data?.jsonString);
       setIsLoading(false);
       setActive(false);
@@ -153,7 +158,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
         actionId: item.actionId,
         productName: item.productName,
         actionDate: item.actionDate,
-        actionType: item.actionType === "outgoing" ? 'Ելք' : item.clientGender === "incoming" ? 'Մուտք' : '',
+        actionType: item.actionType === "outgoing" ? 'Ելք' : item.actionType === "incoming" ? 'Մուտք' : '',
         quantity: item.quantity,
         unit: item.unit,
         balance: item.balance,

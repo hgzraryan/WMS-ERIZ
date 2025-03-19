@@ -93,7 +93,7 @@ function ProductsSummary() {
               </div>
             </div>
             <div className="contact-options-wrap">
-            <a
+            {/* <a
               className="btn btn-icon btn-flush-dark flush-soft-hover dropdown-toggle no-caret active"
               href="#"
               data-bs-toggle="dropdown"
@@ -104,7 +104,7 @@ function ProductsSummary() {
                   <FeatherIcon icon="download" />
                 </span>
               </span>
-            </a>
+            </a> */}
 
               <a
                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"

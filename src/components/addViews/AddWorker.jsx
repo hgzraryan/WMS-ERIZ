@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { REGISTER_WORKER, WORKERSROLES_URL, } from '../../utils/constants';
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import { city_validation, email_validation, emergencyContactName_validation, fullName_validation, name_validation, password_validation, respPersonFullName_validation, status_validation, street_validation, user_validation, zipCode_validation } from '../../utils/inputValidations';
@@ -28,6 +28,9 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
   const [gender, setGender] = useState("");
   const [workerRoles, setWorkerRoles] = useState([]);
   const [additionalData, setAdditionalData] = useState('')
+  const [simpleCreate, setSimpleCreate] = useState(true);
+  const [additionalPhone, setAdditionalPhone] = useState(false);
+
 
   const onGenderSelect = (event) => {
     setGender(prev => event.target.value)
@@ -67,7 +70,11 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
     mode: "onChange",
   });
 
-
+  const toggleAdditionalPhone = (e, value) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setAdditionalPhone(value);
+  };
   const notify = (text) =>
     toast.success(text, {
       position: "top-right",
@@ -126,7 +133,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
 
     //console.log('newWorker',newWorker);
     try {
-      await axiosPrivate.post(REGISTER_WORKER, newWorker, {
+      await axiosPrivate.post(`${REGISTER_WORKER}`, newWorker, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -163,12 +170,214 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
             <div data-simplebar className="nicescroll-bar">
               <div className="d-flex flex-xxl-nowrap flex-wrap">
                 <div className="contact-info w-100">
+                <section>
+                          <div style={{ display:'flex' ,gap:'10px'}}>
+                            <Button variant={simpleCreate?'primary':'selectedMenu'} onClick={(event)=>setSimpleCreate(true)}>Արագ գրանցում</Button>
+                            <Button  variant={!simpleCreate?'primary':'selectedMenu'} onClick={(event)=>setSimpleCreate(false)}>Հիմնական գրանցում</Button>
+                          </div>
+                        </section>
                   <Form
                     onSubmit={(e) => e.preventDefault()}
                     noValidate
                     autoComplete="off"
                     className="container"
                   >
+                        {
+                            simpleCreate && 
+                            <>
+
+                          
+                          <div className="card">
+                            <div className="card-header">
+                              <a href="#">Անձնական տվյալներ</a>
+                            </div>
+                            <div className="card-body">
+                              <div className="modal-body">
+                                <div className="row gx-3 mb-2">
+                                  <div className="col-sm-6">
+                                    <Input {...fullName_validation} />
+                                  </div>
+                                </div>
+                                <div className="row gx-3 mb-2">
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                      <div className="d-flex justify-content-between me-2">
+                                        <label
+                                          className="form-label"
+                                          htmlFor="birthday"
+                                        >
+                                          Ծննդյան ամսաթիվ
+                                        </label>
+                                        {methods.formState.errors
+                                          .dateOfBirth && (
+                                          <span className="error text-red">
+                                            <span>
+                                              <img
+                                                src={ErrorSvg}
+                                                alt="errorSvg"
+                                                className="me-1"
+                                              />
+                                            </span>
+                                            պարտադիր
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div>
+                                        <CustomDateComponent
+                                          name="dateOfBirth"
+                                          control={methods.control}
+                                          maxDate={new Date()}
+                                          ignoreTyping={false}
+                                        />
+                                      </div>
+                                      <div className="separator-full"></div>
+                                    </div>
+                                  </div>  
+                                  
+                                </div>
+                                <div className="row gx-3 ">
+                                <div className="col-sm-6">
+                                    <div className="d-flex justify-content-between me-2">
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="gender"
+                                      >
+                                        Սեռ
+                                      </label>
+                                      {methods.formState.errors.gender && (
+                                        <span className="error text-red">
+                                          <span>
+                                            <img
+                                              src={ErrorSvg}
+                                              alt="errorSvg"
+                                            />
+                                          </span>{" "}
+                                          պարտադիր
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="d-flex  align-items-center">
+                                      <div className="form-check form-check-inline">
+                                        <input
+                                          className="form-check-input"
+                                          type="radio"
+                                          id="male"
+                                          value="Male"
+                                          // onChange={() =>
+                                          //   onGenderSelect("Male")
+                                          // }
+                                          {...methods.register("gender", {
+                                            required: true,
+                                          })}
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor="male"
+                                        >
+                                          Արական
+                                        </label>
+                                      </div>
+                                      <div className="form-check form-check-inline">
+                                        <input
+                                          className="form-check-input"
+                                          type="radio"
+                                          id="female"
+                                          value="Female"
+                                          // onChange={() =>
+                                          //   onGenderSelect("Female")
+                                          // }
+                                          {...methods.register("gender", {
+                                            required: true,
+                                          })}
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor="female"
+                                        >
+                                          Իգական
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-sm-6 d-flex">
+                              <div className="col-sm-6">
+                                <div className="d-flex justify-content-between me-2">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="doctor"
+                                  >
+                                    Հեռախոս
+                                  </label>
+                                  {methods?.formState.errors.phone && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" className="me-1"/>
+                                      </span>
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                                <CustomPhoneComponent
+                                  name="phone"
+                                  control={methods.control}
+                                />
+                              </div>
+                              {additionalPhone &&
+                              <>
+                              <div className="col-sm-6">
+                                <div className="d-flex justify-content-between ">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="addPhone"
+                                  >
+                                    Հավելյալ Հեռախոս
+                                  </label>
+                                  {methods?.formState.errors.addPhone && (
+                                    <span className="error text-red">
+                                      <span>
+                                        <img src={ErrorSvg} alt="errorSvg" className="me-1"/>
+                                      </span>
+                                      պարտադիր
+                                    </span>
+                                  )}
+                                </div>
+                         <div className="d-flex">
+                                <CustomPhoneComponent
+                                  name="addPhone"
+                                  control={methods.control}
+                                  required={false}
+                                  />
+                                         <div onClick={(e)=>toggleAdditionalPhone(e,false)} style={{ cursor: 'pointer',margin:'0 0 0 2px' }}>
+                                  <FeatherIcon icon="minus-circle" size='28'     />
+                                          </div>                         
+                                  </div>
+                              </div>
+                              </>
+                              }
+                              <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                paddingTop:'41px'
+                              }}
+                              >
+                                {!additionalPhone &&
+                                <div onClick={(e)=>toggleAdditionalPhone(e,true)} style={{ cursor: 'pointer',margin:'-8px 0 0 2px'  }}>
+
+                                  <FeatherIcon icon="plus-circle" size='28'  />
+                                </div>
+                                }
+                              </div>
+                            </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                         
+                          </>}
+                          {!simpleCreate &&
+
+                          
                     <div className="card">
                       <div className="card-header">
                         <a href="#">Աշխատակցի տվյալներ</a>
@@ -572,6 +781,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                         </div>
                       </div>
                     </div>
+}
                     <div className="separator-full"></div>
                     <div className="card">
                       <div className="card-header">

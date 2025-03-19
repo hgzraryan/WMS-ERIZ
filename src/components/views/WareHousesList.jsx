@@ -24,6 +24,7 @@ import { BiSolidInfoCircle } from "react-icons/bi";
 import PartnersInfoModal from "../infoModals/PartnersInfoModal";
 import WarehouseInfoModal from "../infoModals/WarehouseInfoModal";
 import WarehouseProductsTransferModal from "./WarehouseProductsTransferModal";
+import ExportData from "../ExportData";
 
 function WareHousesList() {
   const axiosPrivate = useAxiosPrivate();  
@@ -53,7 +54,10 @@ function WareHousesList() {
   const storedUserRoles = JSON.parse(localStorage.getItem('userRoles'));
   const [superAdmin,setSuperAdmin]=useState(storedUserRoles?.includes(ROLES?.SuperAdmin)||[])
   const [transfer, setTransfer] = useState(false);
-
+  const [toggleExport, setToggleExport] = useState(false);
+  const handleToggleExportModal = (value) => {
+    setToggleExport((prev) => value);
+  }; 
   const handleOpenTransferModal = (e,value) => {
     e.stopPropagation()
     setTransfer((prev) => value);
@@ -561,6 +565,11 @@ function WareHousesList() {
   };
   return (
     <HelmetProvider>
+       <ExportData
+  handleToggleExportModal = {handleToggleExportModal}
+  toggleExport={toggleExport}
+  section='productsSummary'
+  />
            {!!transfer &&  (
       <WarehouseProductsTransferModal transfer={transfer} setTransfer={setTransfer} refreshData={refreshData} />
     )}
@@ -622,7 +631,20 @@ function WareHousesList() {
         )}
                   </div>
                   <div>
-                 
+            <a
+              className="btn btn-icon btn-flush-dark flush-soft-hover dropdown-toggle no-caret active"
+              href="#"
+              data-bs-toggle="dropdown"
+            >
+              <span className="icon">
+                <span className="feather-icon"
+                onClick={handleToggleExportModal}>
+                  <FeatherIcon icon="download" />
+                </span>
+              </span>
+            </a>
+
+              
 
          <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover no-caret d-sm-inline-block d-none"
