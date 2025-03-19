@@ -163,7 +163,7 @@ function AddIncomingProduct({
       expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
       expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
       actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-      description: additionalData,
+      description:additionalData.length? additionalData : '',
       barcode: +data?.barcode,
       //productCategory:data?.productCategory || 1,
       // SKU:'1',
@@ -176,6 +176,7 @@ function AddIncomingProduct({
 console.log(newProd)
 console.log(data)
     const updatedData = deleteNullProperties(newProd)
+    console.log(updatedData)
 
     try {
       await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
