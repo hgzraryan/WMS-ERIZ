@@ -125,7 +125,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
       dateOfBirth: dateOfBirth ? moment(dateOfBirth).format('YYYY-MM-DD') : null,
       emergencyContactName: emergencyContactName,
       emergencyContactNumber: emergencyContactNumber,
-      profilePictureUrl: "profilePictureUrl",
+      //profilePictureUrl: "profilePictureUrl",
       isActive: 1,
       additional: additionalData,
 
@@ -133,7 +133,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
 
     //console.log('newWorker',newWorker);
     try {
-      await axiosPrivate.post(`${REGISTER_WORKER}`, newWorker, {
+      await axiosPrivate.post(!simpleCreate?`${REGISTER_WORKER}`:`${REGISTER_WORKER}/short`, newWorker, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -189,7 +189,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                           
                           <div className="card">
                             <div className="card-header">
-                              <a href="#">Անձնական տվյալներ</a>
+                              <a href="#">Աշխատակցի տվյալներ</a>
                             </div>
                             <div className="card-body">
                               <div className="modal-body">
@@ -322,7 +322,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                                   control={methods.control}
                                 />
                               </div>
-                              {additionalPhone &&
+                              {/* {additionalPhone &&
                               <>
                               <div className="col-sm-6">
                                 <div className="d-flex justify-content-between ">
@@ -367,7 +367,7 @@ function AddWorker({ handleToggleCreateModal, refreshData }) {
                                   <FeatherIcon icon="plus-circle" size='28'  />
                                 </div>
                                 }
-                              </div>
+                              </div> */}
                             </div>
                                 </div>
                               </div>

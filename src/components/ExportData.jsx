@@ -141,6 +141,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
   const findResearches = (statusBoard) => {
     return statusBoard?.flatMap(elem => elem.researches.map(research => research?.name));
   }
+
   const handleExportDiagnostics = (exportName, exportData) => {
     if (section === 'productsMovements' && exportType === 'productsMovements') {
       console.log(exportData)
@@ -213,6 +214,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
       // });
 
     } else if (section === 'productsMovements' && exportType === 'currentProduct') {
+      console.log(exportData)
       exportData = exportData.map(item => ({
         // incomingProductId: el.incomingProductId,
         // name: el.name,
@@ -230,7 +232,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
         actionId: item.actionId,
         productName: item.productName,
         actionDate: item.actionDate,
-        actionType: item.actionType === "outgoing" ? 'Ելք' : item.clientGender === "incoming" ? 'Մուտք' : '',
+        actionType: item.actionType === "outgoing" ? 'Ելք' : item.actionType === "incoming" ? 'Մուտք' : '',
         quantity: item.quantity,
         unit: item.unit,
         balance: item.balance,
@@ -375,7 +377,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
                                             Ապրանք
                                           </label>
                                         </div>
-                                        <div className="form-check form-check-inline">
+                                        {/* <div className="form-check form-check-inline">
                                           <input
                                             className="form-check-input"
                                             type="radio"
@@ -389,7 +391,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
                                           <label className="form-check-label" htmlFor="warehouse">
                                             Պահեստ
                                           </label>
-                                        </div>
+                                        </div> */}
                                       </div>
                                     </div>
                                   </div>
