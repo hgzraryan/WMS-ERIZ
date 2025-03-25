@@ -1,10 +1,22 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import ComponentToConfirm from '../ComponentToConfirm';
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import CustomTable from '../CustomTable';
-
+const RolesTypes = [
+  {
+    label: "Պահեստապետ",
+    value: "keeper",
+  },
+  {
+    label: "Վարորդ",
+    value: "driver",
+  },
+  {
+    label: "Աշխատակից",
+    value: "worker",
+  },
+];
 function WorkersPositionsTable({
     confirmRef,
     selectedItem,
@@ -51,6 +63,17 @@ function WorkersPositionsTable({
               <>                
                 <div  className="columnHeader">Տեսակ</div>
               </>
+            ),
+            Cell:({row})=>(
+              <div>
+                {row.original.type==='keeper'
+                ?'Պահեստապետ'
+                :row.original.type==='driver'
+                ?'Վարորդ'
+                :row.original.type==='worker'
+                ?'Աշխատակից'
+                :''}
+              </div>
             ),
             accessor: "type",
             sortable: true,

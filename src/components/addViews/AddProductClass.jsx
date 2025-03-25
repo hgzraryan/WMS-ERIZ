@@ -14,6 +14,7 @@ import ReactQuillEditor from "../ReactQuillEditor";
 
 const attributeTypes = [
   { value: "kg", label: "Կիլոգրամ" },
+  { value: "litre", label: "Լիտր" },
   { value: "piece", label: "Հատ" },
   { value: "Other", label: "Այլ" },
 ];

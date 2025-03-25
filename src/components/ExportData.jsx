@@ -15,6 +15,22 @@ import CustomExportDateComponent from './CustomExportDateComponent';
 import { PRODUCTSLIST_URL, WAREHOUSES_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 
+const translationMap = {
+  actionId: "Գործողության ID",
+  productName: "Ապրանքի Անուն",
+  actionDate: "Գործողության Ամսաթիվ",
+  actionType: "Գործողության Տեսակ",
+  quantity: "Քանակ",
+  unit: "Միավոր",
+  balance: "Հաշվեկշիռ",
+  warehouse: "Պահեստ",
+  driver: "Վարորդ",
+  price: "Գին",
+  sellingPrice: "Վաճառքի Գին",
+  createdAt: "Ստեղծման Ամսաթիվ",
+  generationDate: "Գեներացման Ամսաթիվ",
+  updatedAt: "Թարմացման Ամսաթիվ",
+};
 function ExportData({ handleToggleExportModal, toggleExport, section}) {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -150,7 +166,7 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
         console.log(el)
         return {
           ...el,
-          researchList: findResearches(el.statusBoard)
+         // researchList: findResearches(el.statusBoard)
         }
       })
       console.log(formatedData)
@@ -268,8 +284,16 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
       }))}else{
       return
     }
+    const formattedData = exportData.map(item => {
+      let translatedItem = {};
+      Object.keys(item).forEach(key => {
+        translatedItem[translationMap[key] || key] = item[key]; // Use translated key or default to original
+      });
+      return translatedItem;
+    });
     const workBook = utils.book_new()
-    const workSheet = utils.json_to_sheet(exportData)
+    const workSheet = utils.json_to_sheet(formattedData)
+    console.log(workSheet)
     utils.book_append_sheet(workBook, workSheet, exportName)
     writeFile(workBook, `${section} ${moment(new Date()).format('DD-MM-YYYY')}.xlsx`)
     handleToggleExportModal(false)
