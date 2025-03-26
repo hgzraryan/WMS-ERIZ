@@ -47,6 +47,9 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
     const methods = useForm({
         mode: "onChange",
     });
+    const { watch } = methods;
+    const weightValue = watch("weight"); // Watch the weight input
+    const volumeValue = watch("volume"); // Watch the volume input
     const { trigger } = useForm();
     console.log(incomingProduct)
     useEffect(() => {
@@ -551,10 +554,18 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                         </div>
                                                         <div className="row gx-3">
                                                             <div className="col-sm-6">
-                                                                <Input {...Weight_validation} defaultValue={incomingProduct?.dimensions?.weight} />
+                                                                <Input {...Weight_validation}
+                                                                 defaultValue={incomingProduct?.dimensions?.weight} 
+                                                                 name="weight" 
+                                                                 disabled={!!volumeValue}
+                                                                 validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}/>
                                                             </div>
                                                             <div className="col-sm-6">
-                                                                <Input {...volume_validation} defaultValue={incomingProduct?.dimensions?.volume} />
+                                                                <Input {...volume_validation} 
+                                                                defaultValue={incomingProduct?.dimensions?.volume} 
+                                                                name="volume" 
+                                                                disabled={!!weightValue}
+                                                                validation={{required:{ value:!weightValue, message: "պարտադիր"}}}/>
                                                             </div>
 
                                                         </div>

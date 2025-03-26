@@ -30,7 +30,7 @@ const { inputRef } = Barcode({
     <div className="wrapper " style={{ margin:'20px 40px 0 40px' }} ref={ref}>
       <header
             className="header"
-            style={{ display: "flex", justifyContent: "space-between", margin:'0 40px 0 40px' }}
+            style={{ display: "flex", justifyContent: "space-between", margin:'0 20px 0 20px' }}
           >
             <div>
               <div

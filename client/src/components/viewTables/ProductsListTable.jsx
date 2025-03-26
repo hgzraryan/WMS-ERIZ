@@ -22,7 +22,7 @@ function ProductsListTable({
         const columns = useMemo(
             () => [
               {
-                Header: "ID",
+                Header: "Հ/Հ",
                 accessor: "productListId",
                 width: 80,
               },
@@ -48,21 +48,7 @@ function ProductsListTable({
                         onClick={() => handleOpenInfoModal(row.original)}
                       />
                       </div>
-                       {/* <a
-                    className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                    data-bs-toggle="tooltip"
-                    onClick={() => handleOpenModal(row.original)}
-                    data-placement="top"
-                    title=""
-                    data-bs-original-title="Delete"
-                    href="#"
-                  >
-                    <span className="icon">
-                      <span className="feather-icon">
-                        <FeatherIcon icon="trash" />
-                      </span>
-                    </span>
-                  </a> */}
+                     
                     </div>
                   ),
                 disableSortBy: true,

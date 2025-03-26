@@ -31,7 +31,7 @@ function ProductMovementsTable({
             {
               Header: (event) => (
                 <>
-                  <div  className="columnHeader">ID</div>
+                  <div  className="columnHeader">Հ/Հ</div>
                 </>
               ),
               accessor: "outgoingProductId",
@@ -178,7 +178,7 @@ function ProductMovementsTable({
                   <div  className="quantity1">Գործընկեր</div>
                 </>
               ),
-              accessor: "partner",
+              accessor: "partnerName",
               sortable: true,
               width: 200,              
             },        

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import { BiSolidInfoCircle } from 'react-icons/bi';
@@ -23,7 +22,7 @@ function ProductsSummaryTable({
         const columns = useMemo(
             () => [
               {
-                Header: "ID",
+                Header: "Հ/Հ",
                 accessor: "warehouseBalanceId",
                 width: 80,
               },

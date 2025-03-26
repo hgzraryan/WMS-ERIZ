@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import CustomTable from '../CustomTable';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
@@ -37,7 +36,7 @@ function SuppliersTable({suppliers,
             Header: (event) => (
               <>
                 
-                <div  className="supplierId">ID</div>
+                <div  className="supplierId">Հ/Հ</div>
               </>
             ),
             accessor: "supplierId",

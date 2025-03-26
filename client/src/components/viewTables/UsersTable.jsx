@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ComponentToConfirm from "../ComponentToConfirm";
 import "../../dist/css/data-table.css";
@@ -172,7 +170,7 @@ function UsersTable({
         width: 65,
       },
       {
-        Header: "ID",
+        Header: "Հ/Հ",
         accessor: "userId",
         width: 80,
       },
@@ -224,57 +222,29 @@ function UsersTable({
         accessor: "actions",
         Cell: ( {row} ) => (
           <div className="d-flex align-items-center">
-            <div className="d-flex">
-            <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                data-bs-toggle="tooltip"
-                data-placement="top"
-                title="Edit"
-                href="#"
-                onClick={() => handleOpenEditModal(row.original)}
-  
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="edit" />
-                  </span>
-                </span>
-              </a>
-              {/* <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                data-bs-toggle="tooltip"
-                onClick={() => handleOpenModal(row.original)}
-                data-placement="top"
-                title=""
-                data-bs-original-title="Delete"
-                href="#"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="trash" />
-                  </span>
-                </span>
-              </a> */}
-              {/* {!!superAdmin && */}
+            <div className="d-flex gap-2">
+                          
+                          <div style={{ cursor: "pointer" }}>
+            
+                            <span className="icon"
+                                             onClick={() => handleOpenDisableModal(row)}
 
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                data-bs-toggle="tooltip"
-                onClick={() => handleOpenDisableModal(row)}
-                data-placement="top"
-                title="Status"
-                data-bs-original-title="Activte"
-                href="#"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="power" style={{color: row?.original.isActive ? 'green' : 'red' }} />
-                  </span>
-                </span>
-              </a>
-              {/* } */}
-
-            </div>
+                            >
+                              <span className="feather-icon">
+                              <FeatherIcon icon="power" style={{color: row?.original.isActive ? 'green' : 'red' }} />
+                              </span>
+                            </span>
+                          </div>
+                          <div style={{ cursor: "pointer" }}>
+            
+                            <span className="icon"
+                              onClick={() => handleOpenEditModal(row.original)}>
+                              <span className="feather-icon">
+                                <FeatherIcon icon="edit" size="6px" />
+                              </span>
+                            </span>
+                          </div>
+                        </div>
           </div>
         ),
         

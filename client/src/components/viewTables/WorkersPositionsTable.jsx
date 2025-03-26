@@ -39,7 +39,7 @@ function WorkersPositionsTable({
           {
             Header: (event) => (
               <>                
-                <div  className="columnHeader">ID</div>
+                <div  className="columnHeader">Հ/Հ</div>
               </>
             ),
             accessor: "workerRoleId",

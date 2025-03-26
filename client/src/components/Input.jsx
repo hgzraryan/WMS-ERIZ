@@ -3,7 +3,16 @@ import { useFormContext } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdError } from "react-icons/md";
 
-export const Input = ({ label='',onChange, type='text', id='', placeholder='', validation={required: { value: true, message: "պարտադիր",}}, name='',defaultValue='',min='' }) => {
+export const Input = ({ 
+  label='', 
+  type='text', 
+  id='', 
+  placeholder='', 
+  validation={required: { value: true, message: "պարտադիր",}}, 
+  name='',
+  defaultValue='',
+  min='',
+  disabled=false }) => {
   const {
     register,
     formState: { errors },
@@ -33,7 +42,9 @@ export const Input = ({ label='',onChange, type='text', id='', placeholder='', v
         className="form-control"
         placeholder={placeholder}
         defaultValue={defaultValue}
-        autocomplete="off"
+        //autocomplete="off"
+        disabled={disabled}  // Disable input conditionally
+
         min={min}        
         {...register(name, validation)}
       />

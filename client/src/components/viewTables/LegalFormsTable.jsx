@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
 import React, { useMemo, useState } from 'react'
 import { BiSolidInfoCircle } from "react-icons/bi";
@@ -26,7 +25,7 @@ function LegalFormsTable({confirmRef,
           {
             Header: (event) => (
               <>                
-                <div  className="columnHeader">ID</div>
+                <div  className="columnHeader">Հ/Հ</div>
               </>
             ),
             accessor: "legalformId",

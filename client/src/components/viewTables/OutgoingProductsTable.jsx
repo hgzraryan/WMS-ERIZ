@@ -41,7 +41,7 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="columnHeader">ID</div>
+                  <div  className="columnHeader">Հ/Հ</div>
                 </>
               ),
               accessor: "outgoingProductId",
@@ -234,67 +234,47 @@ function OutgoingProductsTable({
               width: 150,
               Cell: ({ row }) => (
                 <div className="d-flex align-items-center">
-                  {/* <BiSolidInfoCircle
-                cursor={"pointer"}
-                size={"1.5rem"}
-                //onClick={() => handleOpenInfoModal(row.original)}
-              /> */}
-                  <div className="d-flex">
-                  
-                  <a
-                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                      data-bs-toggle="tooltip"
-                      data-placement="top"
-                      title="Print"
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent default anchor behavior
-                        e.stopPropagation(); // Stop event bubbling
-                        handleOpenPrintModal(row.original); // Call your function
-                      }}
-                     
+                {/* <BiSolidInfoCircle
+                  cursor={"pointer"}
+                  size={"1.5rem"}
+                  onClick={() => handleOpenInfoModal(row.original)}
+                /> */}
+                <div className="d-flex gap-2">
+                  <div style={{ cursor: "pointer" }}>
+    
+                    <span className="icon"
+                      onClick={() => handleOpenPrintModal(row.original)}
                     >
-                      <span className="icon">
-                        <span className="feather-icon">
-                          <FeatherIcon icon="printer" />
-                        </span>
+                      <span className="feather-icon">
+                        <FeatherIcon icon="printer" fill="red" />
                       </span>
-                    </a>
-                    <a
-                                        className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                                        data-bs-toggle="tooltip"
-                                        data-placement="top"
-                                        title="Edit"
-                                        href="#"
-                                        onClick={() => handleOpenEditModal(row.original)}
-                        
-                                      >
-                                        <span className="icon">
-                                          <span className="feather-icon">
-                                            <FeatherIcon icon="edit" />
-                                          </span>
-                                        </span>
-                                      </a>
-                                      <a
-                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                      data-bs-toggle="tooltip"
-                      data-placement="top"
-                      title="Repeat"
-                      href="#"
+                    </span>
+                  </div>
+                  <div style={{ cursor: "pointer" }}>
+    
+                    <span className="icon"
                       onClick={(e) => {
                         e.preventDefault(); // Prevent default anchor behavior
                         e.stopPropagation(); // Stop event bubbling
                         handleOpenRepeatModal(row.original); // Call your function
                       }}
                     >
-                      <span className="icon">
-                        <span className="feather-icon">
-                          <FeatherIcon icon="repeat" />
-                        </span>
+                      <span className="feather-icon">
+                        <FeatherIcon icon="repeat" />
                       </span>
-                    </a>
+                    </span>
+                  </div>
+                  <div style={{ cursor: "pointer" }}>
+    
+                    <span className="icon"
+                      onClick={() => handleOpenEditModal(row.original)}>
+                      <span className="feather-icon">
+                        <FeatherIcon icon="edit" size="6px" />
+                      </span>
+                    </span>
                   </div>
                 </div>
+              </div>
               ),
               disableSortBy: true,
               

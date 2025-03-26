@@ -33,7 +33,7 @@ function WorkersTable({
           {
             Header: (event) => (
               <>                
-                <div  className="columnHeader">ID</div>
+                <div  className="columnHeader">Հ/Հ</div>
               </>
             ),
             accessor: "workerId",
@@ -149,46 +149,26 @@ function WorkersTable({
             accessor: "actions",
             width: 200,
             Cell: ({ row }) => (
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center gap-2">
                 <div className="d-flex">
                   <BiSolidInfoCircle
                   cursor={"pointer"}
-                  size={"1.5rem"}
+                  size={"1.3rem"}
                   onClick={() => handleOpenInfoModal(row.original)}
                 />
                 </div>
                 <div className="d-flex">
-                  <a
-                    className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                    data-bs-toggle="tooltip"
-                    data-placement="top"
-                    title="Edit"
-                    href="#"
-                    onClick={() => handleOpenEditModal(row.original)}
-    
-                  >
-                    <span className="icon">
-                      <span className="feather-icon">
-                        <FeatherIcon icon="edit" />
-                      </span>
-                    </span>
-                  </a>
-                  {/* <a
-                    className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                    data-bs-toggle="tooltip"
-                    onClick={() => handleOpenModal(row.original)}
-                    data-placement="top"
-                    title=""
-                    data-bs-original-title="Delete"
-                    href="#"
-                  >
-                    <span className="icon">
-                      <span className="feather-icon">
-                        <FeatherIcon icon="trash" />
-                      </span>
-                    </span>
-                  </a> */}
-                </div>
+              <div style={{ cursor: "pointer" }}>
+
+                <span className="icon"
+                  onClick={() => handleOpenEditModal(row.original)}>
+                  <span className="feather-icon">
+                    <FeatherIcon icon="edit" size="6px" />
+                  </span>
+                </span>
+              </div>
+            </div>
+               
               </div>
             ),
             disableSortBy: true,

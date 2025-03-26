@@ -284,25 +284,6 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
 
                   </li>
                 </ul>
-                {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: "2.3rem",
-                      color: "#4eafcb",
-                      textTransform: "uppercase",
-                      fontWeight: "bolder",
-                      marginTop: "-10px",
-                    }}
-                  >
-                    Laboratory
-                  </p>
-                </div> */}
               </div>
             </div>
           </header>
@@ -312,22 +293,10 @@ function IncomingProductsPrintModal({ modalPrint, setModalPrint }) {
               height: "3px",
               borderRadius: ".3rem",
               background: "linear-gradient(to right, #018a54 65%, transparent)",
-              margin:'0 20px 0 20px' 
+              margin:'0 10px 0 10px' 
             }}
           ></div>
-          {/* <div
-            className="d-flex justify-content-center align-center"
-            style={{
-              background: "#4eafcb",
-              color: "white",
-              borderRadius: "5px",
-              margin: "10px 0",
-            }}
-          >
-            <p style={{ padding: "5px", fontSize: "20px", fontWeight: "bold" }}>
-              Մուտքի օրդեր
-            </p>
-          </div> */}
+         
             <main>
               <Suspense fallback={<LoadingSpinner />}>
                 {isLoading ? (

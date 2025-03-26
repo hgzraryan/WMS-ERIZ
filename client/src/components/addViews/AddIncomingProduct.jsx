@@ -48,12 +48,20 @@ function AddIncomingProduct({
   const [additionalData, setAdditionalData] = useState([])
   //const [suppliersList, setSuppliersList] = useState([])
   const [workers, setWorkers] = useState([])
+
  useEffect(() => {
     if (CountryRegionData[11][0] === "Armenia") {
       CountryRegionData[11][0] = "Հայաստան"
       CountryRegionData[11][2] = "Արագածոտն~AG|Արարատ~AR|Արմավիր~AV|Գեղարքունիք~GR|Կոտայք~KT|Լոռի~LO|Շիրակ~SH|Սյունիք~SU|Տավուշ~TV|Վայոց Ձոր~VD|Երևան~ER";
     }
   }, []);
+  const methods = useForm({
+    mode: "onChange",
+  });
+  const { watch } = methods;
+  const weightValue = watch("weight"); // Watch the weight input
+  const volumeValue = watch("volume"); // Watch the volume input
+
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
@@ -118,9 +126,6 @@ function AddIncomingProduct({
 
     setProductClassId(data?.value);
   };
-  const methods = useForm({
-    mode: "onChange",
-  });
   
   const notify = (text) =>
     toast.success(text, {
@@ -565,10 +570,18 @@ console.log(data)
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
-                              <Input {...Weight_validation} />
+                              <Input {...Weight_validation} 
+                              name="weight" 
+                              disabled={!!volumeValue}
+                              validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}
+                               />
                             </div>
                             <div className="col-sm-6">
-                              <Input {...volume_validation} />
+                              <Input {...volume_validation}  
+                              name="volume" 
+                              disabled={!!weightValue}
+                              validation={{required:{ value:!weightValue, message: "պարտադիր"}}}
+                              />
                             </div>
                             
                           </div>

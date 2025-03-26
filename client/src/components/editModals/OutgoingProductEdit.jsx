@@ -46,7 +46,7 @@ function OutgoingProductEdit(
     const [partners, setPartners] = useState([]);
     const [outgoingList, setOutgoingList] = useState([]);
     const [workers, setWorkers] = useState([])
-    const [additionalData, setAdditionalData] = useState(outgoingProduct.additionalData)
+    const [additionalData, setAdditionalData] = useState(outgoingProduct.description)
     const [isLoading, setIsLoading] = useState(true);
     const [productsList, setProductsList] = useState([])
     const navigate = useNavigate();
@@ -276,7 +276,11 @@ function OutgoingProductEdit(
                                     <Controller
                                       name="partner"
                                       control={methods.control}
-                                      defaultValue={null}
+                                      defaultValue={
+                                        outgoingProduct
+                                            ? { value: outgoingProduct?.partnerId, label: outgoingProduct?.partnerName }
+                                            : null
+                                    }
                                       rules={{ required: true }}
                                       render={({ field }) => (
                                         <Select
@@ -321,7 +325,11 @@ function OutgoingProductEdit(
                                     <Controller
                                       name="driver"
                                       control={methods.control}
-                                      defaultValue={null}
+                                      defaultValue={
+                                        outgoingProduct
+                                            ? { value: outgoingProduct?.driverId, label: outgoingProduct?.driverName }
+                                            : null
+                                    }
                                       rules={{ required: true }}
                                       render={({ field }) => (
                                         <Select
