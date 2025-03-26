@@ -7,6 +7,7 @@ import IncomingProductsPrintModal from '../printModals/IncomingProductsPrintModa
 import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import { ColumnFilter } from '../ColumnFilter';
 import { INCOMINGPRODUCTS_SEARCH_URL, PRODUCTS_URL } from '../../utils/constants';
+import IncomingProductsEdit from '../editModals/IncomingProductsEdit';
 
 function IncomingProductsTable({
   confirmRef,
@@ -26,6 +27,12 @@ function IncomingProductsTable({
   const [repeatIncoming, setRepeateIncoming] = useState("");
   const [filterData, setFilterData] = useState({});
   const [filterDataJSON, setFilterDataJSON] = useState('');
+     const [editRow, setEditRow] = useState(false);
+  
+     const handleOpenEditModal = (value) => {
+      setEditRow((prev) => value);
+      console.log(value)
+    };
   const handleOpenInfoModal = (data) => {
     
     setModalInfo((prev) => data);
@@ -258,6 +265,21 @@ function IncomingProductsTable({
                         </span>
                       </span>
                     </a>
+                      <a
+                                        className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                                        data-bs-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit"
+                                        href="#"
+                                        onClick={() => handleOpenEditModal(row.original)}
+                        
+                                      >
+                                        <span className="icon">
+                                          <span className="feather-icon">
+                                            <FeatherIcon icon="edit" />
+                                          </span>
+                                        </span>
+                                      </a>
                 </div>
               </div>
             ),
@@ -272,6 +294,11 @@ function IncomingProductsTable({
     {/* {!!modalInfo && (
         <IncomingsProductsInfoModal modalInfo={modalInfo} setModalInfo={setModalInfo}/>
       )} */}
+          {!!editRow &&(
+            <>
+     <IncomingProductsEdit incomingProduct={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
+            </>
+  )}
        {!!modalPrint && (
         <IncomingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
       )}

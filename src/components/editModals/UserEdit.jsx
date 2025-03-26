@@ -175,33 +175,32 @@ function UserEdit({ user, setEditRow, refreshData }) {
       // formData.append("image", image);
       // console.log(newUser)
       const updatedFields = deleteNullProperties(updatedUser);
-
       console.log('updatedFields',updatedFields);
-      try {
-        await axiosPrivate.put(
-          USERS_URL,
-          { updatedFields, id: user.userId },
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
+      // try {
+      //   await axiosPrivate.put(
+      //     USERS_URL,
+      //     { updatedFields, id: user.userId },
+      //     {
+      //       headers: { "Content-Type": "application/json" },
+      //       withCredentials: true,
+      //     }
+      //   );
 
-        setEditRow(false);
-        refreshData();
-        //notify(`${newUser.firstname} ${newUser.lastname} աշխատակիցը ավելացված է`)
-      }
-      catch (err) {
-            if (!err?.response) {
-              setErrMsg("No Server Response");
-            } else if (err.response?.status === 409 & err.response?.data?.message ==="Conflict email already registered"  ) {
-              setErrMsg("Կրկնվող էլ․ հասցե");
-            } else if (err.response?.status === 409 & err.response?.data?.message ==="Conflict username already registered"  ) {
-              setErrMsg("Կրկնվող ծածկանուն");
-            }else {
-              setErrMsg(" Failed");
-            }
-          }
+      //   setEditRow(false);
+      //   refreshData();
+      //   //notify(`${newUser.firstname} ${newUser.lastname} աշխատակիցը ավելացված է`)
+      // }
+      // catch (err) {
+      //       if (!err?.response) {
+      //         setErrMsg("No Server Response");
+      //       } else if (err.response?.status === 409 & err.response?.data?.message ==="Conflict email already registered"  ) {
+      //         setErrMsg("Կրկնվող էլ․ հասցե");
+      //       } else if (err.response?.status === 409 & err.response?.data?.message ==="Conflict username already registered"  ) {
+      //         setErrMsg("Կրկնվող ծածկանուն");
+      //       }else {
+      //         setErrMsg(" Failed");
+      //       }
+      //     }
     }
   );
 

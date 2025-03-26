@@ -7,6 +7,9 @@ import OutgoingProductsPrintModal from '../printModals/OutgoingProductsPrintModa
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import { ColumnFilter } from '../ColumnFilter';
 import {   OUTGOINGLIST_SEARCH_URL,OUTGOINGPRODUCTS_URL } from '../../utils/constants';
+import OutgoingProductEdit from '../editModals/OutgoingProductEdit';
+import ConfirmIncomingModal from '../ConfirmIncomingModal';
+import ConfirmOutgoingModal from '../ConfirmOutgoingModal';
 
 function OutgoingProductsTable({
     outgoingProducts,
@@ -18,7 +21,17 @@ function OutgoingProductsTable({
     const [modalPrint, setModalPrint] = useState("");
     const [filterData, setFilterData] = useState({});
     const [filterDataJSON, setFilterDataJSON] = useState('');
-
+     const [editRow, setEditRow] = useState(false);
+    const [repeatOutgoing, setRepeatOutgoing] = useState("");
+  
+     const handleOpenEditModal = (value) => {
+      setEditRow((prev) => value);
+      console.log(value)
+    };
+    const handleOpenRepeatModal = (data) => {
+      console.log(data)
+      setRepeatOutgoing((prev) => data);
+    }; 
     const handleOpenPrintModal = (data) => {
       setModalPrint((prev) => data);
     };
@@ -50,7 +63,7 @@ function OutgoingProductsTable({
               ),
               accessor: "name",
               sortable: true,
-              width: 350,
+              width: 250,
               Filter: ({ column: { id } })=>(
                 <ColumnFilter
                   id={id}
@@ -145,7 +158,7 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Արժեք</div>
+                  <div  className="name">Առքի գին</div>
                 </>
               ),
               accessor: "price",
@@ -162,14 +175,31 @@ function OutgoingProductsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="name">Արժույթ</div>
+                  <div  className="name">Վաճառքի գին</div>
                 </>
               ),
-              accessor: "currency",
+              accessor: "sellingPrice",
               sortable: true,
-              width: 100,
+              Cell: ({ row }) => (
+                <div className="d-flex align-items-center justify-content-center">
+                 {row.original?.sellingPrice}
+                </div>
+              ),
+              width: 150,
               
             },
+            // {
+            //   Header: (event) => (
+            //     <>
+                  
+            //       <div  className="name">Արժույթ</div>
+            //     </>
+            //   ),
+            //   accessor: "currency",
+            //   sortable: true,
+            //   width: 100,
+              
+            // },
             {
               Header: (event) => (
                 <>
@@ -178,6 +208,18 @@ function OutgoingProductsTable({
                 </>
               ),
               accessor: "warehouse",
+              sortable: true,
+              width: 200,
+              
+            },
+            {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="name">Վարորդ</div>
+                </>
+              ),
+              accessor: "driverName",
               sortable: true,
               width: 200,
               
@@ -218,6 +260,39 @@ function OutgoingProductsTable({
                         </span>
                       </span>
                     </a>
+                    <a
+                                        className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                                        data-bs-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit"
+                                        href="#"
+                                        onClick={() => handleOpenEditModal(row.original)}
+                        
+                                      >
+                                        <span className="icon">
+                                          <span className="feather-icon">
+                                            <FeatherIcon icon="edit" />
+                                          </span>
+                                        </span>
+                                      </a>
+                                      <a
+                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                      data-bs-toggle="tooltip"
+                      data-placement="top"
+                      title="Repeat"
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent default anchor behavior
+                        e.stopPropagation(); // Stop event bubbling
+                        handleOpenRepeatModal(row.original); // Call your function
+                      }}
+                    >
+                      <span className="icon">
+                        <span className="feather-icon">
+                          <FeatherIcon icon="repeat" />
+                        </span>
+                      </span>
+                    </a>
                   </div>
                 </div>
               ),
@@ -229,11 +304,16 @@ function OutgoingProductsTable({
         );
     return (
       <>
-       {!!modalPrint && (
-        <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
-      )}
-            <CustomTable data={outgoingProducts} column={columns} dataReceived={dataReceived}/>
-  
+        {!!repeatOutgoing && (
+          <ConfirmOutgoingModal modalData={repeatOutgoing} setRepeateOutgoing={setRepeatOutgoing} refreshData={refreshData}/>
+        )}
+        {!!editRow &&(
+          <OutgoingProductEdit outgoingProduct={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
+        )}
+        {!!modalPrint && (
+          <OutgoingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
+        )}
+          <CustomTable data={outgoingProducts} column={columns} dataReceived={dataReceived}/>
       </>
     )
   }

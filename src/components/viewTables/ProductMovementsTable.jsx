@@ -109,12 +109,34 @@ function ProductMovementsTable({
                 Header: (event) => (
                   <>
                     
-                    <div  className="price">Գումար</div>
+                    <div  className="price">Առքի գին</div>
                   </>
                 ),
                 accessor: "price",
                 sortable: true,
+                Cell: ({ row }) => (
+                  <div className="d-flex align-items-center justify-content-center">
+                   {row.original?.price}
+                  </div>
+                ),
                 width: 100,
+                
+              },
+            {
+                Header: (event) => (
+                  <>
+                    
+                    <div  className="price">Վաճառքի գին</div>
+                  </>
+                ),
+                accessor: "sellingPrice",
+                sortable: true,
+                width: 100,
+                Cell: ({ row }) => (
+                  <div className="d-flex align-items-center justify-content-center">
+                   {row.original?.sellingPrice?row.original?.sellingPrice:'-'}
+                  </div>
+                ),
                 
               },
             {
@@ -153,24 +175,13 @@ function ProductMovementsTable({
               Header: (event) => (
                 <>
                   
-                  <div  className="quantity1">Գնորդ</div>
+                  <div  className="quantity1">Գործընկեր</div>
                 </>
               ),
-              accessor: "driver1",
+              accessor: "partner",
               sortable: true,
               width: 200,              
-            },    
-            {
-              Header: (event) => (
-                <>
-                  
-                  <div  className="quantity2">Մատակարար</div>
-                </>
-              ),
-              accessor: "driver2",
-              sortable: true,
-              width: 200,              
-            },    
+            },        
             {
               Header: (event) => (
                 <>

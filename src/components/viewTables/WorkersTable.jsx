@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from 'react'
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
