@@ -476,7 +476,7 @@ const getAllOutgoingProducts = async (req, res) => {
                     from: "partners",
                     localField: "customer",
                     foreignField: "partnerId",
-                    as: "customerData"
+                    as: "partnerData"
                 }
             },
             {
@@ -495,7 +495,7 @@ const getAllOutgoingProducts = async (req, res) => {
             },
             {
                 $unwind: {
-                    path: "$customerData",
+                    path: "$partnerData",
                     preserveNullAndEmptyArrays: true
                 }
             },
@@ -510,12 +510,14 @@ const getAllOutgoingProducts = async (req, res) => {
                     outgoingProductId: 1,
                     driverId: "$workerInfo.workerId",
                     driverName: "$workerInfo.fullName",
-                    customer: "$customerData.name",
+                    partnerName: "$partnerData.name",
+                    partnerId: "$partnerData.partnerId",
 					outgoingDate:1,
                     description: 1,
 					outgoingList: 1,
                     actionDate: 1,
 					warehouse:"$warehouseInfo.name",
+					warehouseId:"$warehouseInfo.warehouseId",
 					balance:1,
 					sellingPrice:1,
                 }
@@ -524,21 +526,23 @@ const getAllOutgoingProducts = async (req, res) => {
 
         // Count total documents for pagination purposes
         const count = await OutgoingProducts.countDocuments();
-
+console.log(outgoingProducts[0].outgoingList)
         // Transform the data to the desired format
         const transformedData = outgoingProducts.flatMap(product => 
             product.outgoingList.map(item => ({
 				outgoingProductId: product.outgoingProductId,
-                customer: product.customer,
+                partnerName: product.partnerName,
+                partnerId: product.partnerId,
                 currentProductid: item.id,
                 name: item.name,
                 outgoingCount: item.outgoingCount,
                 warehouse: product.warehouse,
+                warehouseId: product.warehouseId,
                 description: product.description,
                 price: item.price,
 				balance:item.balance,
                 barcode: item.barcode,
-                currency: product.currency,
+                currency: item.currency,
 				driverId:product.driverId,
 				sellingPrice: product.sellingPrice,
 				driverName:product.driverName,

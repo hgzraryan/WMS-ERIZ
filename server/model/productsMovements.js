@@ -57,6 +57,10 @@ const productsMovementsSchema = new Schema({
     type: Number,
     required: true,
   },
+  partner: {
+    type: Number,
+    required: true,
+  },
   driver: {
     type: Number,
     required: true,

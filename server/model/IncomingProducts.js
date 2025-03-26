@@ -71,7 +71,10 @@ const IncomingProductsSchema = new Schema({
     weight: { type: Number},  // Weight in kg or other unit
     volume: { type: Number},  // volume in litr or other unit
   },
-  supplier: {
+  // supplier: {
+  //   type: Number,
+  // },
+  partner: {
     type: Number,
   },
   fromWarehouseId: {

@@ -7,54 +7,60 @@ const handleRefreshToken = async (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(401);
 
     const refreshToken = cookies.jwt;
-
-    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: process.env.NODE_ENV === 'production' });
+    
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
 
     const foundUser = await User.findOne({ refreshToken }).exec();
+	
+	
+    // Detected refresh token reuse!
     if (!foundUser) {
-        // Token reuse detection
         jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET,
             async (err, decoded) => {
-                if (err || !decoded) return res.sendStatus(403);
-                console.log('Attempted refresh token reuse!');
-                
+                if (err) return res.sendStatus(403); //Forbidden
+                console.log('attempted refresh token reuse!')
                 const hackedUser = await User.findOne({ username: decoded.username }).exec();
                 if (hackedUser) {
-                    hackedUser.refreshToken = [];
-                    await hackedUser.save();
-                }
-                return res.sendStatus(403);
+					hackedUser.refreshToken = [];
+					const result = await hackedUser.save();
+					console.log(result);
+				}
             }
-        );
-        return;
+        )
+        return res.sendStatus(403); //Forbidden
     }
 
     const newRefreshTokenArray = foundUser.refreshToken.filter(rt => rt !== refreshToken);
 
+    // evaluate jwt 
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, decoded) => {
-            if (err || !decoded) {
-                foundUser.refreshToken = newRefreshTokenArray;
-                try {
-                    await foundUser.save();
-                } catch (error) {
-                    if (error instanceof mongoose.Error.VersionError) {
+            if (err) {
+                console.log('expired refresh token')
+                foundUser.refreshToken = [...newRefreshTokenArray];
+				try {
+					const result = await foundUser.save();
+					console.log(result);
+				 } catch (error) {
+					 
+					 if (error instanceof mongoose.Error.VersionError) {
+                        // Refetch user and retry save
                         const latestUser = await User.findById(foundUser._id).exec();
-                        latestUser.refreshToken = newRefreshTokenArray;
-                        await latestUser.save();
+                        latestUser.refreshToken = [...newRefreshTokenArray];
+                        const retryResult = await latestUser.save();
+                        console.log(retryResult);
                     } else {
                         console.error(error);
                     }
-                }
-                return res.sendStatus(403);
+				 }	 
             }
+            if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
 
-            if (foundUser.username !== decoded.username) return res.sendStatus(403);
-
+            // Refresh token was still valid
             const roles = Object.values(foundUser.roles);
             const accessToken = jwt.sign(
                 {
@@ -64,7 +70,7 @@ const handleRefreshToken = async (req, res) => {
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
+                { expiresIn: '10s' }
             );
 
             const newRefreshToken = jwt.sign(
@@ -72,31 +78,39 @@ const handleRefreshToken = async (req, res) => {
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: '1d' }
             );
-
+			
+			
+			
+            // Saving refreshToken with current user
             foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
-            
-            try {
-                await foundUser.save();
+			
+			
+			
+			 try {
+			
+				const result = await foundUser.save();
+				console.log(result);
             } catch (error) {
                 if (error instanceof mongoose.Error.VersionError) {
+                    // Refetch user and retry save
                     const latestUser = await User.findById(foundUser._id).exec();
                     latestUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
-                    await latestUser.save();
+                    const retryResult = await latestUser.save();
+                    console.log(retryResult);
                 } else {
                     console.error(error);
                 }
             }
+			
+			
+			
 
-            res.cookie('jwt', newRefreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'None',
-                maxAge: 24 * 60 * 60 * 1000
-            });
-            res.json({ roles, accessToken });
+            // Creates Secure Cookie with refresh token
+            res.cookie('jwt', newRefreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+
+            res.json({ roles, accessToken })
         }
     );
-};
-
+}
 
 module.exports = { handleRefreshToken }

@@ -60,6 +60,14 @@ const getAllProducts = async (req, res) => {
 		},
 		  {
 			$lookup: {
+				from: "partners", // Name of the suppliers collection
+				localField: "partner", // Field in products collection (supplier id)
+				foreignField: "partnerId", // Field in suppliers collection (supplier id)
+				as: "partnerInfo" // Alias for the joined data
+			}
+		},
+		  {
+			$lookup: {
 				from: "productcategories", // Name of the suppliers collection
 				localField: "productCategory", // Field in products collection (supplier id)
 				foreignField: "categoryId", // Field in suppliers collection (supplier id)
@@ -83,6 +91,12 @@ const getAllProducts = async (req, res) => {
 		{
 			$unwind: {
 				path: "$supplierInfo", // Unwind to deconstruct the array of supplierInfo
+				preserveNullAndEmptyArrays: true // Preserve documents without supplier info
+			}
+		},
+		{
+			$unwind: {
+				path: "$partnerInfo", // Unwind to deconstruct the array of supplierInfo
 				preserveNullAndEmptyArrays: true // Preserve documents without supplier info
 			}
 		},
@@ -124,14 +138,20 @@ const getAllProducts = async (req, res) => {
 				createdAt:1,
 				updatedAt:1,
 				quantity:1,
+				palletCount:1,
 				balance:1,
 				expirationDate:1,
+				expiredAlertDay:1,
+				producedDate:1,
 				actionDate:1,
 				sellingPrice:1,
+				countryOfOrigin:1,
 				driverId:"$workerInfo.workerId",
 				driverName:"$workerInfo.fullName",
-				supplierId:"$supplierInfo.supplierId",
-				supplierName:"$supplierInfo.name",
+				// supplierId:"$supplierInfo.supplierId",
+				// supplierName:"$supplierInfo.name",
+				partnerId:"$partnerInfo.partnerId",
+				partnerName:"$partnerInfo.name",
 				warehouseId:"$warehouseInfo.warehouseId",
 				warehouseName:"$warehouseInfo.name",
 				productCategoryName:"$categoryInfo.name",
@@ -372,7 +392,8 @@ const registerIncomingProduct = async (req, res) => {
 			  balance: productData.balance,
 			  driver: productData.driver,	
 			  actionType:'incoming',
-			  sellingPrice: productData.sellingPrice
+			  sellingPrice: productData.sellingPrice,
+			  partner:productData.partner
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();

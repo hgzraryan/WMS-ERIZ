@@ -41,6 +41,14 @@ const getAllProductsMovements = async (req, res) => {
 				},
 				{
 				  $lookup: {
+					from: "partners", // Name of the workers collection
+					localField: "partner", // Field in ProductsMovements collection
+					foreignField: "partnerId", // Field in workers collection
+					as: "partnerInfo" // Alias for the joined data
+				  }
+				},
+				{
+				  $lookup: {
 					from: "warehouses",
 					localField: "warehouse",
 					foreignField: "warehouseId",
@@ -55,6 +63,12 @@ const getAllProductsMovements = async (req, res) => {
 				},
 				{
 				  $unwind: {
+					path: "$partnerInfo", // Deconstruct the workerInfo array
+					preserveNullAndEmptyArrays: true // Preserve documents without workerInfo
+				  }
+				},
+				{
+				  $unwind: {
 					path: "$warehouseInfo", // Deconstruct the warehouseInfo array
 					preserveNullAndEmptyArrays: true // Preserve documents without warehouseInfo
 				  }
@@ -63,7 +77,8 @@ const getAllProductsMovements = async (req, res) => {
 				  $project: {
 					actionId: 1,
 					customer: 1,
-					supplier: 1,
+					partnerId: '$partnerInfo.partnerId',
+					partnerName: '$partnerInfo.name',
 					productName: 1,
 					actionType: 1,
 					actionDate: 1,
