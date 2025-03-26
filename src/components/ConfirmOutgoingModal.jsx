@@ -107,6 +107,9 @@ function ConfirmOutgoingModal({modalData,
                        </div>
                      </div>
                    
+                     <div style={{display:'flex', flexDirection:'row-reverse'}}>
+                        <p style={{color:'red'}}>{errMsg}</p>
+                     </div>
                              <div className="modal-footer ">                   
                                <button
                                  type="button"

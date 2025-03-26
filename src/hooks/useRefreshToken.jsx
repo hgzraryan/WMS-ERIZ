@@ -3,30 +3,27 @@ import useAuth from './useAuth';
 
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
-    //debugger
+    
+try {
     const refresh = async () => {
-        try {
-            const response = await axios.get('/refresh', {
-                withCredentials: true
-            });
-
-            // Update auth state with new access token and roles
-            setAuth(prev => ({
+        const response = await axios.get('/refresh', {
+            withCredentials: true
+        });
+        setAuth(prev => {
+            // console.log(JSON.stringify(prev));
+            // console.log(response.data.accessToken);
+            return {
                 ...prev,
                 roles: response.data.roles,
-                accessToken: response.data.accessToken,
-                //newRefreshToken:response.data.newRefreshToken
-            }));
-
-            return response.data.accessToken;
-        } catch (error) {
-            console.error("Error refreshing token:", error);
-            // Optionally, handle token refresh failure (e.g., log out user)
-            return null; // Or redirect to login if refresh fails
-        }
-    };
-
+                accessToken: response.data.accessToken
+            }
+        });
+        return response.data.accessToken;
+    }
     return refresh;
+} catch (error) {
+    console.log(error)
+}
 };
 
 export default useRefreshToken;
