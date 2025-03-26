@@ -139,42 +139,42 @@ function IncomingProductsTable({
             width: 100,
             
           },
-          {
-            Header: (event) => (
-              <>
+          // {
+          //   Header: (event) => (
+          //     <>
                 
-                <div  className="name">Արժեք</div>
-              </>
-            ),
-            accessor: "price",
-            sortable: true,
-            width: 100,
+          //       <div  className="name">Արժեք</div>
+          //     </>
+          //   ),
+          //   accessor: "price",
+          //   sortable: true,
+          //   width: 100,
             
-          },
-          {
-            Header: (event) => (
-              <>
+          // },
+          // {
+          //   Header: (event) => (
+          //     <>
                 
-                <div  className="name">Վաճառք</div>
-              </>
-            ),
-            accessor: "sellingPrice",
-            sortable: true,
-            width: 100,
+          //       <div  className="name">Վաճառք</div>
+          //     </>
+          //   ),
+          //   accessor: "sellingPrice",
+          //   sortable: true,
+          //   width: 100,
             
-          },
-          {
-            Header: (event) => (
-              <>
+          // },
+          // {
+          //   Header: (event) => (
+          //     <>
                 
-                <div  className="name">Արժույթ</div>
-              </>
-            ),
-            accessor: "currency",
-            sortable: true,
-            width: 80,
+          //       <div  className="name">Արժույթ</div>
+          //     </>
+          //   ),
+          //   accessor: "currency",
+          //   sortable: true,
+          //   width: 80,
             
-          },
+          // },
           {
             Header: (event) => (
               <>

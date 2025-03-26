@@ -542,13 +542,13 @@ const MainTemplate = () => {
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="incomingProducts" || location.pathname==="/products/incomingProducts"?"nav-link active":"nav-link"} to="./products/incomingProducts/page/1"
                                                         onClick={()=>handleSubmenuClick("products","incomingProducts")}>
-                                                            <span className="nav-link-text">Ապրանքների մուտք</span>
+                                                            <span className="nav-link-text">Ապրանքների մուտքեր</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
                                                         <Link className={sisActive1==="outgoingProducts" || location.pathname==="/products/outgoingProducts"?"nav-link active":"nav-link"} to="./products/outgoingProducts/page/1"
                                                         onClick={()=>handleSubmenuClick("products","outgoingProducts")}>
-                                                            <span className="nav-link-text">Ապրանքների ելք</span>
+                                                            <span className="nav-link-text">Ապրանքների ելքեր</span>
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">

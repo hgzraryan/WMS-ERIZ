@@ -154,40 +154,40 @@ function OutgoingProductsTable({
               width: 100,
               
             },
-            {
-              Header: (event) => (
-                <>
+            // {
+            //   Header: (event) => (
+            //     <>
                   
-                  <div  className="name">Առքի գին</div>
-                </>
-              ),
-              accessor: "price",
-              sortable: true,
-              Cell: ({ row }) => (
-                <div className="d-flex align-items-center justify-content-center">
-                 {row.original?.price}
-                </div>
-              ),
-              width: 150,
+            //       <div  className="name">Առքի գին</div>
+            //     </>
+            //   ),
+            //   accessor: "price",
+            //   sortable: true,
+            //   Cell: ({ row }) => (
+            //     <div className="d-flex align-items-center justify-content-center">
+            //      {row.original?.price}
+            //     </div>
+            //   ),
+            //   width: 150,
               
-            },
-            {
-              Header: (event) => (
-                <>
+            // },
+            // {
+            //   Header: (event) => (
+            //     <>
                   
-                  <div  className="name">Վաճառքի գին</div>
-                </>
-              ),
-              accessor: "sellingPrice",
-              sortable: true,
-              Cell: ({ row }) => (
-                <div className="d-flex align-items-center justify-content-center">
-                 {row.original?.sellingPrice}
-                </div>
-              ),
-              width: 150,
+            //       <div  className="name">Վաճառքի գին</div>
+            //     </>
+            //   ),
+            //   accessor: "sellingPrice",
+            //   sortable: true,
+            //   Cell: ({ row }) => (
+            //     <div className="d-flex align-items-center justify-content-center">
+            //      {row.original?.sellingPrice}
+            //     </div>
+            //   ),
+            //   width: 150,
               
-            },
+            // },
             // {
             //   Header: (event) => (
             //     <>
@@ -212,18 +212,18 @@ function OutgoingProductsTable({
               width: 200,
               
             },
-            {
-              Header: (event) => (
-                <>
+            // {
+            //   Header: (event) => (
+            //     <>
                   
-                  <div  className="name">Վարորդ</div>
-                </>
-              ),
-              accessor: "driverName",
-              sortable: true,
-              width: 200,
+            //       <div  className="name">Վարորդ</div>
+            //     </>
+            //   ),
+            //   accessor: "driverName",
+            //   sortable: true,
+            //   width: 200,
               
-            },
+            // },
             {
               Header: (event) => (
                 <>

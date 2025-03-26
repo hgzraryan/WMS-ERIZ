@@ -182,17 +182,17 @@ function ProductMovementsTable({
               sortable: true,
               width: 200,              
             },        
-            {
-              Header: (event) => (
-                <>
+            // {
+            //   Header: (event) => (
+            //     <>
                   
-                  <div  className="quantity">Վարորդ</div>
-                </>
-              ),
-              accessor: "driver",
-              sortable: true,
-              width: 200,              
-            },    
+            //       <div  className="quantity">Վարորդ</div>
+            //     </>
+            //   ),
+            //   accessor: "driver",
+            //   sortable: true,
+            //   width: 200,              
+            // },    
             {
               Header: (event) => (
                 <>

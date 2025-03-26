@@ -16,7 +16,7 @@ import { PRODUCTSLIST_URL, WAREHOUSES_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 
 const translationMap = {
-  actionId: "Գործողության ID",
+  actionId: "Հ/Հ",
   productName: "Ապրանքի Անուն",
   actionDate: "Գործողության Ամսաթիվ",
   actionType: "Գործողության Տեսակ",

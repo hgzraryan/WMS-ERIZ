@@ -37,18 +37,18 @@ function CustomTable({data,column,dataReceived}) {
         useResizeColumns,
         useSortBy,
         useRowSelect,
-        (hooks) => {
-          hooks.visibleColumns.push((columns) => [
-            {
-              id: "selection",
-              Header: ({ getToggleAllRowsSelectedProps }) => (
-                <Checkbox {...getToggleAllRowsSelectedProps()} />
-              ),
-              Cell: ({ row }) => <Checkbox {...row.getToggleRowSelectedProps()} />,
-            },
-            ...columns,
-          ]);
-        }
+        // (hooks) => {
+        //   hooks.visibleColumns.push((columns) => [
+        //     {
+        //       id: "selection",
+        //       Header: ({ getToggleAllRowsSelectedProps }) => (
+        //         <Checkbox {...getToggleAllRowsSelectedProps()} />
+        //       ),
+        //       Cell: ({ row }) => <Checkbox {...row.getToggleRowSelectedProps()} />,
+        //     },
+        //     ...columns,
+        //   ]);
+        // }
       );
   return (
     <>    
