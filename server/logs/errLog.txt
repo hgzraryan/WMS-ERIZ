@@ -1,0 +1,88 @@
+20211221	16:22:16	be44f274-712b-4ed9-ac7e-e2d42374324a	Error: Not allowed by CORS
+20211221	16:22:53	22206f99-6736-45e5-b517-8d9e7696175e	Error: Not allowed by CORS
+20230421	18:56:34	80ce15f5-5bd9-4a70-8b45-578acda9e785	Error: Not allowed by CORS
+20230523	08:14:11	aed75fd7-2bc4-4b50-8139-0f4128f3c921	Error: Not allowed by CORS
+20230523	08:14:31	c535fd10-72e3-4c5b-b02f-20ae25ac4abf	Error: Not allowed by CORS
+20230523	08:14:34	db08e6fd-a985-4c34-9807-6e05d5075b52	Error: Not allowed by CORS
+20230523	08:15:20	71e3b46c-5c85-4203-a62f-8a4b816843c4	Error: Not allowed by CORS
+20230523	08:16:19	90e86317-7487-4106-aaa5-a79d78232a1b	Error: Not allowed by CORS
+20230523	08:16:30	ed14cc2a-9a76-470f-9d34-8190dde310f6	Error: Not allowed by CORS
+20230710	17:11:06	b81b580d-4dee-4870-a1a1-98119fb9aaee	Error: Not allowed by CORS
+20230710	17:11:10	93b4070b-3da8-48c4-a434-b9c231e7ef73	Error: Not allowed by CORS
+20230712	17:33:06	6111261a-76e3-46ee-bf0d-fb6df1daa25b	Error: Not allowed by CORS
+20230809	12:35:17	61c5c62e-d958-488a-b1ea-2f22a7e783df	Error: Not allowed by CORS
+20230809	12:35:25	810a314b-c5c4-49b6-b47b-0b31e8802757	Error: Not allowed by CORS
+20230809	12:35:28	95c4f39e-2b60-4220-8e4b-bdb9576d6ac4	Error: Not allowed by CORS
+20231106	08:32:04	9637bcdd-858a-451d-8ba7-d94eb8007761	Error: Not allowed by CORS
+20231106	08:34:05	4ad46c74-f282-44f3-85d9-b7f3796ab465	Error: Not allowed by CORS
+20231106	08:34:36	d5f96af6-e0bc-4db6-a024-044594ffbc2d	Error: Not allowed by CORS
+20231106	08:34:50	81c3326c-b2ef-4d76-b621-466213846054	Error: Not allowed by CORS
+20231106	08:35:44	25f7de19-85a0-4672-96a1-7e5ab035316d	Error: Not allowed by CORS
+20240108	13:00:25	ee95e595-b31f-40d1-859d-c588057085d2	Error: Not allowed by CORS
+20240108	13:02:06	b4f819a8-06eb-4621-a877-94a7004a0cf7	Error: Not allowed by CORS
+20240108	13:02:55	37fbf687-db97-439c-ae2e-387a1ae8a267	Error: Not allowed by CORS
+20240108	13:03:14	bfee0338-53eb-4bca-8501-815aab883efe	Error: Not allowed by CORS
+20240108	13:04:09	0deae048-9fc7-4209-b3e4-4e62297221a4	Error: Not allowed by CORS
+20240108	13:05:12	73ac6a84-b591-4beb-93b6-2def0a373d2d	Error: Not allowed by CORS
+20240108	13:05:23	34d3c2df-4f20-4c2d-b1d9-9059d1838ada	Error: Not allowed by CORS
+20240108	13:06:13	358cc60c-3207-4e61-b30f-6cc3baf7a06d	Error: Not allowed by CORS
+20240108	13:06:18	786abcf9-e796-4ab1-8887-65cf123aa797	Error: Not allowed by CORS
+20240108	13:06:34	9cb95c35-12bf-4c2a-a230-17f8ca88b289	Error: Not allowed by CORS
+20240108	13:06:39	4742c153-29dc-4863-b746-88441e9b67dd	Error: Not allowed by CORS
+20240108	13:07:19	35f10514-d015-48cd-a52a-cf6038c35c3c	Error: Not allowed by CORS
+20240108	13:08:34	828a72cb-29d2-4780-8038-fe8f0344bf50	Error: Not allowed by CORS
+20240108	13:08:39	ca566c69-9d1b-4de0-a90b-0b201298da6b	Error: Not allowed by CORS
+20240108	13:09:07	99dfc769-6399-42d0-9bbc-53d2dd3d2ae6	Error: Not allowed by CORS
+20240108	13:09:13	62f2a3c2-1c8a-4d61-b7dd-39165952eafd	Error: Not allowed by CORS
+20240108	13:09:34	31d5ed64-2ae3-4aa1-a3b6-449f916e5814	Error: Not allowed by CORS
+20240108	13:10:12	509e563c-4904-4789-808a-503d362571d2	Error: Not allowed by CORS
+20240108	13:10:17	0fb43bca-0e6c-455d-9082-e814f645382f	Error: Not allowed by CORS
+20240108	13:10:48	31286858-b26c-419d-a40a-b8c7ebfeb7ed	Error: Not allowed by CORS
+20240108	13:17:15	b8360362-00cb-486b-8d6c-934619323736	Error: Not allowed by CORS
+20240108	13:17:23	07c8dcab-9dac-4f94-a142-316afc5bbceb	Error: Not allowed by CORS
+20240108	13:17:32	70b480b5-c260-43da-978c-75b7e8e29988	Error: Not allowed by CORS
+20240108	14:00:58	8c1a2f31-6357-4073-9e41-c13bf5eeb6a2	Error: Not allowed by CORS
+20240108	14:01:08	a201d563-ee65-4b45-bed2-b642d32b9d21	Error: Not allowed by CORS
+20240108	14:01:28	14609b73-0b8a-4fa2-94ac-78e1acf172ad	Error: Not allowed by CORS
+20240108	14:01:38	81aa5376-ee53-49a2-b11b-4e8ab273a715	Error: Not allowed by CORS
+20240108	14:30:05	a6adc89c-2c83-4877-8191-62f0b292e877	Error: Not allowed by CORS
+20240108	14:30:28	a5595597-764c-4a83-972c-f0572b791aed	Error: Not allowed by CORS
+20240108	14:30:43	5374e013-4cf1-48f2-b014-2a91716f91b0	Error: Not allowed by CORS
+20240108	14:32:19	73393011-12e9-45a5-ba75-5f78807882f2	Error: Not allowed by CORS
+20240108	14:32:24	cb1fcdc0-a6da-44d4-9d96-fdab1776b67e	Error: Not allowed by CORS
+20240108	14:33:22	3d97c7d2-2866-4a15-bdf6-7daa9b594cb5	Error: Not allowed by CORS
+20240108	14:34:26	2e9c4706-0944-4c74-9402-20f05aea35b1	Error: Not allowed by CORS
+20240108	14:35:29	8fc73b06-667a-4c5c-a3e7-b6993724f14a	Error: Not allowed by CORS
+20240108	14:37:03	eda3b0a1-a0e5-43bb-82f2-cd35074035ab	Error: Not allowed by CORS
+20240109	10:00:10	43633036-6dd9-4749-ad3f-f53c354f0f2c	Error: Not allowed by CORS
+20240109	10:02:29	17484298-d693-4ab9-b554-9cf775426a3c	Error: Not allowed by CORS
+20240109	10:02:32	30a7112a-02fe-4c99-8ce2-0be700d9de78	Error: Not allowed by CORS
+20240109	10:02:38	c334144c-2ef4-4dce-ac1a-55aebf38fe5c	Error: Not allowed by CORS
+20240118	18:05:27	8a852911-e638-45e1-bcef-d76bde268447	SyntaxError: Unexpected token } in JSON at position 234
+20240118	18:08:51	20c9b515-15f0-4074-9760-7b6f9637f6e4	SyntaxError: Unexpected token } in JSON at position 233
+20240118	18:10:59	61b6a3e1-187a-4714-af0e-42693f7a8635	SyntaxError: Unexpected token : in JSON at position 265
+20240129	22:50:39	a879268a-d1d7-4f8f-a131-84ae7ec8f820	SyntaxError: Unexpected token } in JSON at position 197
+20240129	22:56:13	a25f66fa-3a92-448b-9ff4-dae9377dd82b	SyntaxError: Unexpected token } in JSON at position 197
+20240129	22:58:19	7845dd56-0810-48df-8d8c-23f090a0da75	SyntaxError: Unexpected token } in JSON at position 441
+20240215	15:22:19	6a4a90b9-3d71-469b-8e08-f4a1c40ec014	SyntaxError: Unexpected token " in JSON at position 0
+20240215	15:48:02	d9a1a0a0-0bf5-4ffa-ac23-3af74dd49a28	SyntaxError: Unexpected token " in JSON at position 0
+20240215	20:02:37	f26bd528-3b03-40be-ac5b-e2b2f659262c	SyntaxError: Unexpected token " in JSON at position 0
+20240215	20:04:27	b9719c2a-5f39-4287-81d2-0353e9f4dccb	SyntaxError: Unexpected token 7 in JSON at position 0
+20240215	20:04:38	a3cbdb6d-b32d-460d-b1bb-b865d061c1a9	SyntaxError: Unexpected token " in JSON at position 0
+20240215	20:04:44	8bd92d0c-5b0b-48c5-a890-e54b99f2abc0	SyntaxError: Unexpected token " in JSON at position 0
+20240215	20:54:33	34f3d0cc-9411-4e05-8038-2cc5b47eda9b	SyntaxError: Unexpected token ] in JSON at position 265
+20240408	01:57:02	f70d9424-21c9-4fe9-acae-ea424f35e803	MulterError: Unexpected field
+20240408	02:05:29	88241a83-a36c-4e2d-9f45-aacc92d29a7e	MulterError: Unexpected field
+20240408	02:11:32	792ad9c5-1238-4e39-a3ef-b381bb9b0c3d	MulterError: Unexpected field
+20240408	02:12:35	69056493-dbac-4fc8-b5d6-b9e3c6396b41	MulterError: Unexpected field
+20240408	02:13:46	025498b0-9b0b-485c-ad5e-a55360ed2418	MulterError: Unexpected field
+20240408	02:14:15	d0785e0b-55d4-463f-98f9-a627eecdf8b0	MulterError: Unexpected field
+20240408	02:14:37	5b47ab71-397d-43a7-804a-7bfdd82491d5	MulterError: Unexpected field
+20240408	02:21:11	debeb4fc-cc6b-422a-a69b-17cd45c38428	MulterError: Unexpected field
+20240408	02:21:33	2400876a-9071-414f-9b75-48a7b8601223	MulterError: Unexpected field
+20240408	02:31:31	f94268a8-b061-4620-afaa-6f390147d9e2	MulterError: Unexpected field
+20240408	02:33:15	dcf7d76f-47a9-4cad-95fd-4f72d2fb5ccf	MulterError: Unexpected field
+20240408	02:35:28	e3ebdf89-6f05-4ae9-8aa5-a4100c99c973	MulterError: Unexpected field
+20240408	02:38:18	688a7d97-86f1-4e3d-a85f-fe39fba3bcfb	Error: ENOENT: no such file or directory, open 'C:\Users\Administrator\Desktop\uploads\1712529498038-Eriz-group.jpg'
+20240408	02:39:14	9558e282-6aee-45d2-937a-f9c550284b11	MulterError: Unexpected field
+20240408	22:09:26	459e9648-6230-486c-9a9c-e2a21ed61ac0	MulterError: Unexpected field

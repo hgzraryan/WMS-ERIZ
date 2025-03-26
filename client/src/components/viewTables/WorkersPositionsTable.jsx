@@ -1,0 +1,172 @@
+import React, { useMemo, useState } from 'react'
+import ComponentToConfirm from '../ComponentToConfirm';
+import FeatherIcon from 'feather-icons-react/build/FeatherIcon';
+import { BiSolidInfoCircle } from 'react-icons/bi';
+import CustomTable from '../CustomTable';
+const RolesTypes = [
+  {
+    label: "Պահեստապետ",
+    value: "keeper",
+  },
+  {
+    label: "Վարորդ",
+    value: "driver",
+  },
+  {
+    label: "Աշխատակից",
+    value: "worker",
+  },
+];
+function WorkersPositionsTable({
+    confirmRef,
+    selectedItem,
+    selectedItemId,
+    handleDeleteItem,
+    handleOpenModal,
+    handleCloseModal,
+    workerRoles,
+    setWorkerRoles,
+    refreshData,
+    dataReceived
+  }) {
+    const [editRow, setEditRow] = useState(false);
+    const handleOpenEditModal = (value) => {
+      setEditRow((prev) => value);
+      console.log(value)
+    };
+      const columns = useMemo(
+        () => [
+          {
+            Header: (event) => (
+              <>                
+                <div  className="columnHeader">ID</div>
+              </>
+            ),
+            accessor: "workerRoleId",
+            sortable: true,
+            width: 80,
+            
+          },
+          {
+            Header: (event) => (
+              <>                
+                <div  className="columnHeader">Անվանում</div>
+              </>
+            ),
+            accessor: "name",
+            sortable: true,
+            width: 300,
+            
+          },
+          {
+            Header: (event) => (
+              <>                
+                <div  className="columnHeader">Տեսակ</div>
+              </>
+            ),
+            Cell:({row})=>(
+              <div>
+                {row.original.type==='keeper'
+                ?'Պահեստապետ'
+                :row.original.type==='driver'
+                ?'Վարորդ'
+                :row.original.type==='worker'
+                ?'Աշխատակից'
+                :''}
+              </div>
+            ),
+            accessor: "type",
+            sortable: true,
+            width: 300,
+            
+          },
+          {
+            Header: (event) => (
+              <>
+               
+                <div  className="columnHeader">Կարգավիճակ</div>
+              </>
+            ),
+            accessor: "isActive",
+            Cell: ({ row }) => (
+              <div className="d-flex align-items-center justify-content-center">
+                {console.log(row)}
+              {row.original?.isActive===1?'Ակտիվ':row.original?.isActive===0?'Պասիվ':'scsd'}
+              </div>
+            ),
+            width: 300,
+          },
+          // {
+          //   Header: (event) => (
+          //     <>
+          //       <div className="columnHeader">Գործողություններ</div>
+          //     </>
+          //   ),
+          //   accessor: "actions",
+          //   width: 300,
+          //   Cell: ({ row }) => (
+          //     <div className="d-flex align-items-center">
+          //        <div className="d-flex">
+          //         <a
+          //           className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+          //           data-bs-toggle="tooltip"
+          //           data-placement="top"
+          //           title="Edit"
+          //           href="#"
+          //           onClick={() => handleOpenEditModal(row.original)}
+    
+          //         >
+          //           <span className="icon">
+          //             <span className="feather-icon">
+          //               <FeatherIcon icon="edit" />
+          //             </span>
+          //           </span>
+          //         </a>
+          //         <a
+          //           className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+          //           data-bs-toggle="tooltip"
+          //           onClick={() => handleOpenModal(row.original)}
+          //           data-placement="top"
+          //           title=""
+          //           data-bs-original-title="Delete"
+          //           href="#"
+          //         >
+          //           <span className="icon">
+          //             <span className="feather-icon">
+          //               <FeatherIcon icon="trash" />
+          //             </span>
+          //           </span>
+          //         </a>
+          //       </div>
+          //     </div>
+          //   ),
+          //   disableSortBy: true,
+            
+          // },
+        ],
+        []
+      );
+      
+  return (
+    <>
+      {/* {
+      editRow &&(
+        <CustomerEdit customer={editRow} setEditRow={setEditRow} refreshData={refreshData}/>
+      )
+    } */}
+            <ComponentToConfirm
+              handleCloseModal={handleCloseModal}
+              handleOpenModal={handleOpenModal}
+              handleDeleteItem={handleDeleteItem}
+              selectedItemId={selectedItemId}
+              confirmRef={confirmRef}
+              keyName={selectedItem.name}
+              delId={selectedItem.customerId}
+            />
+                <CustomTable data={workerRoles} column={columns} dataReceived={dataReceived}/>
+
+    </>
+  )
+}
+
+export default WorkersPositionsTable

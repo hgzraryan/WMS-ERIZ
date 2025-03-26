@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const warehousesController = require('../../controllers/warehousesController');
+const ROLES_LIST = require('../../config/roles_list');
+const verifyRoles = require('../../middleware/verifyRoles');
+
+router.route('/:id')
+    .get(verifyRoles(ROLES_LIST.Admin), warehousesController.getAllWarehouseProducts)
+module.exports = router;
+
