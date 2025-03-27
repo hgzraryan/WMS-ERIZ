@@ -31,7 +31,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
     const axiosPrivate = useAxiosPrivate();
     const [country, setCountry] = useState("");
     const [region, setRegion] = useState("");
-    const [additionalData, setAdditionalData] = useState('')
+    const [additionalData, setAdditionalData] = useState(incomingProduct?.description)
     const [productClassType, setProductClassType] = useState("");
     const [attributs, setAttributs] = useState([]);
     const [productClassId, setProductClassId] = useState([]);
@@ -618,11 +618,11 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                     <div className="d-flex justify-content-between me-2">
                                                                         <label
                                                                             className="form-label"
-                                                                            htmlFor="birthday"
+                                                                            htmlFor="producedDate"
                                                                         >
                                                                             Արտադրման ամսաթիվ
                                                                         </label>
-                                                                        {methods.formState.errors.dateOfBirth && (
+                                                                        {methods.formState.errors.producedDate && (
                                                                             <span className="error text-red">
                                                                                 <span>
                                                                                     <img src={ErrorSvg} alt="errorSvg" />
@@ -633,8 +633,10 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                     </div>
                                                                     <div>
                                                                         <CustomDateComponent
-                                                                            name="dateOfBirth"
+                                                                            name="producedDate"
                                                                             control={methods.control}
+                                                                            defaultValue={incomingProduct?.producedDate}
+
                                                                         />
                                                                     </div>
                                                                 </div>
@@ -691,6 +693,8 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                         <CustomDateComponent
                                                                             name="expiredAlertDay"
                                                                             control={methods.control}
+                                                                            defaultValue={incomingProduct?.expiredAlertDay}
+
                                                                         />
                                                                     </div>
                                                                 </div>

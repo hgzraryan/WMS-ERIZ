@@ -8,6 +8,7 @@ import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import { ColumnFilter } from '../ColumnFilter';
 import { INCOMINGPRODUCTS_SEARCH_URL, PRODUCTS_URL } from '../../utils/constants';
 import IncomingProductsEdit from '../editModals/IncomingProductsEdit';
+import RepeatRegisterIncomingProduct from '../RepeatRegisterIncomingProduct';
 
 function IncomingProductsTable({
   confirmRef,
@@ -299,7 +300,8 @@ function IncomingProductsTable({
         <IncomingProductsPrintModal modalPrint={modalPrint} setModalPrint={setModalPrint} />
       )}
       {!!repeatIncoming && (
-        <ConfirmIncomingModal modalData={repeatIncoming} setRepeateOutgoing={setRepeateIncoming} refreshData={refreshData} />
+        <RepeatRegisterIncomingProduct incomingProduct={repeatIncoming} setEditRow={setRepeateIncoming} refreshData={refreshData} />
+        //<ConfirmIncomingModal modalData={repeatIncoming} setRepeateOutgoing={setRepeateIncoming} refreshData={refreshData} />
       )}
       <CustomTable data={incomingProducts} column={columns} dataReceived={dataReceived} />
 
