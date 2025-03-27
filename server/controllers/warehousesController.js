@@ -385,12 +385,13 @@ const registerOutgoing = async (req, res) => {
 
         // Step 2: Iterate over the outgoingList
         for (const item of outgoingList) {
-            const { id,productListId, outgoingCount } = item; // Extract the product id and outgoingCount from each item
-
+			const { id,productListId, outgoingCount } = item; // Extract the product id and outgoingCount from each item
+			
             // Step 3: Find the product by id
+			console.log(item)
             const product = await WarehouseBalance.findOne({ productListId: productListId });
-            const incomingProduct = await IncomingProducts.findOne({ incomingProductId: id });
 
+            const incomingProduct = await IncomingProducts.findOne({ incomingProductId: id });
             // Step 5: Ensure there is enough stock to decrement
             if (product.balance < outgoingCount || incomingProduct.balance < outgoingCount) {
                 return res.status(400).json({ message: `Not enough stock for product id ${productListId}` });
@@ -540,7 +541,7 @@ const getAllOutgoingProducts = async (req, res) => {
 				outgoingProductId: product.outgoingProductId,
                 partnerName: product.partnerName,
                 partnerId: product.partnerId,
-                currentProductid: item.id,
+                currentProductId: item.productListId,
                 name: item.name,
                 outgoingCount: item.outgoingCount,
                 warehouse: product.warehouse,
