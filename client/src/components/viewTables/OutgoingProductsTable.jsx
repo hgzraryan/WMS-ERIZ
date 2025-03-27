@@ -8,8 +8,6 @@ import { BiSolidInfoCircle } from 'react-icons/bi';
 import { ColumnFilter } from '../ColumnFilter';
 import {   OUTGOINGLIST_SEARCH_URL,OUTGOINGPRODUCTS_URL } from '../../utils/constants';
 import OutgoingProductEdit from '../editModals/OutgoingProductEdit';
-import ConfirmIncomingModal from '../ConfirmIncomingModal';
-import ConfirmOutgoingModal from '../ConfirmOutgoingModal';
 import RepeatRegisterOutgoingProduct from '../repeatAction/RepeatRegisterOutgoingProduct';
 
 function OutgoingProductsTable({

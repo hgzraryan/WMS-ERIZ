@@ -208,6 +208,11 @@ function ProductMovementsTable({
               ),
               accessor: "partnerName",
               sortable: true,
+              Cell: ({ row }) => (
+                <div className="d-flex align-items-center justify-content-center">
+                 {row.original?.partnerName || row.original?.warehouse}
+                </div>
+              ),
               width: 200,              
             },        
             // {

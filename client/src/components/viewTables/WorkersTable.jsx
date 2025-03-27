@@ -52,23 +52,23 @@ function WorkersTable({
             width: 300,
             
           },
-          {
-            Header: (event) => (
-              <>                
-                <div  className="columnAddress">Հասցե</div>
-              </>
-            ),
-            Cell: ({row}) => (
-              <>        
-              {console.log(row)}        
-                <div  className="columnHeader">{row?.original?.contact?.address?.city + "," +row?.original?.contact?.address?.street}</div>
-              </>
-            ),
-            accessor: "address",
-            sortable: true,
-            width: 300,
+          // {
+          //   Header: (event) => (
+          //     <>                
+          //       <div  className="columnAddress">Հասցե</div>
+          //     </>
+          //   ),
+          //   Cell: ({row}) => (
+          //     <>        
+          //     {console.log(row)}        
+          //       <div  className="columnHeader">{row?.original?.contact?.address?.city + "," +row?.original?.contact?.address?.street}</div>
+          //     </>
+          //   ),
+          //   accessor: "address",
+          //   sortable: true,
+          //   width: 300,
             
-          },
+          // },
           {
             Header: (event) => (
               <>                

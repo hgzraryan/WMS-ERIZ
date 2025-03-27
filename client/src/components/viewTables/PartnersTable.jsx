@@ -179,7 +179,7 @@ function PartnersTable({
               : ""}
           </div>
         ),
-        width: 120,
+        width: 150,
       },
       {
         Header: "Հեռախոս",
@@ -193,22 +193,22 @@ function PartnersTable({
         Cell: ({ row }) => <div>{row?.original?.contact?.email}</div>,
         width: 200,
       },
-      {
-        Header: "Հասցե",
-        accessor: "address",
-        Cell: ({ row }) => (
-          <div>
-            {row?.original?.contact?.address?.city},
-            {row?.original?.contact?.address?.street}
-          </div>
-        ),
-        width: 250,
-      },
+      // {
+      //   Header: "Հասցե",
+      //   accessor: "address",
+      //   Cell: ({ row }) => (
+      //     <div>
+      //       {row?.original?.contact?.address?.city},
+      //       {row?.original?.contact?.address?.street}
+      //     </div>
+      //   ),
+      //   width: 250,
+      // },
       {
         Header: "Գործընկերոջ տեսակը",
         accessor: "partnerType",
         Cell: ({ row }) => (
-          <div>
+          <div className="d-flex">
             {Object.values(row?.original?.partnerType || {}).map((el, index) => (
               <div key={index}>
                 {el === "customer"

@@ -454,26 +454,32 @@ function WareHousesList() {
       accessor: "warehouseName",
       width: 200,
     },
-    {
-      Header: "Գին",
-      accessor: "price",
-      width: 100,
-    },
-    {
-      Header: "Հատ",
-      accessor: "quantity",
-      width: 100,
-    },
+    // {
+    //   Header: "Գին",
+    //   accessor: "price",
+    //   width: 100,
+    // },
+    // {
+    //   Header: "Հատ",
+    //   accessor: "quantity",
+    //   width: 100,
+    // },
     {
       Header: "Մնացորդ",
       accessor: "balance",
+      Cell: ({ row }) => (
+        <div className="d-flex align-items-center justify-content-center">
+        {row?.original?.balance}         
+        {row?.original?.dimensions?.weight?'կգ':row.original?.dimensions?.volume?'լ':''}         
+        </div>
+      ),
       width: 100,
     },
     {
       Header: "Քանակ",
       accessor: "quantity1",
       Cell: ({ row }) => (
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center justify-content-center">
         {row?.original?.dimensions?.volume || row?.original?.dimensions?.weight}         
         {row?.original?.dimensions?.weight?'կգ':row.original?.dimensions?.volume?'լ':''}         
         </div>
@@ -503,6 +509,11 @@ function WareHousesList() {
     {
       Header: "Գործընկեր",
       accessor: "partnerName",
+      Cell: ({ row }) => (
+        <div className="d-flex align-items-center">
+        {row?.original?.partnerName || row?.original?.warehouseName}        
+        </div>
+      ),
       width: 200,
     },
     // {

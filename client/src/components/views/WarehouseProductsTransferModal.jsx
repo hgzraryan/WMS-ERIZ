@@ -41,6 +41,7 @@ const notify = (text) =>
 //       setDiagnosticsPrice(totalPayed)  
 //     };
   const onProductSelect = ({data}) => {
+    debugger
     setCurrentProduct(data)
     setProductBalance(data?.balance)  
     };
@@ -108,6 +109,7 @@ const notify = (text) =>
         //console.log(mon)
         console.log(data)
         console.log(currentProduct)
+        
         const newTransfer = {
          // transCount: +data?.count|| null,
           fromWarehouseId: transfer.warehouseId || null,
@@ -119,7 +121,7 @@ const notify = (text) =>
           currentProductId: data?.product?.value || null,
           productCategory: currentProduct?.productCategory || null,
           productIdent: currentProduct?.productIdent || null,
-          countryOfOrigin:currentProduct.countryOfOrigin,
+          countryOfOrigin:currentProduct.countryOfOrigin || null,
           stock: data?.impWarehouse?.value || null,
           partner: currentProduct.partner || null,
           driver: currentProduct.driver || null,
@@ -145,33 +147,38 @@ const notify = (text) =>
         //const updatedData = deleteNullProperties(newDiagnose)
         
     // if(data?.count<=productBalance){
+        if(newTransfer?.fromWarehouseId== newTransfer?.stock){
+          setErrMsg('Ընտրեք մեկ այլ պահեստ')
+          return
+        }else{
 
-        try {
+          try {
             await axiosPrivate.post(TRANSFERPRODUCTS_URL, newTransfer, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
-            });
-            
-            setTransfer(false);
-            refreshData();
-            notify(
+              });
+              
+              setTransfer(false);
+              refreshData();
+              notify(
                 `Փոխանցումը կատարված է`
-            );
+              );
         } catch (err) {
             if (!err?.response) {
-                setErrMsg("Համակարգի սխալ");
+              setErrMsg("Համակարգի սխալ");
             }  else {
-                setErrMsg("Համակարգի սխալ");
+              setErrMsg("Համակարգի սխալ");
             }
+          }
         }
-    // }else if(data?.moneyTransfer>productBalance) {
+          // }else if(data?.moneyTransfer>productBalance) {
     //     setErrMsg('Մուտքագրված գումարի չափսը սխալ է')
     // }
       });
   return (
     <Modal
     show={() => true}
-    size="md"
+    size="lg"
     onHide={() => setTransfer(false)}
   >
     <Modal.Header closeButton>
@@ -300,7 +307,10 @@ const notify = (text) =>
                                             
     
                                              { return { value: item.incomingProductId,
-                                               label:item.incomingProductId+"․ "+item.name +"/ Մնացորդ-"+item?.balance,
+                                               label:`${item.incomingProductId}․ 
+                                               ${item.name} 
+                                               / Արտ․ ամսաթիվ-${item.producedDate}
+                                               / Մնացորդ-${item?.balance}`,
                                                balance:item?.balance,
                                               data:item}
                                               }

@@ -4,7 +4,6 @@ import "../../dist/css/data-table.css";
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { BiSolidInfoCircle } from 'react-icons/bi';
 import IncomingProductsPrintModal from '../printModals/IncomingProductsPrintModal';
-import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import { ColumnFilter } from '../ColumnFilter';
 import { INCOMINGPRODUCTS_SEARCH_URL, PRODUCTS_URL } from '../../utils/constants';
 import IncomingProductsEdit from '../editModals/IncomingProductsEdit';
@@ -301,7 +300,6 @@ function IncomingProductsTable({
       )}
       {!!repeatIncoming && (
         <RepeatRegisterIncomingProduct incomingProduct={repeatIncoming} setEditRow={setRepeateIncoming} refreshData={refreshData} />
-        //<ConfirmIncomingModal modalData={repeatIncoming} setRepeateOutgoing={setRepeateIncoming} refreshData={refreshData} />
       )}
       <CustomTable data={incomingProducts} column={columns} dataReceived={dataReceived} />
 
