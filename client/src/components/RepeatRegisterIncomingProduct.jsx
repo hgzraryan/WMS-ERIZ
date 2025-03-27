@@ -2,7 +2,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import ErrorSvg from "../../dist/svg/error.svg";
+import ErrorSvg from "../dist/svg/error.svg";
 import { Input } from "./Input";
 
 import {
