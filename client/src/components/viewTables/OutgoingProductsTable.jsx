@@ -10,6 +10,7 @@ import {   OUTGOINGLIST_SEARCH_URL,OUTGOINGPRODUCTS_URL } from '../../utils/cons
 import OutgoingProductEdit from '../editModals/OutgoingProductEdit';
 import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import ConfirmOutgoingModal from '../ConfirmOutgoingModal';
+import RepeatRegisterOutgoingProduct from '../repeatAction/RepeatRegisterOutgoingProduct';
 
 function OutgoingProductsTable({
     outgoingProducts,
@@ -285,7 +286,7 @@ function OutgoingProductsTable({
     return (
       <>
         {!!repeatOutgoing && (
-          <ConfirmOutgoingModal modalData={repeatOutgoing} setRepeateOutgoing={setRepeatOutgoing} refreshData={refreshData}/>
+          <RepeatRegisterOutgoingProduct outgoingProduct={repeatOutgoing} setRepeateOutgoing={setRepeatOutgoing} refreshData={refreshData}/>
         )}
         {!!editRow &&(
           <OutgoingProductEdit outgoingProduct={editRow} setEditRow={setEditRow} refreshData={refreshData}/>

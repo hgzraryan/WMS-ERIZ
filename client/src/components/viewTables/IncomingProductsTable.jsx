@@ -8,7 +8,7 @@ import ConfirmIncomingModal from '../ConfirmIncomingModal';
 import { ColumnFilter } from '../ColumnFilter';
 import { INCOMINGPRODUCTS_SEARCH_URL, PRODUCTS_URL } from '../../utils/constants';
 import IncomingProductsEdit from '../editModals/IncomingProductsEdit';
-import RepeatRegisterIncomingProduct from '../RepeatRegisterIncomingProduct';
+import RepeatRegisterIncomingProduct from '../repeatAction/RepeatRegisterIncomingProduct';
 
 function IncomingProductsTable({
   confirmRef,

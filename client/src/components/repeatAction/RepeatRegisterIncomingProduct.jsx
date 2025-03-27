@@ -2,8 +2,8 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
-import ErrorSvg from "../dist/svg/error.svg";
-import { Input } from "./Input";
+import ErrorSvg from "../../dist/svg/error.svg";
+import { Input } from "../Input";
 
 import {
     volume_validation,
@@ -12,18 +12,18 @@ import {
     reorderLevel_validation,
     Weight_validation,
     barcode_validation,
-} from "../utils/inputValidations";
+} from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL } from "../utils/constants";
-import { deleteNullProperties } from "../utils/helper";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL } from "../../utils/constants";
+import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
-import CustomDateComponent from "./CustomDateComponent";
+import CustomDateComponent from "../CustomDateComponent";
 import { CountryDropdown, CountryRegionData } from 'react-country-region-selector';
 import moment from "moment";
-import CustomDateTimeComponent from "./CustomDateTimeComponent copy";
-import ReactQuillEditor from "./ReactQuillEditor";
+import CustomDateTimeComponent from "../CustomDateTimeComponent copy";
+import ReactQuillEditor from "../ReactQuillEditor";
 
 function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshData }) {
     const navigate = useNavigate();
