@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { forwardRef } from "react";
 import { useTable } from "react-table";
 // import Barcode from "react-barcode";

@@ -101,7 +101,7 @@ function OutgoingProductsTable({
                   <div  className="name">Հաճախորդ</div>
                 </>
               ),
-              accessor: "customer",
+              accessor: "partnerName",
               sortable: true,
               width: 200,
               Filter: ({ column: { id } })=>(

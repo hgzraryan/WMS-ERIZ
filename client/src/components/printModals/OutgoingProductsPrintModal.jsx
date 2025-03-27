@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 //import ResearchesPrintWrapper from "../ResearchesPrintWrapper";
@@ -152,24 +153,6 @@ console.log(modalPrint)
                 /> */}
                 
               </div>
-              {/* <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "1.3rem",
-                    color: "#4eafcb",
-                    textTransform: "uppercase",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  ԱԽտորոշման կենտրոն
-                </p>
-              </div> */}
             </div>
             <div>
               <div>
@@ -284,25 +267,6 @@ console.log(modalPrint)
 
                   </li>
                 </ul>
-                {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: "2.3rem",
-                      color: "#4eafcb",
-                      textTransform: "uppercase",
-                      fontWeight: "bolder",
-                      marginTop: "-10px",
-                    }}
-                  >
-                    Laboratory
-                  </p>
-                </div> */}
               </div>
             </div>
           </header>
@@ -312,7 +276,7 @@ console.log(modalPrint)
             height: "3px",
             borderRadius: ".3rem",
             background: "linear-gradient(to right, #018a54 65%, transparent)",
-            margin:'0 20px 0 20px' 
+            margin:'0 10px 0 10px' 
           }}
         ></div>
         {/* <div

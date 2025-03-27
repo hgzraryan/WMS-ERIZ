@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 //import ResearchesPrintWrapper from "../ResearchesPrintWrapper";

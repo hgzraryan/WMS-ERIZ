@@ -284,9 +284,9 @@ function ExportData({ handleToggleExportModal, toggleExport, section}) {
       }))}else{
       return
     }
-    delete exportData[0]._id;
     const formattedData = exportData.map(item => {
       let translatedItem = {};
+      delete item._id;
       Object.keys(item).forEach(key => {
         translatedItem[translationMap[key] || key] = item[key]; // Use translated key or default to original
       });
