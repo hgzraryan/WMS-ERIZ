@@ -293,10 +293,10 @@ const getAllWarehouseProducts = async (req, res) => {
 			},
 			{
 				$lookup: {
-					from: "suppliers", // Name of the suppliers collection
-					localField: "supplier", // Field in products collection (supplier id)
-					foreignField: "supplierId", // Field in suppliers collection (supplier id)
-					as: "supplierInfo" // Alias for the joined data
+					from: "partners", 
+					localField: "partner", 
+					foreignField: "partnerId", 
+					as: "partnerInfo" 
 				}
 			},
 			{
@@ -312,6 +312,9 @@ const getAllWarehouseProducts = async (req, res) => {
 			},
 			{
 				$unwind: { path: "$warehouseInfo", preserveNullAndEmptyArrays: true } // Handle missing warehouses
+			},
+			{
+				$unwind: { path: "$partnerInfo", preserveNullAndEmptyArrays: true }
 			},
 			{
 				$project: {
@@ -337,8 +340,10 @@ const getAllWarehouseProducts = async (req, res) => {
 					productIdent: 1,
 					expirationDate: 1,
 					actionDate: 1,
-					supplierId: "$supplierInfo.supplierId",
-					supplierName: "$supplierInfo.name",
+					//supplierId: "$supplierInfo.supplierId",
+					//supplierName: "$supplierInfo.name",
+					partnerId: "$partnerInfo.partnerId",
+					partnerName: "$partnerInfo.name",
 					warehouseId: "$warehouseInfo.warehouseId",
 					warehouseName: "$warehouseInfo.name"
 				}
@@ -526,7 +531,6 @@ const getAllOutgoingProducts = async (req, res) => {
 
         // Count total documents for pagination purposes
         const count = await OutgoingProducts.countDocuments();
-console.log(outgoingProducts[0].outgoingList)
         // Transform the data to the desired format
         const transformedData = outgoingProducts.flatMap(product => 
             product.outgoingList.map(item => ({
