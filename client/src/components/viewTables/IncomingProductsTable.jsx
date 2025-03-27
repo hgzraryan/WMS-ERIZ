@@ -103,6 +103,18 @@ function IncomingProductsTable({
         Header: (event) => (
           <>
 
+            <div className="name">Արտ․ ամսաթիվ</div>
+          </>
+        ),
+        accessor: "producedDate",
+        sortable: true,
+        width: 120,
+
+      },
+      {
+        Header: (event) => (
+          <>
+
             <div className="name">Դասակարգ</div>
           </>
         ),
@@ -184,7 +196,7 @@ function IncomingProductsTable({
         ),
         accessor: "partnerName",
         sortable: true,
-        width: 200,
+        width: 170,
         Filter: ({ column: { id } }) => (
           <ColumnFilter
             id={id}
@@ -212,7 +224,7 @@ function IncomingProductsTable({
         ),
         accessor: "warehouseName",
         sortable: true,
-        width: 150,
+        width: 120,
 
       },
       {
@@ -222,7 +234,7 @@ function IncomingProductsTable({
           </>
         ),
         accessor: "actions",
-        width: 250,
+        width: 200,
         Cell: ({ row }) => (
           <div className="d-flex align-items-center">
             {/* <BiSolidInfoCircle

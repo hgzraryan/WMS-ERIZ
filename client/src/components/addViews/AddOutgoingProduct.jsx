@@ -17,20 +17,7 @@ import TotalView from "../viewTables/TotalView";
 import { Input } from "../Input";
 import { price_validation, sellingPrice_validation } from "../../utils/inputValidations";
 import ReactQuillEditor from "../ReactQuillEditor";
-const test = [
-  {
-    name: 'xozi bud',
-    count: 5,
-    price: 1200,
-    totalPrice: 6000
-  },
-  {
-    name: 'xozi glux',
-    count: 3,
-    price: 1500,
-    totalPrice: 4500
-  },
-]
+
 function AddOutgoingProduct({
   handleToggleCreateModal,
   productCategories,
@@ -122,6 +109,7 @@ function AddOutgoingProduct({
     tmp.barcode = row.original.barcode
     tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
     tmp.currency = row.original.currency
+    tmp.producedDate = row.original.producedDate
 
     const tmpData = []
     tmpData.push(tmp)
@@ -299,10 +287,10 @@ function AddOutgoingProduct({
         Header: (event) => (
           <>
 
-            <div className="columnHeader">Պիտ. ամսաթիվ</div>
+            <div className="columnHeader">Արտ. ամսաթիվ</div>
           </>
         ),
-        accessor: "expirationDate",
+        accessor: "producedDate",
         style: {
           // Custom style for the 'description' column
         },

@@ -106,6 +106,34 @@ function ProductMovementsTable({
               
             },
             {
+              Header: (event) => (
+                <>
+                  
+                  <div  className="name">Արտ․ ամսաթիվ</div>
+                </>
+              ),
+              accessor: "producedDate",
+              sortable: true,
+              // Filter: ({ column: { id } })=>(
+              //   <ColumnFilter
+              //     id={id}
+              //     setData={setProductMovements}
+              //     data={productMovements}
+              //     placeholder={['startDate','endDate']}
+              //     getUrl={PRODUCTSMOVEMENTS_URL}
+              //     searchUrl={PRODUCTSMOVEMENTS__SEARCH_URL}
+              //     handleSearchPageCount={(val)=>handleSearchPageCount(val)}
+              //     filterData={filterData}
+              //     setFilterData={(newFilterData) => {
+              //         setFilterDataJSON(JSON.stringify({...filterData, ...newFilterData}))
+              //         setFilterData(newFilterData)   
+              //     }}
+              //   />
+              // ),    
+              width: 120,
+              
+            },
+            {
                 Header: (event) => (
                   <>
                     

@@ -67,6 +67,9 @@ const productsMovementsSchema = new Schema({
   },
   sellingPrice: {
 	  type: Number, 
+  },
+  producedDate: {
+	  type: String, 
   }
   
 },{
