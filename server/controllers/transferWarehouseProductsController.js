@@ -56,7 +56,9 @@ console.log(req.body)
 		warehouse: outgoingData.outgoingList[0].warehouse,
 		balance: outgoingData.outgoingList[0].balance,
 		driver: outgoingData.driver,	
-		actionType:'outgoing'
+		actionType:'outgoing',
+		sellingPrice:outgoingData.sellingPrice,
+	  	producedDate:outgoingData.outgoingList[0].producedDate
 	}
 	const newProductMovements1 = new ProductsMovements(ProductMovementData1)
 	await newProductMovements1.save();
@@ -104,7 +106,10 @@ console.log(req.body)
 			  warehouse: productData.stock,
 			  balance: productData.balance,
 			  driver: productData.driver,	
-			  actionType:'incoming'
+			  actionType:'incoming',
+			  sellingPrice: productData.sellingPrice,
+			  partner:productData.partner,
+			  producedDate:productData.producedDate
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
