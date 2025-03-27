@@ -37,6 +37,12 @@ const OutgoingSchema = new Schema({
     currency: {
       type: String,
     },
+    producedDate: {
+      type: String,
+    },
+    unit: {
+      type: String,
+    },
   });
 const OutgoingProductsSchema = new Schema({
   outgoingProductId: { 

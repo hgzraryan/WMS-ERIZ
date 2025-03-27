@@ -434,7 +434,9 @@ const ProductMovementData = {
 	  balance: outgoingData.outgoingList[0].balance,
 	  driver: outgoingData.driver,	
 	  actionType:'outgoing',
-	  sellingPrice:outgoingData.sellingPrice
+	  sellingPrice:outgoingData.sellingPrice,
+	  producedDate:outgoingData.outgoingList[0].producedDate
+
 }
 const newProductMovements = new ProductsMovements(ProductMovementData)
 await newProductMovements.save();
@@ -525,6 +527,7 @@ const getAllOutgoingProducts = async (req, res) => {
 					warehouseId:"$warehouseInfo.warehouseId",
 					balance:1,
 					sellingPrice:1,
+					producedDate:1
                 }
             }
         ]);

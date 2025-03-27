@@ -299,6 +299,7 @@ const getIncomingProductsById = async (req, res) => {
 				warehouseId:"$warehouseInfo.warehouseId",
 				warehouseName:"$warehouseInfo.name",
 				expirationDate:1,
+				producedDate:1,
 				actionDate:1
 			}
 		  }
@@ -340,7 +341,7 @@ const registerIncomingProduct = async (req, res) => {
 		const weight = req.body.dimensions.weight;
 		const volume = req.body.dimensions.volume;
 		const balance = req.body.balance;
-		const sellingPrice = req.body.sellingPrice;
+		const producedDate = req.body.producedDate;
 
 		function generateSKU(category) {
 			// Check if the category is a string
@@ -393,7 +394,8 @@ const registerIncomingProduct = async (req, res) => {
 			  driver: productData.driver,	
 			  actionType:'incoming',
 			  sellingPrice: productData.sellingPrice,
-			  partner:productData.partner
+			  partner:productData.partner,
+			  producedDate:productData.producedDate
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
