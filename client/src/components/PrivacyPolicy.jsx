@@ -19,7 +19,7 @@ const Missing = () => {
 <article>
 <Helmet>
     <meta charSet="utf-8" />
-    <title>Vteam LIMS | error 404</title>
+    <title>Vteam ERP | error 404</title>
     <link rel="icon" type="image/x-icon" href="/dist/img/favicon.ico"></link>
 </Helmet>
 

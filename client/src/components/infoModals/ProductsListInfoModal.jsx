@@ -25,6 +25,8 @@ function ProductsListInfoModal({setModalInfo,modalInfo}) {
                        <div className="separator-full m-0"></div>
                        <div className="d-flex justify-content-between">  <span>Անվանում </span> <span>{modalInfo?.name}</span></div>
                        <div className="separator-full m-0"></div>
+                       <div className="d-flex justify-content-between">  <span>Հիշեցման նվազագույն քանակ </span> <span>{modalInfo?.reorderLevel}</span></div>
+                       <div className="separator-full m-0"></div>
                        <div className="d-flex justify-content-between">  <span>Դասակարգ </span> <span>{modalInfo?.category}</span></div>
                        <div className="separator-full m-0"></div>
                        <div className="d-flex justify-content-between">  <span>Նկարագրություն</span> <span>{modalInfo?.description}</span></div>

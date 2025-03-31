@@ -24,7 +24,7 @@ function Setup() {
       <div>
      <Helmet>
     <meta charSet="utf-8" />
-    <title>Vteam LIMS | Setup</title>
+    <title>Vteam ERP | Setup</title>
     <link rel="icon" type="image/x-icon" href="../dist/img/favicon.ico"></link>
     </Helmet>
       </div>

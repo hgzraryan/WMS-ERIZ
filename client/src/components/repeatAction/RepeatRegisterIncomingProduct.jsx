@@ -1,5 +1,5 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import ErrorSvg from "../../dist/svg/error.svg";
@@ -8,10 +8,11 @@ import { Input } from "../Input";
 import {
     volume_validation,
     pallet_validation,
-    Quantity_validation,
-    reorderLevel_validation,
-    Weight_validation,
     barcode_validation,
+    BoxCount_validation,
+    BoxCapacity_validation,
+    UnitWeight_validation,
+    manufacturer_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -44,12 +45,28 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
     const [productsList, setProductsList] = useState([])
     const [partnersList, setPartnersList] = useState([])
     const [workers, setWorkers] = useState([])
+
     const methods = useForm({
         mode: "onChange",
     });
     const { watch } = methods;
     const weightValue = watch("weight"); // Watch the weight input
-    const volumeValue = watch("volume"); // Watch the volume input
+  const volumeValue = watch("volume"); // Watch the volume input
+  const boxCount = watch("boxCount"); // Watch the volume input
+  const boxCapacity = watch("boxCapacity"); // Watch the volume input
+  const unitWeight = watch("unitWeight"); // Watch the volume input"volume"); // Watch the volume input
+
+      const totalWeight = useMemo(() => {
+        const count = parseFloat(boxCount) || 0;
+        const capacity = parseFloat(boxCapacity) || 0;
+        const weight = parseFloat(unitWeight) || 0;
+        return count * capacity * weight;
+      }, [boxCount, boxCapacity, unitWeight]);
+      const totalCount = useMemo(() => {
+        const count = parseFloat(boxCount) || 0;
+        const capacity = parseFloat(boxCapacity) || 0;
+        return count * capacity;
+      }, [boxCount, boxCapacity]);
     const { trigger } = useForm();
     console.log(incomingProduct)
     useEffect(() => {
@@ -130,6 +147,10 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                 volume: +data.volume || null,
               },
               palletCount:+data?.pallet,
+              boxCount:+boxCount,
+              unitWeight:+unitWeight,
+              boxCapacity:+boxCapacity,
+              manufacturer:data?.manufacturer,
               currency:currency,
               price:+amount,
               sellingPrice:0,//+data.sellingPrice,
@@ -615,10 +636,16 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                                                 <Input {...pallet_validation} defaultValue={incomingProduct?.palletCount} />
                                                             </div>
                                                             <div className="col-sm-6">
-                                                                <Input {...Quantity_validation} defaultValue={incomingProduct?.quantity} />
+                                                                <Input {...volume_validation} 
+                                                                defaultValue={incomingProduct?.dimensions?.volume} 
+                                                                name="volume" 
+                                                                disabled={!!totalWeight}
+                                                                validation={{required:{ value:!totalWeight, message: "պարտադիր"}}}/>
                                                             </div>
                                                         </div>
-                                                        <div className="row gx-3">
+                                                        <div className="separator-full"></div>
+
+                                                        {/* <div className="row gx-3">
                                                             <div className="col-sm-6">
                                                                 <Input {...Weight_validation}
                                                                  defaultValue={incomingProduct?.dimensions?.weight} 
@@ -626,15 +653,87 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                                                  disabled={!!volumeValue}
                                                                  validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}/>
                                                             </div>
-                                                            <div className="col-sm-6">
-                                                                <Input {...volume_validation} 
-                                                                defaultValue={incomingProduct?.dimensions?.volume} 
-                                                                name="volume" 
-                                                                disabled={!!weightValue}
-                                                                validation={{required:{ value:!weightValue, message: "պարտադիր"}}}/>
-                                                            </div>
+                                                          
 
-                                                        </div>
+                                                        </div> */}
+                                                                                         <div className="row gx-3">
+                                                         <div className="col-sm-6">
+                                                           <Input {...BoxCount_validation} 
+                                                           defaultValue={incomingProduct?.boxCount}
+                                                            />
+                                                         </div>
+                                                         <div className="col-sm-6">
+                                                           <Input {...BoxCapacity_validation}
+                                                           defaultValue={incomingProduct?.boxCapacity}/>
+                                                         </div>
+                                                       </div>
+                                                       <div className="row gx-3">
+                                                         <div className="col-sm-6">
+                                                           <Input {...UnitWeight_validation} 
+                                                           defaultValue={incomingProduct?.unitWeight}/>
+                                                         </div>
+                                                         {/* <div className="col-sm-6">
+                                                           <Input {...Weight_validation} 
+                                                           name="weight" 
+                                                           disabled={!!volumeValue}
+                                                           validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}
+                                                            />
+                                                         </div> */}
+                                                         <div className="col-sm-6">
+                                                         <div className="form-group">
+                                                           <div className="d-flex justify-content-between">
+                                                             <label htmlFor="totalWeight" className="form-label">Ընդհանուր քաշը(Կգ)</label>
+                                                             </div>
+                                                             <input 
+                                                             id="totalWeight" 
+                                                             type="text" 
+                                                             className="form-control" 
+                                                             placeholder="Ընդհանուր քաշը" 
+                                                             min="" name="totalWeight" 
+                                                             value={totalWeight}
+                                                             readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                                             />
+                                                             </div>
+                                                           {/* <label>
+                                                             Ընդհանուր քաշը
+                                                           </label>
+                                                           <input 
+                                                           className="form-control"
+                                                           disabled={true}
+                                                           value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                                                           onChange={{}}
+                                                            /> */}
+                                                         </div>
+                                                       </div>
+                                                       <div className="row gx-3">
+                                                        
+                                                         <div className="col-sm-6">
+                                                         <div className="form-group">
+                                                           <div className="d-flex justify-content-between">
+                                                             <label htmlFor="totalCount" className="form-label">Ընդհանուր քանակ(հատ)</label>
+                                                             </div>
+                                                             <input 
+                                                             id="totalCount" 
+                                                             type="text" 
+                                                             className="form-control" 
+                                                             placeholder="Ընդհանուր քաշը" 
+                                                             min="" name="totalCount" 
+                                                             value={totalCount}
+                                                             readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                                             />
+                                                             </div>
+                                                           {/* <label>
+                                                             Ընդհանուր քաշը
+                                                           </label>
+                                                           <input 
+                                                           className="form-control"
+                                                           disabled={true}
+                                                           value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                                                           onChange={{}}
+                                                            /> */}
+                                                         </div>
+                                                       </div>
+                                                       <div className="separator-full"></div>
 
                                                         <div className="row gx-3">
                                                             <div className="col-sm-6">
@@ -666,8 +765,11 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            <div className="col-sm-6">
+                                                            {/* <div className="col-sm-6">
                                                                 <Input {...reorderLevel_validation} defaultValue={incomingProduct?.reorderLevel} />
+                                                            </div> */}
+                                                            <div className="col-sm-6">
+                                                              <Input {...manufacturer_validation} />
                                                             </div>
                                                             {/* <div className="col-sm-6">
                                     <Input {...sellingPrice_validation} />
@@ -678,6 +780,12 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                     <Input {...reorderLevel_validation} />
                                   </div>
                                 </div> */}
+                                <div className="row gx-3">                           
+                                                           
+                                                            {/* <div className="col-sm-6">
+                                                              <Input {...sellingPrice_validation} />
+                                                            </div> */}
+                                                          </div>
                                                         <div className="row gx-3">
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">

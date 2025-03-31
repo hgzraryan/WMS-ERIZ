@@ -324,8 +324,25 @@ export const name_validation = {
       message: 'պարտադիր',
     },
     maxLength: {
-      value: 30,
-      message: '30 characters max',
+      value: 100,
+      message: '100 characters max',
+    },
+  },
+}
+export const manufacturer_validation = {
+  name: 'manufacturer',
+  label: 'Արտադրող',
+  type: 'text',
+  id: 'manufacturer',
+  placeholder: "Արտադրող",
+  validation: {
+    required: {
+      value: true,
+      message: 'պարտադիր',
+    },
+    maxLength: {
+      value: 100,
+      message: '100 characters max',
     },
   },
 }
@@ -715,12 +732,51 @@ export const Dimension_validation = {
     },
   },
 };
+export const BoxCount_validation = {
+  name: "boxCount",
+  label: "Արկղերի քանակ(հատ)",
+  type: "text",
+  id: "BoxCount",
+  placeholder: "Արկղերի քանակ(հատ)",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const BoxCapacity_validation = {
+  name: "boxCapacity",
+  label: "Արկղի տարող․(հատ)",
+  type: "text",
+  id: "boxCapacity",
+  placeholder: "Արկղի տարող․(հատ)",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
 export const Weight_validation = {
   name: "weight",
   label: "Քաշը(կգ)",
   type: "text",
   id: "weight",
   placeholder: "Քաշը",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
+export const UnitWeight_validation = {
+  name: "unitWeight",
+  label: "Միավորի քաշը(կգ)",
+  type: "text",
+  id: "UnitWeight",
+  placeholder: "Միավորի քաշը",
   validation: {
     required: {
       value: true,

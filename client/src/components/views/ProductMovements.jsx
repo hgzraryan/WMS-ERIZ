@@ -10,6 +10,7 @@ import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import ProductMovementsTable from '../viewTables/ProductMovementsTable';
 import ReactPaginate from 'react-paginate';
 import ExportData from '../ExportData';
+import FilterPanel from '../FilterPanel';
 
 function ProductMovements() {
     const { pageNumber } = useParams();
@@ -158,6 +159,7 @@ function ProductMovements() {
                       id="scrollableDiv"
                       style={{overflow: "auto" }}
                     >
+                      {/* <FilterPanel/> */}
                         <ProductMovementsTable
                           confirmRef={confirmAgentsRef}
                           selectedItem={selectedItem}

@@ -149,7 +149,7 @@ const Users = () => {
     <div>
 	<Helmet>
 		<meta charSet="utf-8" />
-		<title>Vteam LIMS | Users</title>
+		<title>Vteam ERP | Users</title>
 		<link rel="icon" type="image/x-icon" href="dist/img/favicon.ico"></link>
 	</Helmet>
       <div className="contactapp-wrap">

@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import ErrorSvg from "../../dist/svg/error.svg";
 import { Input } from "../Input";
-import { name_validation } from "../../utils/inputValidations";
+import { name_validation, reorderLevel_validation } from "../../utils/inputValidations";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { PRODUCTCATEGORIES_URL, REGISTER_PRODUCTSLIST } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
@@ -59,6 +59,7 @@ function AddProductsList({
       const onSubmit = methods.handleSubmit(async (data) => {
         const newProductsList = {
           name: data?.name || null,
+          reorderLevel: +data?.reorderLevel,
           category: data?.productCategory?.value || 0,
           description: additionalData,
         };
@@ -170,6 +171,12 @@ function AddProductsList({
                                 />
                               </div>
                             </div>
+                          </div>
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...reorderLevel_validation} />
+                            </div>
+                            
                           </div>
                          
                         </div>

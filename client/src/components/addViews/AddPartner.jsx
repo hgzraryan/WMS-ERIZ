@@ -547,7 +547,7 @@ function AddPartner({ setIsOpen, refreshData }) {
                               <Input {...zipCode_validation} />
                             </div>
                             <div className="col-sm-6">
-                              <Input {...email_validation} />
+                              <Input {...email_validation} validation={{required:{ value:false}}}/>
                             </div>
                           </div>
 

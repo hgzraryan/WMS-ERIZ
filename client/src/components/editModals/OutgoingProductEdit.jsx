@@ -111,34 +111,34 @@ function OutgoingProductEdit(
       const onSubmit = methods.handleSubmit(async (data) => {
     
        // if (outgoingList.length) {
-          try {
-            await axiosPrivate.post('/registerOutgoing',
-              {
-                customer: data.partner.value,
-                driver: data.driver.value,
-                sellingPrice: +data.sellingPrice,
-                actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-                outgoingList: outgoingList,
-                description: additionalData,
-              }, {
-              headers: { "Content-Type": "application/json" },
-              withCredentials: true,
-            });
+          // try {
+          //   await axiosPrivate.post('/registerOutgoing',
+          //     {
+          //       customer: data.partner.value,
+          //       driver: data.driver.value,
+          //       sellingPrice: +data.sellingPrice,
+          //       actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
+          //       outgoingList: outgoingList,
+          //       description: additionalData,
+          //     }, {
+          //     headers: { "Content-Type": "application/json" },
+          //     withCredentials: true,
+          //   });
     
-            setEditRow(false);
-            refreshData();
-            notify(
-              `Ապրանքը  ելքագրված է`
-            );
-          } catch (err) {
-            if (!err?.response) {
-              setErrMsg("No Server Response");
-            } else if (err.response?.status === 409) {
-              setErrMsg("Username Taken");
-            } else {
-              setErrMsg(" Failed");
-            }
-          }
+          //   setEditRow(false);
+          //   refreshData();
+          //   notify(
+          //     `Ապրանքը  ելքագրված է`
+          //   );
+          // } catch (err) {
+          //   if (!err?.response) {
+          //     setErrMsg("No Server Response");
+          //   } else if (err.response?.status === 409) {
+          //     setErrMsg("Username Taken");
+          //   } else {
+          //     setErrMsg(" Failed");
+          //   }
+          // }
         // } else if (!outgoingList.length) {
         //   setErrMsg("Մուտքագրեք դուրս գրվող ապրանքի քանակը")
         // }

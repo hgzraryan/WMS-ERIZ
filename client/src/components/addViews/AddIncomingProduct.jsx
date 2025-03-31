@@ -1,5 +1,5 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import ErrorSvg from "../../dist/svg/error.svg";
@@ -7,11 +7,11 @@ import { Input } from "../Input";
 import {
   volume_validation,
   pallet_validation,
-  Quantity_validation,
-  reorderLevel_validation,
-  Weight_validation,
   barcode_validation,
-  sellingPrice_validation,
+  BoxCount_validation,
+  UnitWeight_validation,
+  BoxCapacity_validation,
+  manufacturer_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -61,15 +61,28 @@ function AddIncomingProduct({
   const { watch } = methods;
   const weightValue = watch("weight"); // Watch the weight input
   const volumeValue = watch("volume"); // Watch the volume input
+  const boxCount = watch("boxCount"); // Watch the volume input
+  const boxCapacity = watch("boxCapacity"); // Watch the volume input
+  const unitWeight = watch("unitWeight"); // Watch the volume input
 
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
+  const totalWeight = useMemo(() => {
+    const count = parseFloat(boxCount) || 0;
+    const capacity = parseFloat(boxCapacity) || 0;
+    const weight = parseFloat(unitWeight) || 0;
+    return count * capacity * weight;
+  }, [boxCount, boxCapacity, unitWeight]);
+  const totalCount = useMemo(() => {
+    const count = parseFloat(boxCount) || 0;
+    const capacity = parseFloat(boxCapacity) || 0;
+    return count * capacity;
+  }, [boxCount, boxCapacity]);
   const handleToggleCreateProductModal = (value) => {
     setNewProduct((prev) => value);
 
   };
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -150,16 +163,20 @@ function AddIncomingProduct({
       partner: +data.partners?.value || null,
       driver: +data.driver?.value || null,
       quantity: +data.quantity || null,
-      balance: +data.weight || +data?.volume || null,
-      unit:data.weight?'kg':data.volume?"liter":'',
+      balance: +totalWeight || +data?.volume || null,
+      unit:totalWeight?'kg':data.volume?"liter":'',
       dimensions:{
         //height: +data.height || null,
         //length: +data.length || null,
         // width: +data.width || null,
-        weight: +data.weight || null,
+        weight: +totalWeight || null,
         volume: +data.volume || null,
       },
       palletCount:+data?.pallet,
+      boxCount:+boxCount,
+      unitWeight:+unitWeight,
+      boxCapacity:+boxCapacity,
+      manufacturer:data?.manufacturer,
       currency:currency,
       price:+amount,
       sellingPrice:0,//+data.sellingPrice,
@@ -565,26 +582,91 @@ console.log(data)
                               <Input {...pallet_validation} />
                             </div>
                             <div className="col-sm-6">
-                              <Input {...Quantity_validation} />
+                              <Input {...volume_validation}  
+                              name="volume" 
+                              disabled={!!totalWeight}
+                              validation={{required:{ value:!totalWeight, message: "պարտադիր"}}}
+                              />
+                            </div>
+                          </div>
+                          <div className="separator-full"></div>
+
+                          <div className="row gx-3">
+                            <div className="col-sm-6">
+                              <Input {...BoxCount_validation} 
+                              //validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}
+                               />
+                            </div>
+                            <div className="col-sm-6">
+                              <Input {...BoxCapacity_validation} />
                             </div>
                           </div>
                           <div className="row gx-3">
                             <div className="col-sm-6">
+                              <Input {...UnitWeight_validation} />
+                            </div>
+                            {/* <div className="col-sm-6">
                               <Input {...Weight_validation} 
                               name="weight" 
                               disabled={!!volumeValue}
                               validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}
                                />
-                            </div>
+                            </div> */}
                             <div className="col-sm-6">
-                              <Input {...volume_validation}  
-                              name="volume" 
-                              disabled={!!weightValue}
-                              validation={{required:{ value:!weightValue, message: "պարտադիր"}}}
-                              />
+                            <div className="form-group">
+                              <div className="d-flex justify-content-between">
+                                <label htmlFor="totalWeight" className="form-label">Ընդհանուր քաշը(Կգ)</label>
+                                </div>
+                                <input 
+                                id="totalWeight" 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ընդհանուր քաշը" 
+                                min="" name="totalWeight" 
+                                value={totalWeight}
+                                readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                />
+                                </div>
+                              {/* <label>
+                                Ընդհանուր քաշը
+                              </label>
+                              <input 
+                              className="form-control"
+                              disabled={true}
+                              value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                              onChange={{}}
+                               /> */}
                             </div>
-                            
                           </div>
+                          <div className="row gx-3">
+                           
+                            <div className="col-sm-6">
+                            <div className="form-group">
+                              <div className="d-flex justify-content-between">
+                                <label htmlFor="totalCount" className="form-label">Ընդհանուր քանակ(հատ)</label>
+                                </div>
+                                <input 
+                                id="totalCount" 
+                                type="text" 
+                                className="form-control" 
+                                placeholder="Ընդհանուր քաշը" 
+                                min="" name="totalCount" 
+                                value={totalCount}
+                                readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                />
+                                </div>
+                              {/* <label>
+                                Ընդհանուր քաշը
+                              </label>
+                              <input 
+                              className="form-control"
+                              disabled={true}
+                              value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                              onChange={{}}
+                               /> */}
+                            </div>
+                          </div>
+                          <div className="separator-full"></div>
 
                           <div className="row gx-3">                           
                             <div className="col-sm-6">
@@ -617,7 +699,7 @@ console.log(data)
                               </div>
                             </div>
                             <div className="col-sm-6">
-                              <Input {...reorderLevel_validation} />
+                              <Input {...manufacturer_validation} />
                             </div>
                             {/* <div className="col-sm-6">
                               <Input {...sellingPrice_validation} />
