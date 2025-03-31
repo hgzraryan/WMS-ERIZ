@@ -133,7 +133,7 @@ const getAllProducts = async (req, res) => {
 				currency:1,
 				dimensions:1,
 				supplier:1,
-				reorderLevel:1,
+				//reorderLevel:1,
 				attributes:1,
 				createdAt:1,
 				updatedAt:1,
@@ -146,6 +146,10 @@ const getAllProducts = async (req, res) => {
 				actionDate:1,
 				sellingPrice:1,
 				countryOfOrigin:1,
+				unitWeight:1,
+				boxCapacity:1,
+				boxCount:1,
+				manufacturer:1,
 				driverId:"$workerInfo.workerId",
 				driverName:"$workerInfo.fullName",
 				// supplierId:"$supplierInfo.supplierId",
@@ -285,7 +289,7 @@ const getIncomingProductsById = async (req, res) => {
 				currency:1,
 				dimensions:1,
 				//supplier:1,
-				reorderLevel:1,
+				//reorderLevel:1,
 				attributes:1,
 				createdAt:1,
 				updatedAt:1,
@@ -395,7 +399,11 @@ const registerIncomingProduct = async (req, res) => {
 			  actionType:'incoming',
 			  sellingPrice: productData.sellingPrice,
 			  partner:productData.partner,
-			  producedDate:productData.producedDate
+			  producedDate:productData.producedDate,
+			  boxCount:productData.boxCount,
+			  unitWeight:productData.unitWeight,
+			  boxCapacity:productData.boxCapacity,
+			  manufacturer:productData.manufacturer
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();

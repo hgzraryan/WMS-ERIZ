@@ -69,7 +69,19 @@ const productsMovementsSchema = new Schema({
   },
   producedDate: {
 	  type: String, 
-  }
+  },
+  boxCount: {
+    type: Number,
+  },
+  unitWeight: {
+    type: Number,
+  },
+  boxCapacity: {
+    type: Number,
+  },
+  manufacturer: {
+    type: String,
+  },
   
 },{
     timestamps: {  createdAt: 'createdAt', updatedAt: 'updatedAt',  currentTime: () => new Date(Date.now() + 4 * 60 * 60 * 1000)} // Add 4 hours to the current time (GMT+4)

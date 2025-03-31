@@ -39,7 +39,8 @@ const getAllProductsList = async (req, res) => {
 			$project: {
 				productListId:1,
 				category:1,
-				name:1,
+				name:1,				
+				reorderLevel:1,
 				description:1,
 				createdAt:1,
 				updatedAt:1

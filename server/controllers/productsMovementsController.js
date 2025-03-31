@@ -89,7 +89,12 @@ const getAllProductsMovements = async (req, res) => {
 					balance: 1,
 					driver: '$workerInfo.fullName',
 					sellingPrice:1,
-					producedDate:1
+					producedDate:1,
+					unitWeight:1,
+					boxCapacity:1,
+					boxCount:1,
+					manufacturer:1,
+					
 				  }
 				}
 			  ]).exec();

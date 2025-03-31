@@ -74,8 +74,20 @@ const IncomingProductsSchema = new Schema({
   // supplier: {
   //   type: Number,
   // },
+  boxCount: {
+    type: Number,
+  },
+  unitWeight: {
+    type: Number,
+  },
+  boxCapacity: {
+    type: Number,
+  },
   partner: {
     type: Number,
+  },
+  manufacturer: {
+    type: String,
   },
   fromWarehouseId: {
     type: Number,
@@ -88,10 +100,10 @@ const IncomingProductsSchema = new Schema({
 	  type: String,
   },  
   
-  reorderLevel: {
-    type: Number,  // Min count of stock availability:Threshold level for reordering stock
-    required: true,
-  },  
+  // reorderLevel: {
+  //   type: Number,  // Min count of stock availability:Threshold level for reordering stock
+  //   required: true,
+  // },  
   quantity:{
     type: Number,
   },

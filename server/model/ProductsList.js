@@ -12,11 +12,14 @@ const productListSchema = new Schema({
     unique: true,
     //required: true,
   },
- 
   name: {
     type: String,
     required: true,
   },
+  reorderLevel: {
+    type: Number,  // Min count of stock availability:Threshold level for reordering stock
+   // required: true,
+  }, 
   description: {
     type: String,
   },
