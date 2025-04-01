@@ -87,7 +87,7 @@ const IncomingProductsSchema = new Schema({
     type: Number,
   },
   manufacturer: {
-    type: String,
+    type: Number,
   },
   fromWarehouseId: {
     type: Number,
@@ -99,7 +99,6 @@ const IncomingProductsSchema = new Schema({
   countryOfOrigin:{
 	  type: String,
   },  
-  
   // reorderLevel: {
   //   type: Number,  // Min count of stock availability:Threshold level for reordering stock
   //   required: true,

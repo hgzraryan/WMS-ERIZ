@@ -124,6 +124,11 @@ app.use('/registerPartner', require('./routes/api/registerPartner'));
 app.use('/partners', require('./routes/api/partners'));
 //-------------------------------------------------------------------
 
+//---------------------------------manufacturers----------------------------------
+app.use('/manufacturers', require('./routes/api/manufacturers'));
+app.use('/registerManufacturer', require('./routes/api/registerManufacturer'));
+//-------------------------------------------------------------------
+
 //--------------------------------allCounts-----------------------------------
 app.use('/allCount', require('./routes/api/allCounts'));
 
