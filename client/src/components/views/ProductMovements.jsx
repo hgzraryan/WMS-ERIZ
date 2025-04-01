@@ -28,6 +28,11 @@ function ProductMovements() {
     const [currentPage, setCurrentPage] = useState(Number(pageNumber));
     const [selectedItem, setSelectedItem] = useState("");  
     const [selectedItemId, setSelectedItemId] = useState(null);  
+    const [productMovements, setProductMovements] = useState([]);  
+    const [dataCount, setDataCount] = useState(null);  
+    const [dataReceived, setDataReceived] = useState(false);
+    const [filter, setFilter] = useState({});
+    const [handleSearch, setHandleSearch] = useState(false);
     const confirmAgentsRef = useRef("");
   
     // useEffect(() => {
@@ -65,18 +70,76 @@ function ProductMovements() {
       setSearchParams(data.params)
     }
 //-------------------------GetData---------------------------//  
-    const {
-      data: productMovements,
-      setData: setProductMovements,
-      dataReceived,
-      dataCount
-    } = useGetData(PRODUCTSMOVEMENTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
+    // const {
+    //   data: productMovements,
+    //   setData: setProductMovements,
+    //   dataReceived,
+    //   dataCount
+    // } = useGetData(PRODUCTSMOVEMENTS_URL,currentPage,usersPerPage,searchCount,null,searchParams);
     const pageCount = searchCount?Math.ceil(searchCount/usersPerPage) :searchCount===0? 0:Math.ceil(dataCount/usersPerPage)
     const { refreshData,data } = useRefreshData(PRODUCTSMOVEMENTS_URL, usersPerPage);
     useEffect(()=>{
       setProductMovements(data)
       },[data])
 
+      useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
+    // if(!searchCount){
+
+      const getData = async () => {
+        try {
+          const response = await axiosPrivate.post(PRODUCTSMOVEMENTS_URL,{
+            signal: controller.signal,
+            page: currentPage===0?1:currentPage,
+            onPage: usersPerPage,
+             params: filter 
+          });
+          //console.log(response);
+          // if (
+            //   response.data.jsonString.length === 0 ||
+            //   response.data.jsonString.length < onPageCount
+            // ) {
+              //   setHasMore(false);
+            // }
+            isMounted &&
+              setProductMovements((prevUsers) => response.data.jsonString);
+              setDataCount(response.data.count)
+              setDataReceived(true)
+              //setCurrentPage((prev) => prev + 1);
+            } catch (err) {
+              console.error(err);
+              navigate("/login", { state: { from: location }, replace: true });
+            }
+          };
+          
+          getData();
+          
+        // }else if(searchCount && searchUrl){
+        //   const getData = async () => {
+        //   try {
+        //     const response = await axiosPrivate.post(searchUrl, {
+        //       params: searchParams,
+        //       page: currentPage===0?1:currentPage,
+        //       onPage: usersPerPage,
+        //       signal: controller.signal
+        //     });
+        //     //console.log('get search data')
+        //     setData(response.data.jsonString);
+        //     setDataReceived(true)
+        //     //setToggleSearchModal(false)  
+        //     //handleSearchPageCount(response.data.count)    
+        //   }catch (err) {
+        //     console.error(err);
+        //   }  
+        // }; 
+        // getData()
+        // }
+          return () => {
+          isMounted = false;
+          controller.abort();
+        };
+      }, [currentPage,searchCount,searchParams,filter]);
 //-------------------------PAGINATION---------------------------//  
       useEffect(() => {
         setCurrentPage(Number(pageNumber));
@@ -159,7 +222,7 @@ function ProductMovements() {
                       id="scrollableDiv"
                       style={{overflow: "auto" }}
                     >
-                      {/* <FilterPanel/> */}
+                      {/* <FilterPanel setFilter={setFilter} filter={filter}  /> */}
                         <ProductMovementsTable
                           confirmRef={confirmAgentsRef}
                           selectedItem={selectedItem}

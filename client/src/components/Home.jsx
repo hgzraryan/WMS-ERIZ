@@ -1,7 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
 //import React, { useState, useEffect, useRef } from "react";
-
+import startImg from '../../public/dist/img/it-consulting.svg'
 
 
 
@@ -21,7 +21,10 @@ const Home = () => {
     return (
         
         <>
-        <h1>Home</h1>
+        <div style={{width:'100%'}}>
+            <img src={startImg}/> 
+        </div>
+        {/* <h1>Home</h1>
         <br />
         <p>You are logged in!</p>
         <br />
@@ -34,7 +37,7 @@ const Home = () => {
         <Link to="/linkpage">Go to the link page</Link>
         <div className="flexGrow">
             <button onClick={signOut}>Sign Out</button>
-        </div>
+        </div> */}
         </>
 
         

@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { Button } from 'react-bootstrap';
 import { Input } from './Input';
-import { Controller, Form, FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import Select, { components } from "react-select";
 import { color } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { PARTNERS_URL, WORKERS_URL } from '../utils/constants';
 const currencies = [
     {
         label: "ՀՀ դրամ",
@@ -100,27 +103,27 @@ export const customStyles = {
         fontSize: "12px", // Reduce font size in dropdown
         padding: "4px 0", // Reduce padding
         width: "auto", // Adjust width if needed
-      }),
-      menuList: (base) => ({
+    }),
+    menuList: (base) => ({
         ...base,
         padding: "0px", // Remove extra spacing
         maxHeight: "150px", // Limit dropdown height (scrollable)
-        width:'250px'
-      }),
-      option: (styles, { isDisabled, isFocused, isSelected }) => ({
+        width: '250px'
+    }),
+    option: (styles, { isDisabled, isFocused, isSelected }) => ({
         ...styles,
         fontSize: "12px",
         padding: "4px 8px", // Adjust option padding
         backgroundColor: isDisabled
-          ? undefined
-          : isSelected
-          ? "#018a54"
-          : isFocused
-          ? "rgba(1, 138, 84, .1)"
-          : undefined,
+            ? undefined
+            : isSelected
+                ? "#018a54"
+                : isFocused
+                    ? "rgba(1, 138, 84, .1)"
+                    : undefined,
         color: isDisabled ? "#e6e6e6" : isSelected ? "white" : "black",
         cursor: isDisabled ? "not-allowed" : "pointer",
-      }),
+    }),
     valueContainer: (base) => ({
         ...base,
         padding: "0px 6px",
@@ -148,8 +151,8 @@ export const customStyles = {
         fontSize: "12px",
         display: "flex",
         alignItems: "center",
-        height:'10px',
-        backgroundColor:'#018a54'
+        height: '10px',
+        backgroundColor: '#018a54'
     }),
     multiValueLabel: (base) => ({
         ...base,
@@ -194,729 +197,452 @@ export const customStyles = {
 };
 
 
+const FilterPanel = ({ setFilter }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const axiosPrivate = useAxiosPrivate();
 
-function FilterPanel() {
+    const [partners, setPartners] = useState([]);
+    const [workers, setWorkers] = useState([]);
 
+    // Initialize form using FormProvider
     const methods = useForm({
-        mode: "onChange",
+        defaultValues: {
+            barcode: null,
+            name: null,
+            partner: null,
+            dateRange: {
+                startDate: null,
+                endDate: null
+            },
+            warehouse: null,
+            actionDate: null,
+            price: null,
+            driver: null,
+            actionId: null,
+            manufacturer: null,
+
+        },
     });
+
+    const { control, handleSubmit, reset } = methods;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const partnersResp = await axiosPrivate.get(PARTNERS_URL);
+                setPartners(partnersResp?.data?.jsonString || []);
+
+                const driversList = await axiosPrivate.get(WORKERS_URL);
+                setWorkers(driversList?.data?.jsonString || []);
+            } catch (err) {
+                console.error(err);
+                navigate("/login", { state: { from: location }, replace: true });
+            }
+        };
+
+        fetchData();
+    }, [navigate]);
+
+    const onSubmit = (data) => {
+        debugger
+        setFilter(data);
+    };
+
     return (
-        <div className="filter-panel"
+        <div
+            className="filter-panel"
             style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                backgroundColor: 'rgba(0, 125, 136, 0.15)',
-                color: '#000',
-                padding: '20px',
-                borderRadius: '10px',
-                gap: '10px'
-            }}>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
-                <div className='d-flex gap-2'>
+                display: "flex",
+                backgroundColor: "rgba(0, 125, 136, 0.15)",
+                color: "#000",
+                padding: "20px",
+                borderRadius: "10px",
+                gap: "10px",
+            }}
+        >
+            <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', width:'100%' }}>
+                    <div className='flex-center me-2'>
+                        <div className="d-flex gap-2" style={{ height: '30px' }}>
+                            <Button size="sm" type="submit">
+                                Find
+                            </Button>
+                            <Button size="sm" type="button" onClick={() => reset()}>
+                                Clear
+                            </Button>
+                            <FeatherIcon icon="settings" />
+                        </div>
+                    </div>
 
-                    <div>
+                    <div className="filter-body" style={{display:'flex', justifyContent:'space-evenly', width:'100%'}}>
+                        <div >                            
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        <Button size='sm' >
-                            Find
-                        </Button>
-                    </div>
-                    <div>
-                        <Button size='sm'> Clear</Button>
-                    </div>
-                    <div>
-                        <FeatherIcon icon="settings" />
-                    </div>
-                </div>
-                <div className='d-flex flex-column gap-2 '>
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="partner"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="partner" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="partner"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                    {/* <div>
-                        <p style={{ fontSize: '12px' }}>label</p>
-                        <input style={{ height: '20px' }} />
-                    </div> */}
-                    <div className="d-flex flex-column justify-content-between">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={partners.map((partner) => ({
+                                                                value: partner.partnerId,
+                                                                label: `${partner.partnerId}․  ${partner.name}`,
+                                                              }))}
+                                      
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
-                        </div>
-                    </div>
-                    {/* <div>
-                        <p style={{ fontSize: '12px' }}>label</p>
-                        <input style={{ height: '20px' }} />
-                    </div> */}
-                </div>
-            </div>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
+                                            </div>
+                                </div>
 
-                <div className='d-flex flex-column gap-4 '>
+                            </div>
 
-                    <div className=''>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                            </div>
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
+                                            </div>
+                                </div>
 
-            <div className='d-flex flex-column gap-4 '>
+                            </div>
 
-                    <div className=''>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                            </div>
+                            <div className="row gx-3">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
+                                            </div>
+                                </div>
 
-            <div className='d-flex flex-column gap-4 '>
+                            </div>
 
-                    <div className=''>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
+                            </div>
                         </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                        <div >                            
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
+                                            </div>
+                                </div>
 
-            <div className='d-flex flex-column gap-4 '>
+                            </div>
 
-                    <div className=''>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                            </div>
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div className='d-flex flex-column gap-2 ' style={{ flex: '1' }}>
+                                            </div>
+                                </div>
 
-            <div className='d-flex flex-column gap-4 '>
+                            </div>
 
-                    <div className=''>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                            </div>
+                            <div className="row gx-3">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
 
-                        </div>
-                    </div>
-                    </div>
-                    <div>
-                    <div className="">
-                        <div className="d-flex justify-content-between me-2">
-                            <label
-                                className="form-lsabel"
-                                htmlFor="status"
-                            >
-                                
-                            </label>
-                            {/* {methods.formState.errors.status && (
-                                <span className="error text-red">
-                                  <span>
-                                    //<img src={ErrorSvg} alt="errorSvg" />
-                                  </span>{" "}
-                                  պարտադիր
-                                </span>
-                              )} */}
-                        </div>
-                        <div className="fo" style={{ height: '15px' }}>
-                            <Controller
-                                name="status"
-                                control={methods.control}
-                                defaultValue={null}
-                                rules={{ required: false }}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        options={currencies}
-                                        placeholder="Ընտրել"
-                                        styles={customStyles}
-                                        isMulti={true} // Enable multi-select
-                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                        hideSelectedOptions={false}
-                                        components={{ Option: CustomOption }}
-                                    />
-                                )}
-                            />
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
 
+                                            </div>
+                                </div>
+
+                            </div>
+
+                            </div>
                         </div>
+                        <div >                            
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
+
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
+
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
+
+                                            </div>
+                                </div>
+
+                            </div>
+
+                            </div>
+                            <div className="row gx-3 mb-2">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
+
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
+
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
+
+                                            </div>
+                                </div>
+
+                            </div>
+
+                            </div>
+                            <div className="row gx-3">
+                            <div className="col-sm-12">
+                                <div className='d-flex flex-column'>
+
+                                            <div className="d-flex justify-content-between me-2">
+                                                <label
+                                                    className="form-lsabel"
+                                                    htmlFor="status"
+                                                >
+                                                    test
+                                                </label>
+                                            </div>
+                                            <div className="fo" style={{ height: '15px' }}>
+                                                <Controller
+                                                    name="status"
+                                                    control={methods.control}
+                                                    defaultValue={null}
+                                                    rules={{ required: false }}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            {...field}
+
+                                                            options={currencies}
+                                                            placeholder="Ընտրել"
+                                                            styles={customStyles}
+                                                            isMulti={true} // Enable multi-select
+                                                            closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                            hideSelectedOptions={false}
+                                                            components={{ Option: CustomOption }}
+                                                        />
+                                                    )}
+                                                />
+
+                                            </div>
+                                </div>
+
+                            </div>
+
+                            </div>
+                        </div>
+
                     </div>
-                    </div>
-                </div>
-            </div>
+                </form>
+            </FormProvider>
         </div>
-    )
-}
+    );
+};
 
-export default FilterPanel
+export default FilterPanel;
