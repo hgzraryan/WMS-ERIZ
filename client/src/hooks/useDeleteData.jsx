@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 const useDeleteData = (url,itemRef,selectedItem,setSelectedItemId,items,setItems,name,getData) => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-  
   const notify = (text) =>
     toast.error(text, {
       position: "top-right",

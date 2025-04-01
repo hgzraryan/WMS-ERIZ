@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
 

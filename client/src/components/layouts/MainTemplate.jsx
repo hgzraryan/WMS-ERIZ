@@ -6,7 +6,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { checkUsersCount, selectUsersCount } from "../../redux/features/users/usersCountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkSelectedMenu, selectedMenu } from "../../redux/features/dropdown/selectedMenuSlice";
-import { PARTNERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
+import { MANUFACTURERS_ROUTE, PARTNERS_ROUTE, WARREHOUSESLIST_ROUTE } from "../../utils/constants";
 import packageJson from '../../../package.json';
 
 const MainTemplate = () => {
@@ -486,6 +486,34 @@ const MainTemplate = () => {
                                                         <Link className={sisActive1==="partners" || location.pathname===PARTNERS_ROUTE?"nav-link active":"nav-link"} to='./companies/partners/page/1'
                                                         onClick={()=>handleSubmenuClick("companies","partners")}>
                                                             <span className="nav-link-text">Գործընկերներ</span>
+                                                        </Link>
+                                                    </li>
+                                                    {/* <li className="nav-item">
+                                                        <Link className={sisActive1==="suppliers" || location.pathname===SUPPLIERS_ROUTE?"nav-link active":"nav-link"} to='./companies/suppliers/page/1'
+                                                        onClick={()=>handleSubmenuClick("companies","suppliers")}>
+                                                            <span className="nav-link-text">Մատակարարներ</span>
+                                                        </Link>
+                                                    </li> */}
+                                                    {/* <li className="nav-item">
+                                                        <Link className={sisActive1==="brands" || location.pathname==="/companies/brands"?"nav-link active":"nav-link"} to="./companies/brands"
+                                                        onClick={()=>handleSubmenuClick("companies","brands")}>
+                                                            <span className="nav-link-text">Ապրանքանիշ</span>
+                                                        </Link>
+                                                    </li> */}
+                                                </ul>	
+                                            </li>	
+                                            <li className="nav-item">
+                                                <ul className="nav flex-column">
+                                                    {/* <li className="nav-item">
+                                                        <Link className={sisActive1==="companies" || location.pathname==="/companies/companies"?"nav-link active":"nav-link"} to="./companies/companies"
+                                                        onClick={()=>handleSubmenuClick("companies","companies")}>
+                                                            <span className="nav-link-text">Ընկերություն</span>
+                                                        </Link>
+                                                    </li> */}
+                                                    <li className="nav-item">
+                                                        <Link className={sisActive1==="manufacturers" || location.pathname===MANUFACTURERS_ROUTE?"nav-link active":"nav-link"} to='./companies/manufacturers/page/1'
+                                                        onClick={()=>handleSubmenuClick("companies","manufacturers")}>
+                                                            <span className="nav-link-text">Արտադրողներ</span>
                                                         </Link>
                                                     </li>
                                                     {/* <li className="nav-item">

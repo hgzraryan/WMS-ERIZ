@@ -159,8 +159,8 @@ function AddOutgoingProduct({
         setPartners(partnersResp?.data?.jsonString);
 
         const driversList = await axiosPrivate.get(WORKERS_URL);
-        const tmp = driversList?.data?.jsonString.filter((el) => el.workerRoleType === 'driver')
-        setWorkers(tmp);
+        //const tmp = driversList?.data?.jsonString.filter((el) => el.workerRoleType === 'driver')
+        setWorkers(driversList?.data?.jsonString);
 
         const respProductsList = await axiosPrivate.get(PRODUCTSLIST_URL);
         setProductsList(respProductsList?.data?.jsonString);

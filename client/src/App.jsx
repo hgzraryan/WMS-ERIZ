@@ -59,8 +59,10 @@ import {
   WORKERSROLES_ROUTE,
   PRODUCTSSUMMARY_ROUTE,
   PARTNERS_ID_ROUTE,
-  PRODUCTSMOVEMENTS_ROUTE
+  PRODUCTSMOVEMENTS_ROUTE,
+  MANUFACTURERS_ROUTE
 } from "./utils/constants";
+import Manufacturers from "./components/views/Manufacturers";
 const Register = lazy(()=>  import("./components/Register"));
 const Login = lazy(()=>  import("./components/Login"));
 const PrivacyPolicy = lazy(()=>  import("./components/PrivacyPolicy"));
@@ -162,6 +164,7 @@ function App() {
                 <Route path={CUSTOMERS_ROUTE} element={<Customers />} />
                 <Route path={COMPANIES_ROUTE} element={<Companies />} />
                 <Route path={PARTNERS_ROUTE} element={<Partners />} />
+                <Route path={MANUFACTURERS_ROUTE} element={<Manufacturers />} />
                 {/* <Route path={SUPPLIERS_ROUTE} element={<Suppliers />} /> */}
                 <Route path={BRANDS_ROUTE} element={<Brands />} />
                 <Route path={PRODUCTCLASSES_ROUTE} element={<ProductsCategories />} />
