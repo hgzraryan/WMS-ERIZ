@@ -21,6 +21,19 @@ export  function deleteNullProperties(obj) {
     return obj
   }
   
+  export function deleteNullProperties1(obj) {
+    Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === "object" && obj[key] !== null) {
+            deleteNullProperties(obj[key]); // Recursively clean nested objects
+            if (Object.keys(obj[key]).length === 0) {
+                delete obj[key]; // Remove empty objects after recursion
+            }
+        } else if (obj[key] === null || obj[key] === '') {
+            delete obj[key]; // Remove null or empty string values
+        }
+    });
+    return obj;
+}
   export function calculateAge (dateOfBirth) {
     // Convert the birthdate string to a Date object
     const birthdateObj = new Date(dateOfBirth);

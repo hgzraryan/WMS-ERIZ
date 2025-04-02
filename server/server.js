@@ -173,3 +173,12 @@ mongoose.connection.once('open', () => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 	httpsServer.listen(5443, () => console.log(`Server running on port 5443`));
 });
+// handle unknowen errors
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught Exception:", err);
+    process.exit(1); // Ensure a clean exit
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Unhandled Rejection:", reason);
+});

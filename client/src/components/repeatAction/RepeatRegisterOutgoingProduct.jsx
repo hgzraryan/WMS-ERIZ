@@ -20,7 +20,7 @@ import ReactQuillEditor from "../ReactQuillEditor";
 
 function RepeatRegisterOutgoingProduct({ outgoingProduct, setRepeateOutgoing, refreshData }) {
 
-  const [productClassType, setProductClassType] = useState(outgoingProduct.currentProductId);
+  const [productClassType, setProductClassType] = useState(outgoingProduct?.currentProductId);
   const [attributs, setAttributs] = useState([]);
   const [productClassId, setProductClassId] = useState([]);
   const [wareHouses, setWareHouses] = useState([]);

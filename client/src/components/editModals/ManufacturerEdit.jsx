@@ -32,7 +32,7 @@ const companyTypes = [
 function ManufacturerEdit({ manufacturer,setEditRow, refreshData }) {
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate();
-    const [additionalData, setAdditionalData] = useState(manufacturer.additionalData)
+    const [additionalData, setAdditionalData] = useState(manufacturer.additionalData || '')
     const [errMsg, setErrMsg] = useState("");
 
     const methods = useForm({

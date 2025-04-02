@@ -46,7 +46,7 @@ function OutgoingProductEdit(
     const [partners, setPartners] = useState([]);
     const [outgoingList, setOutgoingList] = useState([]);
     const [workers, setWorkers] = useState([])
-    const [additionalData, setAdditionalData] = useState(outgoingProduct.description)
+    const [additionalData, setAdditionalData] = useState(outgoingProduct.description || '')
     const [isLoading, setIsLoading] = useState(true);
     const [productsList, setProductsList] = useState([])
     const navigate = useNavigate();

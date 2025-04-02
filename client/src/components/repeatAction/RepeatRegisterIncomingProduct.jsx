@@ -32,7 +32,7 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
     const axiosPrivate = useAxiosPrivate();
     const [country, setCountry] = useState("");
     const [region, setRegion] = useState("");
-    const [additionalData, setAdditionalData] = useState(incomingProduct?.description)
+    const [additionalData, setAdditionalData] = useState(incomingProduct?.description || '')
     const [productClassType, setProductClassType] = useState("");
     const [attributs, setAttributs] = useState([]);
     const [productClassId, setProductClassId] = useState([]);

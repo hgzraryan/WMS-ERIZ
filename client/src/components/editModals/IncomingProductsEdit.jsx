@@ -1,5 +1,5 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import ErrorSvg from "../../dist/svg/error.svg";
@@ -12,12 +12,15 @@ import {
     reorderLevel_validation,
     Weight_validation,
     barcode_validation,
+    BoxCount_validation,
+    BoxCapacity_validation,
+    UnitWeight_validation,
 } from "../../utils/inputValidations";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL, PRODUCTS_URL } from "../../utils/constants";
-import { deleteNullProperties } from "../../utils/helper";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL, PRODUCTS_URL, MANUFACTURERS_URL } from "../../utils/constants";
+import { deleteNullProperties, deleteNullProperties1 } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
 import { CountryDropdown, CountryRegionData } from 'react-country-region-selector';
@@ -31,25 +34,42 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
     const axiosPrivate = useAxiosPrivate();
     const [country, setCountry] = useState("");
     const [region, setRegion] = useState("");
-    const [additionalData, setAdditionalData] = useState(incomingProduct?.description)
+    const [additionalData, setAdditionalData] = useState(incomingProduct?.description || '')
     const [productClassType, setProductClassType] = useState("");
     const [attributs, setAttributs] = useState([]);
     const [productClassId, setProductClassId] = useState([]);
     const [wareHouses, setWareHouses] = useState([]);
     const [VAT, setVAT] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [amount, setAmount] = useState(incomingProduct?.price);
-    const [currency, setCurrency] = useState(incomingProduct?.currency);
+    const [amount, setAmount] = useState(incomingProduct?.price||0);
+    const [currency, setCurrency] = useState(incomingProduct?.currency||'');
     const [newProduct, setNewProduct] = useState(false)
     const [productsList, setProductsList] = useState([])
     const [partnersList, setPartnersList] = useState([])
     const [workers, setWorkers] = useState([])
+    const [manufacturers, setManufacturers] = useState([])
+
     const methods = useForm({
         mode: "onChange",
     });
     const { watch } = methods;
     const weightValue = watch("weight"); // Watch the weight input
     const volumeValue = watch("volume"); // Watch the volume input
+    const boxCount = watch("boxCount"); // Watch the volume input
+    const boxCapacity = watch("boxCapacity"); // Watch the volume input
+    const unitWeight = watch("unitWeight"); // Watch the volume input"volume"); // Watch the volume input
+
+    const totalWeight = useMemo(() => {
+        const count = parseFloat(boxCount) || 0;
+        const capacity = parseFloat(boxCapacity) || 0;
+        const weight = parseFloat(unitWeight) || 0;
+        return count * capacity * weight;
+    }, [boxCount, boxCapacity, unitWeight]);
+    const totalCount = useMemo(() => {
+        const count = parseFloat(boxCount) || 0;
+        const capacity = parseFloat(boxCapacity) || 0;
+        return count * capacity;
+    }, [boxCount, boxCapacity]);
     const { trigger } = useForm();
     console.log(incomingProduct)
     useEffect(() => {
@@ -57,7 +77,9 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             try {
                 const productsList = await axiosPrivate.get(PRODUCTSLIST_URL);
                 setProductsList(productsList?.data?.jsonString);
-                console.log(productsList?.data?.jsonString)
+
+                const manufacturersList = await axiosPrivate.get(MANUFACTURERS_URL);
+                setManufacturers(manufacturersList?.data?.jsonString);
 
                 const partnersList = await axiosPrivate.get(PARTNERS_URL);
                 setPartnersList(partnersList?.data?.jsonString);
@@ -110,40 +132,50 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
         });
     const onSubmit = methods.handleSubmit(async (data) => {
         console.log(data)
-        const { weight, volume } = incomingProduct?.dimensions || {};
-
+        console.log(+data?.manufacturers?.value !== +incomingProduct?.manufacturerId)
+        console.log(+data?.manufacturers?.value)
+        console.log(+incomingProduct?.manufacturerId)
         const newProd = {
-            // name: data?.productName?.label?.trim() !== incomingProduct?.name?.trim() ? data?.productName?.label : null,
-            // currentProductId: data?.productName?.productListId !== incomingProduct?.incomingProductId ? data?.productName?.productListId : null,
-            // productCategory: data?.productName?.categoryId !== incomingProduct?.productCategory ? data?.productName?.categoryId : null,
-            // productIdent: data?.productName?.value || null,//TODO ????????
-             countryOfOrigin: data?.countryOfOrigin?.trim() !== incomingProduct?.countryOfOrigin?.trim() ? data?.countryOfOrigin : null,
-             stock: +data?.warehouse?.value !== incomingProduct?.warehouseId ? +data?.warehouse?.value : null,
-            // partner: +data.partners?.value !== incomingProduct?.partnerId ? +data.partners?.value : null,
-            // driver: +data.driver?.value !== incomingProduct?.driverId ? +data.driver?.value : null,
-            // quantity: +data.quantity !== incomingProduct?.quantity ? +data.quantity : null,
-            // balance: (+data.weight !== weight || +data.volume !== volume)
-            //     ? +data.weight || +data.volume
-            //     : null,
-            // unit: data.weight ? 'kg' : data.volume ? "liter" : '',
+            name: data?.productName?.label?.trim() !== incomingProduct?.name?.trim() ? data?.productName?.label : null,
+            barcode: +data.barcode !== +incomingProduct?.barcode ? +data.barcode : null,
+            countryOfOrigin: data?.countryOfOrigin?.trim() !== incomingProduct?.countryOfOrigin?.trim() ? data?.countryOfOrigin : null,
+            stock: +data?.warehouse?.value !== incomingProduct?.warehouseId ? +data?.warehouse?.value : null,
+            productIdent: data?.productName?.value || null,//TODO ????????
+            partnerId: +data.partners?.value !== +incomingProduct?.partnerId ? +data.partners?.value : null,
+            driverId: +data.driver?.value !== incomingProduct?.driverId ? +data.driver?.value : null,
+            palletCount: +data.pallet !== incomingProduct?.palletCount ? +data.pallet : null,
+            additional: additionalData !== incomingProduct?.description?.trim() ? additionalData : null,
+            unitWeight: +data.unitWeight !== incomingProduct?.unitWeight ? +data.unitWeight : null,
+            boxCapacity: +data.boxCapacity !== incomingProduct?.boxCapacity ? +data.boxCapacity : null,
+            boxCount: +data.boxCount !== incomingProduct?.boxCount ? +data.boxCount : null,
+            quantity: +totalCount, //  (!== incomingProduct?.quantity ? +data.quantity : null,
+            balance: +totalWeight || +data.volume, //(+totalWeight !== weight || +data.volume !== volume),
+            unit: totalWeight ? 'kg' : data.volume ? "litre" : '',
             dimensions: {
                 //height: +data.height || null,
                 //length: +data.length || null,
                 // width: +data.width || null,
-                // weight: (!!data.weight && +data.weight !==weight)?+data.weight:null,
-                // volume: (!!data.volume && +data.volume !== volume) ?+data.volume:null,
+                weight: totalWeight, // (!!totalWeight && (+totalWeight !== +weight))?+totalWeight:null,
+                volume: data.volume, // (!!data.volume && (+data.volume !== volume)) ?+data.volume:null,
             },
-            //  palletCount: +data.pallet !== incomingProduct?.palletCount ? +data.pallet : null,
-            //  currency: currency !== incomingProduct?.currency.trim() ? currency : null,
-            //  price: +data.price !== incomingProduct?.price ? +data.price : null,
+            currency: currency !== incomingProduct?.currency.trim() ? currency : null,
+            price: +amount !== +incomingProduct?.price ? +amount : null,
+            manufacturer: +data?.manufacturers?.value !== +incomingProduct?.manufacturerId ? data?.manufacturers?.value : null,
+            producedDate: moment(data?.producedDate).format('YYYY-MM-DD') !== moment(incomingProduct?.producedDate).format('YYYY-MM-DD')
+                ? moment(data?.producedDate).format('YYYY-MM-DD')
+                : null,
+            expirationDate: moment(data?.expirationDate).format('YYYY-MM-DD') !== moment(incomingProduct?.expirationDate).format('YYYY-MM-DD')
+                ? moment(data?.expirationDate).format('YYYY-MM-DD')
+                : null,
+            expiredAlertDay: moment(data?.expiredAlertDay).format('YYYY-MM-DD') !== moment(incomingProduct?.expiredAlertDay).format('YYYY-MM-DD')
+                ? moment(data?.expiredAlertDay).format('YYYY-MM-DD')
+                : null,
+            actionDate: moment(data?.actionDate).format('YYYY-MM-DD') !== moment(incomingProduct?.actionDate).format('YYYY-MM-DD')
+                ? moment(data?.actionDate).format('YYYY-MM-DD HH:mm')
+                : null,
+            currentProductId: data?.productName?.productListId !== incomingProduct?.currentProductId ? data?.productName?.productListId : null,
+            productCategory: data?.productName?.categoryId !== incomingProduct?.productCategory ? data?.productName?.categoryId : null,
             // sellingPrice: 0,//+data.sellingPrice,
-             //reorderLevel: +data.reorderLevel !== incomingProduct?.reorderLevel ? +data.reorderLevel : null,
-             additional: additionalData!==incomingProduct?.description?.trim()?additionalData:null,
-             barcode: +data.barcode !== +incomingProduct?.barcode ? +data.barcode : null,
-
-             //producedDate: moment(data?.dateOfBirth).format('YYYY-MM-DD'),
-            // expiredAlertDay: moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
-            // expirationDate: moment(data?.expirationDate).format('YYYY-MM-DD'),
             //productCategory:data?.productCategory || 1,
             // SKU:'1',
             //  attributs:attributs.map((el,index)=>{return{
@@ -152,11 +184,12 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             //   'attributeUnitLabel':el.attributeUnitLabel
             //  }})
         };
-        const updatedFields = deleteNullProperties(newProd)
-        console.log(updatedFields)
+
+        const updateFields = deleteNullProperties1(newProd)
+        console.log(updateFields)
 
         try {
-            await axiosPrivate.put(PRODUCTS_URL, { updatedFields, id: incomingProduct.incomingProductId }, {
+            await axiosPrivate.put(PRODUCTS_URL, { updateFields, documentId: incomingProduct.incomingProductId }, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -185,7 +218,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-                        Ապրանքի ձեռքբերում
+                        Գործարքի փոփոխում
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -310,7 +343,12 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                             control={methods.control}
                                                                             defaultValue={
                                                                                 incomingProduct
-                                                                                    ? { value: incomingProduct?.productListId, label: incomingProduct?.name }
+                                                                                    ? {
+                                                                                        productListId: incomingProduct?.currentProductId,
+                                                                                        label: incomingProduct?.name,
+                                                                                        categoryId: incomingProduct?.productCategory,
+                                                                                        value: incomingProduct?.currentProductId
+                                                                                    }
                                                                                     : null
                                                                             }
                                                                             rules={{ required: true }}
@@ -549,10 +587,16 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                 <Input {...pallet_validation} defaultValue={incomingProduct?.palletCount} />
                                                             </div>
                                                             <div className="col-sm-6">
-                                                                <Input {...Quantity_validation} defaultValue={incomingProduct?.quantity} />
+                                                                <Input {...volume_validation}
+                                                                    defaultValue={incomingProduct?.dimensions?.volume}
+                                                                    name="volume"
+                                                                    disabled={!!totalWeight}
+                                                                    validation={{ required: { value: !totalWeight, message: "պարտադիր" } }} />
                                                             </div>
                                                         </div>
-                                                        <div className="row gx-3">
+                                                        <div className="separator-full"></div>
+
+                                                        {/* <div className="row gx-3">
                                                             <div className="col-sm-6">
                                                                 <Input {...Weight_validation}
                                                                  defaultValue={incomingProduct?.dimensions?.weight} 
@@ -560,15 +604,87 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                  disabled={!!volumeValue}
                                                                  validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}/>
                                                             </div>
-                                                            <div className="col-sm-6">
-                                                                <Input {...volume_validation} 
-                                                                defaultValue={incomingProduct?.dimensions?.volume} 
-                                                                name="volume" 
-                                                                disabled={!!weightValue}
-                                                                validation={{required:{ value:!weightValue, message: "պարտադիր"}}}/>
-                                                            </div>
+                                                          
 
+                                                        </div> */}
+                                                        <div className="row gx-3">
+                                                            <div className="col-sm-6">
+                                                                <Input {...BoxCount_validation}
+                                                                    defaultValue={incomingProduct?.boxCount}
+                                                                />
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <Input {...BoxCapacity_validation}
+                                                                    defaultValue={incomingProduct?.boxCapacity} />
+                                                            </div>
                                                         </div>
+                                                        <div className="row gx-3">
+                                                            <div className="col-sm-6">
+                                                                <Input {...UnitWeight_validation}
+                                                                    defaultValue={incomingProduct?.unitWeight} />
+                                                            </div>
+                                                            {/* <div className="col-sm-6">
+                                                           <Input {...Weight_validation} 
+                                                           name="weight" 
+                                                           disabled={!!volumeValue}
+                                                           validation={{required:{ value:!volumeValue, message: "պարտադիր"}}}
+                                                            />
+                                                         </div> */}
+                                                            <div className="col-sm-6">
+                                                                <div className="form-group">
+                                                                    <div className="d-flex justify-content-between">
+                                                                        <label htmlFor="totalWeight" className="form-label">Ընդհանուր քաշը(Կգ)</label>
+                                                                    </div>
+                                                                    <input
+                                                                        id="totalWeight"
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Ընդհանուր քաշը"
+                                                                        min="" name="totalWeight"
+                                                                        value={totalWeight}
+                                                                        readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                                                    />
+                                                                </div>
+                                                                {/* <label>
+                                                             Ընդհանուր քաշը
+                                                           </label>
+                                                           <input 
+                                                           className="form-control"
+                                                           disabled={true}
+                                                           value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                                                           onChange={{}}
+                                                            /> */}
+                                                            </div>
+                                                        </div>
+                                                        <div className="row gx-3">
+
+                                                            <div className="col-sm-6">
+                                                                <div className="form-group">
+                                                                    <div className="d-flex justify-content-between">
+                                                                        <label htmlFor="totalCount" className="form-label">Ընդհանուր քանակ(հատ)</label>
+                                                                    </div>
+                                                                    <input
+                                                                        id="totalCount"
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Ընդհանուր քաշը"
+                                                                        min="" name="totalCount"
+                                                                        value={totalCount}
+                                                                        readOnly // Prevent manual editingboxCount*boxCapacity*unitWeight:0}
+                                                                    />
+                                                                </div>
+                                                                {/* <label>
+                                                             Ընդհանուր քաշը
+                                                           </label>
+                                                           <input 
+                                                           className="form-control"
+                                                           disabled={true}
+                                                           value={(boxCount && boxCapacity && unitWeight)? boxCount*boxCapacity*unitWeight:0}
+                                                           onChange={{}}
+                                                            /> */}
+                                                            </div>
+                                                        </div>
+                                                        <div className="separator-full"></div>
 
                                                         <div className="row gx-3">
                                                             <div className="col-sm-6">
@@ -600,7 +716,54 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            
+                                                            {/* <div className="col-sm-6">
+                                                                <Input {...reorderLevel_validation} defaultValue={incomingProduct?.reorderLevel} />
+                                                            </div> */}
+                                                            <div className="col-sm-6">
+                                                                <div className="d-flex justify-content-between me-2">
+                                                                    <label
+                                                                        className="form-label"
+                                                                        htmlFor="manufacturers"
+                                                                    >
+                                                                        Արտադրողներ
+                                                                    </label>
+                                                                    {methods.formState.errors.manufacturers && (
+                                                                        <span className="error text-red">
+                                                                            <span>
+                                                                                <img src={ErrorSvg} alt="errorSvg" />
+                                                                            </span>{" "}
+                                                                            պարտադիր
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <div className="form-control">
+                                                                    <Controller
+                                                                        name="manufacturers"
+                                                                        control={methods.control}
+                                                                        defaultValue={
+                                                                            incomingProduct
+                                                                                ? { value: incomingProduct?.manufacturerId, label: incomingProduct?.manufacturerName }
+                                                                                : null
+                                                                        }
+                                                                        rules={{ required: true }}
+                                                                        render={({ field }) => (
+                                                                            <Select
+                                                                                {...field}
+                                                                                value={field.value}
+                                                                                options={manufacturers?.map((item) => ({
+                                                                                    value: item.manufacturerId,
+                                                                                    label: item.name,
+                                                                                }))}
+                                                                                placeholder={"Ընտրել"}
+                                                                            // onChange={(val) => {
+                                                                            //   field.onChange(val);
+                                                                            //   onUnitSelect(val);
+                                                                            // }}
+                                                                            />
+                                                                        )}
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                             {/* <div className="col-sm-6">
                                     <Input {...sellingPrice_validation} />
                                   </div> */}
@@ -610,6 +773,12 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                     <Input {...reorderLevel_validation} />
                                   </div>
                                 </div> */}
+                                                        <div className="row gx-3">
+
+                                                            {/* <div className="col-sm-6">
+                                                              <Input {...sellingPrice_validation} />
+                                                            </div> */}
+                                                        </div>
                                                         <div className="row gx-3">
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">
@@ -634,7 +803,6 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                             name="producedDate"
                                                                             control={methods.control}
                                                                             defaultValue={incomingProduct?.producedDate}
-
                                                                         />
                                                                     </div>
                                                                 </div>
@@ -644,7 +812,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                     <div className="d-flex justify-content-between me-2">
                                                                         <label
                                                                             className="form-label"
-                                                                            htmlFor="birthday"
+                                                                            htmlFor="expirationDate"
                                                                         >
                                                                             Պիտանելիության ամսաթիվ
                                                                         </label>
@@ -720,7 +888,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                             name="actionDate"
                                                                             methods={methods}
                                                                             control={methods.control}
-                                                                            defaultValue={new Date()}
+                                                                            defaultValue={incomingProduct?.actionDate}
                                                                             required={true}
                                                                         />
                                                                     </div>

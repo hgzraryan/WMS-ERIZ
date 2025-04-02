@@ -406,7 +406,7 @@ const registerIncomingProduct = async (req, res) => {
 			  actionType: productData.actionType,
 			  actionDate: productData.actionDate,
 			  price: productData.price,
-			  quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,
+			  quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,// this quantity is differ from incoming product quantity
 			  unit: productData.unit,
 			  warehouse: productData.stock,
 			  balance: productData.balance,
@@ -427,7 +427,7 @@ const registerIncomingProduct = async (req, res) => {
 
         if (warehouseBalance) {
             // Update quantity if entry exists
-            warehouseBalance.count = (parseInt(warehouseBalance.count) + quantity).toString();
+            //warehouseBalance.count = (parseInt(warehouseBalance.count) + quantity).toString();
 			warehouseBalance.balance = (
 				parseInt(warehouseBalance.balance) + (weight ? weight : (volume ? volume : 0))
 			).toString();
@@ -462,6 +462,93 @@ const registerIncomingProduct = async (req, res) => {
 }
 const updateProduct = async (req, res) => {
 	
+    try {
+        const { documentId, updateFields } = req.body;
+
+        if (!documentId || !updateFields) {
+            return res.status(400).json({
+                success: false,
+                message: "Document ID and updateFields are required.",
+            });
+        }
+
+        const updateData = { $set: {} };
+    
+        
+    
+        // Add other fields to the $set operation if they exist in the request data
+        const fieldsToUpdate = [
+            "name",
+			"countryOfOrigin",
+			"stock",
+			"barcode",
+			"palletCount",
+			"boxCount",
+			"boxCapacity",
+			"unitWeight",
+			"manufacturer",
+			"balance",
+			"quantity",
+			"currency",
+			"price",
+			"producedDate",
+			"expirationDate",
+			"expiredAlertDay",
+			"actionDate",
+
+        ];
+    
+        for (const field of fieldsToUpdate) {
+            if (updateFields.hasOwnProperty(field)) {
+                updateData.$set[field] = updateFields[field];
+            }
+        }
+		if (updateFields.hasOwnProperty('partnerId')) {
+			updateData.$set.partner = updateFields.partnerId;
+		  }
+		  if (updateFields.hasOwnProperty('driverId')) {
+			  updateData.$set.driver = updateFields.driverId;
+		  }
+if (updateFields.hasOwnProperty('additional')) {
+			  updateData.$set.description = updateFields.additional;
+		  }
+if (updateFields.hasOwnProperty('dimensions')) {
+			  const dimansions = updateFields.dimensions;
+			  // Construct the update object for the 'contact' field
+			  for (const key in dimansions) {
+			   
+				if (dimansions.hasOwnProperty(key)) {
+				  updateData.$set[`dimensions.${key}`] = dimansions[key];
+				}
+			  }
+			}
+        // Update the document with the constructed update object
+        // const result = await Staff.updateOne(
+        //     { staffId: documentId }, // Filter to find the document
+        //     updateData // Update operation
+        // );
+		const result = await IncomingProducts.updateOne(
+			{ incomingProductId: documentId }, // Filter to find the document
+			updateData // Update operation
+		  );
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: `No Incoming product found with ID ${documentId}`,
+            });
+        }
+    
+        return res.status(200).json({
+            success: true,
+            message: `Incoming product with ID ${documentId} updated successfully`,
+        });
+    } catch (error) {
+        console.error("Error updating fields:", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while updating the staff",
+        });
+    }
 
 	console.log(req.body)
 	
@@ -473,36 +560,7 @@ const updateProduct = async (req, res) => {
 			const updateData = { $set: {} };
 
 			// Check if 'contact' property exists in the request data
-			if (updateFields.hasOwnProperty('contact')) {
-			  const contactData = updateFields.contact;
-
-			  // Construct the update object for the 'contact' field
-			  for (const key in contactData) {
-				if(key == 'address'){
-					continue;
-				}
-				if (contactData.hasOwnProperty(key)) {
-				  updateData.$set[`contact.${key}`] = contactData[key];
-				}
-			  }
-			  
-			  
-			  if (contactData.hasOwnProperty('address')) {
-				//updateData.$set.contact.address = contactData.address;
-				const addressData = contactData.address;
-				
-				for (const key in addressData) {
-					if (addressData.hasOwnProperty(key)) {
-					  updateData.$set[`contact.address.${key}`] = addressData[key];
-					}
-				  }
-				
-				
-			  }
-			  
-			  
-			  
-			}
+		
 // 	+		name
 // +description
 // barcode
@@ -528,34 +586,60 @@ const updateProduct = async (req, res) => {
 			
 
 			// Add other fields to the $set operation if they exist in the request data
-			if (updateFields.hasOwnProperty('name')) {
+			if (updateFields.hasOwnProperty('')) {
 			  updateData.$set.name = updateFields.name;
 			}
-			if (updateFields.hasOwnProperty('barcode')) {
-			  updateData.$set.barcode = updateFields.barcode;
-			}
-			if (updateFields.hasOwnProperty('countryOfOrigin')) {
+			if (updateFields.hasOwnProperty('')) {
 			  updateData.$set.countryOfOrigin = updateFields.countryOfOrigin;
 			}
-			if (updateFields.hasOwnProperty('stock')) {
+			if (updateFields.hasOwnProperty('')) {
 			  updateData.$set.stock = updateFields.stock;
 			}
-			if (updateFields.hasOwnProperty('bankAccNumber')) {
-			  updateData.$set.bankAccNumber = updateFields.bankAccNumber;
-			}
-			if (updateFields.hasOwnProperty('currency')) {
-			  updateData.$set.currency = updateFields.currency;
-			}
-			if (updateFields.hasOwnProperty('partnerType')) {
-			  updateData.$set.partnerType = updateFields.partnerType;
-			}
-			if (updateFields.hasOwnProperty('productCategories')) {
-			  updateData.$set.productCategories = updateFields.productCategories;
-			}
-			if (updateFields.hasOwnProperty('additional')) {
-			  updateData.$set.description = updateFields.additional;
+			if (updateFields.hasOwnProperty('')) {
+			  updateData.$set.barcode = updateFields.barcode;
 			}
 			
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.palletCount = updateFields.palletCount;
+			}
+			
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.boxCount = updateFields.boxCount;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.boxCapacity = updateFields.boxCapacity;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.unitWeight = updateFields.unitWeight;
+			}
+			
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.manufacturer = updateFields.manufacturer;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.balance = updateFields.balance;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.quantity = updateFields.quantity;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.currency = updateFields.currency;
+			}
+			if (updateFields.hasOwnProperty('')) {
+				updateData.$set.price = updateFields.price;
+			}
+			if (updateFields.hasOwnProperty('')) {
+			  updateData.$set.producedDate = updateFields.producedDate;
+			}
+			if (updateFields.hasOwnProperty('')) {
+			  updateData.$set.expirationDate = updateFields.expirationDate;
+			}
+			if (updateFields.hasOwnProperty('')) {
+			  updateData.$set.expiredAlertDay = updateFields.expiredAlertDay;
+			}
+			if (updateFields.hasOwnProperty('')) {
+			  updateData.$set.actionDate = updateFields.actionDate;
+			}
 			
 			
 	
@@ -570,8 +654,12 @@ const updateProduct = async (req, res) => {
 			console.log("Fields updated successfully");
 			return res.status(200).json({ 'message': `${documentId} changed successfully` });
 		} catch (error) {
-			res.status(500).json({ success: false, message: 'Internal server error, no Partner updated!'});
-		}
+        console.error("Error updating fields:", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while updating the incoming Products",
+        });
+    }
 		
 	
 	

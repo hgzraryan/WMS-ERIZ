@@ -50,7 +50,7 @@ function ProductsSummary() {
       setCurrentPage(Number(pageNumber));
     }, [pageNumber]);
     const handlePageClick = ({ selected: selectedPage }) => {
-      navigate(`/products/productsSummary/${selectedPage+1}`);
+      navigate(`/products/productsSummary/page/${selectedPage+1}`);
     }
     const handleToggleExportModal = (value) => {
       setToggleExport((prev) => value);

@@ -177,7 +177,7 @@ function ProductMovementsTable({
               accessor: "quantity",
               sortable: true,
               Cell: ({ row }) => (
-                <div className="d-flex align-items-center justify-content-center">
+                <div className="">
                  {row.original?.quantity+" " +row.original?.unit}
                 </div>
               ),

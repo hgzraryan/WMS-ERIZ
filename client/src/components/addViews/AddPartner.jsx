@@ -55,7 +55,7 @@ const currencies = [
   },
   {
     label: "ԱՄՆ դոլլար",
-    value: "RUB",
+    value: "USD",
   },
 ];
 const partnerTypes = [
