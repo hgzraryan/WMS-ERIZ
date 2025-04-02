@@ -711,7 +711,7 @@ console.log(data)
                                   className="form-label"
                                   htmlFor="manufacturers"
                                 >
-                                  Մատակարարներ
+                                  Արտադրողներ
                                 </label>
                                 {methods.formState.errors.manufacturers && (
                                   <span className="error text-red">

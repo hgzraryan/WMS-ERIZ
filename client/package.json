@@ -1,7 +1,7 @@
 {
   "name": "ERP_VTEAM_CLIENT",
   "version": "0.1.0",
-  "revision": "100325",
+  "revision": "020425",
   "private": true,
   "type": "module",
   "devDependencies": {
