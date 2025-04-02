@@ -448,7 +448,7 @@ const registerIncomingProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
 	
 
-	
+	console.log(req.body)
 	
 	
 		try {
@@ -488,7 +488,26 @@ const updateProduct = async (req, res) => {
 			  
 			  
 			}
-			
+// 	+		name
+// +description
+// barcode
+// productCategory
+// currentProductId
+// stock
+// price
+// currency
+// boxCount
+// unitWeight
+// boxCapacity
+// partner
+// manufacturer
+// driver
+// countryOfOrigin
+// palletCount
+// producedDate
+// expirationDate
+// actionDate
+// userId
 			
 			
 			
@@ -497,14 +516,14 @@ const updateProduct = async (req, res) => {
 			if (updateFields.hasOwnProperty('name')) {
 			  updateData.$set.name = updateFields.name;
 			}
-			if (updateFields.hasOwnProperty('companyType')) {
-			  updateData.$set.companyType = updateFields.companyType;
+			if (updateFields.hasOwnProperty('barcode')) {
+			  updateData.$set.barcode = updateFields.barcode;
 			}
-			if (updateFields.hasOwnProperty('respPersonFullName')) {
-			  updateData.$set.respPersonFullName = updateFields.respPersonFullName;
+			if (updateFields.hasOwnProperty('countryOfOrigin')) {
+			  updateData.$set.countryOfOrigin = updateFields.countryOfOrigin;
 			}
-			if (updateFields.hasOwnProperty('bankName')) {
-			  updateData.$set.bankName = updateFields.bankName;
+			if (updateFields.hasOwnProperty('stock')) {
+			  updateData.$set.stock = updateFields.stock;
 			}
 			if (updateFields.hasOwnProperty('bankAccNumber')) {
 			  updateData.$set.bankAccNumber = updateFields.bankAccNumber;
@@ -519,7 +538,7 @@ const updateProduct = async (req, res) => {
 			  updateData.$set.productCategories = updateFields.productCategories;
 			}
 			if (updateFields.hasOwnProperty('additional')) {
-			  updateData.$set.additional = updateFields.additional;
+			  updateData.$set.description = updateFields.additional;
 			}
 			
 			
@@ -528,13 +547,13 @@ const updateProduct = async (req, res) => {
 			
 			
 			// Update the document with the constructed update object
-			await Partners.updateOne(
-			  { partnerId: documentId }, // Filter to find the document
+			await IncomingProducts.updateOne(
+			  { incomingProductId: documentId }, // Filter to find the document
 			  updateData // Update operation
 			);
 
 			console.log("Fields updated successfully");
-			return res.status(200).json({ 'message': `Partner ID ${documentId} changed successfully` });
+			return res.status(200).json({ 'message': `${documentId} changed successfully` });
 		} catch (error) {
 			res.status(500).json({ success: false, message: 'Internal server error, no Partner updated!'});
 		}
