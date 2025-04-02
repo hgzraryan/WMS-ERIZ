@@ -17,7 +17,7 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL, MANUFACTURERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
@@ -45,6 +45,7 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
     const [productsList, setProductsList] = useState([])
     const [partnersList, setPartnersList] = useState([])
     const [workers, setWorkers] = useState([])
+    const [manufacturers, setManufacturers] = useState([])
 
     const methods = useForm({
         mode: "onChange",
@@ -78,6 +79,9 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
 
                 const partnersList = await axiosPrivate.get(PARTNERS_URL);
                 setPartnersList(partnersList?.data?.jsonString);
+                
+                const manufacturersList = await axiosPrivate.get(MANUFACTURERS_URL);
+                setManufacturers(manufacturersList?.data?.jsonString);
 
                 const workersList = await axiosPrivate.get(WORKERS_URL);
                 setWorkers(workersList?.data?.jsonString);
@@ -137,24 +141,23 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
               partner: +data.partners?.value || null,
               driver: +data.driver?.value || null,
               quantity: +data.quantity || null,
-              balance: +data.weight || +data?.volume || null,
-              unit:data.weight?'kg':data.volume?"liter":'',
+              balance: +totalWeight || +data?.volume || null,
+              unit:totalWeight?'kg':data.volume?"litre":'',
               dimensions:{
                 //height: +data.height || null,
                 //length: +data.length || null,
                 // width: +data.width || null,
-                weight: +data.weight || null,
+                weight: +totalWeight || null,
                 volume: +data.volume || null,
               },
               palletCount:+data?.pallet,
               boxCount:+boxCount,
               unitWeight:+unitWeight,
               boxCapacity:+boxCapacity,
-              manufacturer:data?.manufacturer,
+              manufacturer:+data.manufacturers?.value,
               currency:currency,
               price:+amount,
               sellingPrice:0,//+data.sellingPrice,
-              reorderLevel: +data?.reorderLevel,
               producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
               expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
               expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
@@ -397,7 +400,11 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                                                             control={methods.control}
                                                                             defaultValue={
                                                                                 incomingProduct
-                                                                                    ? { productListId: incomingProduct?.currentProductId, label: incomingProduct?.name }
+                                                                                    ? { 
+                                                                                        productListId: incomingProduct?.currentProductId, 
+                                                                                        label: incomingProduct?.name,
+                                                                                        categoryId:incomingProduct?.productCategory,
+                                                                                        value:incomingProduct?.currentProductId }
                                                                                     : null
                                                                             }
                                                                             rules={{ required: true }}
@@ -768,9 +775,51 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                                             {/* <div className="col-sm-6">
                                                                 <Input {...reorderLevel_validation} defaultValue={incomingProduct?.reorderLevel} />
                                                             </div> */}
-                                                            <div className="col-sm-6">
-                                                              <Input {...manufacturer_validation} />
-                                                            </div>
+                                                                       <div className="col-sm-6">
+                              <div className="d-flex justify-content-between me-2">
+                                <label
+                                  className="form-label"
+                                  htmlFor="manufacturers"
+                                >
+                                  Արտադրողներ
+                                </label>
+                                {methods.formState.errors.manufacturers && (
+                                  <span className="error text-red">
+                                    <span>
+                                      <img src={ErrorSvg} alt="errorSvg" />
+                                    </span>{" "}
+                                    պարտադիր
+                                  </span>
+                                )}
+                              </div>
+                              <div className="form-control">
+                                <Controller
+                                  name="manufacturers"
+                                  control={methods.control}
+                                  defaultValue={
+                                    incomingProduct
+                                        ? { value: incomingProduct?.manufacturer, label: incomingProduct?.manufacturerName }
+                                        : null
+                                }
+                                  rules={{ required: true }}
+                                  render={({ field }) => (
+                                    <Select
+                                      {...field}
+                                      value={field.value}
+                                      options={manufacturers?.map((item) => ({
+                                        value: item.manufacturerId,
+                                        label: item.name,
+                                      }))}
+                                      placeholder={"Ընտրել"}
+                                      // onChange={(val) => {
+                                      //   field.onChange(val);
+                                      //   onUnitSelect(val);
+                                      // }}
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
                                                             {/* <div className="col-sm-6">
                                     <Input {...sellingPrice_validation} />
                                   </div> */}

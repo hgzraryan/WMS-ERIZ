@@ -600,9 +600,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            <div className="col-sm-6">
-                                                                <Input {...reorderLevel_validation} defaultValue={incomingProduct?.reorderLevel} />
-                                                            </div>
+                                                            
                                                             {/* <div className="col-sm-6">
                                     <Input {...sellingPrice_validation} />
                                   </div> */}
