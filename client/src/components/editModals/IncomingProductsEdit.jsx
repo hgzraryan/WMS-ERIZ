@@ -16,7 +16,7 @@ import {
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL } from "../../utils/constants";
+import { PRODUCTSLIST_URL, REGISTER_PRODUCT, CURRENCIES, WAREHOUSES_URL, WORKERS_URL, PARTNERS_URL, PRODUCTS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import { toast } from "react-toastify";
 import CustomDateComponent from "../CustomDateComponent";
@@ -113,15 +113,15 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
         const { weight, volume } = incomingProduct?.dimensions || {};
 
         const newProd = {
-            name: data?.productName?.label?.trim() !== incomingProduct?.name?.trim() ? data?.productName?.label : null,
-            currentProductId: data?.productName?.productListId !== incomingProduct?.incomingProductId ? data?.productName?.productListId : null,
-            productCategory: data?.productName?.categoryId !== incomingProduct?.productCategory ? data?.productName?.categoryId : null,
-            productIdent: data?.productName?.value || null,//TODO ????????
-            countryOfOrigin: data?.countryOfOrigin?.trim() !== incomingProduct?.countryOfOrigin?.trim() ? data?.countryOfOrigin : null,
-            stock: +data?.warehouse?.value !== incomingProduct?.warehouseId ? +data?.warehouse?.value : null,
-            partner: +data.partners?.value !== incomingProduct?.partnerId ? +data.partners?.value : null,
-            driver: +data.driver?.value !== incomingProduct?.driverId ? +data.driver?.value : null,
-            quantity: +data.quantity !== incomingProduct?.quantity ? +data.quantity : null,
+            // name: data?.productName?.label?.trim() !== incomingProduct?.name?.trim() ? data?.productName?.label : null,
+            // currentProductId: data?.productName?.productListId !== incomingProduct?.incomingProductId ? data?.productName?.productListId : null,
+            // productCategory: data?.productName?.categoryId !== incomingProduct?.productCategory ? data?.productName?.categoryId : null,
+            // productIdent: data?.productName?.value || null,//TODO ????????
+             countryOfOrigin: data?.countryOfOrigin?.trim() !== incomingProduct?.countryOfOrigin?.trim() ? data?.countryOfOrigin : null,
+             stock: +data?.warehouse?.value !== incomingProduct?.warehouseId ? +data?.warehouse?.value : null,
+            // partner: +data.partners?.value !== incomingProduct?.partnerId ? +data.partners?.value : null,
+            // driver: +data.driver?.value !== incomingProduct?.driverId ? +data.driver?.value : null,
+            // quantity: +data.quantity !== incomingProduct?.quantity ? +data.quantity : null,
             // balance: (+data.weight !== weight || +data.volume !== volume)
             //     ? +data.weight || +data.volume
             //     : null,
@@ -130,16 +130,16 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
                 //height: +data.height || null,
                 //length: +data.length || null,
                 // width: +data.width || null,
-                weight: (!!data.weight && +data.weight !==weight)?+data.weight:null,
-                volume: (!!data.volume && +data.volume !== volume) ?+data.volume:null,
+                // weight: (!!data.weight && +data.weight !==weight)?+data.weight:null,
+                // volume: (!!data.volume && +data.volume !== volume) ?+data.volume:null,
             },
-             palletCount: +data.pallet !== incomingProduct?.palletCount ? +data.pallet : null,
-             currency: currency !== incomingProduct?.currency.trim() ? currency : null,
-             price: +data.price !== incomingProduct?.price ? +data.price : null,
+            //  palletCount: +data.pallet !== incomingProduct?.palletCount ? +data.pallet : null,
+            //  currency: currency !== incomingProduct?.currency.trim() ? currency : null,
+            //  price: +data.price !== incomingProduct?.price ? +data.price : null,
             // sellingPrice: 0,//+data.sellingPrice,
-             reorderLevel: +data.reorderLevel !== incomingProduct?.reorderLevel ? +data.reorderLevel : null,
+             //reorderLevel: +data.reorderLevel !== incomingProduct?.reorderLevel ? +data.reorderLevel : null,
              additional: additionalData!==incomingProduct?.description?.trim()?additionalData:null,
-             barcode: +data.barcode !== incomingProduct?.barcode ? +data.barcode : null,
+             barcode: +data.barcode !== +incomingProduct?.barcode ? +data.barcode : null,
 
              //producedDate: moment(data?.dateOfBirth).format('YYYY-MM-DD'),
             // expiredAlertDay: moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
@@ -152,29 +152,29 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             //   'attributeUnitLabel':el.attributeUnitLabel
             //  }})
         };
-        const updatedData = deleteNullProperties(newProd)
-        console.log(updatedData)
+        const updatedFields = deleteNullProperties(newProd)
+        console.log(updatedFields)
 
-        // try {
-        //     await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
-        //         headers: { "Content-Type": "application/json" },
-        //         withCredentials: true,
-        //     });
+        try {
+            await axiosPrivate.put(PRODUCTS_URL, { updatedFields, id: incomingProduct.incomingProductId }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
 
-        //     setEditRow(false);
-        //     refreshData();
-        //     notify(
-        //         `${newProd.name}  ավելացված է`
-        //     );
-        // } catch (err) {
-        //     if (!err?.response) {
-        //         setErrMsg("No Server Response");
-        //     } else if (err.response?.status === 409) {
-        //         setErrMsg("Username Taken");
-        //     } else {
-        //         setErrMsg(" Failed");
-        //     }
-        // }
+            setEditRow(false);
+            refreshData();
+            notify(
+                `${newProd.name}  ավելացված է`
+            );
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg("No Server Response");
+            } else if (err.response?.status === 409) {
+                setErrMsg("Username Taken");
+            } else {
+                setErrMsg(" Failed");
+            }
+        }
     });
     return (
         <>
