@@ -82,6 +82,20 @@ const getAllProducts = async (req, res) => {
 				as: "warehouseInfo" 
 			}
 		},
+		  {
+			$lookup: {
+				from: "manufacturers", 
+				localField: "manufacturer",
+				foreignField: "manufacturerId", 
+				as: "manufacturerInfo" 
+			}
+		},
+		{
+			$unwind: {
+				path: "$manufacturerInfo", // Unwind to deconstruct the array of supplierInfo
+				preserveNullAndEmptyArrays: true // Preserve documents without supplier info
+			}
+		},
 		{
 			$unwind: {
 				path: "$workerInfo", // Unwind to deconstruct the array of supplierInfo
@@ -149,7 +163,8 @@ const getAllProducts = async (req, res) => {
 				unitWeight:1,
 				boxCapacity:1,
 				boxCount:1,
-				manufacturer:1,
+				manufacturerId:"$manufacturerInfo.manufacturerId",
+				manufacturerName:"$manufacturerInfo.name",
 				driverId:"$workerInfo.workerId",
 				driverName:"$workerInfo.fullName",
 				// supplierId:"$supplierInfo.supplierId",
