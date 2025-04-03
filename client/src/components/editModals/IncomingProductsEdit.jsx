@@ -170,7 +170,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             expiredAlertDay: moment(data?.expiredAlertDay).format('YYYY-MM-DD') !== moment(incomingProduct?.expiredAlertDay).format('YYYY-MM-DD')
                 ? moment(data?.expiredAlertDay).format('YYYY-MM-DD')
                 : null,
-            actionDate: moment(data?.actionDate).format('YYYY-MM-DD') !== moment(incomingProduct?.actionDate).format('YYYY-MM-DD')
+            actionDate: moment(data?.actionDate).format('YYYY-MM-DD HH:mm') !== moment(incomingProduct?.actionDate).format('YYYY-MM-DD HH:mm')
                 ? moment(data?.actionDate).format('YYYY-MM-DD HH:mm')
                 : null,
             currentProductId: data?.productName?.productListId !== incomingProduct?.currentProductId ? data?.productName?.productListId : null,

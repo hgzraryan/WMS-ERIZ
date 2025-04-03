@@ -245,7 +245,6 @@ const FilterPanel = ({ setFilter }) => {
     }, [navigate]);
 
     const onSubmit = (data) => {
-        debugger
         setFilter(data);
     };
 

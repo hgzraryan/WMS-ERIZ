@@ -12,7 +12,7 @@ function CustomDateTimeComponent({methods, control, name,required='true',default
         name,
         control,
         rules: { required: required },
-        defaultValue:defaultValue,
+        defaultValue:!!defaultValue ? new Date(defaultValue) : '',
 
       });
       const handleInputChange = (e) => {
@@ -44,7 +44,7 @@ function CustomDateTimeComponent({methods, control, name,required='true',default
          scrollableYearDropdown
          onChange={handleDateChange}
          onChangeRaw={handleInputChange} // For manual input
-         dateFormat={"yyyy-MM-dd  HH:mm"}
+         dateFormat={"yyyy-MM-dd HH:mm"}
          timeFormat="HH:mm"
          selected={field.value}
          isClearable
