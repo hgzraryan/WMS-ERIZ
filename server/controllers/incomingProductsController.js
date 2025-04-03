@@ -412,7 +412,7 @@ const registerIncomingProduct = async (req, res) => {
 			  balance: productData.balance,
 			  driver: productData.driver,	
 			  actionType:'incoming',
-			  sellingPrice: productData.sellingPrice,
+			  sellingPrice: 0,
 			  partner:productData.partner,
 			  producedDate:productData.producedDate,
 			  boxCount:productData.boxCount,
@@ -495,6 +495,8 @@ const updateProduct = async (req, res) => {
 			"expirationDate",
 			"expiredAlertDay",
 			"actionDate",
+			"currentProductId",
+			"productIdent",
 
         ];
     

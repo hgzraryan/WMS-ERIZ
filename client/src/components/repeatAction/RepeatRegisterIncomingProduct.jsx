@@ -798,7 +798,7 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
                                   control={methods.control}
                                   defaultValue={
                                     incomingProduct
-                                        ? { value: incomingProduct?.manufacturer, label: incomingProduct?.manufacturerName }
+                                        ? { value: incomingProduct?.manufacturerId, label: incomingProduct?.manufacturerName }
                                         : null
                                 }
                                   rules={{ required: true }}
