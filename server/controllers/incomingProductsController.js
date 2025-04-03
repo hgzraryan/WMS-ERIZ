@@ -405,6 +405,8 @@ const registerIncomingProduct = async (req, res) => {
 			  currentProductId: productData.currentProductId,
 			  actionType: productData.actionType,
 			  actionDate: productData.actionDate,
+			  expirationDate: productData.expirationDate,
+			  expiredAlertDay: productData.expiredAlertDay,
 			  price: productData.price,
 			  quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,// this quantity is differ from incoming product quantity
 			  unit: productData.unit,
@@ -422,7 +424,7 @@ const registerIncomingProduct = async (req, res) => {
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
-
+//TODO
 		let warehouseBalance = await WarehouseBalance.findOne({ productListId: currentProduct, warehouseId });
 
         if (warehouseBalance) {
@@ -461,7 +463,6 @@ const registerIncomingProduct = async (req, res) => {
 
 }
 const updateProduct = async (req, res) => {
-	
     try {
         const { documentId, updateFields } = req.body;
 
@@ -473,201 +474,194 @@ const updateProduct = async (req, res) => {
         }
 
         const updateData = { $set: {} };
-    
-        
-    
-        // Add other fields to the $set operation if they exist in the request data
         const fieldsToUpdate = [
-            "name",
-			"countryOfOrigin",
-			"stock",
-			"barcode",
-			"palletCount",
-			"boxCount",
-			"boxCapacity",
-			"unitWeight",
-			"manufacturer",
-			"balance",
-			"quantity",
-			"currency",
-			"price",
-			"producedDate",
-			"expirationDate",
-			"expiredAlertDay",
-			"actionDate",
-			"currentProductId",
-			"productIdent",
-
+            "name", "countryOfOrigin", "stock", "barcode", "palletCount", "boxCount",
+            "boxCapacity", "unitWeight", "manufacturer", "balance", "quantity", "currency",
+            "price", "producedDate", "expirationDate", "expiredAlertDay", "actionDate",
+            "currentProductId", "productIdent"
         ];
-    
+
         for (const field of fieldsToUpdate) {
             if (updateFields.hasOwnProperty(field)) {
                 updateData.$set[field] = updateFields[field];
             }
         }
-		if (updateFields.hasOwnProperty('partnerId')) {
-			updateData.$set.partner = updateFields.partnerId;
-		  }
-		  if (updateFields.hasOwnProperty('driverId')) {
-			  updateData.$set.driver = updateFields.driverId;
-		  }
-if (updateFields.hasOwnProperty('additional')) {
-			  updateData.$set.description = updateFields.additional;
-		  }
-if (updateFields.hasOwnProperty('dimensions')) {
-			  const dimansions = updateFields.dimensions;
-			  // Construct the update object for the 'contact' field
-			  for (const key in dimansions) {
-			   
-				if (dimansions.hasOwnProperty(key)) {
-				  updateData.$set[`dimensions.${key}`] = dimansions[key];
-				}
-			  }
-			}
-        // Update the document with the constructed update object
-        // const result = await Staff.updateOne(
-        //     { staffId: documentId }, // Filter to find the document
-        //     updateData // Update operation
-        // );
-		const result = await IncomingProducts.updateOne(
-			{ incomingProductId: documentId }, // Filter to find the document
-			updateData // Update operation
-		  );
-        if (result.matchedCount === 0) {
+        if (updateFields.hasOwnProperty('partnerId')) {
+            updateData.$set.partner = updateFields.partnerId;
+        }
+        if (updateFields.hasOwnProperty('driverId')) {
+            updateData.$set.driver = updateFields.driverId;
+        }
+        if (updateFields.hasOwnProperty('additional')) {
+            updateData.$set.description = updateFields.additional;
+        }
+        if (updateFields.hasOwnProperty('dimensions')) {
+            const dimensions = updateFields.dimensions;
+            for (const key in dimensions) {
+                if (dimensions.hasOwnProperty(key)) {
+                    updateData.$set[`dimensions.${key}`] = dimensions[key];
+                }
+            }
+        }
+
+        const existingProduct = await IncomingProducts.findOne({ incomingProductId: documentId });
+        if (!existingProduct) {
             return res.status(404).json({
                 success: false,
                 message: `No Incoming product found with ID ${documentId}`,
             });
         }
-    
+
+        await IncomingProducts.updateOne({ incomingProductId: documentId }, updateData);
+
+        // Update ProductsMovements
+        const movementUpdate = {
+            actionDate: updateFields.actionDate || existingProduct.actionDate,
+            price: updateFields.price || existingProduct.price,
+            quantity: updateFields.dimensions?.weight || updateFields.dimensions?.volume || existingProduct.dimensions?.weight || existingProduct.dimensions?.volume,
+            unit: updateFields.unit || existingProduct.unit,
+            warehouse: updateFields.stock || existingProduct.stock,
+            balance: updateFields.balance || existingProduct.balance,
+            driver: updateFields.driverId || existingProduct.driver,
+            partner: updateFields.partnerId || existingProduct.partner,
+            producedDate: updateFields.producedDate || existingProduct.producedDate,
+            expirationDate: updateFields.expirationDate || existingProduct.expirationDate || '',
+            expiredAlertDay: updateFields.expiredAlertDay || existingProduct.expiredAlertDay || '',
+            boxCount: updateFields.boxCount || existingProduct.boxCount,
+            unitWeight: updateFields.unitWeight || existingProduct.unitWeight,
+            boxCapacity: updateFields.boxCapacity || existingProduct.boxCapacity,
+            manufacturer: updateFields.manufacturer || existingProduct.manufacturer
+        };
+		// expirationDate: productData.expirationDate,
+		// 	  expiredAlertDay: productData.expiredAlertDay,
+        await ProductsMovements.updateOne({ actionId: documentId,actionType:"incoming"}, { $set: movementUpdate });
+
+        //TODO Update WarehouseBalance
+        const warehouseBalance = await WarehouseBalance.findOne({ productListId: existingProduct.currentProductId});
+        if (warehouseBalance) {
+            warehouseBalance.balance = (
+                parseInt(warehouseBalance.balance) + (updateFields.dimensions?.weight || updateFields.dimensions?.volume || 0)
+            ).toString();
+            await warehouseBalance.save();
+        } else {
+            const newWarehouseBalance = new WarehouseBalance({
+                productListId: existingProduct.currentProductId,
+                balance: updateFields.balance || existingProduct.balance,
+                unit: updateFields.dimensions?.weight ? 'weight' : updateFields.dimensions?.volume ? 'volume' : ''
+            });
+            await newWarehouseBalance.save();
+        }
+
         return res.status(200).json({
             success: true,
             message: `Incoming product with ID ${documentId} updated successfully`,
         });
     } catch (error) {
-        console.error("Error updating fields:", error);
+        console.error("Error updating product:", error);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while updating the staff",
+            message: "An error occurred while updating the product",
         });
     }
+};
+// const updateProduct = async (req, res) => {
+	
+//     try {
+//         const { documentId, updateFields } = req.body;
 
-	console.log(req.body)
-	
-	
-		try {
-			const updateFields = req.body.updatedFields;
-			const documentId = req.body.id;
+//         if (!documentId || !updateFields) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Document ID and updateFields are required.",
+//             });
+//         }
 
-			const updateData = { $set: {} };
+//         const updateData = { $set: {} };
+    
+        
+    
+//         // Add other fields to the $set operation if they exist in the request data
+//         const fieldsToUpdate = [
+//             "name",
+// 			"countryOfOrigin",
+// 			"stock",
+// 			"barcode",
+// 			"palletCount",
+// 			"boxCount",
+// 			"boxCapacity",
+// 			"unitWeight",
+// 			"manufacturer",
+// 			"balance",
+// 			"quantity",
+// 			"currency",
+// 			"price",
+// 			"producedDate",
+// 			"expirationDate",
+// 			"expiredAlertDay",
+// 			"actionDate",
+// 			"currentProductId",
+// 			"productIdent",
 
-			// Check if 'contact' property exists in the request data
-		
-// 	+		name
-// +description
-// barcode
-// productCategory
-// currentProductId
-// stock
-// price
-// currency
-// boxCount
-// unitWeight
-// boxCapacity
-// partner
-// manufacturer
-// driver
-// countryOfOrigin
-// palletCount
-// producedDate
-// expirationDate
-// actionDate
-// userId
-			
-			
-			
+//         ];
+    
+//         for (const field of fieldsToUpdate) {
+//             if (updateFields.hasOwnProperty(field)) {
+//                 updateData.$set[field] = updateFields[field];
+//             }
+//         }
+// 		if (updateFields.hasOwnProperty('partnerId')) {
+// 			updateData.$set.partner = updateFields.partnerId;
+// 		  }
+// 		  if (updateFields.hasOwnProperty('driverId')) {
+// 			  updateData.$set.driver = updateFields.driverId;
+// 		  }
+// if (updateFields.hasOwnProperty('additional')) {
+// 			  updateData.$set.description = updateFields.additional;
+// 		  }
+// if (updateFields.hasOwnProperty('dimensions')) {
+// 			  const dimansions = updateFields.dimensions;
+// 			  // Construct the update object for the 'contact' field
+// 			  for (const key in dimansions) {
+			   
+// 				if (dimansions.hasOwnProperty(key)) {
+// 				  updateData.$set[`dimensions.${key}`] = dimansions[key];
+// 				}
+// 			  }
+// 			}
+//         // Update the document with the constructed update object
+//         // const result = await Staff.updateOne(
+//         //     { staffId: documentId }, // Filter to find the document
+//         //     updateData // Update operation
+//         // );
+// 		const result = await IncomingProducts.updateOne(
+// 			{ incomingProductId: documentId }, // Filter to find the document
+// 			updateData // Update operation
+// 		  );
+//         if (result.matchedCount === 0) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: `No Incoming product found with ID ${documentId}`,
+//             });
+//         }
+    
+//         return res.status(200).json({
+//             success: true,
+//             message: `Incoming product with ID ${documentId} updated successfully`,
+//         });
+//     } catch (error) {
+//         console.error("Error updating fields:", error);
+//         return res.status(500).json({
+//             success: false,
+//             message: "An error occurred while updating the staff",
+//         });
+//     }
 
-			// Add other fields to the $set operation if they exist in the request data
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.name = updateFields.name;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.countryOfOrigin = updateFields.countryOfOrigin;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.stock = updateFields.stock;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.barcode = updateFields.barcode;
-			}
-			
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.palletCount = updateFields.palletCount;
-			}
-			
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.boxCount = updateFields.boxCount;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.boxCapacity = updateFields.boxCapacity;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.unitWeight = updateFields.unitWeight;
-			}
-			
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.manufacturer = updateFields.manufacturer;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.balance = updateFields.balance;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.quantity = updateFields.quantity;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.currency = updateFields.currency;
-			}
-			if (updateFields.hasOwnProperty('')) {
-				updateData.$set.price = updateFields.price;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.producedDate = updateFields.producedDate;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.expirationDate = updateFields.expirationDate;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.expiredAlertDay = updateFields.expiredAlertDay;
-			}
-			if (updateFields.hasOwnProperty('')) {
-			  updateData.$set.actionDate = updateFields.actionDate;
-			}
-			
-			
-	
-			
-			
-			// Update the document with the constructed update object
-			await IncomingProducts.updateOne(
-			  { incomingProductId: documentId }, // Filter to find the document
-			  updateData // Update operation
-			);
-
-			console.log("Fields updated successfully");
-			return res.status(200).json({ 'message': `${documentId} changed successfully` });
-		} catch (error) {
-        console.error("Error updating fields:", error);
-        return res.status(500).json({
-            success: false,
-            message: "An error occurred while updating the incoming Products",
-        });
-    }
-		
 	
 	
 	
 	
-}
+	
+// }
 const deleteProduct = async (req, res) => {
 	
 	try {	

@@ -40,6 +40,12 @@ const productsMovementsSchema = new Schema({
   actionDate: {
     type: String
   },
+  expirationDate: {
+    type: String
+  },
+  expiredAlertDay: {
+    type: String
+  },
   price: {
     type: String
   },
