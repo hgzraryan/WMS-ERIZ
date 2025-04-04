@@ -2,126 +2,158 @@ const ProductsMovements = require('../model/productsMovements');
 
 
 const getAllProductsMovements = async (req, res) => {
+	try {
+	  let page = req.body.page;
+	  let onPage = req.body.onPage;
+	  const filters = req.body.params || {};
+  
+	  let skipParam = 0;
+	  if (page === undefined) {
+		onPage = 100000;
+		skipParam = 0;
+	  } else {
+		skipParam = parseInt(page) === 1 ? 0 : parseInt(page) * onPage - onPage;
+	}
+	const toArray = (val) => {
+		if (!val) return [];
+		return Array.isArray(val) ? val : [val];
+	};
+	// Build dynamic filter object
+	const matchStage = {};
 	
-		try {	
-			var page = req.body.page;
-			var onPage = req.body.onPage;
+	if (filters.price) {
+	  matchStage["price"] = filters.price
+	}
+	if (filters.actionId) {
+	  matchStage["actionId"] = filters.actionId
+	}
+debugger
+	if (filters.stock) {
+		matchStage["warehouse"] = filters.stock
+	  }
+	if (filters.productName) {
+		matchStage["productName"] = {
+			$regex: filters.productName,
+			$options: "i"
+		};
+	}
 	
-			
-			
-			if (page === undefined) {
-				onPage = 100000;
-				skipParam = 0;
-			} else {
-				if(req.body.page==1){
-					skipParam=0;
-				}else{
-					skipParam = parseInt(page)*onPage-onPage;
-				}
-			}
-				
-	
-			const productsMovements = await ProductsMovements.aggregate([
-				{
-				  $sort: { actionDate: -1 } // Sort documents by actionDate in descending order
-				},
-				{
-				  $skip: skipParam // Skip documents based on the skipParam value
-				},
-				{
-				  $limit: onPage // Limit the number of documents returned based on the onPage value
-				},
-				{
-				  $lookup: {
-					from: "workers", // Name of the workers collection
-					localField: "driver", // Field in ProductsMovements collection
-					foreignField: "workerId", // Field in workers collection
-					as: "workerInfo" // Alias for the joined data
-				  }
-				},
-				{
-				  $lookup: {
-					from: "partners", // Name of the workers collection
-					localField: "partner", // Field in ProductsMovements collection
-					foreignField: "partnerId", // Field in workers collection
-					as: "partnerInfo" // Alias for the joined data
-				  }
-				},
-				{
-				  $lookup: {
-					from: "warehouses",
-					localField: "warehouse",
-					foreignField: "warehouseId",
-					as: "warehouseInfo"
-				  }
-				},
-				{
-				  $unwind: {
-					path: "$workerInfo", // Deconstruct the workerInfo array
-					preserveNullAndEmptyArrays: true // Preserve documents without workerInfo
-				  }
-				},
-				{
-				  $unwind: {
-					path: "$partnerInfo", // Deconstruct the workerInfo array
-					preserveNullAndEmptyArrays: true // Preserve documents without workerInfo
-				  }
-				},
-				{
-				  $unwind: {
-					path: "$warehouseInfo", // Deconstruct the warehouseInfo array
-					preserveNullAndEmptyArrays: true // Preserve documents without warehouseInfo
-				  }
-				},
-				{
-				  $project: {
-					actionId: 1,
-					customer: 1,
-					partnerId: '$partnerInfo.partnerId',
-					partnerName: '$partnerInfo.name',
-					productName: 1,
-					actionType: 1,
-					actionDate: 1,
-					price: 1,
-					quantity: 1,
-					unit: 1,
-					warehouse: '$warehouseInfo.name',
-					balance: 1,
-					driver: '$workerInfo.fullName',
-					sellingPrice:1,
-					producedDate:1,
-					unitWeight:1,
-					boxCapacity:1,
-					boxCount:1,
-					manufacturer:1,
-					
-				  }
-				}
-			  ]).exec();
-			  
-	
-			const count = await ProductsMovements.count({});
-			if (!productsMovements) return res.status(204).json({ 'message': 'No Products lists found' });
-	
-			var jsonString = productsMovements;
-			var jsonCount = count;
-		 
-			var mainObj = {
-				success: true,
-				count:parseInt(jsonCount),
-				jsonString			
-			}
-			
-			res.status(200).json(mainObj);
-		
-		} catch (error) {
-			res.status(500).json({ success: false, message: 'Internal server error'});
+	if (filters.actionType) {
+		matchStage["actionType"] = filters.actionType.toLowerCase();
+	}
+	if (filters.dateRange?.startDate && filters.dateRange?.endDate) {
+	  matchStage["actionDate"] = {
+		$gte: new Date(filters.dateRange.startDate),
+		$lte: new Date(filters.dateRange.endDate)
+	  };
+	}
+	  if (filters.partner && filters.partner.length > 0) {
+		matchStage["partner"] = {
+		  $in: filters.partner.map(p => parseInt(p.value))
+		};
+	  }
+  
+	  if (filters.driver && filters.driver.length > 0) {
+		matchStage["driver"] = {
+		  $in: filters.driver.map(d => parseInt(d.value))
+		};
+	  }
+	  if (filters.manufacturer) {
+		const manufacturers = toArray(filters.manufacturer);
+		matchStage["manufacturer"] = {
+		  $in: manufacturers.map(m => parseInt(m.value ?? m))
+		};
+	  }
+  
+	  if (filters.warehouse && filters.warehouse.length > 0) {
+		matchStage["warehouse"] = {
+		  $in: filters.warehouse.map(w => parseInt(w.value))
+		};
+	  }
+  
+  
+	  const productsMovements = await ProductsMovements.aggregate([
+		{ $sort: { actionDate: -1 } },
+		{ $match: matchStage },
+		{ $skip: skipParam },
+		{ $limit: onPage },
+		{
+		  $lookup: {
+			from: "workers",
+			localField: "driver",
+			foreignField: "workerId",
+			as: "workerInfo"
+		  }
+		},
+		{
+		  $lookup: {
+			from: "partners",
+			localField: "partner",
+			foreignField: "partnerId",
+			as: "partnerInfo"
+		  }
+		},
+		{
+		  $lookup: {
+			from: "warehouses",
+			localField: "warehouse",
+			foreignField: "warehouseId",
+			as: "warehouseInfo"
+		  }
+		},
+		{
+		  $unwind: { path: "$workerInfo", preserveNullAndEmptyArrays: true }
+		},
+		{
+		  $unwind: { path: "$partnerInfo", preserveNullAndEmptyArrays: true }
+		},
+		{
+		  $unwind: { path: "$warehouseInfo", preserveNullAndEmptyArrays: true }
+		},
+		{
+		  $project: {
+			actionId: 1,
+			customer: 1,
+			partnerId: '$partnerInfo.partnerId',
+			partnerName: '$partnerInfo.name',
+			productName: 1,
+			actionType: 1,
+			actionDate: 1,
+			price: 1,
+			quantity: 1,
+			unit: 1,
+			warehouse: '$warehouseInfo.name',
+			warehouseId:'$warehouseInfo.warehouseId',
+			balance: 1,
+			driver: '$workerInfo.fullName',
+			sellingPrice: 1,
+			producedDate: 1,
+			unitWeight: 1,
+			boxCapacity: 1,
+			boxCount: 1,
+			manufacturer: 1,
+		  }
 		}
-		
-		
-		
-	
-}
+	  ]);
+  
+	  const count = await ProductsMovements.countDocuments(matchStage);
+  
+	  if (!productsMovements || productsMovements.length === 0) {
+		return res.status(204).json({ message: 'No product movements found' });
+	  }
+  
+	  res.status(200).json({
+		success: true,
+		count,
+		jsonString: productsMovements
+	  });
+  
+	} catch (error) {
+	  console.error("Error in getAllProductsMovements:", error);
+	  res.status(500).json({ success: false, message: 'Internal server error' });
+	}
+  };
+  
 const searchProductsMovements = async (req, res) => {
     console.log(req.body);
 
