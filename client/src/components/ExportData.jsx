@@ -6,7 +6,6 @@ import ErrorSvg from "../dist/svg/error.svg";
 import LoadingSpinner from './LoadingSpinner';
 import Select from "react-select";
 import moment from 'moment';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { utils, writeFile } from 'xlsx';
 import { CSVLink } from "react-csv";
 import { deleteNullProperties } from '../utils/helper';
@@ -14,6 +13,7 @@ import makeAnimated from "react-select/animated";
 import CustomExportDateComponent from './CustomExportDateComponent';
 import { PRODUCTSLIST_URL, WAREHOUSES_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const translationMap = {
   actionId: "Հ/Հ",

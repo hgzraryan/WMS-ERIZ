@@ -192,7 +192,7 @@ function ProductMovements() {
                       id="scrollableDiv"
                       style={{overflow: "auto" }}
                     >
-                      {/* <FilterPanel setFilter={setFilter} filter={filter}  /> */}
+                      <FilterPanel setFilter={setFilter} filter={filter}  />
                         <ProductMovementsTable
                           confirmRef={confirmAgentsRef}
                           selectedItem={selectedItem}

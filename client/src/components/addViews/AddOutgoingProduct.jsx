@@ -5,7 +5,7 @@ import { Controller, Form, FormProvider, useForm } from "react-hook-form";
 import ErrorSvg from "../../dist/svg/error.svg";
 import Select from "react-select";
 import { useLocation, useNavigate } from "react-router-dom";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 import { PARTNERS_URL, PRODUCTS_URL, PRODUCTSLIST_URL, REGISTER_PRODUCT, WAREHOUSES_URL, WORKERS_URL } from "../../utils/constants";
 import { deleteNullProperties } from "../../utils/helper";
 import CustomTable from "../CustomTable";
@@ -17,6 +17,7 @@ import TotalView from "../viewTables/TotalView";
 import { Input } from "../Input";
 import { price_validation, sellingPrice_validation } from "../../utils/inputValidations";
 import ReactQuillEditor from "../ReactQuillEditor";
+import  useAxiosPrivate  from '../../hooks/useAxiosPrivate';
 
 function AddOutgoingProduct({
   handleToggleCreateModal,
