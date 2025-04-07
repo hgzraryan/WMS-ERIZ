@@ -420,7 +420,7 @@ const registerIncomingProduct = async (req, res) => {
 			  boxCount:productData.boxCount,
 			  unitWeight:productData.unitWeight,
 			  boxCapacity:productData.boxCapacity,
-			  manufacturer:productData.manufacturer
+			  manufacturerId:productData.manufacturer
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();

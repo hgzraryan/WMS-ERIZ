@@ -27,31 +27,34 @@ const getAllProductsMovements = async (req, res) => {
 	if (filters.actionId) {
 	  matchStage["actionId"] = filters.actionId
 	}
-debugger
-	if (filters.stock) {
-		matchStage["warehouse"] = filters.stock
-	  }
-	if (filters.productName) {
-		matchStage["productName"] = {
-			$regex: filters.productName,
-			$options: "i"
-		};
-	}
+
+	  if (Array.isArray(filters.stock) && filters.stock.length > 0) {
+		  matchStage["warehouse"] = { $in: filters.stock.map(Number) };
+		}
+	  if (Array.isArray(filters.product) && filters.product.length > 0) {
+		  matchStage["currentProductId"] = { $in: filters.product.map(Number) };
+		}
+	  if (Array.isArray(filters.partner) && filters.partner.length > 0) {
+		  matchStage["partner"] = { $in: filters.partner.map(Number) };
+		}
+		if (filters.actionType) {
+			matchStage["actionType"] = filters.actionType.toLowerCase();
+		}
+	// if (filters.product) {
+	// 	matchStage["currentProductId"] = filters.product
+	// }
+
 	
-	if (filters.actionType) {
-		matchStage["actionType"] = filters.actionType.toLowerCase();
-	}
+	//   if (filters.product && Array.isArray(filters.product) && filters.product.length > 0) {
+	// 	matchStage["currentProductId"] = { $in: filters.product.map(Number) };
+	// }
 	if (filters.dateRange?.startDate && filters.dateRange?.endDate) {
 	  matchStage["actionDate"] = {
-		$gte: new Date(filters.dateRange.startDate),
-		$lte: new Date(filters.dateRange.endDate)
+		$gte: filters.dateRange.startDate,
+		$lte: filters.dateRange.endDate
 	  };
 	}
-	  if (filters.partner && filters.partner.length > 0) {
-		matchStage["partner"] = {
-		  $in: filters.partner.map(p => parseInt(p.value))
-		};
-	  }
+	  
   
 	  if (filters.driver && filters.driver.length > 0) {
 		matchStage["driver"] = {
@@ -132,16 +135,19 @@ debugger
 			boxCapacity: 1,
 			boxCount: 1,
 			manufacturer: 1,
+			currentProductId:1,
+			expirationDate:1,
+			expiredAlertDay:1
 		  }
 		}
 	  ]);
   
 	  const count = await ProductsMovements.countDocuments(matchStage);
   
-	  if (!productsMovements || productsMovements.length === 0) {
-		return res.status(204).json({ message: 'No product movements found' });
+	  if (!productsMovements) {
+		return res.status(204).json({ 'message': 'No product movements found' });
 	  }
-  
+
 	  res.status(200).json({
 		success: true,
 		count,

@@ -32,7 +32,7 @@ const productsMovementsSchema = new Schema({
     required: true,
   },
   currentProductId: {
-    type: String,
+    type: Number,
   },
   actionType: {
     type: String,
@@ -85,7 +85,7 @@ const productsMovementsSchema = new Schema({
   boxCapacity: {
     type: Number,
   },
-  manufacturer: {
+  manufacturerId: {
     type: String,
   },
   
