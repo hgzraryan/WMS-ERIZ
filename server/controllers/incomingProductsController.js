@@ -264,6 +264,20 @@ const getIncomingProductsById = async (req, res) => {
 				foreignField: "warehouseId", 
 				as: "warehouseInfo" 
 			}
+		},  
+		{
+			$lookup: {
+				from: "manufacturers", 
+				localField: "manufacturer",
+				foreignField: "manufacturerId", 
+				as: "manufacturerInfo" 
+			}
+		},
+		{
+			$unwind: {
+				path: "$manufacturerInfo", // Unwind to deconstruct the array of supplierInfo
+				preserveNullAndEmptyArrays: true // Preserve documents without supplier info
+			}
 		},
 		{
 			$unwind: {
@@ -314,12 +328,17 @@ const getIncomingProductsById = async (req, res) => {
 				driverId:"$workerInfo.workerId",
 				driverName:"$workerInfo.fullName",
 				supplierId:"$supplierInfo.supplierId",
+				manufacturerId:"$manufacturerInfo.manufacturerId",
 				supplierName:"$supplierInfo.name",
 				warehouseId:"$warehouseInfo.warehouseId",
 				warehouseName:"$warehouseInfo.name",
 				expirationDate:1,
 				producedDate:1,
-				actionDate:1
+				actionDate:1,
+				expiredAlertDay:1,
+				boxCount:1,
+				unitWeight:1,
+				boxCapacity:1
 			}
 		  }
 		]).exec();
@@ -403,7 +422,6 @@ const registerIncomingProduct = async (req, res) => {
 			  actionId: counter[0]?counter[0].sequence_value:1, 
 			  productName: productData.name,
 			  currentProductId: productData.currentProductId,
-			  actionType: productData.actionType,
 			  actionDate: productData.actionDate,
 			  expirationDate: productData.expirationDate,
 			  expiredAlertDay: productData.expiredAlertDay,
@@ -412,10 +430,10 @@ const registerIncomingProduct = async (req, res) => {
 			  unit: productData.unit,
 			  warehouse: productData.stock,
 			  balance: productData.balance,
+			  partner: productData.partner,	
 			  driver: productData.driver,	
 			  actionType:'incoming',
 			  sellingPrice: 0,
-			  partner:productData.partner,
 			  producedDate:productData.producedDate,
 			  boxCount:productData.boxCount,
 			  unitWeight:productData.unitWeight,

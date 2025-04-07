@@ -21,7 +21,7 @@ const productsMovementsSchema = new Schema({
     type: Number,
     unique: true,
     //required: true,
-  },
+    },
   actionId: { 
     type: Number,
     required: true,
@@ -33,24 +33,30 @@ const productsMovementsSchema = new Schema({
   },
   currentProductId: {
     type: Number,
+    required: true,
   },
   actionType: {
     type: String,
+    required: true,
   },
   actionDate: {
-    type: String
+    type: String,
+    required: true,
   },
   expirationDate: {
-    type: String
+    type: String,
+    required: true,
   },
   expiredAlertDay: {
     type: String
   },
   price: {
-    type: String
+    type: Number,
+    required: true,
   },
   quantity: {
     type: Number,
+    required: true,
   },
   unit: {
     type: String,
@@ -68,25 +74,28 @@ const productsMovementsSchema = new Schema({
   },
   driver: {
     type: Number,
-    required: true,
   },
   sellingPrice: {
 	  type: Number, 
+    required: true,
   },
   producedDate: {
 	  type: String, 
+    required: true,
   },
   boxCount: {
     type: Number,
+    required: true,
   },
   unitWeight: {
     type: Number,
   },
   boxCapacity: {
     type: Number,
+    required: true,
   },
   manufacturerId: {
-    type: String,
+    type: Number,
   },
   
 },{

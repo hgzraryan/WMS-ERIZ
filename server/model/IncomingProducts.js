@@ -127,9 +127,6 @@ const IncomingProductsSchema = new Schema({
   userId:{
     type: Number,
   },
-  sellingPrice:{
-	type: Number,
-  }
 	
 	
 },{

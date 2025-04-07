@@ -16,6 +16,10 @@ const OutgoingSchema = new Schema({
       type: Number,
       required: true,
     },
+    manufacturerId: {
+      type: Number,
+     // required: true,
+    },
     outgoingCount: {
       type: Number,
       required: true,
@@ -40,9 +44,28 @@ const OutgoingSchema = new Schema({
     producedDate: {
       type: String,
     },
+    expirationDate: {
+      type: String,
+    },
+    expiredAlertDay: {
+      type: String,
+    },
     unit: {
       type: String,
     },
+    boxCount: {
+      type: Number,
+    },
+    unitWeight: {
+      type: String,
+    },
+    boxCapacity: {
+      type: Number,
+    },
+    quantity: {
+      type: Number,
+    },
+
   });
 const OutgoingProductsSchema = new Schema({
   outgoingProductId: { 
@@ -58,6 +81,10 @@ const OutgoingProductsSchema = new Schema({
     type: Number,
     required: true,
   },
+  // partner: {
+  //   type: Number,
+  //   required: true,
+  // },
   actionDate: {
     type: String,
   },

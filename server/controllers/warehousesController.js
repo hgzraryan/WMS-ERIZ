@@ -274,7 +274,6 @@ const getAllWarehouseProducts = async (req, res) => {
 				skipParam = parseInt(page)*onPage-onPage;
 			}
 		}
-			
 		const incomingproducts = await IncomingProducts.aggregate([
 			{
 				$match: { 
@@ -345,7 +344,14 @@ const getAllWarehouseProducts = async (req, res) => {
 					partnerId: "$partnerInfo.partnerId",
 					partnerName: "$partnerInfo.name",
 					warehouseId: "$warehouseInfo.warehouseId",
-					warehouseName: "$warehouseInfo.name"
+					warehouseName: "$warehouseInfo.name",
+					expirationDate:1,
+					producedDate:1,
+					actionDate:1,
+					expiredAlertDay:1,
+					boxCount:1,
+					unitWeight:1,
+					boxCapacity:1
 				}
 			}
 		]).exec();
@@ -422,22 +428,29 @@ const registerOutgoing = async (req, res) => {
 const counter = await Counter.find(
 	{ _id: 'outgoingProductId' },			
   );
+
+debugger
 const ProductMovementData = {
 	  actionId: counter[0]?counter[0].sequence_value:1, 
-	  partner:outgoingData.customer,
 	  productName: outgoingData.outgoingList[0].name,
 	  currentProductId: outgoingData.outgoingList[0].productListId,
 	  actionDate: outgoingData.actionDate,
+	  expirationDate: outgoingData.outgoingList[0].expirationDate,
+	  expiredAlertDay: outgoingData.outgoingList[0].expiredAlertDay,
 	  price: outgoingData.outgoingList[0].price,
 	  quantity: outgoingData.outgoingList[0].outgoingCount,
 	  unit: outgoingData.outgoingList[0].unit,
 	  warehouse: outgoingData.outgoingList[0].warehouse,
 	  balance: outgoingData.outgoingList[0].balance,
+	  partner:outgoingData.customer,
 	  driver: outgoingData.driver,	
 	  actionType:'outgoing',
 	  sellingPrice:outgoingData.sellingPrice,
-	  producedDate:outgoingData.outgoingList[0].producedDate
-
+	  producedDate:outgoingData.outgoingList[0].producedDate,
+	  boxCount:outgoingData.outgoingList[0].boxCount,
+	  unitWeight:outgoingData.outgoingList[0].unitWeight,
+	  boxCapacity:outgoingData.outgoingList[0].boxCapacity,
+	  manufacturerId:outgoingData.outgoingList[0].manufacturerId
 }
 const newProductMovements = new ProductsMovements(ProductMovementData)
 await newProductMovements.save();
@@ -528,7 +541,8 @@ const getAllOutgoingProducts = async (req, res) => {
 					warehouseId:"$warehouseInfo.warehouseId",
 					balance:1,
 					sellingPrice:1,
-					producedDate:1
+					producedDate:1,
+					
                 }
             }
         ]);
@@ -547,10 +561,18 @@ const getAllOutgoingProducts = async (req, res) => {
                 warehouse: product.warehouse,
                 warehouseId: product.warehouseId,
                 description: product.description,
+				partner: product.partner,
                 price: item.price,
 				balance:item.balance,
                 barcode: item.barcode,
                 currency: item.currency,
+				expirationDate: item.expirationDate,
+				expiredAlertDay: item.expiredAlertDay,
+				producedDate: item.producedDate,
+				boxCount: item.boxCount,
+				unitWeight: item.unitWeight,
+				boxCapacity: item.boxCapacity,
+				manufacturerId: item.manufacturerId,
 				driverId:product.driverId,
 				sellingPrice: product.sellingPrice,
 				driverName:product.driverName,

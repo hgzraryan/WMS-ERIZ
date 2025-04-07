@@ -19,16 +19,21 @@ console.log(req.body)
 			driver:req.body.driver,
 			outgoingList:[
 			{
+				name:req.body.name,
+				id:req.body.currentProductId,
 				balance:req.body.balance,
 				barcode:req.body.barcode,
 				currency:req.body.currency,
-				id:req.body.currentProductId,
-				name:req.body.name,
 				outgoingCount:req.body.dimensions?.weight || req.body.dimensions?.volume,
 				price:req.body.price,
 				productListId:req.body.productIdent,
 				unit:req.body.unit,
 				warehouse:req.body.fromWarehouseId,
+				producedDate:req.body.producedDate,
+				driverId:req.body.driver,
+				expirationDate:req.body.expirationDate,
+				expiredAlertDay:req.body.expiredAlertDay,
+				warehouseId:req.body.stock,
 			}
 			]
 		}
@@ -95,22 +100,53 @@ console.log(req.body)
 		const counter = await Counter.find(
 			{ _id: 'incomingProductId' },			
 		  );
+		  debugger
 		const ProductMovementData = {
 			  actionId: counter[0]?.sequence_value, 
 			  productName: productData.name,
-			  actionType: productData.actionType,
-			  actionDate: productData.actionDate,
+			  //currentProductId: productData.currentProductId,
+			  actionDate: productData.actionDate,			  
+			  //expirationDate: productData.expirationDate,
+			  //expiredAlertDay: productData.expiredAlertDay,
 			  price: productData.price,
 			  quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,
 			  unit: productData.unit,
 			  warehouse: productData.stock,
-			  balance: productData.balance,
+			  balance: productData.balance,			  
+			  //partner: productData.partner,
 			  driver: productData.driver,	
-			  actionType:'incoming',
-			  sellingPrice: productData.sellingPrice,
+			  actionType: productData.actionType,
+			 // actionType:'incoming',
+			  sellingPrice: 0,
 			  partner:productData.partner,
-			  producedDate:productData.producedDate
+			  producedDate:productData.producedDate,
+			  boxCount:productData.boxCount,
+			  unitWeight:productData.unitWeight,
+			  boxCapacity:productData.boxCapacity,
+			  manufacturerId:productData.manufacturer
 		}
+		const ProductMovementData1s = {
+			actionId: counter[0]?counter[0].sequence_value:1, 
+			productName: productData.name,
+			currentProductId: productData.currentProductId,
+			actionDate: productData.actionDate,
+			expirationDate: productData.expirationDate,
+			expiredAlertDay: productData.expiredAlertDay,
+			price: productData.price,
+			quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,// this quantity is differ from incoming product quantity
+			unit: productData.unit,
+			warehouse: productData.stock,
+			balance: productData.balance,
+			partner: productData.partner,	
+			driver: productData.driver,	
+			actionType:'incoming',
+			sellingPrice: 0,
+			producedDate:productData.producedDate,
+			boxCount:productData.boxCount,
+			unitWeight:productData.unitWeight,
+			boxCapacity:productData.boxCapacity,
+			manufacturerId:productData.manufacturer
+	  }
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
 
