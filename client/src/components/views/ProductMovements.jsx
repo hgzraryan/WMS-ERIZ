@@ -110,6 +110,61 @@ function ProductMovements() {
           controller.abort();
         };
       }, [currentPage,filter]);
+      
+      //TODO
+/*---------------------get data need to be implemented by GET calls-----------------------------*/
+      // useEffect(() => {
+      //   let isMounted = true;
+      //   const controller = new AbortController();
+      
+      //   const getData = async () => {
+      //     try {
+      //       const params = new URLSearchParams();
+      
+      //       params.append("page", currentPage === 0 ? 1 : currentPage);
+      //       params.append("onPage", usersPerPage);
+      
+      //       // Add filter params to query string
+      //       if (filter && typeof filter === "object") {
+      //         Object.entries(filter).forEach(([key, value]) => {
+      //           if (key === "dateRange" && value) {
+      //             if (value.startDate) {
+      //               params.append("params[startDate]", value.startDate);
+      //             }
+      //             if (value.endDate) {
+      //               params.append("params[endDate]", value.endDate);
+      //             }
+      //           } else if (value !== null && value !== undefined && value !== "") {
+      //             params.append(`params[${key}]`, value);
+      //           }
+      //         });
+      //       }
+      
+      //       const response = await axiosPrivate.get(`${PRODUCTSMOVEMENTS_URL}?${params.toString()}`, {
+      //         signal: controller.signal
+      //       });
+      
+      //       if (isMounted) {
+      //         setProductMovements(response.data.jsonString);
+      //         setDataCount(response.data.count);
+      //         setDataReceived(true);
+      //       }
+      
+      //     } catch (err) {
+      //       console.error(err);
+      //       navigate("/login", { state: { from: location }, replace: true });
+      //     }
+      //   };
+      
+      //   getData();
+      
+      //   return () => {
+      //     isMounted = false;
+      //     controller.abort();
+      //   };
+      // }, [currentPage, filter]);
+/*-------------------------------------------------------------------------------------*/
+
 //-------------------------PAGINATION---------------------------//  
       useEffect(() => {
         setCurrentPage(Number(pageNumber));

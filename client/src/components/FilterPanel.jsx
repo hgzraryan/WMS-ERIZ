@@ -107,7 +107,7 @@ export const customStyles = {
         borderColor: state.isFocused ? "#018a54" : "#e6e6e6",
         boxShadow: "none",
         display: "flex",
-        alignItems: "center", // Ensure everything inside is vertically centered
+        alignItems: "center", 
         "&:hover": {
             borderColor: "#018a54",
         },
@@ -137,13 +137,15 @@ export const customStyles = {
                     : undefined,
         color: isDisabled ? "#e6e6e6" : isSelected ? "white" : "black",
         cursor: isDisabled ? "not-allowed" : "pointer",
+   
     }),
     valueContainer: (base) => ({
         ...base,
-        padding: "0px 6px",
+       // padding: "0px 6px",
         display: "flex",
         alignItems: "center",
         minHeight: "24px",
+        marginTop:'-3px'
     }),
     input: (base) => ({
         ...base,
@@ -159,34 +161,47 @@ export const customStyles = {
         display: "flex",
         alignItems: "center",
     }),
+    // multiValue: (base) => ({
+    //     ...base,
+    //     minHeight: "20px",
+    //     fontSize: "12px",
+    //     display: "flex",
+    //     alignItems: "center",
+    //     height: '10px',
+    //     borderRadius:'20px',
+    //     backgroundColor: '#018a54',
+    //     color:'#fff'
+    // }),
     multiValue: (base) => ({
         ...base,
-        minHeight: "20px",
         fontSize: "12px",
         display: "flex",
         alignItems: "center",
-        height: '10px',
-        backgroundColor: '#018a54',
-        color:'#fff'
+        height: "20px",
+        borderRadius: "20px",
+        backgroundColor: "#018a54",
+        color: "#fff",
+        padding: "0 4px",
+        margin: "2px",
     }),
     multiValueLabel: (base) => ({
         ...base,
         fontSize: "10px",
-        padding: "0px 0px",
+        padding: "0 4px",
         display: "flex",
         alignItems: "center",
-        color:"#fff"
+        lineHeight: "1",
+        color: "#fff",
     }),
     multiValueRemove: (base) => ({
         ...base,
-        fontSize: "12px",
-        padding: "2px 6px",
-        display: "flex",
-        alignItems: "center",
-        ":hover": {
-            backgroundColor: "#018a54",
-            color: "#fff",
-        },
+         padding: "0 4px",
+    display: "flex",
+    alignItems: "center",
+    ":hover": {
+        backgroundColor: "#018a54",
+        color: "#fff",
+    },
     }),
     indicatorsContainer: (base) => ({
         ...base,

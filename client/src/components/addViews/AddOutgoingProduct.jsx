@@ -98,7 +98,6 @@ function AddOutgoingProduct({
   };
   const handleOutgoingProductsList = async (e, row) => {
     e.preventDefault()
-
     const tmp = {}
     tmp.id = row.original.incomingProductId
     tmp.name = row.original.name
@@ -111,13 +110,19 @@ function AddOutgoingProduct({
     tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
     tmp.currency = row.original.currency
     tmp.producedDate = row.original.producedDate
+    tmp.expirationDate = row.original.expirationDate
+    tmp.expiredAlertDay = row.original.expiredAlertDay
+    tmp.boxCount = row.original.boxCount
+    tmp.unitWeight = row.original.unitWeight
+    tmp.boxCapacity = row.original.boxCapacity
+    tmp.manufacturerId = row.original.manufacturerId
 
     const tmpData = []
     tmpData.push(tmp)
     setOutgoingList((prev) => [tmp, ...prev])
   };
 
-
+ 
 
 
   // const handleOutgoingProductsList = async (e, row) => {

@@ -4,8 +4,8 @@ import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
-    const refresh = useRefreshToken();
-    const { auth } = useAuth();
+    const refresh = useRefreshToken(); 
+    const { auth } = useAuth(); 
 
 
 
@@ -13,23 +13,29 @@ const useAxiosPrivate = () => {
     useEffect(() => {
 
         const requestIntercept = axiosPrivate.interceptors.request.use(
-            config => {
+            (config) => {
                 if (!config.headers['Authorization']) {
                     config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
                 }
                 return config;
-            }, (error) => Promise.reject(error)
+            }, (error) => Promise.reject(error) 
         );
 
         const responseIntercept = axiosPrivate.interceptors.response.use(
-            response => response,
+            (response) => response,
             async (error) => {
-                const prevRequest = error?.config;
-                if (error?.response?.status === 403 && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosPrivate(prevRequest);
+                const prevRequest = error?.config; 
+                if (error?.response?.status === 403 && !prevRequest?.__retry) {
+                    prevRequest.__retry = true; 
+                    try {
+                        const newAccessToken = await refresh();
+                        prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                        return axiosPrivate(prevRequest);
+                    } catch (refreshError) {
+                        console.error('Failed to refresh token:', refreshError);
+                        // Optional: Redirect to login or handle logout
+                        window.location.href = '/login';
+                    }
                 }
                 return Promise.reject(error);
             }
