@@ -993,6 +993,19 @@ export const count_validation = {
     },
   },
 };
+export const productCount_validation = {
+  name: "productCount",
+  label: "Ապրանքի քանակ(հատ)",
+  type: "number",
+  id: "productCount",
+  placeholder: "Ապրանքի քանակ(հատ)",
+  validation: {
+    required: {
+      value: true,
+      message: "պարտադիր",
+    },
+  },
+};
 export const volume_validation = {
   name: "volume",
   label: "Ծավալ(լիտր)",
