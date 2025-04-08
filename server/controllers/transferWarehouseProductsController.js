@@ -17,26 +17,36 @@ console.log(req.body)
 			actionDate:req.body.actionDate,
 			customer:req.body.stock,
 			driver:req.body.driver,
+			userId:req.body.userId,
+			warehouseId:req.body.stock,
 			outgoingList:[
 			{
-				name:req.body.name,
+				warehouse:req.body.fromWarehouseId,
 				id:req.body.currentProductId,
+				currentProductId:req.body.currentProductId,
 				balance:req.body.balance,
 				barcode:req.body.barcode,
+				countryOfOrigin:req.body.countryOfOrigin,
 				currency:req.body.currency,
 				outgoingCount:req.body.dimensions?.weight || req.body.dimensions?.volume,
-				price:req.body.price,
-				productListId:req.body.productIdent,
-				unit:req.body.unit,
-				warehouse:req.body.fromWarehouseId,
-				producedDate:req.body.producedDate,
-				driverId:req.body.driver,
 				expirationDate:req.body.expirationDate,
 				expiredAlertDay:req.body.expiredAlertDay,
-				warehouseId:req.body.stock,
+				name:req.body.name,
+				price:req.body.price,
+				unit:req.body.unit,
+				producedDate:req.body.producedDate,
+				productCategory:req.body.productCategory,
+				productListId:req.body.productIdent,
+				quantity:req.body.quantity,
+				boxCount:req.body.boxCount,
+				unitWeight:req.body.unitWeight,
+				boxCapacity:req.body.boxCapacity,
+				manufacturerId:req.body.manufacturer,
+
 			}
 			]
 		}
+		
 	for (const item of outgoingDataTMP?.outgoingList) {
 		const { id,outgoingCount } = item; // Extract the product id and outgoingCount from each item
 		await IncomingProducts.findOneAndUpdate(
@@ -51,19 +61,32 @@ console.log(req.body)
 	//add action in product movements list
 	const counter1 = await Counter.find({ _id: 'outgoingProductId' });
 	const ProductMovementData1 = {
-		actionId: counter1[0].sequence_value, 
-		partner:outgoingData.customer,
-		productName: outgoingData.outgoingList[0].name,
 		actionDate: outgoingData.actionDate,
-		price: outgoingData.outgoingList[0].price,
-		quantity: outgoingData.outgoingList[0].outgoingCount,
-		unit: outgoingData.outgoingList[0].unit,
-		warehouse: outgoingData.outgoingList[0].warehouse,
-		balance: outgoingData.outgoingList[0].balance,
+		partner:outgoingData.customer,
 		driver: outgoingData.driver,	
+		userId: outgoingData.userId,	
+		warehouse: outgoingData.warehouseId,
+		actionId: counter1[0].sequence_value, 
+		balance: outgoingData.outgoingList[0].balance,
+		barcode: outgoingData.outgoingList[0].barcode,
+		countryOfOrigin: outgoingData.outgoingList[0].countryOfOrigin,
+		currency: outgoingData.outgoingList[0].currency,
+		quantity: outgoingData.outgoingList[0].outgoingCount,
+		expirationDate: outgoingData.outgoingList[0].expirationDate,
+		expiredAlertDay: outgoingData.outgoingList[0].expiredAlertDay,
+		productName: outgoingData.outgoingList[0].name,
+		price: outgoingData.outgoingList[0].price,
+		unit: outgoingData.outgoingList[0].unit,
+		producedDate:outgoingData.outgoingList[0].producedDate,
+		productCategory:outgoingData.outgoingList[0].productCategory,
+		productListId:outgoingData.outgoingList[0].productListId,
 		actionType:'outgoing',
-		sellingPrice:outgoingData.sellingPrice,
-	  	producedDate:outgoingData.outgoingList[0].producedDate
+		sellingPrice:0,
+		boxCount:outgoingData.outgoingList[0].boxCount,
+		unitWeight:outgoingData.outgoingList[0].unitWeight,
+		boxCapacity:outgoingData.outgoingList[0].boxCapacity,
+		manufacturerId:outgoingData.outgoingList[0].manufacturerId,
+		currentProductId: outgoingData.outgoingList[0].currentProductId
 	}
 	const newProductMovements1 = new ProductsMovements(ProductMovementData1)
 	await newProductMovements1.save();
@@ -100,23 +123,24 @@ console.log(req.body)
 		const counter = await Counter.find(
 			{ _id: 'incomingProductId' },			
 		  );
-		  debugger
+		  
 		const ProductMovementData = {
 			  actionId: counter[0]?.sequence_value, 
 			  productName: productData.name,
-			  //currentProductId: productData.currentProductId,
+			  currentProductId: productData.currentProductId,
 			  actionDate: productData.actionDate,			  
-			  //expirationDate: productData.expirationDate,
-			  //expiredAlertDay: productData.expiredAlertDay,
+			  expirationDate: productData.expirationDate,
+			  expiredAlertDay: productData.expiredAlertDay,
 			  price: productData.price,
 			  quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,
 			  unit: productData.unit,
 			  warehouse: productData.stock,
 			  balance: productData.balance,			  
+			  fromWarehouseId: productData.fromWarehouseId,			  
 			  //partner: productData.partner,
 			  driver: productData.driver,	
 			  actionType: productData.actionType,
-			 // actionType:'incoming',
+			  actionType:'incoming',
 			  sellingPrice: 0,
 			  partner:productData.partner,
 			  producedDate:productData.producedDate,
@@ -157,10 +181,11 @@ console.log(req.body)
             });		
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ success: false, message: 'Internal server error, no product created!'});
+		res.status(500).json({ success: false, message:error});
 	}
 }
 //}
 module.exports = {
     transfer
 }
+ 

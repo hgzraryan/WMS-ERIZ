@@ -351,7 +351,8 @@ const getAllWarehouseProducts = async (req, res) => {
 					expiredAlertDay:1,
 					boxCount:1,
 					unitWeight:1,
-					boxCapacity:1
+					boxCapacity:1,
+					manufacturer:1
 				}
 			}
 		]).exec();
@@ -429,7 +430,7 @@ const counter = await Counter.find(
 	{ _id: 'outgoingProductId' },			
   );
 
-debugger
+
 const ProductMovementData = {
 	  actionId: counter[0]?counter[0].sequence_value:1, 
 	  productName: outgoingData.outgoingList[0].name,
