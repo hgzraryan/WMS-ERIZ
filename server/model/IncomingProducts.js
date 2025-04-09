@@ -109,6 +109,12 @@ const IncomingProductsSchema = new Schema({
   balance:{
     type: Number,
   },
+  boxCountBalance:{
+    type: Number,
+  },
+  quantityBalance:{
+    type: Number,
+  },
   palletCount:{
     type: Number,
   },
@@ -127,7 +133,6 @@ const IncomingProductsSchema = new Schema({
   userId:{
     type: Number,
   },
-	
 	
 },{
     timestamps: {  createdAt: 'createdAt', updatedAt: 'updatedAt',  currentTime: () => new Date(Date.now() + 4 * 60 * 60 * 1000)} // Add 4 hours to the current time (GMT+4)

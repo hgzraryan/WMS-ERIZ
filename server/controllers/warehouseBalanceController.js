@@ -75,20 +75,33 @@ const getAllProductsSummary = async (req, res) => {
         // ]).exec();
         const incomingProductsSummary = await IncomingProduct.aggregate([
             {
+                        $sort: { _id: -1 } // Sort the documents in descending order based on _id
+                    },
+                    {
+                                $skip: skipParam // Skip documents based on the skipParam value
+                            },
+                            {
+                                $limit: onPage // Limit the number of documents returned based on the onPage value
+                            },
+            {
                 $group: {
                     _id: "$productIdent",
                     totalBalance: { $sum: "$balance" },
                     name: { $first: "$name" },
                     unit: { $first: "$unit" },
-                    dimensions: { $first: "$dimensions" }
+                    dimensions: { $first: "$dimensions" },
+                    boxCountBalance: { $first: "$boxCountBalance" },
+                    quantityBalance: { $first: "$quantityBalance" }
                 }
             },
             {
                 $project: {
                     productIdent: "$_id",
                     totalBalance: 1,
+                    totalQuantityBalance:"$quantityBalance",
+                    totalBoxCountBalance:"$boxCountBalance",
                     name: 1,
-                    dimensions:1
+                    dimensions:1,
                 }
             }
         ]).exec();

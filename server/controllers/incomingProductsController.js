@@ -329,6 +329,7 @@ const getIncomingProductsById = async (req, res) => {
 				driverName:"$workerInfo.fullName",
 				supplierId:"$supplierInfo.supplierId",
 				manufacturerId:"$manufacturerInfo.manufacturerId",
+				manufacturerName:"$manufacturerInfo.name",
 				supplierName:"$supplierInfo.name",
 				warehouseId:"$warehouseInfo.warehouseId",
 				warehouseName:"$warehouseInfo.name",
@@ -338,7 +339,9 @@ const getIncomingProductsById = async (req, res) => {
 				expiredAlertDay:1,
 				boxCount:1,
 				unitWeight:1,
-				boxCapacity:1
+				boxCapacity:1,
+				boxCountBalance:1,
+				quantityBalance:1
 			}
 		  }
 		]).exec();
@@ -442,36 +445,6 @@ const registerIncomingProduct = async (req, res) => {
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
-//TODO
-		let warehouseBalance = await WarehouseBalance.findOne({ productListId: currentProduct, warehouseId });
-
-        if (warehouseBalance) {
-            // Update quantity if entry exists
-            //warehouseBalance.count = (parseInt(warehouseBalance.count) + quantity).toString();
-			warehouseBalance.balance = (
-				parseInt(warehouseBalance.balance) + (weight ? weight : (volume ? volume : 0))
-			).toString();
-            await warehouseBalance.save();
-
-            return res.status(200).json({
-                success: true,
-                message: 'Product quantity updated successfully',
-                product: warehouseBalance
-            });
-        } else {
-            // Create new WarehouseBalance entry
-            const newWarehouseBalance = new WarehouseBalance({
-                productListId: currentProduct,
-				balance:balance,
-				unit:dimensions?.weight?'weight':dimensions?.volume?'volume':''
-            });
-            await newWarehouseBalance.save();
-
-            return res.status(201).json({
-                success: true,
-                message: 'New product registered and added to warehouse balance successfully'
-            });
-        }
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ success: false, message: 'Internal server error, no product created!'});

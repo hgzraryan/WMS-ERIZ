@@ -65,7 +65,12 @@ const OutgoingSchema = new Schema({
     quantity: {
       type: Number,
     },
-
+    outgoingBoxCount: {
+      type: Number,
+    },
+    outgoingQuantityCount: {
+      type: Number,
+    }
   });
 const OutgoingProductsSchema = new Schema({
   outgoingProductId: { 

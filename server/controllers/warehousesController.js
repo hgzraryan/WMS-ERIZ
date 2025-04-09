@@ -392,27 +392,33 @@ const registerOutgoing = async (req, res) => {
 
         // Step 2: Iterate over the outgoingList
         for (const item of outgoingList) {
-			const { id,productListId, outgoingCount } = item; // Extract the product id and outgoingCount from each item
+			const { id,productListId, outgoingCount,outgoingBoxCount,outgoingQuantityCount } = item; // Extract the product id and outgoingCount from each item
 			
             // Step 3: Find the product by id
 			console.log(item)
-            const product = await WarehouseBalance.findOne({ productListId: productListId });
 
             const incomingProduct = await IncomingProducts.findOne({ incomingProductId: id });
             // Step 5: Ensure there is enough stock to decrement
-            if (product.balance < outgoingCount || incomingProduct.balance < outgoingCount) {
+            if ( incomingProduct.balance < outgoingCount) {
                 return res.status(400).json({ message: `Not enough stock for product id ${productListId}` });
             }
-
-            // Step 6: Update the product by decrementing the quantity
-            await WarehouseBalance.findOneAndUpdate(
-                { productListId: productListId },
-                { $inc: { balance: -outgoingCount } }
-            );
+            if ( incomingProduct.outgoingBoxCount < outgoingBoxCount) {
+                return res.status(400).json({ message: `Not enough box stock for product id ${productListId}` });
+            }
+            if (incomingProduct.outgoingQuantityCount < outgoingQuantityCount) {
+                return res.status(400).json({ message: `Not enough quantity stock for product id ${productListId}` });
+            }
+           
 
             await IncomingProducts.findOneAndUpdate(
                 { incomingProductId: id },
-                { $inc: { balance: -outgoingCount } }
+                { 
+					$inc: {
+						balance: -outgoingCount,
+						boxCountBalance: -outgoingBoxCount,
+						quantityBalance: -outgoingQuantityCount,
+					  },
+				 }
             );
         
         }
