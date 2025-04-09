@@ -191152,3 +191152,11 @@
 20250409	19:02:17	a79d40ac-b77a-4e6d-b157-3dccc40a8e6f	GET	undefined	/productsList
 20250409	19:02:17	b239635e-a849-44c8-8762-10b6f5831776	GET	undefined	/warehouses
 20250409	19:02:19	d96aa4fa-7a5b-42f6-961b-baebc3148a82	GET	undefined	/productsList
+20250409	19:05:38	f7aa23c1-da62-497e-91b9-7a4e6584ad9b	GET	undefined	/warehouses
+20250409	19:05:38	232c3dd5-b264-4027-b898-27c48a5bed73	POST	http://localhost:5444	/productsMovements
+20250409	19:05:38	33bfa9d8-92be-417f-ad82-823b2a37f4ee	GET	undefined	/partners
+20250409	19:05:38	7b7664c0-96de-4ba4-bfc7-e2eed11c3842	GET	undefined	/workerList
+20250409	19:05:38	e5e17707-c35b-49b7-948a-bdc1ca2328aa	GET	undefined	/productsList
+20250409	19:05:38	d5495423-30a0-4b67-8ad9-41a58ffb7418	GET	undefined	/partners
+20250409	19:05:38	c0e1d406-6ae7-4dc1-ac94-f7ea90357be5	GET	undefined	/manufacturers
+20250409	19:05:38	78f45fe8-5b0e-4b54-9249-e77b341f364d	GET	undefined	/workerList

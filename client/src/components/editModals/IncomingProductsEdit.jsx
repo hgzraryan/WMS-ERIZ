@@ -149,7 +149,7 @@ function IncomingProductsEdit({ incomingProduct, setEditRow, refreshData }) {
             boxCapacity: +data.boxCapacity !== incomingProduct?.boxCapacity ? +data.boxCapacity : null,
             boxCount: +data.boxCount !== incomingProduct?.boxCount ? +data.boxCount : null,
             quantity: +totalCount, //  (!== incomingProduct?.quantity ? +data.quantity : null,
-            balance: +totalWeight || +data.volume, //(+totalWeight !== weight || +data.volume !== volume),
+            balance: +totalWeight-(incomingProduct.dimensions?.weight-incomingProduct?.balance), //(+totalWeight !== weight || +data.volume !== volume),
             unit: totalWeight ? 'kg' : data.volume ? "litre" : '',
             dimensions: {
                 //height: +data.height || null,

@@ -33,7 +33,7 @@ function ProductsSummaryTable({
               },
               {
                 Header: "Քանակ",
-                accessor: "balance",
+                accessor: "totalBalance",
                 width: 250,
               },
               {
@@ -41,7 +41,7 @@ function ProductsSummaryTable({
                 accessor: "unit",
                 Cell: ({ row }) => (
                   <div className="d-flex align-items-center">
-                   {row.original?.unit==='weight'?'կգ':row.original?.unit==='volume'?'Լիտր':''}
+                   {row.original?.dimensions.weight?'կգ':row.original?.dimensions.volume?'Լիտր':''}
                   </div>
                 ),
                 width: 150,
