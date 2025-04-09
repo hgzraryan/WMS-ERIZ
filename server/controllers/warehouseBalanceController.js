@@ -1,5 +1,6 @@
 
 const WarehouseBalance = require('../model//WarehouseBalance');
+const IncomingProduct = require('../model//IncomingProducts');
 
 
 const getAllProductsSummary = async (req, res) => {
@@ -21,78 +22,96 @@ const getAllProductsSummary = async (req, res) => {
 			}
 		}
 
-		const balance = await WarehouseBalance.aggregate([
+		// const balance = await WarehouseBalance.aggregate([
+        //     {
+        //         $sort: { _id: -1 } // Sort the documents in descending order based on _id
+        //     },
+        //     {
+        //         $skip: skipParam // Skip documents based on the skipParam value
+        //     },
+        //     {
+        //         $limit: onPage // Limit the number of documents returned based on the onPage value
+        //     },
+		// 	// {
+		// 	// 	$addFields: {
+		// 	// 		productListId: { $toInt: "$productListId" } // Convert productListId to integer
+		// 	// 	}
+		// 	// },
+        //     {
+        //         $lookup: {
+        //             from: "productslists", // Ensure this matches the actual collection name in MongoDB
+        //             localField: "productListId", // Field in WarehouseBalance
+        //             foreignField: "productListId", // Field in ProductsList
+        //             as: "productsListInfo" // Alias for the joined data
+        //         }
+        //     },
+		// 	// {
+		// 	// 	$lookup: {
+        //     //         from: "productslists", // Ensure this matches the actual collection name
+        //     //         let: { productListIdLocal: { $toInt: "$productListId" } }, // Convert productListId to integer
+        //     //         pipeline: [
+        //     //             { $match: { $expr: { $eq: ["$productListId", "$$productListIdLocal"] } } }
+        //     //         ],
+        //     //         as: "productsListInfo"
+        //     //     }
+        //     // },
+        //     {
+        //         $unwind: {
+        //             path: "$productsListInfo",
+        //             preserveNullAndEmptyArrays: true // Preserve documents without productsList info
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             warehouseBalanceId: 1,
+        //             productListId: 1,
+        //             balance: 1,
+		// 			unit:1,
+        //             createdAt: 1,
+        //             updatedAt: 1,
+        //             name: "$productsListInfo.name" // Ensure correct field name for name
+        //         }
+        //     }
+        // ]).exec();
+        const incomingProductsSummary = await IncomingProduct.aggregate([
             {
-                $sort: { _id: -1 } // Sort the documents in descending order based on _id
-            },
-            {
-                $skip: skipParam // Skip documents based on the skipParam value
-            },
-            {
-                $limit: onPage // Limit the number of documents returned based on the onPage value
-            },
-			// {
-			// 	$addFields: {
-			// 		productListId: { $toInt: "$productListId" } // Convert productListId to integer
-			// 	}
-			// },
-            {
-                $lookup: {
-                    from: "productslists", // Ensure this matches the actual collection name in MongoDB
-                    localField: "productListId", // Field in WarehouseBalance
-                    foreignField: "productListId", // Field in ProductsList
-                    as: "productsListInfo" // Alias for the joined data
-                }
-            },
-			// {
-			// 	$lookup: {
-            //         from: "productslists", // Ensure this matches the actual collection name
-            //         let: { productListIdLocal: { $toInt: "$productListId" } }, // Convert productListId to integer
-            //         pipeline: [
-            //             { $match: { $expr: { $eq: ["$productListId", "$$productListIdLocal"] } } }
-            //         ],
-            //         as: "productsListInfo"
-            //     }
-            // },
-            {
-                $unwind: {
-                    path: "$productsListInfo",
-                    preserveNullAndEmptyArrays: true // Preserve documents without productsList info
+                $group: {
+                    _id: "$productIdent",
+                    totalBalance: { $sum: "$balance" },
+                    name: { $first: "$name" },
+                    unit: { $first: "$unit" },
+                    dimensions: { $first: "$dimensions" }
                 }
             },
             {
                 $project: {
-                    warehouseBalanceId: 1,
-                    productListId: 1,
-                    balance: 1,
-					unit:1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    name: "$productsListInfo.name" // Ensure correct field name for name
+                    productIdent: "$_id",
+                    totalBalance: 1,
+                    name: 1,
+                    dimensions:1
                 }
             }
         ]).exec();
-		
-		console.log(balance)
-		
+		//console.log(balance)
 		
 		
-		const count = await WarehouseBalance.count({});
 		
-		if (!balance) return res.status(204).json({ 'message': 'No Warehouses lists found' });
+		//const count = await WarehouseBalance.count({});
 		
-
+		if (!incomingProductsSummary) return res.status(204).json({ 'message': 'No Warehouses lists found' });
 		
 
 		
 
+		
 
-		var jsonString = balance;
-		var jsonCount = count;
+
+		var jsonString = incomingProductsSummary;
+		//var jsonCount = count;
 	 
 		var mainObj = {
 			errorCode: 0,
-			count:parseInt(jsonCount),
+			//count:parseInt(jsonCount),
 			jsonString			
 		}
 		

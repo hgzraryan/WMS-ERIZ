@@ -11,7 +11,7 @@ const transfer = async (req, res) => {
 	//async function transferProducts(data) {
 	  try {
 console.log(req.body)
-			// Step 2: OutgoingList			
+			// Step 1: generate  outgoing	data		
 		const outgoingDataTMP = 
 		{
 			actionDate:req.body.actionDate,
@@ -46,21 +46,36 @@ console.log(req.body)
 			}
 			]
 		}
-		
+
+	// Step 2: Implement decrement data	
+
 	for (const item of outgoingDataTMP?.outgoingList) {
 		const { id,outgoingCount } = item; // Extract the product id and outgoingCount from each item
-		await IncomingProducts.findOneAndUpdate(
-			{ incomingProductId: id },
-			{ $inc: { balance: -outgoingCount } }
+		const currentIncome = await IncomingProducts.findOne(
+			{ incomingProductId: id }			
 		);
+		//check if product balance available
+		if((+currentIncome?.balance)>=(+outgoingCount)){
+			await IncomingProducts.findOneAndUpdate(
+				{ incomingProductId: id },
+				{ $inc: { balance: -outgoingCount } }
+			);
+		}else{
+			return res.status(200).json({
+                success: false,
+                message: 'Unavailable count',
+            });	
+		}
 	}
+
+	// Step 3: Implement outgoing	
 	const outgoingData = outgoingDataTMP;
 	const newOutgoing = new OutgoingProducts(outgoingData);
 	await newOutgoing.save();
 
-	//add action in product movements list
+	//Step 4:Generate data for product movement(outgoing)
 	const counter1 = await Counter.find({ _id: 'outgoingProductId' });
-	const ProductMovementData1 = {
+	const ProductMovementDataOutgoing = {
 		actionDate: outgoingData.actionDate,
 		partner:outgoingData.customer,
 		driver: outgoingData.driver,	
@@ -80,7 +95,7 @@ console.log(req.body)
 		producedDate:outgoingData.outgoingList[0].producedDate,
 		productCategory:outgoingData.outgoingList[0].productCategory,
 		productListId:outgoingData.outgoingList[0].productListId,
-		actionType:'outgoing',
+		actionType:'internalAction',
 		sellingPrice:0,
 		boxCount:outgoingData.outgoingList[0].boxCount,
 		unitWeight:outgoingData.outgoingList[0].unitWeight,
@@ -88,13 +103,21 @@ console.log(req.body)
 		manufacturerId:outgoingData.outgoingList[0].manufacturerId,
 		currentProductId: outgoingData.outgoingList[0].currentProductId
 	}
-	const newProductMovements1 = new ProductsMovements(ProductMovementData1)
-	await newProductMovements1.save();
+	const newProductMovementsOut = new ProductsMovements(ProductMovementDataOutgoing)
+	await newProductMovementsOut.save();
 
-	  	// Step 1: Incoming
+	  	// Step 5: Implement incoming 
 		const productData = req.body;
 		const categoryId = req.body.currentProductId;
+		
+		const newProducts = new IncomingProducts(productData);
+		await newProducts.save();
 
+		const counter = await Counter.find(
+			{ _id: 'incomingProductId' },			
+		  );
+
+		// Step 6: Generate SKU 
 		function generateSKU(category) {
 			// Check if the category is a string
 			if (typeof category !== 'string') {
@@ -112,17 +135,10 @@ console.log(req.body)
 			
 			return sku;
 		}
-
 		const catName = await ProductCategories.find({ currentProduct: categoryId });		
 		const category =  catName[0].name;// Replace with actual product category		
 		const sku = generateSKU(category);
 		productData.SKU = sku;
-		const newProducts = new IncomingProducts(productData);
-		await newProducts.save();
-		//add action in product movements list
-		const counter = await Counter.find(
-			{ _id: 'incomingProductId' },			
-		  );
 		  
 		const ProductMovementData = {
 			  actionId: counter[0]?.sequence_value, 
@@ -140,7 +156,7 @@ console.log(req.body)
 			  //partner: productData.partner,
 			  driver: productData.driver,	
 			  actionType: productData.actionType,
-			  actionType:'incoming',
+			  actionType:'internalAction',
 			  sellingPrice: 0,
 			  partner:productData.partner,
 			  producedDate:productData.producedDate,
@@ -149,28 +165,8 @@ console.log(req.body)
 			  boxCapacity:productData.boxCapacity,
 			  manufacturerId:productData.manufacturer
 		}
-		const ProductMovementData1s = {
-			actionId: counter[0]?counter[0].sequence_value:1, 
-			productName: productData.name,
-			currentProductId: productData.currentProductId,
-			actionDate: productData.actionDate,
-			expirationDate: productData.expirationDate,
-			expiredAlertDay: productData.expiredAlertDay,
-			price: productData.price,
-			quantity: productData?.dimensions?.weight || productData?.dimensions?.volume,// this quantity is differ from incoming product quantity
-			unit: productData.unit,
-			warehouse: productData.stock,
-			balance: productData.balance,
-			partner: productData.partner,	
-			driver: productData.driver,	
-			actionType:'incoming',
-			sellingPrice: 0,
-			producedDate:productData.producedDate,
-			boxCount:productData.boxCount,
-			unitWeight:productData.unitWeight,
-			boxCapacity:productData.boxCapacity,
-			manufacturerId:productData.manufacturer
-	  }
+
+		
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
 

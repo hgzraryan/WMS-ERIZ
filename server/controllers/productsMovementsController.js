@@ -40,6 +40,9 @@ const getAllProductsMovements = async (req, res) => {
 		if (filters.actionType) {
 			matchStage["actionType"] = filters.actionType.toLowerCase();
 		}
+		if (filters.internalAction) {
+			matchStage["internalAction"] = filters.internalAction;
+		}
 	// if (filters.product) {
 	// 	matchStage["currentProductId"] = filters.product
 	// }
@@ -138,7 +141,8 @@ const getAllProductsMovements = async (req, res) => {
 			manufacturer: 1,
 			currentProductId:1,
 			expirationDate:1,
-			expiredAlertDay:1
+			expiredAlertDay:1,
+			internalAction:1
 		  }
 		}
 	  ]);
