@@ -192006,3 +192006,12 @@
 20250409	23:30:27	9b362b46-aadf-4940-ab45-311166c552e9	GET	undefined	/workerList
 20250409	23:30:27	cb63dd68-ac76-4611-8734-ed5718ba0f06	GET	undefined	/productsList
 20250409	23:30:47	1a58587f-e77b-435a-b1af-10ae1ad20653	POST	http://localhost:5444	/productById
+20250409	23:42:38	76b9d616-537c-4fa4-940a-fb1c2e871596	GET	undefined	/partners
+20250409	23:42:38	c6d8cbb4-09a5-477d-8937-9920aa0a61f4	GET	undefined	/workerList
+20250409	23:42:38	d6011056-5e40-47eb-9e2d-4e3cfbc828d3	GET	undefined	/productsList
+20250409	23:42:40	10064300-d137-45c8-a6eb-0f8e2aeae7c3	GET	undefined	/partners
+20250409	23:42:40	75fb9100-420b-45d9-9d41-9235c1137539	GET	undefined	/workerList
+20250409	23:42:40	2718b375-f95f-42ac-8cd3-cc2bd96b38ad	GET	undefined	/productsList
+20250409	23:43:38	4dc0785a-ed8b-4333-a34f-d3904dd35f2e	GET	undefined	/partners
+20250409	23:43:38	c2c54804-3718-4026-82c4-ccb1e97af21c	GET	undefined	/workerList
+20250409	23:43:38	96eae4a8-2720-4a7b-8074-395305aa4576	GET	undefined	/productsList

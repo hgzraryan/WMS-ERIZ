@@ -23,7 +23,7 @@ function ProductsSummaryTable({
             () => [
               {
                 Header: "Հ/Հ",
-                accessor: "warehouseBalanceId",
+                accessor: "productIdent",
                 width: 80,
               },
               {
@@ -32,7 +32,17 @@ function ProductsSummaryTable({
                 width: 250,
               },
               {
-                Header: "Քանակ",
+                Header: "Հատաքանակ",
+                accessor: "totalQuantityBalance",
+                width: 250,
+              },
+              {
+                Header: "Արկղերի քանակ",
+                accessor: "totalBoxCountBalance",
+                width: 250,
+              },
+              {
+                Header: "Մնացորդ",
                 accessor: "totalBalance",
                 width: 250,
               },

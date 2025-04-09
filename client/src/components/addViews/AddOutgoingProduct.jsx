@@ -33,6 +33,7 @@ function AddOutgoingProduct({
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState('051');
   const [errMsg, setErrMsg] = useState("");
+  const [internalErrMsg, setInternalErrMsg] = useState("");
   const [partners, setPartners] = useState([]);
   const [newProduct, setNewProduct] = useState(false)
   const [productsList, setProductsList] = useState([])
@@ -98,28 +99,44 @@ function AddOutgoingProduct({
   };
   const handleOutgoingProductsList = async (e, row) => {
     e.preventDefault()
+    const data=row.original
     const tmp = {}
-    tmp.id = row.original.incomingProductId
-    tmp.name = row.original.name
-    tmp.productListId = row.original.currentProductId
-    tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
-    tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
-    tmp.warehouse = row.original.warehouseId
-    tmp.price = row.original.price
-    tmp.barcode = row.original.barcode
-    tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
-    tmp.currency = row.original.currency
-    tmp.producedDate = row.original.producedDate
-    tmp.expirationDate = row.original.expirationDate
-    tmp.expiredAlertDay = row.original.expiredAlertDay
-    tmp.boxCount = row.original.boxCount
-    tmp.unitWeight = row.original.unitWeight
-    tmp.boxCapacity = row.original.boxCapacity
-    tmp.manufacturerId = row.original.manufacturerId
+    const correctPieceCount=rowInputValues[data?.incomingProductId] % data.unitWeight===0
+    if(correctPieceCount){      
+      //parse to int
+      const pieceCount =
+      parseFloat(rowInputValues?.[data?.incomingProductId] ?? '') /
+      parseFloat(data?.unitWeight ?? '');    
+      const boxcalc = pieceCount/+data.boxCapacity
 
-    const tmpData = []
-    tmpData.push(tmp)
-    setOutgoingList((prev) => [tmp, ...prev])
+      setInternalErrMsg('')
+      
+      tmp.id = row.original.incomingProductId
+      tmp.name = row.original.name
+      tmp.productListId = row.original.currentProductId
+      tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
+      tmp.outgoingBoxCount = boxcalc
+      tmp.outgoingQuantityCount = pieceCount
+      tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
+      tmp.warehouse = row.original.warehouseId
+      tmp.price = row.original.price
+      tmp.barcode = row.original.barcode
+      tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
+      tmp.currency = row.original.currency
+      tmp.producedDate = row.original.producedDate
+      tmp.expirationDate = row.original.expirationDate
+      tmp.expiredAlertDay = row.original.expiredAlertDay
+      tmp.boxCount = row.original.boxCount
+      tmp.unitWeight = row.original.unitWeight
+      tmp.boxCapacity = row.original.boxCapacity
+      tmp.manufacturerId = row.original.manufacturerId
+      tmp.totalCalculatedCount=pieceCount
+      const tmpData = []
+      tmpData.push(tmp)
+      setOutgoingList((prev) => [tmp, ...prev])
+    }else{
+      setInternalErrMsg('Սխալ եք մուտքագրել ապրանքի քաշը')
+    }
   };
 
  
@@ -264,25 +281,6 @@ function AddOutgoingProduct({
         Header: (event) => (
           <>
 
-            <div className="columnHeader">Մուտքի ամսաթիվ</div>
-          </>
-        ),
-        accessor: "createdAt",
-        style: {
-          // Custom style for the 'description' column
-        },
-        Cell: ({ row }) => (
-          <div className="d-flex align-items-center">
-            {moment(row.original?.createdAt).format('DD-MM-YYYY')}
-          </div>
-        ),
-        width: 140,
-
-      },
-      {
-        Header: (event) => (
-          <>
-
             <div className="columnHeader">Գին</div>
           </>
         ),
@@ -306,6 +304,40 @@ function AddOutgoingProduct({
           </div>
         ),
         width: 120,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+
+            <div className="columnHeader">Արտադրող</div>
+          </>
+        ),
+        accessor: "manufacturerName",
+        style: {
+          // Custom style for the 'description' column
+        },
+        
+        width: 120,
+        
+      },
+      {
+        Header: (event) => (
+          <>
+
+            <div className="columnHeader">Միավորի քաշ</div>
+          </>
+        ),
+        accessor: "unitWeight",
+        style: {
+          // Custom style for the 'description' column
+        },
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+           {row.original?.unitWeight}կգ
+          </div>
+        ),
+        width: 110,
 
       },
       {
@@ -661,6 +693,12 @@ function AddOutgoingProduct({
                           <div style={{ border: '3px solid #edebeb', borderRadius: '10px', padding: '10px' }}>
 
                             <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
+                            {internalErrMsg &&
+                            <div className="flex-center">
+                            <p style={{fontSize:'16px', color:'red'}}>{internalErrMsg}</p>
+                            </div>
+                            }
+
                           </div>
                         </> : 
                         <>
@@ -673,7 +711,7 @@ function AddOutgoingProduct({
                         <>
                           <div className="separator-full"></div>
                           <div style={{ border: '1px solid #edebeb', borderRadius: '10px' }}>
-                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff', borderRadius: '10px 10px 0 0', padding: '10px', marginBottom: '20px' }}>
+                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#ffffff', borderRadius: '10px 10px 0 0', padding: '10px', marginBottom: '20px' }}>
                               <div className="flex-center">
                                 <h4>Դուրս գրվող ապրանքներ</h4>
                               </div>
@@ -684,7 +722,11 @@ function AddOutgoingProduct({
                                   <>
                                     <div className="d-flex gap-5 mb-2 justify-content-between">
                                       <li key={el.id} >
-                                        {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit}
+                                        {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit  }
+                                         <span>    {el?.totalCalculatedCount} հատ,</span>
+                                         <span
+                                         style={{color:el.totalCalculatedCount % el.boxCapacity===0?'':'#f28015'}}
+                                         >(Արկղի տարողունակությունը {el.boxCapacity} հատ)</span>
                                       </li>
                                       <div>
                                         <FeatherIcon icon={'trash'} style={{ color: 'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}
@@ -798,6 +840,7 @@ const EditableInput = ({ rowId, value, handleInputChange, isFocused, onFocus,isM
       style={{ width: "70px", height: "30px", padding: "1px",
         border:isMoreThanAvailable?'3px solid red':'' 
       }}
+      placeholder="կգ"
       value={value}
       onChange={(e) => handleInputChange(e, rowId)}
       onFocus={() => onFocus(rowId)}
