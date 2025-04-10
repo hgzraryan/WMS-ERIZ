@@ -112,16 +112,15 @@ function WarehouseProductsTransferModal({ transfer, setTransfer, refreshData }) 
     }, 500);
   }, [navigate]);
   const onSubmit = methods.handleSubmit(async (data) => {
-    //console.log(mon)
-    console.log(data)
-    console.log(currentProduct)
+    if (+transfer.warehouseId === +data?.impWarehouse?.value) {
+      setErrMsg('Ընտրեք մեկ այլ պահեստ')
+      return
+    } else {
+    const actionCount = parseFloat(productCount);
+    const boxcalc = actionCount/+currentProduct.boxCapacity
 
     const newTransfer = {
-      // transCount: +data?.count|| null,
       fromWarehouseId: transfer.warehouseId || null,
-      //destId: data?.impWarehouse?.value || null,
-      //productID:data?.product?.value || null,
-      //paymentPurpose:data?.paymentPurpose||null,
       userId: storedUserData?.userId || null,
       name: currentProduct?.name || null,
       currentProductId: data?.product?.value || null,
@@ -141,7 +140,6 @@ function WarehouseProductsTransferModal({ transfer, setTransfer, refreshData }) 
       //palletCount: data?.pallet,
       currency: currentProduct?.currency,
       price: currentProduct?.price,
-      reorderLevel: currentProduct?.reorderLevel,
       producedDate: currentProduct?.producedDate,
       expiredAlertDay: currentProduct?.expiredAlertDay,
       expirationDate: currentProduct?.expirationDate,
@@ -150,13 +148,15 @@ function WarehouseProductsTransferModal({ transfer, setTransfer, refreshData }) 
       boxCount:currentProduct?.boxCount,
       unitWeight:currentProduct?.unitWeight,
       boxCapacity:currentProduct?.boxCapacity,
-      manufacturer:currentProduct?.manufacturer
+      manufacturer:currentProduct?.manufacturer,
+      outgoingBoxCount:boxcalc,
+      outgoingQuantityCount:+productCount,
     };
     console.log(newTransfer)
 
     //const updatedData = deleteNullProperties(newDiagnose)
 
-    // if(data?.count<=productBalance){
+    if(+totalWeight<=+productBalance){
     if (newTransfer?.fromWarehouseId == newTransfer?.stock) {
       setErrMsg('Ընտրեք մեկ այլ պահեստ')
       return
@@ -181,9 +181,10 @@ function WarehouseProductsTransferModal({ transfer, setTransfer, refreshData }) 
         }
       }
     }
-    // }else if(data?.moneyTransfer>productBalance) {
-    //     setErrMsg('Մուտքագրված գումարի չափսը սխալ է')
-    // }
+    }else {
+        setErrMsg('Մուտքագրված քանակը սխալ է')
+    }
+  }
   });
   console.log(warehouseProducts)
   return (
@@ -321,7 +322,7 @@ function WarehouseProductsTransferModal({ transfer, setTransfer, refreshData }) 
                                           label: `${item.incomingProductId}․ 
                                                ${item.name} 
                                                / Արտ․ ամսաթիվ-${item.producedDate}
-                                               / Մնացորդ-${item?.balance}`,
+                                               / Մնացորդ-${item?.balance}կգ`,
                                           balance: item?.balance,
                                           data: item
                                         }

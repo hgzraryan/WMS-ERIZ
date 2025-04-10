@@ -193,6 +193,7 @@ const FilterPanel = ({ setFilter }) => {
             actionType: null,
             manufacturer: null,
             product: null,
+            internalTransfer:null,
 
         },
     });
@@ -246,6 +247,10 @@ const FilterPanel = ({ setFilter }) => {
         }
         if (!!data.partner) {
             data.partner = data.partner.map((el) => el = el.value)
+            //data.product = data.product?.value+''
+        }
+        if (!!data.fromWarehouseId) {
+            data.fromWarehouseId = true
             //data.product = data.product?.value+''
         }
         if (!!data.dateRange.startDate && !!data.dateRange.endDate) {
@@ -539,6 +544,62 @@ const FilterPanel = ({ setFilter }) => {
                                                     />
                                                 )}
                                             />
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div className="col-sm-3 ">
+                                <div className='d-flex flex-column'>
+                                    <div className="d-flex justify-content-between me-2">
+                                        <label
+                                            className="formLabel"
+                                            htmlFor="partner"
+                                        >
+                                            Ներքին տեղաշարժ
+                                        </label>
+
+                                    </div>
+                                    <div className=" d-flex justify-content-between">
+                                        <div className="flex-grow-1 me-1">
+                                                
+                                        <Controller
+                                          name="internalTransfer"
+                                          control={control}
+                                          render={({ field }) => (
+                                            <input
+                                              type="checkbox"
+                                              id="internalTransfer"
+                                              {...field}
+                                              checked={field.value}
+                                            />
+                                          )}
+                                        />
+                                            {/* <Controller
+                                                name="partner"
+                                                control={methods.control}
+                                                defaultValue={null}
+                                                rules={{ required: false }}
+                                                render={({ field }) => (
+                                                    <Select
+                                                        {...field}
+                                                        value={field.value}
+                                                        options={partners?.map((item) => ({
+                                                            value: item.partnerId,
+                                                            label: item.name,
+                                                        }))}
+                                                        placeholder={"Ընտրել"}
+                                                        components={{ Option: CustomOption }}
+                                                        styles={customStyles}
+                                                        isMulti={true} // Enable multi-select
+                                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                    //hideSelectedOptions={false}
+                                                    // onChange={(val) => {
+                                                    //   field.onChange(val);
+                                                    //   onUnitSelect(val);
+                                                    // }}
+                                                    />
+                                                )}
+                                            /> */}
                                         </div>
                                     </div>
                                     </div>
