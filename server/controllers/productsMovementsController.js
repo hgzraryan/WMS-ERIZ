@@ -43,8 +43,9 @@ const getAllProductsMovements = async (req, res) => {
 		// if (filters.actionType) {
 		// 	matchStage["actionType"] = filters.actionType.toLowerCase();
 		// }
-		if (filters.internalAction) {
-			matchStage["internalAction"] = filters.internalAction;
+		
+		if (filters.internalTransfer) {
+			matchStage["internalTransfer"] = { $exists: true, $ne: null };
 		}
 	// if (filters.product) {
 	// 	matchStage["currentProductId"] = filters.product
@@ -111,7 +112,18 @@ const getAllProductsMovements = async (req, res) => {
 		  }
 		},
 		{
+		  $lookup: {
+			from: "warehouses",
+			localField: "fromWarehouseId",
+			foreignField: "warehouseId",
+			as: "stockInfo"
+		  }
+		},
+		{
 		  $unwind: { path: "$workerInfo", preserveNullAndEmptyArrays: true }
+		},
+		{
+		  $unwind: { path: "$stockInfo", preserveNullAndEmptyArrays: true }
 		},
 		{
 		  $unwind: { path: "$partnerInfo", preserveNullAndEmptyArrays: true }
@@ -145,7 +157,9 @@ const getAllProductsMovements = async (req, res) => {
 			currentProductId:1,
 			expirationDate:1,
 			expiredAlertDay:1,
-			internalAction:1
+			internalAction:1,
+			fromWarehouseId:'$stockInfo.warehouseId',
+			fromWarehouseName:'$stockInfo.name',
 		  }
 		}
 	  ]);

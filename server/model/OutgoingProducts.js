@@ -99,6 +99,9 @@ const OutgoingProductsSchema = new Schema({
   	sellingPrice: {
 		type: Number,
 	},
+  userId: {
+		type: Number,
+	},
   outgoingList: {
     type: [OutgoingSchema],  // Array of outgoingList
     default: [],

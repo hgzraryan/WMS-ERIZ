@@ -100,6 +100,9 @@ const productsMovementsSchema = new Schema({
   fromWarehouseId: {
     type: Number,
   },
+		internalTransfer: {
+    type: Boolean,
+  },
   
 },{
     timestamps: {  createdAt: 'createdAt', updatedAt: 'updatedAt',  currentTime: () => new Date(Date.now() + 4 * 60 * 60 * 1000)} // Add 4 hours to the current time (GMT+4)
