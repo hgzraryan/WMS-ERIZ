@@ -115,7 +115,7 @@ export const ColumnFilter = ({
     // }
   });
   const handleSearch = async () => {
-    debugger
+    
     const controller = new AbortController();
     const updateFilterdObject = { ...filterData, [id]: searchTerms };
     for (let i in updateFilterdObject) {

@@ -11,20 +11,6 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import moment from 'moment';
 import CustomDateFilterComponent from './CustomDateFilterComponent';
 
-const currencies = [
-    {
-        label: "ՀՀ դրամ",
-        value: "AMD",
-    },
-    {
-        label: "Ռուսական ռուբլի",
-        value: "RUB",
-    },
-    {
-        label: "ԱՄՆ դոլլար",
-        value: "USD",
-    },
-];
 const actionTypes = [
     {
         label: "Մուտք",
@@ -45,57 +31,6 @@ const CustomOption = (props) => {
         </div>
     );
 };
-// export const customStyles = {
-//     control: (base, state) => ({
-//         ...base,
-//         minHeight: "15px",
-//         fontSize: "12px",
-//         borderColor: state.isFocused ? "#018a54" : "#e6e6e6",
-//         boxShadow: "none",
-//         "&:hover": {
-//             borderColor: "#018a54",
-//         },
-//     }),
-//     option: (styles, { isDisabled, isFocused, isSelected }) => ({
-//         ...styles,
-//         fontSize: "10px",
-//         height: '14px',
-//         backgroundColor: isDisabled
-//             ? undefined
-//             : isSelected
-//                 ? "#018a54"
-//                 : isFocused
-//                     ? "rgba(1, 138, 84, .1)"
-//                     : undefined,
-//         color: isDisabled ? "#e6e6e6" : isSelected ? "white" : "black",
-//         cursor: isDisabled ? "not-allowed" : "default",
-//         ":active": {
-//             ...styles[":active"],
-//             backgroundColor: !isDisabled
-//                 ? isSelected
-//                     ? "#018a54"
-//                     : "#fff"
-//                 : undefined,
-//         },
-//     }),
-//     multiValueLabel: (styles) => ({
-//         ...styles,
-//         backgroundColor: "#018a54",
-//         color: "#fff",
-//         fontSize: "12px",
-//         padding: "0px",
-//     }),
-
-//     multiValueRemove: (styles) => ({
-//         ...styles,
-//         backgroundColor: "#018a54",
-//         color: "#e8e3e3",
-//         ":hover": {
-//             backgroundColor: "#018a54",
-//             color: "#eb3434",
-//         },
-//     }),
-// };
 
 export const customStyles = {
     control: (base, state) => ({
@@ -299,7 +234,7 @@ const FilterPanel = ({ setFilter }) => {
 
     const onSubmit = (data) => {
         if (!!data.actionType) {
-            data.actionType = data.actionType?.value
+            data.actionType = data.actionType.map((el) => el = el.value)
         }
         if (!!data.stock) {
             data.stock = data.stock.map((el) => el = el.value)
@@ -322,6 +257,30 @@ const FilterPanel = ({ setFilter }) => {
         console.log(data)
         setFilter(data);
     };
+    const resetFilters = () => {
+        reset(); // Reset the form UI
+      
+        const clearedFilters = {
+          barcode: null,
+          name: null,
+          partner: null,
+          dateRange: {
+            startDate: null,
+            endDate: null,
+          },
+          stock: null,
+          actionDate: null,
+          price: null,
+          driver: null,
+          actionId: null,
+          actionType: null,
+          manufacturer: null,
+          product: null,
+        };
+      
+        // Call your backend API or filter handler
+        onSubmit(clearedFilters); // <- this should fetch data again with defaults
+      };
     return (
         <div
             className="filter-panel"
@@ -341,7 +300,7 @@ const FilterPanel = ({ setFilter }) => {
                             <Button size="sm" type="submit">
                                 Փնտրել
                             </Button>
-                            <Button size="sm" type="button" onClick={() => reset()}>
+                            <Button size="sm" type="button" onClick={resetFilters}>
                                 Ջնջել
                             </Button>
                             {/* <FeatherIcon icon="settings" /> */}
@@ -373,10 +332,10 @@ const FilterPanel = ({ setFilter }) => {
                                                         options={actionTypes}
                                                         placeholder="Ընտրել"
                                                         styles={customStyles}
-                                                        //isMulti={true} // Enable multi-select
-                                                        //closeMenuOnSelect={false} // Keep menu open for multiple selection
-                                                        //hideSelectedOptions={false}
-                                                        //components={{ Option: CustomOption }}
+                                                        isMulti={true} // Enable multi-select
+                                                        closeMenuOnSelect={false} // Keep menu open for multiple selection
+                                                        hideSelectedOptions={false}
+                                                        components={{ Option: CustomOption }}
                                                     />
                                                 )}
                                             />
@@ -584,7 +543,7 @@ const FilterPanel = ({ setFilter }) => {
                                     </div>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 ">
+                                {/* <div className="col-sm-3 ">
                                 <div className='d-flex flex-column'>
                                     <div className="d-flex justify-content-between me-2">
                                         <label
@@ -627,7 +586,7 @@ const FilterPanel = ({ setFilter }) => {
                                         </div>
                                     </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                         </div>

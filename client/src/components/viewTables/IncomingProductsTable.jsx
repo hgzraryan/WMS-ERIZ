@@ -134,7 +134,7 @@ function IncomingProductsTable({
         sortable: true,
         Cell: ({ row }) => (
           <div className="d-flex align-items-center">
-            {row.original?.dimensions?.weight || row.original?.dimensions?.volume}
+            {row.original?.dimensions?.weight || row.original?.dimensions?.volume}կգ
           </div>
         ),
         width: 100,
@@ -145,6 +145,11 @@ function IncomingProductsTable({
           <>
             <div className="quantity">Մնացորդ</div>
           </>
+        ),
+        Cell: ({ row }) => (
+          <div className="d-flex align-items-center">
+            {row.original?.balance}կգ
+          </div>
         ),
         accessor: "balance",
         sortable: true,

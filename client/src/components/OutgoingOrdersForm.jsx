@@ -47,7 +47,7 @@ function OutgoingOrdersForm({ data }) {
                     <div style={{ marginBottom: '10px' }}>
 
                         <div className="section" style={{ display: 'flex' }}>
-                            <h6 style={{ marginRight: '5px', marginBottom: 0, alignContent: 'end' }}>Գնորդ</h6><div className='line' style={{ width: '80%' }}>{data?.customer}</div>
+                            <h6 style={{ marginRight: '5px', marginBottom: 0, alignContent: 'end' }}>Գնորդ</h6><div className='line' style={{ width: '80%' }}>{data?.partnerName}</div>
                         </div>
                         <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>(անունը,ստորագրությունը)</p>
                     </div>
@@ -134,16 +134,14 @@ function OutgoingOrdersForm({ data }) {
                     <div style={{ marginBottom: '10px' }}>
 
                         <div className="section" style={{ display: 'flex' }}>
-                            <h6 style={{ marginRight: '5px', marginBottom: 0, alignContent: 'end' }}>Գնորդ</h6><div className='line' style={{ width: '80%' }}>{data?.customer}</div>
+                            <h6 style={{ marginRight: '5px', marginBottom: 0, alignContent: 'end' }}>Գնորդ</h6><div className='line' style={{ width: '80%' }}>{data?.partnerName}</div>
                         </div>
                         <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>(անունը,ստորագրությունը)</p>
                     </div>
                     <div style={{ marginBottom: '10px' }}>
-
                         <div className="section" style={{ display: 'flex' }}>
                             <h6 style={{ marginRight: '5px', marginBottom: 0, alignContent: 'end' }}>Ստացման հիմքը և նպատակը</h6><div className='line' style={{ width: '59%' }}></div>
                         </div>
-
                     </div>
                     {/* <div style={{ marginBottom:'50px'}}>
 

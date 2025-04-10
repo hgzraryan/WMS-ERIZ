@@ -334,7 +334,7 @@ function WareHousesList() {
               size={"1.5rem"}
               onClick={(e) => handleOpenInfoModal(e,record)}
             />
-             {!!superAdmin && !record?.children?.length ?
+             {/* {!!superAdmin && !record?.children?.length ?
                      <a
                      className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
                      data-bs-toggle="tooltip"
@@ -352,7 +352,7 @@ function WareHousesList() {
                   </span>
                 </a>
                 :''                  
-              }
+              } */}
           <FeatherIcon icon="edit" width={20} />
           {/* <a
                   className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"

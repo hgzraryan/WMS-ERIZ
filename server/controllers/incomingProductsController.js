@@ -445,6 +445,11 @@ const registerIncomingProduct = async (req, res) => {
 		}
 		const newProductMovements = new ProductsMovements(ProductMovementData)
 		await newProductMovements.save();
+
+		return res.status(201).json({
+			success: true,
+			message: 'New product registered and added to warehouse balance successfully'
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ success: false, message: 'Internal server error, no product created!'});
@@ -528,20 +533,20 @@ const updateProduct = async (req, res) => {
         await ProductsMovements.updateOne({ actionId: documentId,actionType:"incoming"}, { $set: movementUpdate });
 
         //TODO Update WarehouseBalance
-        const warehouseBalance = await WarehouseBalance.findOne({ productListId: existingProduct.currentProductId});
-        if (warehouseBalance) {
-            warehouseBalance.balance = (
-                parseInt(warehouseBalance.balance) + (updateFields.dimensions?.weight || updateFields.dimensions?.volume || 0)
-            ).toString();
-            await warehouseBalance.save();
-        } else {
-            const newWarehouseBalance = new WarehouseBalance({
-                productListId: existingProduct.currentProductId,
-                balance: updateFields.balance || existingProduct.balance,
-                unit: updateFields.dimensions?.weight ? 'weight' : updateFields.dimensions?.volume ? 'volume' : ''
-            });
-            await newWarehouseBalance.save();
-        }
+        // const warehouseBalance = await WarehouseBalance.findOne({ productListId: existingProduct.currentProductId});
+        // if (warehouseBalance) {
+        //     warehouseBalance.balance = (
+        //         parseInt(warehouseBalance.balance) + (updateFields.dimensions?.weight || updateFields.dimensions?.volume || 0)
+        //     ).toString();
+        //     await warehouseBalance.save();
+        // } else {
+        //     const newWarehouseBalance = new WarehouseBalance({
+        //         productListId: existingProduct.currentProductId,
+        //         balance: updateFields.balance || existingProduct.balance,
+        //         unit: updateFields.dimensions?.weight ? 'weight' : updateFields.dimensions?.volume ? 'volume' : ''
+        //     });
+        //     await newWarehouseBalance.save();
+        // }
 
         return res.status(200).json({
             success: true,

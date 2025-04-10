@@ -1,56 +1,60 @@
-import React, { useState } from 'react'
-import { useController } from 'react-hook-form'
+import React from 'react';
+import { useController } from 'react-hook-form';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { calculateAge } from '../utils/helper';
-import moment from 'moment';
 
-function CustomDateFilterComponent({ control, name,required=false,defaultValue='',maxDate='' })  {
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState(null);
-    const {
-      field,
-      fieldState: { invalid, isTouched, isDirty },
-      formState: { touchedFields, dirtyFields },
-    } = useController({
-      name,
-      control,
-      rules: { required: required },
-      defaultValue:!!defaultValue ? new Date(defaultValue) : '',
+function CustomDateFilterComponent({
+  control,
+  name,
+  required = false,
+  maxDate = ''
+}) {
+  const {
+    field
+  } = useController({
+    name,
+    control,
+    rules: { required },
+    defaultValue: null
+  });
 
-    });
-    const handleDateChange = (date) => {
-      const [start, end] = date;
-console.log(date)
-      field.onChange({ startDate: start, endDate: end?end:moment(new Date()).format('YYYY-MM-DD') });
-      setStartDate(start);
-      setEndDate(end);
-    };
-    const preventTyping = (e) => {
-      e.preventDefault(); // Prevent any typing into the field
-    };
-    return (
-      <DatePicker
-       showYearDropdown
-       yearDropdownItemNumber={100}
-       scrollableYearDropdown
-       onChange={handleDateChange}
-       dateFormat={"dd-MM-yyyy"}
-       selected={startDate}
-       selectsRange
-       startDate={startDate}
-       endDate={endDate}
-       isClearable
-       required={required}
-       onKeyDown={preventTyping} // Prevent typing in the input field
-       placeholderText="Ընտրեք ամսաթիվը" 
-       className='filter-datepicker'
-       popperPlacement="auto"
-       maxDate={new Date(maxDate)}
-       //popperContainer={({ children }) => <div>{children}</div>} // Custom container
+  const handleDateChange = (dates) => {
+    const [start, end] = dates;
 
-       />
-    )
+    // Only update when either start or end is selected
+    if (!start && !end) {
+      field.onChange(null);
+    } else {
+      field.onChange({
+        startDate: start,
+        endDate: end || null
+      });
+    }
+  };
+
+  const preventTyping = (e) => e.preventDefault();
+
+  const startDate = field.value?.startDate ? new Date(field.value.startDate) : null;
+  const endDate = field.value?.endDate ? new Date(field.value.endDate) : null;
+
+  return (
+    <DatePicker
+      selectsRange
+      startDate={startDate}
+      endDate={endDate}
+      onChange={handleDateChange}
+      isClearable
+      showYearDropdown
+      scrollableYearDropdown
+      yearDropdownItemNumber={100}
+      placeholderText="Ընտրեք ամսաթիվը"
+      dateFormat="dd-MM-yyyy"
+      onKeyDown={preventTyping}
+      className="filter-datepicker"
+      popperPlacement="auto"
+      maxDate={maxDate ? new Date(maxDate) : undefined}
+    />
+  );
 }
 
-export default CustomDateFilterComponent
+export default CustomDateFilterComponent;

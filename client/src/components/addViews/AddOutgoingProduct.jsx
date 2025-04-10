@@ -101,7 +101,14 @@ function AddOutgoingProduct({
     e.preventDefault()
     const data=row.original
     const tmp = {}
-    const correctPieceCount=rowInputValues[data?.incomingProductId] % data.unitWeight===0
+    // const correctPieceCount=parseFloat(rowInputValues[data?.incomingProductId]) % data.unitWeight === 0
+    // console.log(parseFloat(rowInputValues[data?.incomingProductId]))
+    // console.log(data.unitWeight)
+    const value = parseFloat(rowInputValues[data?.incomingProductId]);
+    const weight = parseFloat(data.unitWeight); // in case it’s not a number yet
+
+    const correctPieceCount = weight !== 0 && Number.isInteger(value / weight);
+    
     if(correctPieceCount){      
       //parse to int
       const pieceCount =
@@ -725,7 +732,7 @@ function AddOutgoingProduct({
                                         {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit  }
                                          <span>    {el?.totalCalculatedCount} հատ,</span>
                                          <span
-                                         style={{color:el.totalCalculatedCount % el.boxCapacity===0?'':'#f28015'}}
+                                         style={{color:el.totalCalculatedCount % el.boxCapacity===0?'#198754':'#f28015'}}
                                          >(Արկղի տարողունակությունը {el.boxCapacity} հատ)</span>
                                       </li>
                                       <div>

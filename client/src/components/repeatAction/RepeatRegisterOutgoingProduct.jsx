@@ -38,6 +38,8 @@ function RepeatRegisterOutgoingProduct({ outgoingProduct, setRepeateOutgoing, re
   const [focusedInputId, setFocusedInputId] = useState(null); // Tracks which input is focused
   const [workers, setWorkers] = useState([])
   const [additionalData, setAdditionalData] = useState('')
+    const [internalErrMsg, setInternalErrMsg] = useState("");
+  
 console.log(outgoingProduct)
   const navigate = useNavigate();
   const location = useLocation();
@@ -94,27 +96,52 @@ console.log(outgoingProduct)
   };
   const handleOutgoingProductsList = async (e, row) => {
     e.preventDefault()
-
+    const data=row.original
     const tmp = {}
-    tmp.id = row.original.incomingProductId
-    tmp.name = row.original.name
-    tmp.productListId = row.original.currentProductId
-    tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
-    tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
-    tmp.warehouse = row.original.warehouseId
-    tmp.price = row.original.price
-    tmp.barcode = row.original.barcode
-    tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
-    tmp.currency = row.original.currency
-    tmp.producedDate = row.original.producedDate
+    // const correctPieceCount=parseFloat(rowInputValues[data?.incomingProductId]) % data.unitWeight === 0
+    // console.log(parseFloat(rowInputValues[data?.incomingProductId]))
+    // console.log(data.unitWeight)
+    const value = parseFloat(rowInputValues[data?.incomingProductId]);
+    const weight = parseFloat(data.unitWeight); // in case it’s not a number yet
 
-    const tmpData = []
-    tmpData.push(tmp)
-    setOutgoingList((prev) => [tmp, ...prev])
+    const correctPieceCount = weight !== 0 && Number.isInteger(value / weight);
+    
+    if(correctPieceCount){      
+      //parse to int
+      const pieceCount =
+      parseFloat(rowInputValues?.[data?.incomingProductId] ?? '') /
+      parseFloat(data?.unitWeight ?? '');    
+      const boxcalc = pieceCount/+data.boxCapacity
+
+      setInternalErrMsg('')
+      
+      tmp.id = row.original.incomingProductId
+      tmp.name = row.original.name
+      tmp.productListId = row.original.currentProductId
+      tmp.outgoingCount = +rowInputValues[row.original.incomingProductId]
+      tmp.outgoingBoxCount = boxcalc
+      tmp.outgoingQuantityCount = pieceCount
+      tmp.unit = row.original.dimensions.weight ? 'կգ' : row.original.dimensions.volume ? 'Լիտր' : ''
+      tmp.warehouse = row.original.warehouseId
+      tmp.price = row.original.price
+      tmp.barcode = row.original.barcode
+      tmp.balance = row.original.balance - (+rowInputValues[row.original.incomingProductId])
+      tmp.currency = row.original.currency
+      tmp.producedDate = row.original.producedDate
+      tmp.expirationDate = row.original.expirationDate
+      tmp.expiredAlertDay = row.original.expiredAlertDay
+      tmp.boxCount = row.original.boxCount
+      tmp.unitWeight = row.original.unitWeight
+      tmp.boxCapacity = row.original.boxCapacity
+      tmp.manufacturerId = row.original.manufacturerId
+      tmp.totalCalculatedCount=pieceCount
+      const tmpData = []
+      tmpData.push(tmp)
+      setOutgoingList((prev) => [tmp, ...prev])
+    }else{
+      setInternalErrMsg('Սխալ եք մուտքագրել ապրանքի քաշը')
+    }
   };
-
-
-
 
   // const handleOutgoingProductsList = async (e, row) => {
   //   e.preventDefault();
@@ -223,199 +250,214 @@ console.log(outgoingProduct)
     }
   });
   const fetchedDataColumn = useMemo(
-    () => [
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader">ID</div>
-          </>
-        ),
-        accessor: "incomingProductId",
-        sortable: true,
-        width: 60,
-
-      },
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader">Անվանում</div>
-          </>
-        ),
-        accessor: "name",
-        sortable: true,
-        width: 100,
-
-      },
-      {
-        Header: (event) => (
-          <>
-            <div>Պահեստ</div>
-          </>
-        ),
-        accessor: "warehouseName",
-        width: 120,
-        sortable: true,
-        // Cell: ({ row }) => (
-        //   <div className="d-flex align-items-center">
-
-        //   </div>
-        // ),
-      },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Մուտքի ամսաթիվ</div>
-          </>
-        ),
-        accessor: "createdAt",
-        style: {
-          // Custom style for the 'description' column
-        },
-        Cell: ({ row }) => (
-          <div className="d-flex align-items-center">
-            {moment(row.original?.createdAt).format('DD-MM-YYYY')}
-          </div>
-        ),
-        width: 140,
-
-      },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Գին</div>
-          </>
-        ),
-        accessor: "price",
-        width: 100,
-      },
-      {
-        Header: (event) => (
-          <>
-
-            <div className="columnHeader">Արտ. ամսաթիվ</div>
-          </>
-        ),
-        accessor: "producedDate",
-        style: {
-          // Custom style for the 'description' column
-        },
-        Cell: ({ row }) => (
-          <div className="d-flex align-items-center">
-            {moment(row.original?.expirationDate).format('DD-MM-YYYY')}
-          </div>
-        ),
-        width: 120,
-
-      },
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader">Մնացորդ</div>
-          </>
-        ),
-        accessor: "balance",
-        width: 100,
-      },
-
-      {
-        Header: (event) => (
-          <>
-            <div className="columnHeader">Գործողություններ</div>
-          </>
-        ),
-        accessor: "actions",
-        width: 150,
-
-        Cell: ({ row }) => {
-          const isInputEmpty = !rowInputValues[row.original.incomingProductId]?.trim();
-          const isMoreThanAvailable = +rowInputValues[row.original.incomingProductId]>row.original?.balance;
-          const handleButtonClick = (e, row) => {
-            handleOutgoingProductsList(e, row); // Call your existing function
-            setErrMsg('')
-
-            // Clear the input for the current row
-            setRowInputValues((prevValues) => ({
-              ...prevValues,
-              [row.original.incomingProductId]: "", // Reset input to empty string
-            }));
-          }
-          return (
-
-            <div className="d-flex align-items-center">
-
-              <div className="d-flex">
-                <EditableInput
-                  rowId={row.original.incomingProductId}
-                  value={ rowInputValues[row?.original?.incomingProductId] || ""}
-                  handleInputChange={handleInputChange}
-                  isFocused={focusedInputId === row.original.incomingProductId}
-                  onFocus={handleFocus}
-                  isMoreThanAvailable={isMoreThanAvailable}
-                />
+     () => [
+       {
+         Header: (event) => (
+           <>
+             <div className="columnHeader">ID</div>
+           </>
+         ),
+         accessor: "incomingProductId",
+         sortable: true,
+         width: 60,
+ 
+       },
+       {
+         Header: (event) => (
+           <>
+             <div className="columnHeader">Անվանում</div>
+           </>
+         ),
+         accessor: "name",
+         sortable: true,
+         width: 100,
+ 
+       },
+       {
+         Header: (event) => (
+           <>
+             <div>Պահեստ</div>
+           </>
+         ),
+         accessor: "warehouseName",
+         width: 120,
+         sortable: true,
+         // Cell: ({ row }) => (
+         //   <div className="d-flex align-items-center">
+ 
+         //   </div>
+         // ),
+       },
+       {
+         Header: (event) => (
+           <>
+ 
+             <div className="columnHeader">Գին</div>
+           </>
+         ),
+         accessor: "price",
+         width: 100,
+       },
+       {
+         Header: (event) => (
+           <>
+ 
+             <div className="columnHeader">Արտ. ամսաթիվ</div>
+           </>
+         ),
+         accessor: "producedDate",
+         style: {
+           // Custom style for the 'description' column
+         },
+         Cell: ({ row }) => (
+           <div className="d-flex align-items-center">
+             {moment(row.original?.expirationDate).format('DD-MM-YYYY')}
+           </div>
+         ),
+         width: 120,
+         
+       },
+       {
+         Header: (event) => (
+           <>
+ 
+             <div className="columnHeader">Արտադրող</div>
+           </>
+         ),
+         accessor: "manufacturerName",
+         style: {
+           // Custom style for the 'description' column
+         },
+         
+         width: 120,
+         
+       },
+       {
+         Header: (event) => (
+           <>
+ 
+             <div className="columnHeader">Միավորի քաշ</div>
+           </>
+         ),
+         accessor: "unitWeight",
+         style: {
+           // Custom style for the 'description' column
+         },
+         Cell: ({ row }) => (
+           <div className="d-flex align-items-center">
+            {row.original?.unitWeight}կգ
+           </div>
+         ),
+         width: 110,
+ 
+       },
+       {
+         Header: (event) => (
+           <>
+             <div className="columnHeader">Մնացորդ</div>
+           </>
+         ),
+         accessor: "balance",
+         width: 100,
+       },
+ 
+       {
+         Header: (event) => (
+           <>
+             <div className="columnHeader">Գործողություններ</div>
+           </>
+         ),
+         accessor: "actions",
+         width: 150,
+ 
+         Cell: ({ row }) => {
+           const isInputEmpty = !rowInputValues[row.original.incomingProductId]?.trim();
+           const isMoreThanAvailable = +rowInputValues[row.original.incomingProductId]>row.original?.balance;
+           const handleButtonClick = (e, row) => {
+             handleOutgoingProductsList(e, row); // Call your existing function
+             setErrMsg('')
+ 
+             // Clear the input for the current row
+             setRowInputValues((prevValues) => ({
+               ...prevValues,
+               [row.original.incomingProductId]: "", // Reset input to empty string
+             }));
+           }
+           return (
+ 
+             <div className="d-flex align-items-center">
+ 
+               <div className="d-flex">
+                 <EditableInput
+                   rowId={row.original.incomingProductId}
+                   value={rowInputValues[row?.original?.incomingProductId] || ""}
+                   handleInputChange={handleInputChange}
+                   isFocused={focusedInputId === row.original.incomingProductId}
+                   onFocus={handleFocus}
+                   isMoreThanAvailable={isMoreThanAvailable}
+                 />
+                  
+                 <button
+                   disabled={isInputEmpty || isMoreThanAvailable}
+                   className="btn btn-primary"
+                   style={{ 
+                     marginLeft: '5px', 
+                     width: '40px', 
+                     height: '30px', 
+                     padding: '1px',
+                     border:isMoreThanAvailable?"1px solid red !important":"none" }}
+                   onClick={(e) => handleButtonClick(e, row)}>
+                   Ելք
+                 </button>
                  
-                <button
-                  disabled={isInputEmpty || isMoreThanAvailable}
-                  className="btn btn-primary"
-                  style={{ 
-                    marginLeft: '5px', 
-                    width: '40px', 
-                    height: '30px', 
-                    padding: '1px',
-                    border:isMoreThanAvailable?"1px solid red !important":"none" }}
-                  onClick={(e) => handleButtonClick(e, row)}>
-                  Ելք
-                </button>
-                
-                {/* {isMoreThanAvailable && 
-                <div className="flex-center">
-
-                <p style={{color:"red", fontSize:'12px'}}>Սխալ քանակ</p>
-                </div>
-                } */}
-              </div>
-              {/* <div className="d-flex">
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
-                data-bs-toggle="tooltip"
-                data-placement="top"
-                title="Edit"
-                href="#"
-                onClick={() => handleOpenEditModal(row.original)}
-
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="edit" />
-                  </span>
-                </span>
-              </a>
-              <a
-                className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
-                data-bs-toggle="tooltip"
-                onClick={() => handleOpenModal(row.original)}
-                data-placement="top"
-                title=""
-                data-bs-original-title="Delete"
-                href="#"
-              >
-                <span className="icon">
-                  <span className="feather-icon">
-                    <FeatherIcon icon="trash" />
-                  </span>
-                </span>
-              </a>
-            </div> */}
-            </div>
-          )
-        },
-        disableSortBy: true,
-
-      },
-    ],
-    [rowInputValues]
-  );
+                 {/* {isMoreThanAvailable && 
+                 <div className="flex-center">
+ 
+                 <p style={{color:"red", fontSize:'12px'}}>Սխալ քանակ</p>
+                 </div>
+                 } */}
+               </div>
+               {/* <div className="d-flex">
+               <a
+                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover"
+                 data-bs-toggle="tooltip"
+                 data-placement="top"
+                 title="Edit"
+                 href="#"
+                 onClick={() => handleOpenEditModal(row.original)}
+ 
+               >
+                 <span className="icon">
+                   <span className="feather-icon">
+                     <FeatherIcon icon="edit" />
+                   </span>
+                 </span>
+               </a>
+               <a
+                 className="btn btn-icon btn-flush-dark btn-rounded flush-soft-hover del-button"
+                 data-bs-toggle="tooltip"
+                 onClick={() => handleOpenModal(row.original)}
+                 data-placement="top"
+                 title=""
+                 data-bs-original-title="Delete"
+                 href="#"
+               >
+                 <span className="icon">
+                   <span className="feather-icon">
+                     <FeatherIcon icon="trash" />
+                   </span>
+                 </span>
+               </a>
+             </div> */}
+             </div>
+           )
+         },
+         disableSortBy: true,
+ 
+       },
+     ],
+     [rowInputValues]
+   );
   const handleFocus = (rowId) => {
     setFocusedInputId(rowId);
   };
@@ -677,6 +719,12 @@ console.log(outgoingProduct)
                           <div style={{ border: '3px solid #edebeb', borderRadius: '10px', padding: '10px' }}>
 
                             <CustomTable column={fetchedDataColumn} data={fetchedProductsList} dataReceived={true} />
+                            {internalErrMsg &&
+                            <div className="flex-center">
+                            <p style={{fontSize:'16px', color:'red'}}>{internalErrMsg}</p>
+                            </div>
+                            }
+
                           </div>
                         </> : 
                         <>
@@ -685,11 +733,11 @@ console.log(outgoingProduct)
                         </div>
                         </>
                       }
-                      {(!!outgoingList && outgoingList.length) ?
+                     {(!!outgoingList && outgoingList.length) ?
                         <>
                           <div className="separator-full"></div>
                           <div style={{ border: '1px solid #edebeb', borderRadius: '10px' }}>
-                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#fff', borderRadius: '10px 10px 0 0', padding: '10px', marginBottom: '20px' }}>
+                            <header style={{ backgroundColor: '#018a54', fontSize: '24px', color: '#ffffff', borderRadius: '10px 10px 0 0', padding: '10px', marginBottom: '20px' }}>
                               <div className="flex-center">
                                 <h4>Դուրս գրվող ապրանքներ</h4>
                               </div>
@@ -700,7 +748,11 @@ console.log(outgoingProduct)
                                   <>
                                     <div className="d-flex gap-5 mb-2 justify-content-between">
                                       <li key={el.id} >
-                                        {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit}
+                                        {(el.id) + '.' + el.name + "- " + el.outgoingCount + el.unit  }
+                                         <span>    {el?.totalCalculatedCount} հատ,</span>
+                                         <span
+                                         style={{color:el.totalCalculatedCount % el.boxCapacity===0?'#198754':'#f28015'}}
+                                         >(Արկղի տարողունակությունը {el.boxCapacity} հատ)</span>
                                       </li>
                                       <div>
                                         <FeatherIcon icon={'trash'} style={{ color: 'red', cursor: 'pointer', border: '1px solid #edebeb', borderRadius: '10px', marginRight: '10px' }}

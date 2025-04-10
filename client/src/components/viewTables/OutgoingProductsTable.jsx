@@ -263,7 +263,7 @@ function OutgoingProductsTable({
                       </span>
                     </span>
                   </div>
-                  <div style={{ cursor: "pointer" }}>
+                  {/* <div style={{ cursor: "pointer" }}>
     
                     <span className="icon"
                       onClick={() => handleOpenEditModal(row.original)}>
@@ -271,7 +271,7 @@ function OutgoingProductsTable({
                         <FeatherIcon icon="edit" size="6px" />
                       </span>
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               ),

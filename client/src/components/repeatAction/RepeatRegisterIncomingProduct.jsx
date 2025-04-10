@@ -130,74 +130,77 @@ function RepeatRegisterIncomingProduct({ incomingProduct, setEditRow, refreshDat
             theme: "light",
         });
          const onSubmit = methods.handleSubmit(async (data) => {
-            console.log(data)
-            const newProd = {
-              name: data?.productName?.label || null,
-              currentProductId: data?.productName?.productListId || null,
-              productCategory: data?.productName?.categoryId || null,
-              productIdent: data?.productName?.value || null,
-              countryOfOrigin:data.countryOfOrigin,
-              stock: +data?.warehouse?.value || null,
-              partner: +data.partners?.value || null,
-              driver: +data.driver?.value || null,
-              quantity: +data.quantity || null,
-              balance: +totalWeight || +data?.volume || null,
-              unit:totalWeight?'kg':data.volume?"litre":'',
-              dimensions:{
-                //height: +data.height || null,
-                //length: +data.length || null,
-                // width: +data.width || null,
-                weight: +totalWeight || null,
-                volume: +data.volume || null,
-              },
-              palletCount:+data?.pallet,
-              boxCount:+boxCount,
-              unitWeight:+unitWeight,
-              boxCapacity:+boxCapacity,
-              manufacturer:+data.manufacturers?.value,
-              currency:currency,
-              price:+amount,
-              sellingPrice:0,//+data.sellingPrice,
-              producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
-              expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
-              expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
-              actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
-              description:additionalData.length? additionalData : '',
-              barcode: +data?.barcode,
-              //productCategory:data?.productCategory || 1,
-              // SKU:'1',
-              //  attributs:attributs.map((el,index)=>{return{
-              //   'attributeName':el.attributeName,
-              //   'attributeUnit':el.attributeUnit,
-              //   'attributeUnitLabel':el.attributeUnitLabel
-              //  }})
-            };
-        console.log(newProd)
-        console.log(data)
-            const updatedData = deleteNullProperties(newProd)
-            console.log(updatedData)
-        
-            try {
-              await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true,
-              });
-        
-              setEditRow(false);
-              refreshData();
-              notify(
-                `${newProd.name}  ավելացված է`
-              );
-            } catch (err) {
-              if (!err?.response) {
-                setErrMsg("No Server Response");
-              } else if (err.response?.status === 409) {
-                setErrMsg("Username Taken");
-              } else {
-                setErrMsg(" Failed");
-              }
-            }
-          });
+           console.log(data)
+           const newProd = {
+             name: data?.productName?.label || null,
+             currentProductId: data?.productName?.productListId || null,
+             productCategory: data?.productName?.categoryId || null,
+             productIdent: data?.productName?.value || null,
+             countryOfOrigin:data.countryOfOrigin,
+             stock: +data?.warehouse?.value || null,
+             partner: +data.partners?.value || null,
+             driver: +data.driver?.value || null,
+             boxCount:+boxCount,
+             quantity: +data.quantity || null,
+             balance: +totalWeight || +data?.volume || null,
+             boxCountBalance:+boxCount,
+             quantityBalance:+totalCount,
+             unit:totalWeight?'kg':data.volume?"litre":'',
+             dimensions:{
+               //height: +data.height || null,
+               //length: +data.length || null,
+               // width: +data.width || null,
+               weight: +totalWeight || null,
+               volume: +data.volume || null,
+             },
+             palletCount:+data?.pallet,
+             unitWeight:+unitWeight,
+             boxCapacity:+boxCapacity,
+             manufacturer:+data.manufacturers?.value,
+             currency:currency,
+             price:+amount,
+             sellingPrice:0,//+data.sellingPrice,
+             //reorderLevel: +data?.reorderLevel,
+             producedDate:moment(data?.dateOfBirth).format('YYYY-MM-DD'),
+             expiredAlertDay:moment(data?.expiredAlertDay).format('YYYY-MM-DD'),
+             expirationDate:moment(data?.expirationDate).format('YYYY-MM-DD'),
+             actionDate:moment(data?.actionDate).format('YYYY-MM-DD HH:mm'),
+             description:additionalData.length? additionalData : '',
+             barcode: +data?.barcode,
+             //productCategory:data?.productCategory || 1,
+             // SKU:'1',
+             //  attributs:attributs.map((el,index)=>{return{
+             //   'attributeName':el.attributeName,
+             //   'attributeUnit':el.attributeUnit,
+             //   'attributeUnitLabel':el.attributeUnitLabel
+             //  }})
+           };
+       console.log(newProd)
+       console.log(data)
+           const updatedData = deleteNullProperties(newProd)
+           console.log(updatedData)
+       
+           try {
+             await axiosPrivate.post(REGISTER_PRODUCT, updatedData, {
+               headers: { "Content-Type": "application/json" },
+               withCredentials: true,
+             });
+       
+             setEditRow(false);
+             refreshData();
+             notify(
+               `${newProd.name}  ավելացված է`
+             );
+           } catch (err) {
+             if (!err?.response) {
+               setErrMsg("No Server Response");
+             } else if (err.response?.status === 409) {
+               setErrMsg("Username Taken");
+             } else {
+               setErrMsg(" Failed");
+             }
+           }
+         });
     // const onSubmit = methods.handleSubmit(async (data) => {
     //     console.log(data)
     //     const { weight, volume } = incomingProduct?.dimensions || {};

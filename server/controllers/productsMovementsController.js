@@ -37,9 +37,12 @@ const getAllProductsMovements = async (req, res) => {
 	  if (Array.isArray(filters.partner) && filters.partner.length > 0) {
 		  matchStage["partner"] = { $in: filters.partner.map(Number) };
 		}
-		if (filters.actionType) {
-			matchStage["actionType"] = filters.actionType.toLowerCase();
-		}
+		if (Array.isArray(filters.actionType) && filters.actionType.length > 0) {
+			matchStage["actionType"] = { $in: filters.actionType.map(String) };
+		  }
+		// if (filters.actionType) {
+		// 	matchStage["actionType"] = filters.actionType.toLowerCase();
+		// }
 		if (filters.internalAction) {
 			matchStage["internalAction"] = filters.internalAction;
 		}
