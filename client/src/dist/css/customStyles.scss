@@ -3,3 +3,26 @@
     justify-content: center;
     align-items: center;
 }
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .custom-checkbox:checked {
+    background-color: #01945c;
+    border-color: #01945c;
+  }
+
+  .custom-checkbox:checked::after {
+    content: "✔";
+    color: white;
+    font-size: 16px;
+  }

@@ -567,6 +567,7 @@ const FilterPanel = ({ setFilter }) => {
                                           control={control}
                                           render={({ field }) => (
                                             <input
+                                            className="custom-checkbox"
                                               type="checkbox"
                                               id="internalTransfer"
                                               {...field}
